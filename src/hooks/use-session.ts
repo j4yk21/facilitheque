@@ -1,0 +1,153 @@
+"use client";
+
+import { useCallback } from "react";
+import { useSupabase } from "./use-supabase";
+import { useBattleStore } from "@/stores/battle-store";
+import { useAuthStore } from "@/stores/auth-store";
+import { generateBattleCode } from "@/lib/battle/battle-code";
+import { calculateBattleState } from "@/lib/battle/calculate-battle-state";
+import type { Question } from "@/types/question";
+
+export function useSession() {
+  const supabase = useSupabase();
+  const profile = useAuthStore((s) => s.profile);
+  const battleStore = useBattleStore();
+
+  /** Teacher: create a new session from a template */
+  const createSession = useCallback(
+    async (templateId: string, expectedStudentCount: number) => {
+      if (!profile) return null;
+
+      // Fetch template questions
+      const { data: template } = await supabase
+        .from("templates")
+        .select("questions")
+        .eq("id", templateId)
+        .single();
+
+      if (!template) return null;
+
+      const questions = template.questions as Question[];
+      const battleState = calculateBattleState(expectedStudentCount, questions);
+
+      // Generate unique battle code (retry on collision)
+      let battleCode = generateBattleCode();
+      let retries = 3;
+
+      while (retries > 0) {
+        const { data: session, error } = await supabase
+          .from("sessions")
+          .insert({
+            template_id: templateId,
+            teacher_id: profile.id,
+            battle_code: battleCode,
+            expected_student_count: expectedStudentCount,
+            status: "waiting",
+          })
+          .select()
+          .single();
+
+        if (!error && session) {
+          // Create session_state
+          await supabase.from("session_state").insert({
+            session_id: session.id,
+            current_boss_hp: battleState.max_boss_hp,
+            max_boss_hp: battleState.max_boss_hp,
+          });
+
+          battleStore.setSession(
+            session.id,
+            battleState.max_boss_hp,
+            expectedStudentCount
+          );
+
+          return session;
+        }
+
+        // If battle_code collision, retry
+        if (error?.code === "23505") {
+          battleCode = generateBattleCode();
+          retries--;
+        } else {
+          console.error("createSession error:", error);
+          return null;
+        }
+      }
+
+      return null;
+    },
+    [profile, supabase, battleStore]
+  );
+
+  /** Teacher: start a waiting session */
+  const startSession = useCallback(
+    async (sessionId: string) => {
+      const { error } = await supabase
+        .from("sessions")
+        .update({ status: "active", started_at: new Date().toISOString() })
+        .eq("id", sessionId);
+
+      return !error;
+    },
+    [supabase]
+  );
+
+  /** Student: join a session by battle code */
+  const joinSession = useCallback(
+    async (battleCode: string) => {
+      if (!profile) return null;
+
+      const { data: session } = await supabase
+        .from("sessions")
+        .select("*, session_state(*)")
+        .eq("battle_code", battleCode.toUpperCase())
+        .single();
+
+      if (!session) return null;
+
+      // Insert participant
+      const { error } = await supabase.from("session_participants").insert({
+        session_id: session.id,
+        student_id: profile.id,
+      });
+
+      if (error && error.code !== "23505") {
+        // 23505 = already joined, which is fine
+        console.error("joinSession error:", error);
+        return null;
+      }
+
+      const state = Array.isArray(session.session_state)
+        ? session.session_state[0]
+        : session.session_state;
+
+      if (state) {
+        battleStore.setSession(
+          session.id,
+          state.max_boss_hp,
+          session.expected_student_count
+        );
+        battleStore.updateBossHp(state.current_boss_hp);
+      }
+
+      return session;
+    },
+    [profile, supabase, battleStore]
+  );
+
+  /** Fetch a session by ID */
+  const getSession = useCallback(
+    async (sessionId: string) => {
+      const { data } = await supabase
+        .from("sessions")
+        .select("*, templates(*), session_state(*)")
+        .eq("id", sessionId)
+        .single();
+
+      return data;
+    },
+    [supabase]
+  );
+
+  return { createSession, startSession, joinSession, getSession };
+}

@@ -1,10 +1,100 @@
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+
 export default function LoginPage() {
+  const router = useRouter();
+  const supabase = createClient();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+
+    const { data, error: authError } = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    setLoading(false);
+
+    if (authError) {
+      setError(authError.message);
+      return;
+    }
+
+    // Redirect based on role
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", data.user.id)
+      .single();
+
+    if (profile?.role === "teacher") {
+      router.push("/teacher/dashboard");
+    } else {
+      router.push("/student/join");
+    }
+  };
+
   return (
     <main className="flex min-h-screen items-center justify-center p-8">
-      <div className="w-full max-w-sm space-y-6">
-        <h1 className="text-center text-2xl font-bold">Log In</h1>
-        <p className="text-center text-gray-500">Auth form coming in Step 2.</p>
-      </div>
+      <form
+        onSubmit={handleLogin}
+        className="w-full max-w-sm space-y-6"
+      >
+        <div className="text-center">
+          <h1 className="text-2xl font-bold">Log In to BattleLearn</h1>
+          <p className="mt-1 text-gray-500">Welcome back, warrior.</p>
+        </div>
+
+        {error && (
+          <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            {error}
+          </div>
+        )}
+
+        <Input
+          label="Email"
+          id="email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="you@school.edu"
+          required
+        />
+
+        <Input
+          label="Password"
+          id="password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          placeholder="Your password"
+          required
+        />
+
+        <Button type="submit" isLoading={loading} className="w-full">
+          Log In
+        </Button>
+
+        <p className="text-center text-sm text-gray-500">
+          Don&apos;t have an account?{" "}
+          <Link href="/signup" className="text-indigo-500 hover:underline">
+            Sign Up
+          </Link>
+        </p>
+      </form>
     </main>
   );
 }

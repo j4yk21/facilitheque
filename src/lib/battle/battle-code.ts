@@ -18,5 +18,5 @@ export function generateBattleCode(): string {
  * Validates that a string is a valid battle code format.
  */
 export function isValidBattleCode(code: string): boolean {
-  return /^[A-HJ-NP-Z2-9]{6}$/.test(code);
+  return /^[A-HJKMNP-Z2-9]{6}$/.test(code);
 }
