@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "OpenDyslexic";
+  src: url("/fonts/OpenDyslexic-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --font-default: system-ui, -apple-system, sans-serif;
+  --font-dyslexia: "OpenDyslexic", sans-serif;
+
+  /* Teacher theme (light) */
+  --color-bg-light: #f8fafc;
+  --color-text-light: #0f172a;
+  --color-primary: #6366f1;
+  --color-primary-hover: #4f46e5;
+
+  /* Student theme (dark/fantasy) */
+  --color-bg-dark: #0c0a1a;
+  --color-text-dark: #e2e8f0;
+  --color-accent: #a855f7;
+  --color-accent-hover: #9333ea;
+  --color-boss-hp: #ef4444;
+  --color-damage: #fbbf24;
+  --color-xp: #22d3ee;
+}
+
+body {
+  font-family: var(--font-default);
+}
+
+body.dyslexia-font {
+  font-family: var(--font-dyslexia);
+}
+
+body.high-contrast {
+  --color-bg-light: #ffffff;
+  --color-text-light: #000000;
+  --color-bg-dark: #000000;
+  --color-text-dark: #ffffff;
+}
