@@ -149,5 +149,57 @@ export function useSession() {
     [supabase]
   );
 
-  return { createSession, startSession, joinSession, getSession };
+  /** Teacher: delete a template */
+  const deleteTemplate = useCallback(
+    async (templateId: string) => {
+      const { error } = await supabase
+        .from("templates")
+        .delete()
+        .eq("id", templateId);
+
+      return !error;
+    },
+    [supabase]
+  );
+
+  /** Student: get current progress in a session */
+  const getParticipantProgress = useCallback(
+    async (sessionId: string) => {
+      if (!profile) return null;
+
+      const { data } = await supabase
+        .from("session_participants")
+        .select("current_question_index, damage_dealt, xp_earned")
+        .eq("session_id", sessionId)
+        .eq("student_id", profile.id)
+        .single();
+
+      return data;
+    },
+    [profile, supabase]
+  );
+
+  /** Student: update question progress */
+  const updateQuestionProgress = useCallback(
+    async (sessionId: string, questionIndex: number) => {
+      if (!profile) return;
+
+      await supabase
+        .from("session_participants")
+        .update({ current_question_index: questionIndex })
+        .eq("session_id", sessionId)
+        .eq("student_id", profile.id);
+    },
+    [profile, supabase]
+  );
+
+  return {
+    createSession,
+    startSession,
+    joinSession,
+    getSession,
+    deleteTemplate,
+    getParticipantProgress,
+    updateQuestionProgress,
+  };
 }

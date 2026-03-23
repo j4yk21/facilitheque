@@ -30,10 +30,15 @@
 
 body {
   font-family: var(--font-default);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body.dyslexia-font {
   font-family: var(--font-dyslexia);
+  letter-spacing: 0.05em;
+  word-spacing: 0.1em;
+  line-height: 1.8;
 }
 
 body.high-contrast {
@@ -41,4 +46,14 @@ body.high-contrast {
   --color-text-light: #000000;
   --color-bg-dark: #000000;
   --color-text-dark: #ffffff;
+  --color-primary: #4338ca;
+  --color-accent: #7c3aed;
+  --color-boss-hp: #dc2626;
+  --color-damage: #d97706;
+}
+
+/* Focus visible ring for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }

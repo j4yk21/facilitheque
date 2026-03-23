@@ -28,7 +28,8 @@ export default function BattleArena({
   const { sessionId } = use(params);
   const router = useRouter();
   const { profile } = useAuth();
-  const { getSession } = useSession();
+  const { getSession, getParticipantProgress, updateQuestionProgress } =
+    useSession();
   const {
     currentBossHp,
     maxBossHp,
@@ -48,15 +49,34 @@ export default function BattleArena({
   const [loading, setLoading] = useState(true);
   const [finished, setFinished] = useState(false);
 
+  // Load session + restore progress
   useEffect(() => {
-    getSession(sessionId).then((data) => {
+    async function init() {
+      const data = await getSession(sessionId);
       if (data) {
         setSession(data);
-        setQuestions((data.templates?.questions as Question[]) ?? []);
+        const qs = (data.templates?.questions as Question[]) ?? [];
+        setQuestions(qs);
+
+        // Restore student progress
+        const progress = await getParticipantProgress(sessionId);
+        if (progress) {
+          setTotalDamage(progress.damage_dealt);
+          setTotalXp(progress.xp_earned);
+
+          if (progress.current_question_index >= qs.length) {
+            setFinished(true);
+          } else {
+            setCurrentQIndex(progress.current_question_index);
+          }
+        }
       }
       setLoading(false);
-    });
-  }, [sessionId, getSession]);
+    }
+
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId]);
 
   // Check for boss defeat via realtime
   useEffect(() => {
@@ -89,21 +109,31 @@ export default function BattleArena({
           setTimeout(() => setScreenShake(false), 400);
 
           if (result.bossDefeated) {
+            await updateQuestionProgress(sessionId, currentQIndex + 1);
             setFinished(true);
             return;
           }
         }
       }
 
-      // Move to next question (or loop back)
-      if (currentQIndex < questions.length - 1) {
-        setCurrentQIndex((i) => i + 1);
+      // Move to next question or finish
+      const nextIndex = currentQIndex + 1;
+      await updateQuestionProgress(sessionId, nextIndex);
+
+      if (nextIndex < questions.length) {
+        setCurrentQIndex(nextIndex);
       } else {
-        // All questions answered — wait for boss defeat or show complete message
         setFinished(true);
       }
     },
-    [currentQIndex, questions, dealDamage, profile]
+    [
+      currentQIndex,
+      questions,
+      dealDamage,
+      profile,
+      sessionId,
+      updateQuestionProgress,
+    ]
   );
 
   const removeDamage = useCallback((id: string) => {

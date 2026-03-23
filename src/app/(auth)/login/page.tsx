@@ -1,14 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
+  return (
+    <Suspense>
+      <LoginForm />
+    </Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const supabase = createClient();
 
   const [email, setEmail] = useState("");
@@ -33,18 +42,20 @@ export default function LoginPage() {
       return;
     }
 
-    // Redirect based on role
+    // Redirect to original destination or role-based default
+    const redirect = searchParams.get("redirect");
+    if (redirect) {
+      router.push(redirect);
+      return;
+    }
+
     const { data: profile } = await supabase
       .from("profiles")
       .select("role")
       .eq("id", data.user.id)
       .single();
 
-    if (profile?.role === "teacher") {
-      router.push("/teacher/dashboard");
-    } else {
-      router.push("/student/join");
-    }
+    router.push(profile?.role === "teacher" ? "/teacher/dashboard" : "/student/join");
   };
 
   return (

@@ -4,6 +4,8 @@ import { useEffect, useState, use } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/use-auth";
 import { useSupabase } from "@/hooks/use-supabase";
+import { useSession } from "@/hooks/use-session";
+import { Modal } from "@/components/ui/modal";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { QuestionEditor } from "@/components/dashboard/question-editor";
@@ -21,6 +23,7 @@ export default function EditTemplate({
   const router = useRouter();
   const { profile } = useAuth();
   const supabase = useSupabase();
+  const { deleteTemplate } = useSession();
 
   const [bossName, setBossName] = useState("");
   const [bossAvatarId, setBossAvatarId] = useState("default_boss");
@@ -28,6 +31,7 @@ export default function EditTemplate({
   const [saving, setSaving] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     supabase
@@ -126,10 +130,38 @@ export default function EditTemplate({
         <Button onClick={handleSave} isLoading={saving}>
           Save Changes
         </Button>
-        <Button variant="danger" onClick={() => router.back()}>
+        <Button variant="ghost" onClick={() => router.back()}>
           Cancel
         </Button>
+        <Button variant="danger" onClick={() => setShowDeleteModal(true)}>
+          Delete
+        </Button>
       </div>
+
+      <Modal
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Delete Template"
+      >
+        <p className="mb-6 text-gray-600">
+          Are you sure you want to delete &quot;{bossName}&quot;? This cannot be
+          undone. Sessions using this template will not be affected.
+        </p>
+        <div className="flex justify-end gap-3">
+          <Button variant="ghost" onClick={() => setShowDeleteModal(false)}>
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={async () => {
+              const ok = await deleteTemplate(id);
+              if (ok) router.push("/teacher/dashboard");
+            }}
+          >
+            Delete Template
+          </Button>
+        </div>
+      </Modal>
     </div>
   );
 }
