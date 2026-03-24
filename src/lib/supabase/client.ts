@@ -13,5 +13,13 @@ if (supabaseAnonKey?.startsWith("sb_secret_")) {
 }
 
 export function createClient() {
-  return createBrowserClient(supabaseUrl, supabaseAnonKey);
+  return createBrowserClient(supabaseUrl, supabaseAnonKey, {
+    auth: {
+      // Disable navigator.locks to prevent deadlocks caused by
+      // React Strict Mode double-mounting effects in development.
+      lock: async (_name: string, _acquireTimeout: number, fn: () => Promise<any>) => {
+        return await fn();
+      },
+    },
+  });
 }

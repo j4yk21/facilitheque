@@ -18,7 +18,11 @@ export default function TeacherDashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!profile) return;
+    if (authLoading) return;
+    if (!profile) {
+      setLoading(false);
+      return;
+    }
 
     async function load() {
       const [tRes, sRes] = await Promise.all([
@@ -41,7 +45,7 @@ export default function TeacherDashboard() {
     }
 
     load();
-  }, [profile, supabase]);
+  }, [profile, authLoading, supabase]);
 
   if (authLoading || loading) {
     return <LoadingSpinner className="mt-32" size="lg" />;
