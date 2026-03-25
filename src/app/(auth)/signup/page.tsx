@@ -26,7 +26,7 @@ export default function SignUpPage() {
     setLoading(true);
     setError("");
 
-    const { error: authError } = await supabase.auth.signUp({
+    const { data: authData, error: authError } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -37,12 +37,33 @@ export default function SignUpPage() {
       },
     });
 
-    setLoading(false);
-
     if (authError) {
+      setLoading(false);
       setError(authError.message);
       return;
     }
+
+    // Create profile via server API (bypasses trigger issues)
+    if (authData.user) {
+      const res = await fetch("/api/auth/create-profile", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: authData.user.id,
+          displayName: displayName.trim(),
+          role,
+        }),
+      });
+
+      if (!res.ok) {
+        const { error: profileError } = await res.json();
+        setLoading(false);
+        setError(profileError || "Failed to create profile");
+        return;
+      }
+    }
+
+    setLoading(false);
 
     if (role === "teacher") {
       router.push("/teacher/dashboard");
