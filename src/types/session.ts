@@ -16,6 +16,7 @@ export interface SessionParticipant {
   id: string;
   session_id: string;
   student_id: string;
+  character_class: import("@/types/database").CharacterClass | null;
   current_question_index: number;
   damage_dealt: number;
   xp_earned: number;

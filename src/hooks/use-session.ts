@@ -105,10 +105,11 @@ export function useSession() {
 
       if (!session) return null;
 
-      // Insert participant
+      // Insert participant with character class snapshot
       const { error } = await supabase.from("session_participants").insert({
         session_id: session.id,
         student_id: profile.id,
+        character_class: profile.character_class ?? null,
       });
 
       if (error && error.code !== "23505") {

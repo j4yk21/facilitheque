@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useState } from "react";
 import { useSupabase } from "./use-supabase";
 import { useBattleStore } from "@/stores/battle-store";
 import { useAuthStore } from "@/stores/auth-store";
@@ -8,6 +8,8 @@ import {
   calculateQuestionDamage,
   calculateXpReward,
 } from "@/lib/battle/calculate-battle-state";
+import { computeTeamBonuses, type TeamBonuses } from "@/lib/rpg/character-classes";
+import type { CharacterClass } from "@/types/database";
 import type { Question } from "@/types/question";
 import type { BattleLogEntry } from "@/types/battle";
 
@@ -15,6 +17,7 @@ export function useBattle(sessionId: string | null) {
   const supabase = useSupabase();
   const store = useBattleStore();
   const profile = useAuthStore((s) => s.profile);
+  const [teamBonuses, setTeamBonuses] = useState<TeamBonuses | null>(null);
 
   // Subscribe to real-time session_state updates
   useEffect(() => {
@@ -101,13 +104,44 @@ export function useBattle(sessionId: string | null) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId]);
 
+  // Fetch party composition for team bonuses
+  useEffect(() => {
+    if (!sessionId) return;
+
+    const fetchParty = async () => {
+      const { data } = await supabase
+        .from("session_participants")
+        .select("character_class")
+        .eq("session_id", sessionId);
+
+      if (data) {
+        const classes = data.map(
+          (p: { character_class: CharacterClass | null }) => p.character_class
+        );
+        setTeamBonuses(computeTeamBonuses(classes));
+      }
+    };
+
+    fetchParty();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sessionId]);
+
   // Deal damage by answering a question correctly
   const dealDamage = useCallback(
     async (question: Question) => {
       if (!sessionId || !profile) return null;
 
-      const damage = calculateQuestionDamage(question);
-      const xpReward = calculateXpReward(damage);
+      const damage = calculateQuestionDamage(
+        question,
+        undefined,
+        profile.character_class,
+        teamBonuses
+      );
+      const xpReward = calculateXpReward(
+        damage,
+        profile.character_class,
+        teamBonuses
+      );
 
       const logEntry: BattleLogEntry = {
         timestamp: new Date().toISOString(),
@@ -132,7 +166,7 @@ export function useBattle(sessionId: string | null) {
 
       return { damage, xpReward, bossDefeated: data?.[0]?.boss_defeated ?? false };
     },
-    [sessionId, profile, supabase]
+    [sessionId, profile, supabase, teamBonuses]
   );
 
   return {
@@ -141,6 +175,7 @@ export function useBattle(sessionId: string | null) {
     logs: store.logs,
     participantCount: store.participantCount,
     expectedStudentCount: store.expectedStudentCount,
+    teamBonuses,
     dealDamage,
   };
 }

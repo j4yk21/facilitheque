@@ -10,6 +10,8 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[];
 
+export type CharacterClass = "warrior" | "mage" | "healer" | "scout";
+
 export interface Database {
   public: {
     Tables: {
@@ -22,6 +24,7 @@ export interface Database {
           total_xp: number;
           max_hp: number;
           avatar_url: string | null;
+          character_class: CharacterClass | null;
           dyslexia_font_enabled: boolean;
           high_contrast_enabled: boolean;
           created_at: string;
@@ -35,6 +38,7 @@ export interface Database {
           total_xp?: number;
           max_hp?: number;
           avatar_url?: string | null;
+          character_class?: CharacterClass | null;
           dyslexia_font_enabled?: boolean;
           high_contrast_enabled?: boolean;
         };
@@ -86,6 +90,7 @@ export interface Database {
           id: string;
           session_id: string;
           student_id: string;
+          character_class: CharacterClass | null;
           current_question_index: number;
           damage_dealt: number;
           xp_earned: number;
@@ -95,12 +100,77 @@ export interface Database {
           id?: string;
           session_id: string;
           student_id: string;
+          character_class?: CharacterClass | null;
           current_question_index?: number;
           damage_dealt?: number;
           xp_earned?: number;
         };
         Update: Partial<
           Database["public"]["Tables"]["session_participants"]["Insert"]
+        >;
+      };
+      classrooms: {
+        Row: {
+          id: string;
+          teacher_id: string;
+          name: string;
+          invite_token: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          teacher_id: string;
+          name: string;
+          invite_token?: string;
+        };
+        Update: Partial<Database["public"]["Tables"]["classrooms"]["Insert"]>;
+      };
+      classroom_students: {
+        Row: {
+          id: string;
+          classroom_id: string;
+          student_id: string;
+          joined_at: string;
+        };
+        Insert: {
+          id?: string;
+          classroom_id: string;
+          student_id: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["classroom_students"]["Insert"]
+        >;
+      };
+      classroom_groups: {
+        Row: {
+          id: string;
+          classroom_id: string;
+          name: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          classroom_id: string;
+          name: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["classroom_groups"]["Insert"]
+        >;
+      };
+      classroom_group_members: {
+        Row: {
+          id: string;
+          group_id: string;
+          student_id: string;
+        };
+        Insert: {
+          id?: string;
+          group_id: string;
+          student_id: string;
+        };
+        Update: Partial<
+          Database["public"]["Tables"]["classroom_group_members"]["Insert"]
         >;
       };
       session_state: {

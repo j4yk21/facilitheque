@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import type { CharacterClass } from "@/types/database";
 
 interface Profile {
   id: string;
@@ -8,6 +9,7 @@ interface Profile {
   total_xp: number;
   max_hp: number;
   avatar_url: string | null;
+  character_class: CharacterClass | null;
   dyslexia_font_enabled: boolean;
   high_contrast_enabled: boolean;
 }

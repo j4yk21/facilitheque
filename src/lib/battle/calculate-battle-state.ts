@@ -1,26 +1,62 @@
 import type { Question } from "@/types/question";
 import type { BattleState, DamageConfig, QuestionBattleInfo } from "@/types/battle";
+import type { CharacterClass } from "@/types/database";
 import { DEFAULT_DAMAGE_CONFIG, XP_PER_DAMAGE_UNIT } from "./damage-config";
+import {
+  getClassDamageMultiplier,
+  getClassXpMultiplier,
+  computeTeamBonuses,
+  type TeamBonuses,
+} from "@/lib/rpg/character-classes";
 
 /**
  * Calculates the damage a single correct answer deals for a given question.
- * Formula: floor(base_damage * type_multiplier * difficulty_multiplier)
+ * Formula: floor(base_damage * type_multiplier * difficulty_multiplier * classMultiplier * teamMultiplier)
  */
 export function calculateQuestionDamage(
   question: Question,
-  config: DamageConfig = DEFAULT_DAMAGE_CONFIG
+  config: DamageConfig = DEFAULT_DAMAGE_CONFIG,
+  characterClass: CharacterClass | null = null,
+  teamBonuses: TeamBonuses | null = null
 ): number {
   const typeMultiplier = config.type_multipliers[question.type] ?? 1.0;
   const difficultyMultiplier =
     config.difficulty_multipliers[question.difficulty] ?? 1.0;
-  return Math.floor(config.base_damage * typeMultiplier * difficultyMultiplier);
+
+  const classMultiplier = getClassDamageMultiplier(
+    characterClass,
+    question.type,
+    question.difficulty
+  );
+
+  let teamDmgMultiplier = 1.0;
+  if (teamBonuses) {
+    teamDmgMultiplier = teamBonuses.damageMultiplier;
+    if (question.type === "multiple_choice") {
+      teamDmgMultiplier *= teamBonuses.mcDamageMultiplier;
+    }
+  }
+
+  return Math.floor(
+    config.base_damage *
+      typeMultiplier *
+      difficultyMultiplier *
+      classMultiplier *
+      teamDmgMultiplier
+  );
 }
 
 /**
  * Calculates XP reward for a correct answer based on its damage value.
  */
-export function calculateXpReward(damage: number): number {
-  return Math.floor(damage * XP_PER_DAMAGE_UNIT);
+export function calculateXpReward(
+  damage: number,
+  characterClass: CharacterClass | null = null,
+  teamBonuses: TeamBonuses | null = null
+): number {
+  const classXpMult = getClassXpMultiplier(characterClass);
+  const teamXpMult = teamBonuses?.xpMultiplier ?? 1.0;
+  return Math.floor(damage * XP_PER_DAMAGE_UNIT * classXpMult * teamXpMult);
 }
 
 /**
