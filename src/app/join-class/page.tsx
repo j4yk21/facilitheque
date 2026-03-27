@@ -130,17 +130,28 @@ function JoinClassContent() {
   // joined or already
   return (
     <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
-      <div className="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 text-3xl text-green-600">
-        &#10003;
-      </div>
-      <h1 className="text-2xl font-bold">
-        {status === "already" ? "Deja inscrit !" : "Inscription reussie !"}
-      </h1>
-      <p className="text-gray-500">
-        {status === "already"
-          ? `Tu fais deja partie de la classe "${classroomName}".`
-          : `Tu as rejoint la classe "${classroomName}".`}
-      </p>
+      {status === "already" ? (
+        <>
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 text-3xl text-blue-600">
+            &#10003;
+          </div>
+          <h1 className="text-2xl font-bold">Deja inscrit !</h1>
+          <p className="text-gray-500">
+            Tu fais deja partie de la classe &ldquo;{classroomName}&rdquo;.
+          </p>
+        </>
+      ) : (
+        <>
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-amber-100 text-3xl text-amber-600">
+            &#9203;
+          </div>
+          <h1 className="text-2xl font-bold">Demande envoyee !</h1>
+          <p className="text-gray-500">
+            Ton professeur doit approuver ton inscription a la classe
+            &ldquo;{classroomName}&rdquo;.
+          </p>
+        </>
+      )}
       <Link href="/student/dashboard">
         <Button>Aller a mon dashboard</Button>
       </Link>
