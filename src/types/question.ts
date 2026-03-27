@@ -1,5 +1,17 @@
-export type QuestionType = "multiple_choice" | "short_answer";
+export type QuestionType =
+  | "multiple_choice"
+  | "short_answer"
+  | "true_false"
+  | "ordering"
+  | "matching"
+  | "fill_blank";
+
 export type Difficulty = 1 | 2 | 3;
+
+export interface MatchingPair {
+  term: string;
+  definition: string;
+}
 
 export interface Question {
   id: string;
@@ -9,4 +21,8 @@ export interface Question {
   options?: string[];
   correct_answer: string;
   time_limit_seconds?: number;
+  /** Items for ordering questions (stored in correct order) */
+  items?: string[];
+  /** Term-definition pairs for matching questions */
+  pairs?: MatchingPair[];
 }

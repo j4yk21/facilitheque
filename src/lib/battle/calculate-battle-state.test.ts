@@ -58,7 +58,14 @@ describe("calculateQuestionDamage", () => {
   it("respects custom config", () => {
     const config: DamageConfig = {
       base_damage: 20,
-      type_multipliers: { multiple_choice: 1.0, short_answer: 1.5 },
+      type_multipliers: {
+        multiple_choice: 1.0,
+        short_answer: 1.5,
+        true_false: 0.7,
+        ordering: 1.5,
+        matching: 1.3,
+        fill_blank: 1.2,
+      },
       difficulty_multipliers: { 1: 0.5, 2: 1.0, 3: 2.0 },
     };
     const q = makeQuestion({ id: "q1", type: "short_answer", difficulty: 3 });
@@ -178,7 +185,14 @@ describe("calculateBattleState", () => {
   it("uses custom damage config", () => {
     const config: DamageConfig = {
       base_damage: 20,
-      type_multipliers: { multiple_choice: 1.0, short_answer: 1.0 },
+      type_multipliers: {
+        multiple_choice: 1.0,
+        short_answer: 1.0,
+        true_false: 0.7,
+        ordering: 1.5,
+        matching: 1.3,
+        fill_blank: 1.2,
+      },
       difficulty_multipliers: { 1: 1.0, 2: 1.0, 3: 1.0 },
     };
     const questions = [

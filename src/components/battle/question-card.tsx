@@ -4,6 +4,11 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { checkAnswer } from "@/lib/battle/check-answer";
+import { TrueFalseInput } from "./question-types/true-false-input";
+import { OrderingInput } from "./question-types/ordering-input";
+import { MatchingInput } from "./question-types/matching-input";
+import { FillBlankInput } from "./question-types/fill-blank-input";
 import type { Question } from "@/types/question";
 
 interface QuestionCardProps {
@@ -27,9 +32,7 @@ export function QuestionCard({
   const [isCorrect, setIsCorrect] = useState(false);
 
   const handleSubmit = (answer: string) => {
-    const correct =
-      answer.trim().toLowerCase() ===
-      question.correct_answer.trim().toLowerCase();
+    const correct = checkAnswer(question, answer);
 
     setIsCorrect(correct);
     setShowResult(true);
@@ -40,6 +43,15 @@ export function QuestionCard({
       setTextAnswer("");
       setShowResult(false);
     }, 1500);
+  };
+
+  const questionTypeLabel: Record<string, string> = {
+    multiple_choice: "Multiple Choice",
+    short_answer: "Short Answer",
+    true_false: "True / False",
+    ordering: "Ordering",
+    matching: "Matching",
+    fill_blank: "Fill in the Blank",
   };
 
   return (
@@ -53,24 +65,38 @@ export function QuestionCard({
         <span className="text-sm text-gray-500">
           Question {questionIndex + 1} / {totalQuestions}
         </span>
-        <span
-          className={cn(
-            "rounded-full px-2 py-0.5 text-xs font-medium",
-            question.difficulty === 1 && "bg-green-900 text-green-300",
-            question.difficulty === 2 && "bg-yellow-900 text-yellow-300",
-            question.difficulty === 3 && "bg-red-900 text-red-300"
-          )}
-        >
-          {question.difficulty === 1
-            ? "Easy"
-            : question.difficulty === 2
-              ? "Medium"
-              : "Hard"}
-        </span>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-gray-800 px-2 py-0.5 text-xs font-medium text-gray-400">
+            {questionTypeLabel[question.type] ?? question.type}
+          </span>
+          <span
+            className={cn(
+              "rounded-full px-2 py-0.5 text-xs font-medium",
+              question.difficulty === 1 && "bg-green-900 text-green-300",
+              question.difficulty === 2 && "bg-yellow-900 text-yellow-300",
+              question.difficulty === 3 && "bg-red-900 text-red-300"
+            )}
+          >
+            {question.difficulty === 1
+              ? "Easy"
+              : question.difficulty === 2
+                ? "Medium"
+                : "Hard"}
+          </span>
+        </div>
       </div>
 
-      {/* Question text */}
-      <h3 className="mb-6 text-xl font-semibold text-white">{question.text}</h3>
+      {/* Question text (for non-fill_blank, or fill_blank without ___ in text) */}
+      {question.type !== "fill_blank" && (
+        <h3 className="mb-6 text-xl font-semibold text-white">
+          {question.text}
+        </h3>
+      )}
+      {question.type === "fill_blank" && !question.text.includes("___") && (
+        <h3 className="mb-6 text-xl font-semibold text-white">
+          {question.text}
+        </h3>
+      )}
 
       {/* Result feedback */}
       {showResult && (
@@ -86,7 +112,7 @@ export function QuestionCard({
         >
           {isCorrect
             ? "Correct! You dealt damage to the boss!"
-            : "Not quite — but keep fighting! No penalty."}
+            : "Not quite -- but keep fighting! No penalty."}
         </motion.div>
       )}
 
@@ -147,6 +173,46 @@ export function QuestionCard({
             Submit Answer
           </Button>
         </div>
+      )}
+
+      {/* True/False */}
+      {question.type === "true_false" && (
+        <TrueFalseInput
+          question={question}
+          disabled={disabled}
+          showResult={showResult}
+          onSubmit={handleSubmit}
+        />
+      )}
+
+      {/* Ordering */}
+      {question.type === "ordering" && (
+        <OrderingInput
+          question={question}
+          disabled={disabled}
+          showResult={showResult}
+          onSubmit={handleSubmit}
+        />
+      )}
+
+      {/* Matching */}
+      {question.type === "matching" && (
+        <MatchingInput
+          question={question}
+          disabled={disabled}
+          showResult={showResult}
+          onSubmit={handleSubmit}
+        />
+      )}
+
+      {/* Fill in the blank */}
+      {question.type === "fill_blank" && (
+        <FillBlankInput
+          question={question}
+          disabled={disabled}
+          showResult={showResult}
+          onSubmit={handleSubmit}
+        />
       )}
     </motion.div>
   );

@@ -5,6 +5,10 @@ export const DEFAULT_DAMAGE_CONFIG: DamageConfig = {
   type_multipliers: {
     multiple_choice: 1.0,
     short_answer: 1.3,
+    true_false: 0.7,
+    ordering: 1.5,
+    matching: 1.3,
+    fill_blank: 1.2,
   },
   difficulty_multipliers: {
     1: 0.8, // easy
