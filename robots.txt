@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://facilkit.vercel.app/sitemap.xml
