@@ -4,24 +4,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>FaciliKit — Boîte à outils live pour facilitateurs</title>
-<meta name="description" content="FaciliKit est une application open source pour facilitateurs : chronomètre, roulette, temps de parole, séquenceur, planificateur d'atelier et bibliothèque de 12 outils téléchargeables en PDF. 100% gratuit, sans installation.">
+<title>Facilithèque — Boîte à outils live pour facilitateurs</title>
+<meta name="description" content="Facilithèque est une application open source pour facilitateurs : chronomètre, roulette, temps de parole, séquenceur, planificateur d'atelier et bibliothèque de 12 outils téléchargeables en PDF. 100% gratuit, sans installation.">
 <meta name="keywords" content="facilitation, facilitateur, outils facilitation, chronomètre atelier, roulette participants, temps de parole, planificateur atelier, world café, 1-2-4-all, dot voting, intelligence collective">
-<meta name="author" content="FaciliKit">
+<meta name="author" content="Facilithèque">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://facilkit.vercel.app/">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="shortcut icon" href="/favicon.svg">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://facilkit.vercel.app/">
-<meta property="og:title" content="FaciliKit — Boîte à outils live pour facilitateurs">
+<meta property="og:title" content="Facilithèque — Boîte à outils live pour facilitateurs">
 <meta property="og:description" content="Chronomètre, roulette, temps de parole, planificateur d'atelier, bibliothèque d'outils PDF. Tout ce qu'il faut pour animer un atelier, en un seul outil open source et gratuit.">
 <meta property="og:locale" content="fr_FR">
-<meta property="og:site_name" content="FaciliKit">
+<meta property="og:site_name" content="Facilithèque">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="FaciliKit — Boîte à outils live pour facilitateurs">
+<meta name="twitter:title" content="Facilithèque — Boîte à outils live pour facilitateurs">
 <meta name="twitter:description" content="Chronomètre, roulette, temps de parole, planificateur d'atelier, bibliothèque d'outils PDF. Open source, gratuit, sans installation.">
 <meta name="google-site-verification" content="PhIdJWXZ141shY9XAPKTKJKEv2lie_QhvMtsHsX8gGw" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -211,13 +213,17 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 /* ── MODAL ── */
 .modal-ov{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
 .modal-ov.open{opacity:1;visibility:visible}
-.modal-box{background:#fff;border-radius:var(--r24);max-width:800px;width:100%;max-height:96vh;overflow-y:auto;box-shadow:var(--sh2);transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.modal-box{background:#fff;border-radius:var(--r24);max-width:980px;width:100%;max-height:96vh;overflow:hidden;box-shadow:var(--sh2);display:flex;flex-direction:column;transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
 .modal-ov.open .modal-box{transform:translateY(0) scale(1)}
-.modal-hdr{padding:28px 32px 20px;border-bottom:1px solid var(--cream-dark);position:sticky;top:0;background:#fff;z-index:1;border-radius:var(--r24) var(--r24) 0 0;display:flex;justify-content:space-between;align-items:flex-start;gap:12px}
+.modal-hdr{padding:24px 32px 18px;border-bottom:1px solid var(--cream-dark);background:#fff;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-shrink:0}
 .modal-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--ink)}
 .modal-close{width:34px;height:34px;border-radius:50%;background:var(--cream);border:none;display:grid;place-items:center;flex-shrink:0;cursor:pointer;transition:background var(--tr)}
 .modal-close:hover{background:var(--cream-dark)}
-.modal-body{padding:24px 32px 32px}
+.modal-inner{display:flex;flex:1;overflow:hidden;min-height:0}
+.modal-content{flex:1;overflow-y:auto;min-width:0}
+.modal-content::-webkit-scrollbar{width:4px}
+.modal-content::-webkit-scrollbar-thumb{background:var(--cream-mid);border-radius:4px}
+.modal-body{padding:22px 32px 32px}
 .modal-meta-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
 .modal-meta-card{background:var(--cream);border-radius:var(--r12);padding:14px;text-align:center}
 .modal-meta-card .n{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--terra)}
@@ -226,6 +232,14 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .modal-steps{list-style:none;display:flex;flex-direction:column;gap:12px}
 .modal-steps li{display:flex;gap:12px;font-size:.88rem;line-height:1.65;color:var(--ink-s)}
 .step-n{width:24px;height:24px;background:var(--terra);color:#fff;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px}
+.modal-preview{width:250px;min-width:250px;background:var(--cream);border-left:1px solid var(--cream-dark);padding:28px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:22px}
+.modal-preview::-webkit-scrollbar{width:3px}
+.modal-preview::-webkit-scrollbar-thumb{background:var(--cream-mid);border-radius:3px}
+.mprev-icon{font-size:3.5rem;text-align:center;padding:16px 0 8px;line-height:1}
+.mprev-label{font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:5px}
+.mprev-val{font-size:.88rem;font-weight:600;color:var(--ink);line-height:1.4}
+.mprev-tags{display:flex;flex-wrap:wrap;gap:5px}
+.mprev-tag{display:inline-block;padding:3px 9px;background:#fff;border:1px solid var(--cream-dark);color:var(--ink-s);border-radius:20px;font-size:.7rem}
 .modal-tip{background:rgba(107,143,113,.08);border-left:3px solid var(--sage);border-radius:0 var(--r12) var(--r12) 0;padding:14px 18px;margin-top:18px;font-size:.85rem;color:var(--sage-d);line-height:1.65}
 
 /* ── FULLSCREEN TIMER ── */
@@ -324,7 +338,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
       <div class="sb-logo-mark">
         <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="white"/><path d="M8 1.5V3M8 13v1.5M1.5 8H3M13 8h1.5M3.1 3.1l1.1 1.1M11.8 11.8l1.1 1.1M3.1 12.9l1.1-1.1M11.8 4.2l1.1-1.1" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
       </div>
-      <span class="sb-logo-text">FaciliKit</span>
+      <span class="sb-logo-text">Facilithèque</span>
     </div>
     <nav class="sb-nav">
       <button class="nav-item active" data-panel="home">
@@ -366,7 +380,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
         <span>Parking</span>
       </button>
     </nav>
-    <div class="sb-footer"><p>FaciliKit · Open source<br>Fait pour les facilitateurs</p></div>
+    <div class="sb-footer"><p>Facilithèque · Open source<br>Fait pour les facilitateurs</p></div>
   </aside>
 
   <!-- MAIN -->
@@ -714,17 +728,22 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
     </div>
-    <div class="modal-body">
-      <div class="modal-meta-row" id="modal-meta"></div>
-      <div class="modal-sec">Description</div>
-      <p id="modal-desc" style="font-size:.9rem;line-height:1.75;color:var(--ink-s)"></p>
-      <div class="modal-sec" style="margin-top:20px">Déroulé en pratique</div>
-      <ul class="modal-steps" id="modal-steps"></ul>
-      <div class="modal-tip" id="modal-tip"></div>
-      <div style="margin-top:24px;display:flex;gap:10px">
-        <button class="btn btn-primary" onclick="toolPDF()">⬇ Fiche PDF</button>
-        <button class="btn btn-secondary" onclick="toolModalCloseBtn()">Fermer</button>
+    <div class="modal-inner">
+      <div class="modal-content">
+        <div class="modal-body">
+          <div class="modal-meta-row" id="modal-meta"></div>
+          <div class="modal-sec">Description</div>
+          <p id="modal-desc" style="font-size:.9rem;line-height:1.75;color:var(--ink-s)"></p>
+          <div class="modal-sec" style="margin-top:20px">Déroulé en pratique</div>
+          <ul class="modal-steps" id="modal-steps"></ul>
+          <div class="modal-tip" id="modal-tip"></div>
+          <div style="margin-top:24px;display:flex;gap:10px">
+            <button class="btn btn-primary" onclick="toolPDF()">⬇ Fiche PDF</button>
+            <button class="btn btn-secondary" onclick="toolModalCloseBtn()">Fermer</button>
+          </div>
+        </div>
       </div>
+      <div class="modal-preview" id="modal-preview"></div>
     </div>
   </div>
 </div>
@@ -1255,6 +1274,13 @@ function toolOpen(id){
   document.getElementById('modal-desc').textContent=t.desc;
   document.getElementById('modal-steps').innerHTML=t.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join('');
   document.getElementById('modal-tip').innerHTML=`💡 <strong>Conseil du praticien</strong><br>${t.tip}`;
+  document.getElementById('modal-preview').innerHTML=`
+    <div class="mprev-icon">${t.icon||'🔧'}</div>
+    <div><div class="mprev-label">Phase</div><span class="tool-phase-badge ph-${t.phase}" style="margin-bottom:0">${t.phaseLabel}</span></div>
+    <div><div class="mprev-label">Durée estimée</div><div class="mprev-val">${t.dur}</div></div>
+    <div><div class="mprev-label">Taille du groupe</div><div class="mprev-val">${t.grp}</div></div>
+    <div><div class="mprev-label">Besoins couverts</div><div style="display:flex;flex-direction:column;gap:5px;margin-top:4px">${t.needs.map(n=>`<span style="display:inline-block;padding:3px 10px;background:rgba(201,107,58,.1);color:var(--terra);border-radius:20px;font-size:.75rem;font-weight:600">${NEED_LABELS[n]||n}</span>`).join('')}</div></div>
+    <div><div class="mprev-label">Tags</div><div class="mprev-tags" style="margin-top:4px">${t.tags.map(tag=>`<span class="mprev-tag">${tag}</span>`).join('')}</div></div>`;
   document.getElementById('tool-modal').classList.add('open');
   document.body.style.overflow='hidden';
 }
@@ -1278,7 +1304,7 @@ function toolPDFById(id){
   doc.text(t.name,M,29);
   // Brand
   doc.setFontSize(11);doc.setTextColor(201,107,58);
-  doc.text('FaciliKit',W-M,29,{align:'right'});
+  doc.text('Facilithèque',W-M,29,{align:'right'});
   // Separator
   doc.setDrawColor(201,107,58);doc.setLineWidth(0.5);doc.line(M,33,W-M,33);doc.setLineWidth(0.2);
   // Meta box
@@ -1324,7 +1350,7 @@ function toolPDFById(id){
   const pH=doc.internal.pageSize.height;
   doc.setDrawColor(235,228,214);doc.line(M,pH-16,W-M,pH-16);
   doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(138,128,120);
-  doc.text('Fiche outil FaciliKit · facilkit.app',W/2,pH-10,{align:'center'});
+  doc.text('Fiche outil Facilithèque · facilkit.vercel.app',W/2,pH-10,{align:'center'});
   const safeName=t.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   doc.save(`fiche-${safeName}.pdf`);
 }
@@ -1400,13 +1426,13 @@ function pdfHeader(doc, label, title){
   doc.setFontSize(20); doc.setFont('helvetica','bold'); doc.setTextColor(26,26,26);
   doc.text(title,M,28);
   doc.setFontSize(11); doc.setTextColor(201,107,58);
-  doc.text('FaciliKit',W-M,28,{align:'right'});
+  doc.text('Facilithèque',W-M,28,{align:'right'});
 }
 function pdfFooter(doc){
   const W=210,M=20,pH=doc.internal.pageSize.height;
   doc.setDrawColor(235,228,214); doc.setLineWidth(0.2); doc.line(M,pH-16,W-M,pH-16);
   doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(138,128,120);
-  doc.text('Généré par FaciliKit · facilkit.app',W/2,pH-10,{align:'center'});
+  doc.text('Généré par Facilithèque · facilkit.vercel.app',W/2,pH-10,{align:'center'});
 }
 
 // ════════════════════════════════════════════════════
