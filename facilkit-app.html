@@ -1,30 +1,30 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Facilithèque — Boîte à outils live pour facilitateurs</title>
-<meta name="description" content="Facilithèque est une application open source pour facilitateurs : chronomètre, roulette, temps de parole, séquenceur, planificateur d'atelier et bibliothèque de 12 outils téléchargeables en PDF. 100% gratuit, sans installation.">
-<meta name="keywords" content="facilitation, facilitateur, outils facilitation, chronomètre atelier, roulette participants, temps de parole, planificateur atelier, world café, 1-2-4-all, dot voting, intelligence collective">
-<meta name="author" content="Facilithèque">
+<title>FacilithÃ¨que â€” BoÃ®te Ã  outils live pour facilitateurs</title>
+<meta name="description" content="FacilithÃ¨que est une application open source pour facilitateurs : chronomÃ¨tre, roulette, temps de parole, sÃ©quenceur, planificateur d'atelier et bibliothÃ¨que de 12 outils tÃ©lÃ©chargeables en PDF. 100% gratuit, sans installation.">
+<meta name="keywords" content="facilitation, facilitateur, outils facilitation, chronomÃ¨tre atelier, roulette participants, temps de parole, planificateur atelier, world cafÃ©, 1-2-4-all, dot voting, intelligence collective">
+<meta name="author" content="FacilithÃ¨que">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://facilkit.vercel.app/">
+<link rel="canonical" href="https://facilitheque.vercel.app/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="shortcut icon" href="/favicon.svg">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://facilkit.vercel.app/">
-<meta property="og:title" content="Facilithèque — Boîte à outils live pour facilitateurs">
-<meta property="og:description" content="Chronomètre, roulette, temps de parole, planificateur d'atelier, bibliothèque d'outils PDF. Tout ce qu'il faut pour animer un atelier, en un seul outil open source et gratuit.">
+<meta property="og:url" content="https://facilitheque.vercel.app/">
+<meta property="og:title" content="FacilithÃ¨que â€” BoÃ®te Ã  outils live pour facilitateurs">
+<meta property="og:description" content="ChronomÃ¨tre, roulette, temps de parole, planificateur d'atelier, bibliothÃ¨que d'outils PDF. Tout ce qu'il faut pour animer un atelier, en un seul outil open source et gratuit.">
 <meta property="og:locale" content="fr_FR">
-<meta property="og:site_name" content="Facilithèque">
+<meta property="og:site_name" content="FacilithÃ¨que">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Facilithèque — Boîte à outils live pour facilitateurs">
-<meta name="twitter:description" content="Chronomètre, roulette, temps de parole, planificateur d'atelier, bibliothèque d'outils PDF. Open source, gratuit, sans installation.">
+<meta name="twitter:title" content="FacilithÃ¨que â€” BoÃ®te Ã  outils live pour facilitateurs">
+<meta name="twitter:description" content="ChronomÃ¨tre, roulette, temps de parole, planificateur d'atelier, bibliothÃ¨que d'outils PDF. Open source, gratuit, sans installation.">
 <meta name="google-site-verification" content="PhIdJWXZ141shY9XAPKTKJKEv2lie_QhvMtsHsX8gGw" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -39,10 +39,10 @@ a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:'DM Sans',sans-serif}
 input,textarea,select{font-family:'DM Sans',sans-serif}
 
-/* ── APP SHELL ── */
+/* â”€â”€ APP SHELL â”€â”€ */
 #app{display:flex;height:100vh;overflow:hidden}
 
-/* ── SIDEBAR ── */
+/* â”€â”€ SIDEBAR â”€â”€ */
 #sidebar{width:220px;min-width:220px;background:var(--ink);display:flex;flex-direction:column;overflow:hidden;border-right:1px solid rgba(255,255,255,.06)}
 .sb-logo{padding:20px 16px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07)}
 .sb-logo-mark{width:32px;height:32px;background:var(--terra);border-radius:50% 50% 50% 10px;display:grid;place-items:center;flex-shrink:0}
@@ -60,7 +60,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .sb-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07)}
 .sb-footer p{font-size:.7rem;color:rgba(245,240,232,.2);line-height:1.5}
 
-/* ── MAIN ── */
+/* â”€â”€ MAIN â”€â”€ */
 #main{flex:1;overflow-y:auto;background:var(--cream);position:relative}
 #main::-webkit-scrollbar{width:6px}
 #main::-webkit-scrollbar-thumb{background:var(--cream-mid);border-radius:6px}
@@ -70,11 +70,11 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .panel-title{font-size:1.75rem;font-weight:700;color:var(--ink);margin-bottom:6px}
 .panel-sub{font-size:.9rem;color:var(--gray);margin-bottom:28px;font-weight:300}
 
-/* ── CARDS ── */
+/* â”€â”€ CARDS â”€â”€ */
 .card{background:#fff;border:1px solid var(--cream-dark);border-radius:var(--r16);padding:24px;box-shadow:var(--sh)}
 .card-sm{background:#fff;border:1px solid var(--cream-dark);border-radius:var(--r12);padding:18px}
 
-/* ── BUTTONS ── */
+/* â”€â”€ BUTTONS â”€â”€ */
 .btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:40px;font-size:.875rem;font-weight:500;border:none;transition:all var(--tr);cursor:pointer}
 .btn-primary{background:var(--terra);color:#fff;box-shadow:0 3px 14px rgba(201,107,58,.28)}
 .btn-primary:hover{background:var(--terra-d);transform:translateY(-1px)}
@@ -88,14 +88,14 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .btn-icon{width:36px;height:36px;padding:0;border-radius:50%;display:grid;place-items:center}
 .btn-icon svg{width:15px;height:15px}
 
-/* ── INPUTS ── */
+/* â”€â”€ INPUTS â”€â”€ */
 .input{width:100%;padding:10px 14px;border:1.5px solid var(--cream-mid);border-radius:var(--r8);background:#fff;font-size:.9rem;color:var(--ink);outline:none;transition:border-color var(--tr)}
 .input:focus{border-color:var(--terra)}
 .input::placeholder{color:var(--gray)}
 .textarea{resize:vertical;min-height:80px;line-height:1.6}
 .label{display:block;font-size:.78rem;font-weight:600;letter-spacing:.04em;color:var(--ink-s);margin-bottom:6px}
 
-/* ── HOME PANEL ── */
+/* â”€â”€ HOME PANEL â”€â”€ */
 .home-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
 .home-tool-card{background:#fff;border:1px solid var(--cream-dark);border-radius:var(--r16);padding:22px;cursor:pointer;transition:all var(--tr);display:flex;flex-direction:column;gap:12px}
 .home-tool-card:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:transparent}
@@ -103,7 +103,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .home-tool-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--ink)}
 .home-tool-desc{font-size:.78rem;color:var(--gray);line-height:1.5}
 
-/* ── TIMER PANEL ── */
+/* â”€â”€ TIMER PANEL â”€â”€ */
 .timer-wrap{display:grid;grid-template-columns:1fr 300px;gap:32px;align-items:start}
 .timer-center{display:flex;flex-direction:column;align-items:center;gap:24px}
 .timer-ring-wrap{position:relative;width:280px;height:280px;margin:0 auto}
@@ -123,7 +123,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .timer-controls{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .timer-side{display:flex;flex-direction:column;gap:16px}
 
-/* ── CHRONO PANEL ── */
+/* â”€â”€ CHRONO PANEL â”€â”€ */
 .chrono-display{font-family:'Playfair Display',serif;font-size:4.5rem;font-weight:700;color:var(--ink);text-align:center;letter-spacing:-.02em;line-height:1;padding:32px 0}
 .chrono-cs{font-size:2rem;color:var(--gray)}
 .laps-list{list-style:none;display:flex;flex-direction:column;gap:6px;max-height:280px;overflow-y:auto}
@@ -132,7 +132,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .lap-time{font-family:'Playfair Display',serif;font-weight:600}
 .lap-delta{color:var(--gray);font-size:.78rem}
 
-/* ── ROULETTE PANEL ── */
+/* â”€â”€ ROULETTE PANEL â”€â”€ */
 .roulette-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
 .roulette-stage{background:#fff;border:1px solid var(--cream-dark);border-radius:var(--r24);padding:32px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:360px;justify-content:center}
 .roulette-slot{font-family:'Playfair Display',serif;font-size:2.8rem;font-weight:700;color:var(--ink);text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center;line-height:1.2;transition:color .1s;word-break:break-word;max-width:100%}
@@ -147,7 +147,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .hist-item{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--cream);border-radius:var(--r8);font-size:.83rem}
 .hist-num{width:22px;height:22px;background:var(--terra);color:#fff;border-radius:50%;display:grid;place-items:center;font-size:.65rem;font-weight:700;flex-shrink:0}
 
-/* ── TEMPS DE PAROLE ── */
+/* â”€â”€ TEMPS DE PAROLE â”€â”€ */
 .parole-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px}
 .parole-card{background:#fff;border:2px solid var(--cream-mid);border-radius:var(--r16);padding:20px;text-align:center;cursor:pointer;transition:all var(--tr);user-select:none}
 .parole-card:hover{border-color:var(--terra);transform:translateY(-2px)}
@@ -160,7 +160,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .parole-mic{font-size:1.2rem;margin-bottom:4px}
 .parole-totals{display:flex;gap:20px;padding:16px;background:var(--cream-dark);border-radius:var(--r12);font-size:.85rem}
 
-/* ── SEQUENCE ── */
+/* â”€â”€ SEQUENCE â”€â”€ */
 .seq-phase-row{display:flex;align-items:center;gap:12px;padding:14px;background:#fff;border:1px solid var(--cream-dark);border-radius:var(--r12);margin-bottom:8px;transition:all var(--tr)}
 .seq-phase-row.seq-active{border-color:var(--terra);background:rgba(201,107,58,.04);box-shadow:0 0 0 3px rgba(201,107,58,.1)}
 .seq-phase-row.seq-done{opacity:.45}
@@ -175,7 +175,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .seq-progress-bar{height:6px;background:var(--cream-dark);border-radius:3px;overflow:hidden;margin:12px 0}
 .seq-progress-fill{height:100%;background:var(--terra);border-radius:3px;transition:width .5s}
 
-/* ── PLANNER ── */
+/* â”€â”€ PLANNER â”€â”€ */
 .planner-header{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
 .planner-phase-row{background:#fff;border:1px solid var(--cream-dark);border-radius:var(--r12);padding:18px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr 80px 140px 80px;gap:12px;align-items:start;transition:box-shadow var(--tr)}
 .planner-phase-row:hover{box-shadow:var(--sh)}
@@ -186,7 +186,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .planner-total-label{font-size:.8rem;color:rgba(245,240,232,.5)}
 .planner-actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
 
-/* ── LIBRARY ── */
+/* â”€â”€ LIBRARY â”€â”€ */
 .lib-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
 .lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
 .lib-card{background:#fff;border:1px solid var(--cream-dark);border-radius:var(--r16);padding:22px;cursor:pointer;transition:all var(--tr);position:relative;overflow:hidden}
@@ -210,7 +210,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .lib-card-footer{display:flex;gap:8px}
 .lib-card.hidden{display:none}
 
-/* ── MODAL ── */
+/* â”€â”€ MODAL â”€â”€ */
 .modal-ov{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
 .modal-ov.open{opacity:1;visibility:visible}
 .modal-box{background:#fff;border-radius:var(--r24);max-width:980px;width:100%;max-height:96vh;overflow:hidden;box-shadow:var(--sh2);display:flex;flex-direction:column;transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
@@ -242,7 +242,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .mprev-tag{display:inline-block;padding:3px 9px;background:#fff;border:1px solid var(--cream-dark);color:var(--ink-s);border-radius:20px;font-size:.7rem}
 .modal-tip{background:rgba(107,143,113,.08);border-left:3px solid var(--sage);border-radius:0 var(--r12) var(--r12) 0;padding:14px 18px;margin-top:18px;font-size:.85rem;color:var(--sage-d);line-height:1.65}
 
-/* ── FULLSCREEN TIMER ── */
+/* â”€â”€ FULLSCREEN TIMER â”€â”€ */
 #fs-ov{position:fixed;inset:0;background:#111;z-index:3000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:32px}
 #fs-ov.open{display:flex}
 #fs-ring-wrap{position:relative;width:380px;height:380px}
@@ -256,7 +256,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .fs-exit{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:var(--r8);padding:8px 14px;color:rgba(255,255,255,.6);font-size:.8rem;cursor:pointer;transition:all var(--tr)}
 .fs-exit:hover{background:rgba(255,255,255,.15);color:#fff}
 
-/* ── PILLS ── */
+/* â”€â”€ PILLS â”€â”€ */
 .pill{padding:6px 14px;border-radius:40px;font-size:.78rem;font-weight:500;border:1.5px solid var(--cream-mid);background:#fff;color:var(--ink-s);cursor:pointer;transition:all var(--tr)}
 .pill:hover{border-color:var(--terra);color:var(--terra)}
 .pill.active{background:var(--terra);border-color:var(--terra);color:#fff}
@@ -264,7 +264,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .pill[data-phase=cloture].active{background:var(--gold);border-color:var(--gold)}
 .pill[data-phase=avant].active{background:var(--blue);border-color:var(--blue)}
 
-/* ── MISC ── */
+/* â”€â”€ MISC â”€â”€ */
 .divider{height:1px;background:var(--cream-dark);margin:20px 0}
 .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:.7rem;font-weight:600}
 .empty-state{text-align:center;padding:48px 20px;color:var(--gray)}
@@ -278,7 +278,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .text-sm{font-size:.82rem}.text-xs{font-size:.72rem}.text-gray{color:var(--gray)}
 .fw6{font-weight:600}
 
-/* ── PARKING ── */
+/* â”€â”€ PARKING â”€â”€ */
 .parking-board{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
 .parking-note{border-radius:var(--r12);padding:18px;position:relative;animation:noteIn .25s cubic-bezier(.34,1.56,.64,1)}
 @keyframes noteIn{from{opacity:0;transform:scale(.85) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
@@ -311,7 +311,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 
 <!-- FULLSCREEN TIMER -->
 <div id="fs-ov">
-  <button class="fs-exit" onclick="fsClose()">✕ Quitter plein écran</button>
+  <button class="fs-exit" onclick="fsClose()">âœ• Quitter plein Ã©cran</button>
   <div id="fs-ring-wrap">
     <svg viewBox="0 0 380 380">
       <circle cx="190" cy="190" r="160" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>
@@ -325,8 +325,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
     </div>
   </div>
   <div class="fs-controls">
-    <button class="fs-btn" id="fs-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
-    <button class="fs-btn" onclick="timerReset()">↺ Reset</button>
+    <button class="fs-btn" id="fs-toggle-btn" onclick="timerToggle()">â–¶ DÃ©marrer</button>
+    <button class="fs-btn" onclick="timerReset()">â†º Reset</button>
   </div>
 </div>
 
@@ -338,7 +338,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
       <div class="sb-logo-mark">
         <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" fill="white"/><path d="M8 1.5V3M8 13v1.5M1.5 8H3M13 8h1.5M3.1 3.1l1.1 1.1M11.8 11.8l1.1 1.1M3.1 12.9l1.1-1.1M11.8 4.2l1.1-1.1" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
       </div>
-      <span class="sb-logo-text">Facilithèque</span>
+      <span class="sb-logo-text">FacilithÃ¨que</span>
     </div>
     <nav class="sb-nav">
       <button class="nav-item active" data-panel="home">
@@ -352,7 +352,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
       </button>
       <button class="nav-item" data-panel="chrono">
         <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="9" r="5.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 6v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M5.5 1.5h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="9" r="1" fill="currentColor"/></svg>
-        <span>Chronomètre</span>
+        <span>ChronomÃ¨tre</span>
       </button>
       <button class="nav-item" data-panel="roulette">
         <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.3"/><path d="M8 2v6l3 3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><circle cx="8" cy="8" r="1.5" fill="currentColor"/></svg>
@@ -364,23 +364,23 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
       </button>
       <button class="nav-item" data-panel="sequence">
         <svg viewBox="0 0 16 16" fill="none"><path d="M2 4h12M2 8h9M2 12h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-        <span>Séquence</span>
+        <span>SÃ©quence</span>
       </button>
-      <div class="nav-label">Préparer</div>
+      <div class="nav-label">PrÃ©parer</div>
       <button class="nav-item" data-panel="planner">
         <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 6h6M5 9h4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><path d="M5 2v2M11 2v2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         <span>Planificateur</span>
       </button>
       <button class="nav-item" data-panel="library">
         <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.3"/></svg>
-        <span>Bibliothèque</span>
+        <span>BibliothÃ¨que</span>
       </button>
       <button class="nav-item" data-panel="parking">
         <svg viewBox="0 0 16 16" fill="none"><rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3"/><path d="M6 5h3a1.5 1.5 0 010 3H6V5z" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><path d="M6 8v3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
         <span>Parking</span>
       </button>
     </nav>
-    <div class="sb-footer"><p>Facilithèque · Open source<br>Fait pour les facilitateurs</p></div>
+    <div class="sb-footer"><p>FacilithÃ¨que Â· Open source<br>Fait pour les facilitateurs</p></div>
   </aside>
 
   <!-- MAIN -->
@@ -389,47 +389,47 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
     <!-- HOME -->
     <section class="panel active" id="p-home">
       <h1 class="panel-title">Tableau de bord</h1>
-      <p class="panel-sub">Lance un outil rapidement ou reprends là où tu en étais.</p>
+      <p class="panel-sub">Lance un outil rapidement ou reprends lÃ  oÃ¹ tu en Ã©tais.</p>
       <div class="home-grid">
         <div class="home-tool-card" onclick="goPanel('timer')">
-          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">⏱</div>
+          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">â±</div>
           <div class="home-tool-name">Minuteur</div>
-          <div class="home-tool-desc">Décompte avec anneau de progression, presets, plein écran</div>
+          <div class="home-tool-desc">DÃ©compte avec anneau de progression, presets, plein Ã©cran</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('roulette')">
-          <div class="home-tool-icon" style="background:rgba(201,107,58,.12)">🎲</div>
+          <div class="home-tool-icon" style="background:rgba(201,107,58,.12)">ðŸŽ²</div>
           <div class="home-tool-name">Roulette</div>
           <div class="home-tool-desc">Tire un participant au sort parmi ta liste</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('parole')">
-          <div class="home-tool-icon" style="background:rgba(91,127,166,.12)">💬</div>
+          <div class="home-tool-icon" style="background:rgba(91,127,166,.12)">ðŸ’¬</div>
           <div class="home-tool-name">Temps de parole</div>
-          <div class="home-tool-desc">Chronomètre la parole de chaque participant en live</div>
+          <div class="home-tool-desc">ChronomÃ¨tre la parole de chaque participant en live</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('planner')">
-          <div class="home-tool-icon" style="background:rgba(196,148,58,.12)">📋</div>
+          <div class="home-tool-icon" style="background:rgba(196,148,58,.12)">ðŸ“‹</div>
           <div class="home-tool-name">Planificateur</div>
-          <div class="home-tool-desc">Conçois ton déroulé et exporte-le en PDF</div>
+          <div class="home-tool-desc">ConÃ§ois ton dÃ©roulÃ© et exporte-le en PDF</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('chrono')">
-          <div class="home-tool-icon" style="background:rgba(184,84,80,.12)">⏲</div>
-          <div class="home-tool-name">Chronomètre</div>
-          <div class="home-tool-desc">Mesure une durée libre avec gestion des tours</div>
+          <div class="home-tool-icon" style="background:rgba(184,84,80,.12)">â²</div>
+          <div class="home-tool-name">ChronomÃ¨tre</div>
+          <div class="home-tool-desc">Mesure une durÃ©e libre avec gestion des tours</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('sequence')">
-          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">🔄</div>
-          <div class="home-tool-name">Séquence</div>
-          <div class="home-tool-desc">Enchaîne des phases minutées automatiquement</div>
+          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">ðŸ”„</div>
+          <div class="home-tool-name">SÃ©quence</div>
+          <div class="home-tool-desc">EnchaÃ®ne des phases minutÃ©es automatiquement</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('library')">
-          <div class="home-tool-icon" style="background:rgba(196,148,58,.12)">🛠</div>
-          <div class="home-tool-name">Bibliothèque</div>
-          <div class="home-tool-desc">48 outils filtrables, téléchargeables en PDF</div>
+          <div class="home-tool-icon" style="background:rgba(196,148,58,.12)">ðŸ› </div>
+          <div class="home-tool-name">BibliothÃ¨que</div>
+          <div class="home-tool-desc">48 outils filtrables, tÃ©lÃ©chargeables en PDF</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('parking')">
-          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">🅿️</div>
+          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">ðŸ…¿ï¸</div>
           <div class="home-tool-name">Parking</div>
-          <div class="home-tool-desc">Capture les idées hors-sujet en plein atelier</div>
+          <div class="home-tool-desc">Capture les idÃ©es hors-sujet en plein atelier</div>
         </div>
       </div>
       <div id="home-planner-preview"></div>
@@ -438,12 +438,12 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
     <!-- TIMER -->
     <section class="panel" id="p-timer">
       <h1 class="panel-title">Minuteur</h1>
-      <p class="panel-sub">Décompte visible de loin. Plein écran pour projeter.</p>
+      <p class="panel-sub">DÃ©compte visible de loin. Plein Ã©cran pour projeter.</p>
       <div class="timer-wrap">
         <div class="timer-center">
           <div style="width:100%;max-width:320px">
-            <label class="label">Libellé (optionnel)</label>
-            <input class="input" id="timer-label-inp" placeholder="Ex : Tour de table, Travail en sous-groupe…" oninput="timerLabelUpdate()">
+            <label class="label">LibellÃ© (optionnel)</label>
+            <input class="input" id="timer-label-inp" placeholder="Ex : Tour de table, Travail en sous-groupeâ€¦" oninput="timerLabelUpdate()">
           </div>
           <div class="timer-presets">
             <button class="preset-btn" onclick="timerSet(2,this)">2 min</button>
@@ -452,7 +452,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
             <button class="preset-btn" onclick="timerSet(15,this)">15 min</button>
             <button class="preset-btn" onclick="timerSet(20,this)">20 min</button>
             <button class="preset-btn" onclick="timerSet(30,this)">30 min</button>
-            <button class="preset-btn" id="custom-preset-btn" onclick="timerSetCustom(this)">Autre…</button>
+            <button class="preset-btn" id="custom-preset-btn" onclick="timerSetCustom(this)">Autreâ€¦</button>
           </div>
           <div class="timer-ring-wrap" id="timer-ring-wrap">
             <svg viewBox="0 0 280 280">
@@ -468,17 +468,17 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
             </div>
           </div>
           <div class="timer-controls">
-            <button class="btn btn-primary" id="timer-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
-            <button class="btn btn-secondary" onclick="timerReset()">↺ Reset</button>
-            <button class="btn btn-ghost" onclick="fsOpen()" title="Plein écran">
+            <button class="btn btn-primary" id="timer-toggle-btn" onclick="timerToggle()">â–¶ DÃ©marrer</button>
+            <button class="btn btn-secondary" onclick="timerReset()">â†º Reset</button>
+            <button class="btn btn-ghost" onclick="fsOpen()" title="Plein Ã©cran">
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2h4M2 2v4M13 2h-4M13 2v4M2 13h4M2 13v-4M13 13h-4M13 13v-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-              Plein écran
+              Plein Ã©cran
             </button>
           </div>
         </div>
         <div class="timer-side">
           <div class="card">
-            <div class="fw6 text-sm" style="margin-bottom:12px">Durée personnalisée</div>
+            <div class="fw6 text-sm" style="margin-bottom:12px">DurÃ©e personnalisÃ©e</div>
             <div class="flex-row">
               <input class="input" id="custom-min" type="number" min="0" max="99" placeholder="min" style="width:70px;text-align:center">
               <span class="text-gray">:</span>
@@ -496,10 +496,10 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
           <div class="card" id="timer-color-guide">
             <div class="fw6 text-sm" style="margin-bottom:12px">Code couleur</div>
             <div style="display:flex;flex-direction:column;gap:8px;font-size:.8rem">
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--sage);display:inline-block"></span> Vert — plus de 50%</div>
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--gold);display:inline-block"></span> Or — 25 à 50%</div>
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--terra);display:inline-block"></span> Terracotta — 10 à 25%</div>
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--red);display:inline-block"></span> Rouge — moins de 10%</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--sage);display:inline-block"></span> Vert â€” plus de 50%</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--gold);display:inline-block"></span> Or â€” 25 Ã  50%</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--terra);display:inline-block"></span> Terracotta â€” 10 Ã  25%</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--red);display:inline-block"></span> Rouge â€” moins de 10%</div>
             </div>
           </div>
         </div>
@@ -508,23 +508,23 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 
     <!-- CHRONO -->
     <section class="panel" id="p-chrono">
-      <h1 class="panel-title">Chronomètre</h1>
-      <p class="panel-sub">Mesure une durée libre. Enregistre des tours.</p>
+      <h1 class="panel-title">ChronomÃ¨tre</h1>
+      <p class="panel-sub">Mesure une durÃ©e libre. Enregistre des tours.</p>
       <div class="two-col" style="align-items:start">
         <div class="card" style="text-align:center">
           <div class="chrono-display" id="chrono-display">
             <span id="chrono-main">00:00</span><span class="chrono-cs">.<span id="chrono-cs">00</span></span>
           </div>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button class="btn btn-primary" id="chrono-toggle-btn" onclick="chronoToggle()">▶ Démarrer</button>
+            <button class="btn btn-primary" id="chrono-toggle-btn" onclick="chronoToggle()">â–¶ DÃ©marrer</button>
             <button class="btn btn-secondary" onclick="chronoLap()" id="chrono-lap-btn" disabled>Tour</button>
-            <button class="btn btn-ghost" onclick="chronoReset()">↺ Reset</button>
+            <button class="btn btn-ghost" onclick="chronoReset()">â†º Reset</button>
           </div>
         </div>
         <div class="card">
-          <div class="fw6 text-sm" style="margin-bottom:14px">Tours enregistrés</div>
+          <div class="fw6 text-sm" style="margin-bottom:14px">Tours enregistrÃ©s</div>
           <ul class="laps-list" id="laps-list">
-            <li style="text-align:center;padding:20px;color:var(--gray);font-size:.85rem">Les tours apparaîtront ici</li>
+            <li style="text-align:center;padding:20px;color:var(--gray);font-size:.85rem">Les tours apparaÃ®tront ici</li>
           </ul>
         </div>
       </div>
@@ -539,12 +539,12 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
           <div class="card">
             <label class="label">Ajouter un participant</label>
             <div class="flex-row mt8">
-              <input class="input" id="roulette-inp" placeholder="Prénom ou nom…" onkeydown="rouletteKeydown(event)">
+              <input class="input" id="roulette-inp" placeholder="PrÃ©nom ou nomâ€¦" onkeydown="rouletteKeydown(event)">
               <button class="btn btn-primary btn-sm" onclick="rouletteAddFromInput()">+ Ajouter</button>
             </div>
             <div style="margin-top:10px">
               <label class="label">Ou coller une liste (une par ligne)</label>
-              <textarea class="input textarea" id="roulette-bulk" placeholder="Alice&#10;Bob&#10;Camille&#10;…" style="min-height:60px"></textarea>
+              <textarea class="input textarea" id="roulette-bulk" placeholder="Alice&#10;Bob&#10;Camille&#10;â€¦" style="min-height:60px"></textarea>
               <button class="btn btn-secondary btn-sm mt8" onclick="rouletteBulkAdd()">Importer la liste</button>
             </div>
             <div class="divider"></div>
@@ -553,7 +553,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
             <div class="flex-row mt12">
               <label style="display:flex;align-items:center;gap:8px;font-size:.82rem;cursor:pointer;color:var(--ink-s)">
                 <input type="checkbox" id="roulette-remove" style="accent-color:var(--terra);width:14px;height:14px">
-                Retirer après le tirage
+                Retirer aprÃ¨s le tirage
               </label>
               <button class="btn btn-ghost btn-sm" onclick="rouletteClear()">Vider</button>
             </div>
@@ -566,7 +566,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
         <div>
           <div class="roulette-stage">
             <div id="roulette-slot" class="roulette-idle">Entre des noms<br>et lance la roulette !</div>
-            <button class="btn btn-primary" id="roulette-spin-btn" onclick="rouletteSpin()" style="font-size:1.1rem;padding:14px 36px">🎲 Tourner !</button>
+            <button class="btn btn-primary" id="roulette-spin-btn" onclick="rouletteSpin()" style="font-size:1.1rem;padding:14px 36px">ðŸŽ² Tourner !</button>
           </div>
         </div>
       </div>
@@ -575,51 +575,51 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
     <!-- TEMPS DE PAROLE -->
     <section class="panel" id="p-parole">
       <h1 class="panel-title">Temps de parole</h1>
-      <p class="panel-sub">Clique sur un participant pour démarrer / stopper son chrono.</p>
+      <p class="panel-sub">Clique sur un participant pour dÃ©marrer / stopper son chrono.</p>
       <div class="flex-row" style="margin-bottom:20px">
-        <input class="input" id="parole-inp" placeholder="Ajouter un participant…" onkeydown="paroleKeydown(event)" style="max-width:280px">
+        <input class="input" id="parole-inp" placeholder="Ajouter un participantâ€¦" onkeydown="paroleKeydown(event)" style="max-width:280px">
         <button class="btn btn-primary btn-sm" onclick="paroleAdd()">+ Ajouter</button>
-        <button class="btn btn-ghost btn-sm" onclick="paroleReset()">↺ Remettre à zéro</button>
-        <button class="btn btn-secondary btn-sm" onclick="parolePrint()">⬇ Exporter</button>
+        <button class="btn btn-ghost btn-sm" onclick="paroleReset()">â†º Remettre Ã  zÃ©ro</button>
+        <button class="btn btn-secondary btn-sm" onclick="parolePrint()">â¬‡ Exporter</button>
       </div>
       <div class="parole-grid" id="parole-grid"></div>
       <div id="parole-totals-wrap" style="display:none">
         <div class="parole-totals" id="parole-totals"></div>
       </div>
       <div id="parole-empty" class="empty-state">
-        <div class="es-icon">💬</div>
+        <div class="es-icon">ðŸ’¬</div>
         <p>Ajoute les participants pour commencer le suivi</p>
       </div>
     </section>
 
     <!-- SEQUENCE -->
     <section class="panel" id="p-sequence">
-      <h1 class="panel-title">Séquence de timers</h1>
-      <p class="panel-sub">Enchaîne des phases minutées. L'alerte passe automatiquement à la suivante.</p>
+      <h1 class="panel-title">SÃ©quence de timers</h1>
+      <p class="panel-sub">EnchaÃ®ne des phases minutÃ©es. L'alerte passe automatiquement Ã  la suivante.</p>
       <div class="two-col" style="align-items:start">
         <div>
           <div class="flex-between" style="margin-bottom:12px">
-            <span class="fw6 text-sm">Phases de la séquence</span>
+            <span class="fw6 text-sm">Phases de la sÃ©quence</span>
             <button class="btn btn-primary btn-sm" onclick="seqAddPhase()">+ Ajouter une phase</button>
           </div>
           <div id="seq-phases-list"></div>
           <div id="seq-total-row" style="display:none;margin-top:12px;padding:12px 16px;background:var(--cream-dark);border-radius:var(--r12);align-items:center;justify-content:space-between">
-            <span class="text-xs text-gray fw6">DURÉE TOTALE</span>
-            <span id="seq-total-dur" class="fw6" style="font-family:'Playfair Display',serif;color:var(--ink)">—</span>
+            <span class="text-xs text-gray fw6">DURÃ‰E TOTALE</span>
+            <span id="seq-total-dur" class="fw6" style="font-family:'Playfair Display',serif;color:var(--ink)">â€”</span>
           </div>
           <div class="flex-between mt16">
-            <button class="btn btn-primary" id="seq-start-btn" onclick="seqStart()">▶ Lancer la séquence</button>
-            <button class="btn btn-ghost btn-sm" onclick="seqReset()">↺ Reset</button>
+            <button class="btn btn-primary" id="seq-start-btn" onclick="seqStart()">â–¶ Lancer la sÃ©quence</button>
+            <button class="btn btn-ghost btn-sm" onclick="seqReset()">â†º Reset</button>
           </div>
         </div>
         <div class="card" style="text-align:center">
-          <div class="seq-phase-name" id="seq-current-name">—</div>
+          <div class="seq-phase-name" id="seq-current-name">â€”</div>
           <div class="seq-display" id="seq-display">00:00</div>
           <div class="seq-progress-bar"><div class="seq-progress-fill" id="seq-prog-fill" style="width:0%"></div></div>
-          <div class="text-xs text-gray" id="seq-progress-label">—</div>
+          <div class="text-xs text-gray" id="seq-progress-label">â€”</div>
           <div style="margin-top:20px;display:flex;gap:10px;justify-content:center">
-            <button class="btn btn-primary btn-sm" id="seq-toggle-btn" onclick="seqToggle()">▶</button>
-            <button class="btn btn-ghost btn-sm" onclick="seqSkip()">Passer →</button>
+            <button class="btn btn-primary btn-sm" id="seq-toggle-btn" onclick="seqToggle()">â–¶</button>
+            <button class="btn btn-ghost btn-sm" onclick="seqSkip()">Passer â†’</button>
           </div>
         </div>
       </div>
@@ -630,47 +630,47 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
       <div class="flex-between" style="margin-bottom:24px">
         <div>
           <h1 class="panel-title">Planificateur d'atelier</h1>
-          <p class="panel-sub">Construis ton déroulé. Sauvegardé automatiquement.</p>
+          <p class="panel-sub">Construis ton dÃ©roulÃ©. SauvegardÃ© automatiquement.</p>
         </div>
         <div style="display:flex;gap:10px">
-          <button class="btn btn-secondary btn-sm" onclick="plannerClear()">🗑 Effacer</button>
-          <button class="btn btn-primary" onclick="plannerExportPDF()">⬇ Exporter PDF</button>
+          <button class="btn btn-secondary btn-sm" onclick="plannerClear()">ðŸ—‘ Effacer</button>
+          <button class="btn btn-primary" onclick="plannerExportPDF()">â¬‡ Exporter PDF</button>
         </div>
       </div>
       <div class="planner-header">
         <div>
           <label class="label">Nom de l'atelier</label>
-          <input class="input" id="plan-name" placeholder="Ex : Rétrospective Q2" oninput="plannerSave()">
+          <input class="input" id="plan-name" placeholder="Ex : RÃ©trospective Q2" oninput="plannerSave()">
         </div>
         <div>
           <label class="label">Date</label>
           <input class="input" id="plan-date" type="date" oninput="plannerSave()">
         </div>
         <div>
-          <label class="label">Facilitateur·trice</label>
-          <input class="input" id="plan-fac" placeholder="Ton prénom" oninput="plannerSave()">
+          <label class="label">FacilitateurÂ·trice</label>
+          <input class="input" id="plan-fac" placeholder="Ton prÃ©nom" oninput="plannerSave()">
         </div>
         <div>
           <label class="label">Lieu</label>
-          <input class="input" id="plan-loc" placeholder="Salle, visio…" oninput="plannerSave()">
+          <input class="input" id="plan-loc" placeholder="Salle, visioâ€¦" oninput="plannerSave()">
         </div>
       </div>
       <div class="flex-between" style="margin-bottom:12px">
-        <span class="fw6 text-sm">Phases & activités</span>
+        <span class="fw6 text-sm">Phases & activitÃ©s</span>
         <button class="btn btn-primary btn-sm" onclick="plannerAddPhase()">+ Ajouter une phase</button>
       </div>
       <div id="planner-phases"></div>
       <div class="planner-total" id="planner-total">
         <div>
-          <div class="planner-total-label">Durée totale de l'atelier</div>
+          <div class="planner-total-label">DurÃ©e totale de l'atelier</div>
           <div class="planner-total-num" id="plan-total-time">0 min</div>
         </div>
         <div style="flex:1"></div>
         <div style="color:rgba(245,240,232,.4);font-size:.8rem" id="plan-phase-count">0 phase</div>
       </div>
       <div class="mt24">
-        <label class="label">Notes générales</label>
-        <textarea class="input textarea" id="plan-notes" placeholder="Objectifs, contraintes, matériel, parking…" style="min-height:100px" oninput="plannerSave()"></textarea>
+        <label class="label">Notes gÃ©nÃ©rales</label>
+        <textarea class="input textarea" id="plan-notes" placeholder="Objectifs, contraintes, matÃ©riel, parkingâ€¦" style="min-height:100px" oninput="plannerSave()"></textarea>
       </div>
     </section>
 
@@ -679,35 +679,35 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
       <div class="flex-between" style="margin-bottom:8px">
         <div>
           <h1 class="panel-title">Parking</h1>
-          <p class="panel-sub">Capture les idées hors-sujet pendant l'atelier. On y revient après.</p>
+          <p class="panel-sub">Capture les idÃ©es hors-sujet pendant l'atelier. On y revient aprÃ¨s.</p>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-secondary btn-sm" onclick="parkingPrint()">⬇ Exporter</button>
-          <button class="btn btn-ghost btn-sm" onclick="parkingClear()">🗑 Vider</button>
+          <button class="btn btn-secondary btn-sm" onclick="parkingPrint()">â¬‡ Exporter</button>
+          <button class="btn btn-ghost btn-sm" onclick="parkingClear()">ðŸ—‘ Vider</button>
         </div>
       </div>
-      <input class="input" id="parking-title" placeholder="Titre de la séance ou de l'atelier…" oninput="PARK.saveTitle()" style="width:100%;margin-bottom:10px">
+      <input class="input" id="parking-title" placeholder="Titre de la sÃ©ance ou de l'atelierâ€¦" oninput="PARK.saveTitle()" style="width:100%;margin-bottom:10px">
       <div style="display:flex;gap:10px;margin-bottom:20px">
-        <input class="input" id="parking-inp" placeholder="Une idée, un sujet à traiter plus tard…" onkeydown="parkingKeydown(event)" style="flex:1">
+        <input class="input" id="parking-inp" placeholder="Une idÃ©e, un sujet Ã  traiter plus tardâ€¦" onkeydown="parkingKeydown(event)" style="flex:1">
         <select class="input" id="parking-cat" style="width:150px">
-          <option value="idee">💡 Idée</option>
-          <option value="question">❓ Question</option>
-          <option value="action">✅ Action</option>
-          <option value="blocage">⚡ Blocage</option>
+          <option value="idee">ðŸ’¡ IdÃ©e</option>
+          <option value="question">â“ Question</option>
+          <option value="action">âœ… Action</option>
+          <option value="blocage">âš¡ Blocage</option>
         </select>
         <button class="btn btn-primary" onclick="parkingAdd()">+ Ajouter</button>
       </div>
       <div id="parking-board" class="parking-board"></div>
       <div id="parking-empty" class="empty-state">
-        <div class="es-icon">🅿️</div>
-        <p>Le parking est vide.<br>Capture ici tout ce qui émerge mais sort du sujet principal.</p>
+        <div class="es-icon">ðŸ…¿ï¸</div>
+        <p>Le parking est vide.<br>Capture ici tout ce qui Ã©merge mais sort du sujet principal.</p>
       </div>
     </section>
 
     <!-- LIBRARY -->
     <section class="panel" id="p-library">
-      <h1 class="panel-title">Bibliothèque d'outils</h1>
-      <p class="panel-sub">48 outils classés par phase et besoin. Chaque fiche est téléchargeable en PDF.</p>
+      <h1 class="panel-title">BibliothÃ¨que d'outils</h1>
+      <p class="panel-sub">48 outils classÃ©s par phase et besoin. Chaque fiche est tÃ©lÃ©chargeable en PDF.</p>
       <div class="lib-filters" id="lib-phase-filters"></div>
       <div class="lib-filters" id="lib-need-filters"></div>
       <div class="lib-grid" id="lib-grid"></div>
@@ -734,11 +734,11 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
           <div class="modal-meta-row" id="modal-meta"></div>
           <div class="modal-sec">Description</div>
           <p id="modal-desc" style="font-size:.9rem;line-height:1.75;color:var(--ink-s)"></p>
-          <div class="modal-sec" style="margin-top:20px">Déroulé en pratique</div>
+          <div class="modal-sec" style="margin-top:20px">DÃ©roulÃ© en pratique</div>
           <ul class="modal-steps" id="modal-steps"></ul>
           <div class="modal-tip" id="modal-tip"></div>
           <div style="margin-top:24px;display:flex;gap:10px">
-            <button class="btn btn-primary" onclick="toolPDF()">⬇ Fiche PDF</button>
+            <button class="btn btn-primary" onclick="toolPDF()">â¬‡ Fiche PDF</button>
             <button class="btn btn-secondary" onclick="toolModalCloseBtn()">Fermer</button>
           </div>
         </div>
@@ -749,9 +749,9 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 </div>
 
 <script>
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // NAVIGATION
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const panels = {};
 document.querySelectorAll('.panel').forEach(p => panels[p.id.replace('p-','')] = p);
 document.querySelectorAll('.nav-item').forEach(btn => {
@@ -771,9 +771,9 @@ function goPanel(id) {
   if (id === 'sequence') { seqRender(); seqUpdateDisplay(); }
 }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SOUND
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function beep(freqs, vol=0.35) {
   try {
     const ctx = new (window.AudioContext||window.webkitAudioContext)();
@@ -791,9 +791,9 @@ const SND_TIMER_END = [[880,0,.3],[880,.35,.3],[1047,.7,.4]];
 const SND_WIN = [[523,0,.18],[659,.16,.18],[784,.32,.18],[1047,.48,.3]];
 const SND_PHASE = [[660,0,.2],[880,.22,.2]];
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TIMER
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const CIRC_280 = 753.98, CIRC_380 = 1005.3;
 const T = {
   total: 300, remaining: 300, running: false, iv: null,
@@ -840,7 +840,7 @@ const T = {
     document.getElementById('fs-ring').style.stroke = c;
   },
   updateBtn(){
-    const t = T.running?'⏸ Pause':'▶ Démarrer';
+    const t = T.running?'â¸ Pause':'â–¶ DÃ©marrer';
     document.getElementById('timer-toggle-btn').textContent=t;
     document.getElementById('fs-toggle-btn').textContent=t;
   }
@@ -855,27 +855,27 @@ function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') fsClose(); });
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // CHRONO
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const CH = {
   ms:0, running:false, iv:null, lapStart:0, laps:[],
   toggle(){ CH.running ? CH.stop() : CH.start(); },
-  start(){ CH.running=true; const start=Date.now()-CH.ms; CH.iv=setInterval(()=>{ CH.ms=Date.now()-start; CH.render(); },31); document.getElementById('chrono-toggle-btn').textContent='⏸ Pause'; document.getElementById('chrono-lap-btn').disabled=false; },
-  stop(){ CH.running=false; clearInterval(CH.iv); document.getElementById('chrono-toggle-btn').textContent='▶ Reprendre'; },
-  reset(){ CH.stop(); CH.ms=0; CH.laps=[]; CH.lapStart=0; CH.render(); CH.renderLaps(); document.getElementById('chrono-toggle-btn').textContent='▶ Démarrer'; document.getElementById('chrono-lap-btn').disabled=true; },
+  start(){ CH.running=true; const start=Date.now()-CH.ms; CH.iv=setInterval(()=>{ CH.ms=Date.now()-start; CH.render(); },31); document.getElementById('chrono-toggle-btn').textContent='â¸ Pause'; document.getElementById('chrono-lap-btn').disabled=false; },
+  stop(){ CH.running=false; clearInterval(CH.iv); document.getElementById('chrono-toggle-btn').textContent='â–¶ Reprendre'; },
+  reset(){ CH.stop(); CH.ms=0; CH.laps=[]; CH.lapStart=0; CH.render(); CH.renderLaps(); document.getElementById('chrono-toggle-btn').textContent='â–¶ DÃ©marrer'; document.getElementById('chrono-lap-btn').disabled=true; },
   lap(){ if(!CH.running) return; const lapMs=CH.ms-CH.lapStart; CH.laps.push({total:CH.ms,lap:lapMs}); CH.lapStart=CH.ms; CH.renderLaps(); },
   render(){ const t=CH.ms; const m=Math.floor(t/60000), s=Math.floor((t%60000)/1000), cs=Math.floor((t%1000)/10); document.getElementById('chrono-main').textContent=`${pad(m)}:${pad(s)}`; document.getElementById('chrono-cs').textContent=pad(cs); },
-  renderLaps(){ const el=document.getElementById('laps-list'); if(!CH.laps.length){el.innerHTML='<li style="text-align:center;padding:20px;color:var(--gray);font-size:.85rem">Les tours apparaîtront ici</li>';return;} el.innerHTML=CH.laps.map((l,i)=>`<li class="lap-item"><span class="lap-num">Tour ${i+1}</span><span class="lap-time">${fmtMs(l.lap)}</span><span class="lap-delta">${fmtMs(l.total)}</span></li>`).reverse().join(''); }
+  renderLaps(){ const el=document.getElementById('laps-list'); if(!CH.laps.length){el.innerHTML='<li style="text-align:center;padding:20px;color:var(--gray);font-size:.85rem">Les tours apparaÃ®tront ici</li>';return;} el.innerHTML=CH.laps.map((l,i)=>`<li class="lap-item"><span class="lap-num">Tour ${i+1}</span><span class="lap-time">${fmtMs(l.lap)}</span><span class="lap-delta">${fmtMs(l.total)}</span></li>`).reverse().join(''); }
 };
 function chronoToggle(){ CH.toggle(); }
 function chronoLap(){ CH.lap(); }
 function chronoReset(){ CH.reset(); }
 function fmtMs(ms){ const m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000),cs=Math.floor((ms%1000)/10); return `${pad(m)}:${pad(s)}.${pad(cs)}`; }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // ROULETTE
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const RL = {
   names:[], history:[],
   save(){ try{localStorage.setItem('fk-rl',JSON.stringify(RL.names));}catch(e){} },
@@ -886,7 +886,7 @@ const RL = {
   renderTags(){
     const el=document.getElementById('roulette-tags');
     document.getElementById('roulette-count').textContent=RL.names.length;
-    el.innerHTML=RL.names.length ? RL.names.map((n,i)=>`<span class="name-tag">${escHtml(n)}<button onclick="RL.removeName(${i})">×</button></span>`).join('') : '<span style="font-size:.78rem;color:var(--gray)">Aucun participant pour l\'instant</span>';
+    el.innerHTML=RL.names.length ? RL.names.map((n,i)=>`<span class="name-tag">${escHtml(n)}<button onclick="RL.removeName(${i})">Ã—</button></span>`).join('') : '<span style="font-size:.78rem;color:var(--gray)">Aucun participant pour l\'instant</span>';
   },
   spin(){
     if(RL.names.length===0) return;
@@ -922,9 +922,9 @@ function rouletteBulkAdd(){ document.getElementById('roulette-bulk').value.split
 function rouletteSpin(){ RL.spin(); }
 function rouletteClear(){ RL.clear(); }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // TEMPS DE PAROLE
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const PA = {
   parts:[], activeIdx:null, iv:null,
   save(){ try{localStorage.setItem('fk-pa',JSON.stringify(PA.parts.map(p=>p.name)));}catch(e){} },
@@ -950,11 +950,11 @@ const PA = {
       const pct=Math.round(p.time/tot*100);
       const warn=pct>40&&PA.parts.length>1;
       return `<div class="parole-card${p.active?' active-spk':''}" onclick="PA.toggle(${i})">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button onclick="event.stopPropagation();PA.remove(${i})" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;transition:color .2s" title="Retirer ce participant" onmouseenter="this.style.color='var(--red)'" onmouseleave="this.style.color='var(--gray)'">✕</button></div>
-        <div class="parole-mic">${p.active?'🎙':'🎤'}</div>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button onclick="event.stopPropagation();PA.remove(${i})" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;transition:color .2s" title="Retirer ce participant" onmouseenter="this.style.color='var(--red)'" onmouseleave="this.style.color='var(--gray)'">âœ•</button></div>
+        <div class="parole-mic">${p.active?'ðŸŽ™':'ðŸŽ¤'}</div>
         <div class="parole-name">${escHtml(p.name)}</div>
         <div class="parole-time-disp">${fmtSec(p.time)}</div>
-        <div style="font-size:.7rem;color:${warn?'var(--terra)':'var(--gray)'};margin-top:4px;font-weight:${warn?'600':'400'}">${pct}% du total${warn?' ⚠':''}</div>
+        <div style="font-size:.7rem;color:${warn?'var(--terra)':'var(--gray)'};margin-top:4px;font-weight:${warn?'600':'400'}">${pct}% du total${warn?' âš ':''}</div>
         <div class="parole-bar-wrap"><div class="parole-bar${warn?' warn':''}" style="width:${pct}%"></div></div>
       </div>`;
     }).join('');
@@ -988,7 +988,7 @@ function parolePrint(){
   const M=20, tot=PA.total();
   pdfHeader(doc,'RAPPORT D\'ATELIER','Temps de parole');
   doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(138,128,120);
-  doc.text(`Généré le ${new Date().toLocaleString('fr-FR')}`,M,36);
+  doc.text(`GÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}`,M,36);
   const rows=PA.parts.map(p=>[p.name,fmtSec(p.time),Math.round(p.time/(tot||1)*100)+'%']);
   doc.autoTable({
     startY:44,
@@ -1005,9 +1005,9 @@ function parolePrint(){
 }
 function fmtSec(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // SEQUENCE
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const SEQ = {
   phases:[], curIdx:0, remaining:0, running:false, iv:null,
   addPhase(){ SEQ.phases.push({id:Date.now(),name:'Phase '+(SEQ.phases.length+1),duration:10}); seqRender(); },
@@ -1023,7 +1023,7 @@ const SEQ = {
     SEQ.running=true;
     clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,1000);
     seqUpdateDisplay(); seqRender();
-    document.getElementById('seq-toggle-btn').textContent='⏸';
+    document.getElementById('seq-toggle-btn').textContent='â¸';
   },
   tick(){
     SEQ.remaining--;
@@ -1031,12 +1031,12 @@ const SEQ = {
     seqUpdateDisplay();
   },
   toggle(){
-    if(!SEQ.running&&SEQ.remaining>0){ SEQ.running=true; SEQ.iv=setInterval(SEQ.tick,1000); document.getElementById('seq-toggle-btn').textContent='⏸'; }
-    else { SEQ.running=false; clearInterval(SEQ.iv); document.getElementById('seq-toggle-btn').textContent='▶'; }
+    if(!SEQ.running&&SEQ.remaining>0){ SEQ.running=true; SEQ.iv=setInterval(SEQ.tick,1000); document.getElementById('seq-toggle-btn').textContent='â¸'; }
+    else { SEQ.running=false; clearInterval(SEQ.iv); document.getElementById('seq-toggle-btn').textContent='â–¶'; }
   },
   skip(){ clearInterval(SEQ.iv); beep(SND_PHASE); SEQ.loadPhase(SEQ.curIdx+1); },
-  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='▶'; },
-  end(){ SEQ.running=false; beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='✓ Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
+  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='â–¶'; },
+  end(){ SEQ.running=false; beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='âœ“ SÃ©quence terminÃ©e'; document.getElementById('seq-display').textContent='â€”'; }
 };
 function seqStart(){ SEQ.start(); }
 function seqToggle(){ SEQ.toggle(); }
@@ -1048,7 +1048,7 @@ function seqRender(){
   const totalRow=document.getElementById('seq-total-row');
   const totalDur=document.getElementById('seq-total-dur');
   if(!SEQ.phases.length){
-    el.innerHTML=`<div class="empty-state"><div class="es-icon">🔄</div><p>Ajoute des phases pour construire ta séquence</p></div>`;
+    el.innerHTML=`<div class="empty-state"><div class="es-icon">ðŸ”„</div><p>Ajoute des phases pour construire ta sÃ©quence</p></div>`;
     totalRow.style.display='none'; return;
   }
   const totalMin=SEQ.phases.reduce((s,p)=>s+(parseInt(p.duration)||0),0);
@@ -1057,9 +1057,9 @@ function seqRender(){
   totalRow.style.display='flex';
   el.innerHTML=SEQ.phases.map((p,i)=>`
     <div class="seq-phase-row${i===SEQ.curIdx&&SEQ.running?' seq-active':i<SEQ.curIdx?' seq-done':''}">
-      <div class="seq-num">${i<SEQ.curIdx?'✓':i+1}</div>
+      <div class="seq-num">${i<SEQ.curIdx?'âœ“':i+1}</div>
       <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.phases[${i}].name=this.value;seqRender()" placeholder="Nom de la phase">
-      <input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.phases[${i}].duration=parseInt(this.value)||1;seqRender()" title="Durée en minutes"> min
+      <input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.phases[${i}].duration=parseInt(this.value)||1;seqRender()" title="DurÃ©e en minutes"> min
       <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})">
         <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
@@ -1067,17 +1067,17 @@ function seqRender(){
 }
 function seqUpdateDisplay(){
   const ph=SEQ.phases[SEQ.curIdx];
-  document.getElementById('seq-current-name').textContent=ph?ph.name:'—';
-  document.getElementById('seq-display').textContent=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'—';
+  document.getElementById('seq-current-name').textContent=ph?ph.name:'â€”';
+  document.getElementById('seq-display').textContent=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'â€”';
   if(ph){ const pct=SEQ.remaining/(ph.duration*60)*100; document.getElementById('seq-prog-fill').style.width=pct+'%'; }
-  document.getElementById('seq-progress-label').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'—';
+  document.getElementById('seq-progress-label').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'â€”';
 }
 seqRender();
 seqUpdateDisplay();
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // PLANNER
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const PL = {
   data:{ name:'', date:'', fac:'', loc:'', notes:'', phases:[] },
   save(){
@@ -1109,24 +1109,24 @@ const PL = {
   },
   renderPhases(){
     const el=document.getElementById('planner-phases');
-    if(!PL.data.phases.length){ el.innerHTML=`<div class="empty-state" style="padding:32px"><div class="es-icon">📋</div><p>Clique sur "+ Ajouter une phase" pour commencer ton déroulé</p></div>`; PL.updateTotal(); return; }
+    if(!PL.data.phases.length){ el.innerHTML=`<div class="empty-state" style="padding:32px"><div class="es-icon">ðŸ“‹</div><p>Clique sur "+ Ajouter une phase" pour commencer ton dÃ©roulÃ©</p></div>`; PL.updateTotal(); return; }
     el.innerHTML=PL.data.phases.map((p,i)=>`
       <div class="planner-phase-row">
         <div class="phase-drag"><svg viewBox="0 0 10 14" fill="none"><circle cx="3.5" cy="3" r="1" fill="currentColor"/><circle cx="6.5" cy="3" r="1" fill="currentColor"/><circle cx="3.5" cy="7" r="1" fill="currentColor"/><circle cx="6.5" cy="7" r="1" fill="currentColor"/><circle cx="3.5" cy="11" r="1" fill="currentColor"/><circle cx="6.5" cy="11" r="1" fill="currentColor"/></svg></div>
         <div>
-          <input class="input" placeholder="Nom de la phase / activité" value="${escHtml(p.name)}" oninput="PL.phaseChange(${p.id},'name',this.value)" style="margin-bottom:6px">
-          <input class="input" placeholder="Description, outils, matériel…" value="${escHtml(p.desc)}" oninput="PL.phaseChange(${p.id},'desc',this.value)" style="font-size:.82rem">
+          <input class="input" placeholder="Nom de la phase / activitÃ©" value="${escHtml(p.name)}" oninput="PL.phaseChange(${p.id},'name',this.value)" style="margin-bottom:6px">
+          <input class="input" placeholder="Description, outils, matÃ©rielâ€¦" value="${escHtml(p.desc)}" oninput="PL.phaseChange(${p.id},'desc',this.value)" style="font-size:.82rem">
         </div>
         <div>
-          <label class="label text-xs">Durée (min)</label>
+          <label class="label text-xs">DurÃ©e (min)</label>
           <input class="input" type="number" min="0" value="${p.duration}" oninput="PL.phaseChange(${p.id},'duration',this.value)" style="text-align:center">
         </div>
         <div>
-          <label class="label text-xs">Outil utilisé</label>
-          <input class="input" placeholder="World Café, 1-2-4-All…" value="${escHtml(p.tool)}" oninput="PL.phaseChange(${p.id},'tool',this.value)" style="font-size:.82rem">
+          <label class="label text-xs">Outil utilisÃ©</label>
+          <input class="input" placeholder="World CafÃ©, 1-2-4-Allâ€¦" value="${escHtml(p.tool)}" oninput="PL.phaseChange(${p.id},'tool',this.value)" style="font-size:.82rem">
         </div>
         <div style="padding-top:22px">
-          <button class="btn btn-danger btn-sm" onclick="PL.removePhase(${p.id})">✕</button>
+          <button class="btn btn-danger btn-sm" onclick="PL.removePhase(${p.id})">âœ•</button>
         </div>
       </div>`).join('');
     PL.updateTotal();
@@ -1141,9 +1141,9 @@ const PL = {
     // Meta box
     const metaItems=[];
     if(d.date) metaItems.push({l:'Date',v:d.date});
-    if(d.fac)  metaItems.push({l:'Facilitateur·trice',v:d.fac});
+    if(d.fac)  metaItems.push({l:'FacilitateurÂ·trice',v:d.fac});
     if(d.loc)  metaItems.push({l:'Lieu',v:d.loc});
-    metaItems.push({l:'Durée totale',v:(h?h+'h ':'')+( m?m+' min':'—')});
+    metaItems.push({l:'DurÃ©e totale',v:(h?h+'h ':'')+( m?m+' min':'â€”')});
     metaItems.push({l:'Phases',v:String(d.phases.length)});
     const mY=34, mH=20, mCW=(W-M*2)/metaItems.length;
     doc.setFillColor(245,240,232); doc.roundedRect(M,mY,W-M*2,mH,2,2,'F');
@@ -1155,10 +1155,10 @@ const PL = {
       doc.text(String(item.v),x,mY+15,{align:'center'});
     });
     // Table
-    const rows=d.phases.map((p,i)=>[String(i+1),p.name||'—',(p.duration||'—')+' min',p.tool||'—']);
+    const rows=d.phases.map((p,i)=>[String(i+1),p.name||'â€”',(p.duration||'â€”')+' min',p.tool||'â€”']);
     doc.autoTable({
       startY:mY+mH+6,
-      head:[['#','Phase / Activité','Durée','Outil']],
+      head:[['#','Phase / ActivitÃ©','DurÃ©e','Outil']],
       body:rows,
       headStyles:{fillColor:[26,26,26],textColor:[255,255,255],fontSize:9,fontStyle:'bold'},
       bodyStyles:{fontSize:10,textColor:[26,26,26],valign:'top'},
@@ -1173,7 +1173,7 @@ const PL = {
       const nH=noteLines.length*5+14;
       doc.setFillColor(245,240,232); doc.roundedRect(M,nY,W-M*2,nH,2,2,'F');
       doc.setFontSize(8);doc.setFont('helvetica','bold');doc.setTextColor(61,55,48);
-      doc.text('Notes générales',M+5,nY+7);
+      doc.text('Notes gÃ©nÃ©rales',M+5,nY+7);
       doc.setFontSize(9);doc.setFont('helvetica','normal');
       doc.text(noteLines,M+5,nY+13);
     }
@@ -1202,39 +1202,39 @@ function plannerRender(){
   PL.renderPhases();
 }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // HOME REFRESH
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function homeRefresh(){
   PL.load();
   const wrap=document.getElementById('home-planner-preview');
   if(PL.data.name||PL.data.phases.length){
     const tot=PL.data.phases.reduce((s,p)=>s+(parseInt(p.duration)||0),0);
     const h=Math.floor(tot/60),m=tot%60;
-    wrap.innerHTML=`<div class="card" style="margin-top:0;border-left:3px solid var(--terra)"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><div class="text-xs text-gray fw6" style="letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Atelier en cours</div><div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600">${escHtml(PL.data.name)||'Plan sans titre'}</div></div><button class="btn btn-primary btn-sm" onclick="goPanel('planner')">Ouvrir →</button></div><div style="display:flex;gap:20px;font-size:.8rem;color:var(--gray)"><span>📋 ${PL.data.phases.length} phase${PL.data.phases.length>1?'s':''}</span><span>⏱ ${h?h+'h ':''} ${m}min au total</span>${PL.data.date?`<span>📅 ${PL.data.date}</span>`:''}</div></div>`;
+    wrap.innerHTML=`<div class="card" style="margin-top:0;border-left:3px solid var(--terra)"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><div class="text-xs text-gray fw6" style="letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Atelier en cours</div><div style="font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:600">${escHtml(PL.data.name)||'Plan sans titre'}</div></div><button class="btn btn-primary btn-sm" onclick="goPanel('planner')">Ouvrir â†’</button></div><div style="display:flex;gap:20px;font-size:.8rem;color:var(--gray)"><span>ðŸ“‹ ${PL.data.phases.length} phase${PL.data.phases.length>1?'s':''}</span><span>â± ${h?h+'h ':''} ${m}min au total</span>${PL.data.date?`<span>ðŸ“… ${PL.data.date}</span>`:''}</div></div>`;
   } else { wrap.innerHTML=''; }
 }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // LIBRARY DATA & RENDERING
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const TOOLS = [
-  {id:1,name:"World Café",icon:"☕",phase:"production",phaseLabel:"Production",dur:"90–120 min",grp:"8 à 50 pers.",needs:["lien","idees"],tags:["dialogue","intelligence collective"],desc:"Des tables rondes en rotation pour explorer un sujet sous différents angles. La pollinisation croisée des idées entre tables crée une intelligence collective qui dépasse la somme des individus.",steps:["Définir 3 à 5 questions directrices liées au sujet central.","Répartir les participants en tables de 4 à 6 avec un hôte fixe.","Lancer des rounds de 20 à 30 min — chaque groupe repart des notes de la nappe.","Inviter chaque hôte à partager les grandes convergences.","Synthétiser en plénière les thèmes transversaux."],tip:"Ne forcez pas la synthèse — laissez les participants se reconnaître dans les convergences. La richesse est dans la diversité des parcours, pas dans l'accord forcé."},
-  {id:2,name:"1-2-4-All",icon:"🔁",phase:"ouverture",phaseLabel:"Ouverture",dur:"12–15 min",grp:"4 à 100+ pers.",needs:["idees","lien"],tags:["inclusion","libérateur"],desc:"Chacun réfléchit seul, puis en binôme, en quatuor, puis partage en grand groupe. Structure libératrice qui garantit que chaque voix compte, même dans un grand groupe.",steps:["Poser une question claire et ouverte (1 min de réflexion silencieuse).","Partage en binôme : chacun partage sa réflexion (2 min).","Groupes de 4 : synthétiser les idées clés (4 min).","Chaque groupe partage une idée forte en plénière."],tip:"Cette structure brise l'accaparement de la parole dès le départ. Utilisez-la en début d'atelier pour égaliser les niveaux d'expression."},
-  {id:3,name:"Dot Voting",icon:"·",phase:"cloture",phaseLabel:"Clôture",dur:"10–20 min",grp:"3 à 30 pers.",needs:["decision"],tags:["priorisation","rapide"],desc:"Chaque participant dispose d'un nombre limité de gommettes à attribuer librement aux idées affichées. Le résultat est immédiatement visible et légitime.",steps:["Afficher toutes les options sur un mur.","Distribuer 3 à 5 gommettes par personne.","Voter en silence et simultanément.","Identifier les 3 à 5 priorités émergentes.","Ouvrir une courte discussion si des surprises émergent."],tip:"Autorisez les gens à mettre plusieurs gommettes sur un même item. Et ne laissez pas le score brut décider seul — c'est une aide à la discussion, pas un verdict."},
-  {id:4,name:"Fishbowl",icon:"🐠",phase:"production",phaseLabel:"Production",dur:"45–75 min",grp:"8 à 40 pers.",needs:["conflits","lien"],tags:["dialogue","tensions","observation"],desc:"Un cercle intérieur débat en direct pendant que le reste du groupe observe. Favorise l'écoute profonde et permet de traiter des tensions sans que la salle entière s'embrase.",steps:["Installer 4–6 chaises au centre, reste du groupe en cercle extérieur.","Définir le sujet et les règles du jeu.","Le cercle intérieur débat librement 20–30 min.","Une chaise vide : n'importe qui peut s'asseoir pour contribuer.","Débriefer avec tout le groupe sur ce qui a été observé."],tip:"Le Fishbowl est particulièrement puissant pour révéler des non-dits. La position d'observateur crée une distance utile."},
-  {id:5,name:"Speedboat",icon:"🚤",phase:"cloture",phaseLabel:"Clôture",dur:"30–45 min",grp:"4 à 20 pers.",needs:["idees","decision"],tags:["rétrospective","ancres"],desc:"Une métaphore visuelle pour identifier ce qui propulse le groupe (moteurs) et ce qui le freine (ancres). Idéal pour les rétrospectives d'équipe.",steps:["Dessiner un bateau rapide avec voiles et ancres.","Post-its verts = vents favorables (accélérateurs).","Post-its rouges = ancres (obstacles, freins).","Voter sur les ancres prioritaires.","Définir 2–3 actions pour lever les ancres les plus lourdes."],tip:"Ne laissez pas les ancres s'étirer en plainte collective. Orientez rapidement vers 'qu'est-ce qu'on fait maintenant ?' dès que l'image est claire."},
-  {id:6,name:"Check-in Météo",icon:"☁️",phase:"ouverture",phaseLabel:"Ouverture",dur:"5–15 min",grp:"4 à 20 pers.",needs:["lien","energie"],tags:["inclusion","présence"],desc:"Chaque participant décrit son état du moment à travers une météo. Un rituel d'ouverture simple qui crée immédiatement de la présence et de la connexion.",steps:["Présenter la métaphore météo avec exemples.","Chacun dit son prénom, sa météo et une phrase courte.","Le facilitateur note les états pour adapter son animation.","Remercier le groupe sans chercher à 'corriger' les météos difficiles."],tip:"Modélisez une météo honnête vous-même. La vulnérabilité du facilitateur ouvre la permission pour les autres d'être vrais."},
-  {id:7,name:"Six Chapeaux de Bono",icon:"🎩",phase:"production",phaseLabel:"Production",dur:"60–90 min",grp:"4 à 15 pers.",needs:["decision","idees"],tags:["décision","angles","pensée critique"],desc:"Six chapeaux de couleur représentent six modes de pensée. Le groupe explore une décision sous chaque chapeau simultanément, évitant les débats d'ego.",steps:["Présenter les 6 chapeaux : Blanc (faits), Rouge (émotions), Noir (risques), Jaune (optimisme), Vert (créativité), Bleu (processus).","Présenter la décision à explorer.","Passer sous chaque chapeau 5–10 min — tous portent le même à la fois.","Compiler les perspectives par chapeau.","Synthétiser en chapeau Bleu."],tip:"Résistez à la tentation de sauter le chapeau Rouge. Les émotions et l'intuition sont souvent les signaux les plus précieux et les plus ignorés."},
-  {id:8,name:"ROTI",icon:"⭐",phase:"apres",phaseLabel:"Après l'atelier",dur:"5–10 min",grp:"4 à 100+ pers.",needs:["energie"],tags:["évaluation","retour"],desc:"Return On Time Invested — chaque participant note l'atelier de 1 à 5 selon ce que la session lui a apporté par rapport au temps investi.",steps:["Présenter l'échelle 1 à 5 avec significations.","Voter (main levée, gommette ou digital).","Pour les 1 et 2, inviter une courte explication.","Remercier les retours honnêtes.","S'engager à en tenir compte."],tip:"Ne défendez jamais votre note. Le ROTI est un cadeau d'information, pas un jugement personnel. Un 2 expliqué vaut dix 5 silencieux."},
-  {id:9,name:"Carte d'Empathie",icon:"🗺️",phase:"avant",phaseLabel:"Avant l'atelier",dur:"45–60 min",grp:"2 à 12 pers.",needs:["idees"],tags:["design","persona","besoins"],desc:"Un canevas visuel pour se mettre dans la peau d'un utilisateur : ce qu'il voit, entend, pense, ressent, dit et fait. Essentiel pour cadrer un atelier centré sur l'humain.",steps:["Choisir le persona à explorer.","Compléter les 6 zones : Voit / Entend / Pense & Ressent / Dit & Fait / Douleurs / Gains.","Travailler en sous-groupes puis consolider.","Identifier les contradictions dit/fait.","Utiliser pour cadrer les questions clés de l'atelier."],tip:"La zone 'Pense & Ressent' est souvent laissée vide. Invitez à explorer les peurs non dites — c'est là que se trouvent les vraies tensions créatives."},
-  {id:10,name:"Hot Air Balloon",icon:"🎈",phase:"cloture",phaseLabel:"Clôture",dur:"30–45 min",grp:"4 à 20 pers.",needs:["decision","energie"],tags:["vision","obstacles","prospective"],desc:"Une montgolfière symbolise l'ambition du groupe. Les sacs de sable (obstacles), le vent (tendances), les trous dans la nacelle (risques) permettent d'explorer la trajectoire collectivement.",steps:["Dessiner une montgolfière avec nacelle, sacs de sable, vent et nuages.","Identifier la destination (vision à 12/24 mois).","Sacs = freins actuels. Vent = tendances porteuses.","Trous = risques internes à surveiller.","Prioriser actions pour alléger les sacs et colmater les brèches."],tip:"Cette métaphore fonctionne avec des équipes managériales qui résistent aux formats trop classiques. Le dessin libère une parole souvent plus authentique."},
-  {id:11,name:"Troika Consulting",icon:"🔺",phase:"production",phaseLabel:"Production",dur:"30–45 min",grp:"3 à 30 pers.",needs:["idees","lien"],tags:["co-développement","conseil","pairs"],desc:"En groupes de 3, une personne expose un défi pendant que les deux autres débattent dans son dos. Puissant et libérateur pour le co-développement professionnel.",steps:["Former des trios. Personne A expose son défi (2 min).","A tourne le dos. B et C débattent librement (8 min).","A revient et partage ce qui l'a touché (sans se justifier).","Rotation : B puis C partagent leur propre défi.","Débrief en plénière."],tip:"La posture 'dos tourné' libère le conseilleur et la personne conseillée. Préparez le groupe à l'inconfort initial — après 2 min, tout le monde est dedans."},
-  {id:12,name:"Plan d'Action POST",icon:"📋",phase:"cloture",phaseLabel:"Clôture",dur:"20–30 min",grp:"4 à 25 pers.",needs:["decision"],tags:["engagement","suivi","plan"],desc:"Un cadre de clôture rigoureux : POST = Priorité, Owner (responsable), Steps (étapes), Timeline. Garantit que rien ne disparaît dans les boîtes mail après l'atelier.",steps:["Lister les décisions et intentions de l'atelier.","Pour chacune : identifier le responsable, la prochaine étape, la date.","Vérifier oralement que chaque responsable est d'accord.","Envoyer le compte-rendu POST dans les 24h.","Planifier un suivi à J+15 ou J+30."],tip:"Résistez à la tentation d'assigner plusieurs responsables. 'Tout le monde responsable' = personne ne l'est. Un seul nom par action."}
+  {id:1,name:"World CafÃ©",icon:"â˜•",phase:"production",phaseLabel:"Production",dur:"90â€“120 min",grp:"8 Ã  50 pers.",needs:["lien","idees"],tags:["dialogue","intelligence collective"],desc:"Des tables rondes en rotation pour explorer un sujet sous diffÃ©rents angles. La pollinisation croisÃ©e des idÃ©es entre tables crÃ©e une intelligence collective qui dÃ©passe la somme des individus.",steps:["DÃ©finir 3 Ã  5 questions directrices liÃ©es au sujet central.","RÃ©partir les participants en tables de 4 Ã  6 avec un hÃ´te fixe.","Lancer des rounds de 20 Ã  30 min â€” chaque groupe repart des notes de la nappe.","Inviter chaque hÃ´te Ã  partager les grandes convergences.","SynthÃ©tiser en plÃ©niÃ¨re les thÃ¨mes transversaux."],tip:"Ne forcez pas la synthÃ¨se â€” laissez les participants se reconnaÃ®tre dans les convergences. La richesse est dans la diversitÃ© des parcours, pas dans l'accord forcÃ©."},
+  {id:2,name:"1-2-4-All",icon:"ðŸ”",phase:"ouverture",phaseLabel:"Ouverture",dur:"12â€“15 min",grp:"4 Ã  100+ pers.",needs:["idees","lien"],tags:["inclusion","libÃ©rateur"],desc:"Chacun rÃ©flÃ©chit seul, puis en binÃ´me, en quatuor, puis partage en grand groupe. Structure libÃ©ratrice qui garantit que chaque voix compte, mÃªme dans un grand groupe.",steps:["Poser une question claire et ouverte (1 min de rÃ©flexion silencieuse).","Partage en binÃ´me : chacun partage sa rÃ©flexion (2 min).","Groupes de 4 : synthÃ©tiser les idÃ©es clÃ©s (4 min).","Chaque groupe partage une idÃ©e forte en plÃ©niÃ¨re."],tip:"Cette structure brise l'accaparement de la parole dÃ¨s le dÃ©part. Utilisez-la en dÃ©but d'atelier pour Ã©galiser les niveaux d'expression."},
+  {id:3,name:"Dot Voting",icon:"Â·",phase:"cloture",phaseLabel:"ClÃ´ture",dur:"10â€“20 min",grp:"3 Ã  30 pers.",needs:["decision"],tags:["priorisation","rapide"],desc:"Chaque participant dispose d'un nombre limitÃ© de gommettes Ã  attribuer librement aux idÃ©es affichÃ©es. Le rÃ©sultat est immÃ©diatement visible et lÃ©gitime.",steps:["Afficher toutes les options sur un mur.","Distribuer 3 Ã  5 gommettes par personne.","Voter en silence et simultanÃ©ment.","Identifier les 3 Ã  5 prioritÃ©s Ã©mergentes.","Ouvrir une courte discussion si des surprises Ã©mergent."],tip:"Autorisez les gens Ã  mettre plusieurs gommettes sur un mÃªme item. Et ne laissez pas le score brut dÃ©cider seul â€” c'est une aide Ã  la discussion, pas un verdict."},
+  {id:4,name:"Fishbowl",icon:"ðŸ ",phase:"production",phaseLabel:"Production",dur:"45â€“75 min",grp:"8 Ã  40 pers.",needs:["conflits","lien"],tags:["dialogue","tensions","observation"],desc:"Un cercle intÃ©rieur dÃ©bat en direct pendant que le reste du groupe observe. Favorise l'Ã©coute profonde et permet de traiter des tensions sans que la salle entiÃ¨re s'embrase.",steps:["Installer 4â€“6 chaises au centre, reste du groupe en cercle extÃ©rieur.","DÃ©finir le sujet et les rÃ¨gles du jeu.","Le cercle intÃ©rieur dÃ©bat librement 20â€“30 min.","Une chaise vide : n'importe qui peut s'asseoir pour contribuer.","DÃ©briefer avec tout le groupe sur ce qui a Ã©tÃ© observÃ©."],tip:"Le Fishbowl est particuliÃ¨rement puissant pour rÃ©vÃ©ler des non-dits. La position d'observateur crÃ©e une distance utile."},
+  {id:5,name:"Speedboat",icon:"ðŸš¤",phase:"cloture",phaseLabel:"ClÃ´ture",dur:"30â€“45 min",grp:"4 Ã  20 pers.",needs:["idees","decision"],tags:["rÃ©trospective","ancres"],desc:"Une mÃ©taphore visuelle pour identifier ce qui propulse le groupe (moteurs) et ce qui le freine (ancres). IdÃ©al pour les rÃ©trospectives d'Ã©quipe.",steps:["Dessiner un bateau rapide avec voiles et ancres.","Post-its verts = vents favorables (accÃ©lÃ©rateurs).","Post-its rouges = ancres (obstacles, freins).","Voter sur les ancres prioritaires.","DÃ©finir 2â€“3 actions pour lever les ancres les plus lourdes."],tip:"Ne laissez pas les ancres s'Ã©tirer en plainte collective. Orientez rapidement vers 'qu'est-ce qu'on fait maintenant ?' dÃ¨s que l'image est claire."},
+  {id:6,name:"Check-in MÃ©tÃ©o",icon:"â˜ï¸",phase:"ouverture",phaseLabel:"Ouverture",dur:"5â€“15 min",grp:"4 Ã  20 pers.",needs:["lien","energie"],tags:["inclusion","prÃ©sence"],desc:"Chaque participant dÃ©crit son Ã©tat du moment Ã  travers une mÃ©tÃ©o. Un rituel d'ouverture simple qui crÃ©e immÃ©diatement de la prÃ©sence et de la connexion.",steps:["PrÃ©senter la mÃ©taphore mÃ©tÃ©o avec exemples.","Chacun dit son prÃ©nom, sa mÃ©tÃ©o et une phrase courte.","Le facilitateur note les Ã©tats pour adapter son animation.","Remercier le groupe sans chercher Ã  'corriger' les mÃ©tÃ©os difficiles."],tip:"ModÃ©lisez une mÃ©tÃ©o honnÃªte vous-mÃªme. La vulnÃ©rabilitÃ© du facilitateur ouvre la permission pour les autres d'Ãªtre vrais."},
+  {id:7,name:"Six Chapeaux de Bono",icon:"ðŸŽ©",phase:"production",phaseLabel:"Production",dur:"60â€“90 min",grp:"4 Ã  15 pers.",needs:["decision","idees"],tags:["dÃ©cision","angles","pensÃ©e critique"],desc:"Six chapeaux de couleur reprÃ©sentent six modes de pensÃ©e. Le groupe explore une dÃ©cision sous chaque chapeau simultanÃ©ment, Ã©vitant les dÃ©bats d'ego.",steps:["PrÃ©senter les 6 chapeaux : Blanc (faits), Rouge (Ã©motions), Noir (risques), Jaune (optimisme), Vert (crÃ©ativitÃ©), Bleu (processus).","PrÃ©senter la dÃ©cision Ã  explorer.","Passer sous chaque chapeau 5â€“10 min â€” tous portent le mÃªme Ã  la fois.","Compiler les perspectives par chapeau.","SynthÃ©tiser en chapeau Bleu."],tip:"RÃ©sistez Ã  la tentation de sauter le chapeau Rouge. Les Ã©motions et l'intuition sont souvent les signaux les plus prÃ©cieux et les plus ignorÃ©s."},
+  {id:8,name:"ROTI",icon:"â­",phase:"apres",phaseLabel:"AprÃ¨s l'atelier",dur:"5â€“10 min",grp:"4 Ã  100+ pers.",needs:["energie"],tags:["Ã©valuation","retour"],desc:"Return On Time Invested â€” chaque participant note l'atelier de 1 Ã  5 selon ce que la session lui a apportÃ© par rapport au temps investi.",steps:["PrÃ©senter l'Ã©chelle 1 Ã  5 avec significations.","Voter (main levÃ©e, gommette ou digital).","Pour les 1 et 2, inviter une courte explication.","Remercier les retours honnÃªtes.","S'engager Ã  en tenir compte."],tip:"Ne dÃ©fendez jamais votre note. Le ROTI est un cadeau d'information, pas un jugement personnel. Un 2 expliquÃ© vaut dix 5 silencieux."},
+  {id:9,name:"Carte d'Empathie",icon:"ðŸ—ºï¸",phase:"avant",phaseLabel:"Avant l'atelier",dur:"45â€“60 min",grp:"2 Ã  12 pers.",needs:["idees"],tags:["design","persona","besoins"],desc:"Un canevas visuel pour se mettre dans la peau d'un utilisateur : ce qu'il voit, entend, pense, ressent, dit et fait. Essentiel pour cadrer un atelier centrÃ© sur l'humain.",steps:["Choisir le persona Ã  explorer.","ComplÃ©ter les 6 zones : Voit / Entend / Pense & Ressent / Dit & Fait / Douleurs / Gains.","Travailler en sous-groupes puis consolider.","Identifier les contradictions dit/fait.","Utiliser pour cadrer les questions clÃ©s de l'atelier."],tip:"La zone 'Pense & Ressent' est souvent laissÃ©e vide. Invitez Ã  explorer les peurs non dites â€” c'est lÃ  que se trouvent les vraies tensions crÃ©atives."},
+  {id:10,name:"Hot Air Balloon",icon:"ðŸŽˆ",phase:"cloture",phaseLabel:"ClÃ´ture",dur:"30â€“45 min",grp:"4 Ã  20 pers.",needs:["decision","energie"],tags:["vision","obstacles","prospective"],desc:"Une montgolfiÃ¨re symbolise l'ambition du groupe. Les sacs de sable (obstacles), le vent (tendances), les trous dans la nacelle (risques) permettent d'explorer la trajectoire collectivement.",steps:["Dessiner une montgolfiÃ¨re avec nacelle, sacs de sable, vent et nuages.","Identifier la destination (vision Ã  12/24 mois).","Sacs = freins actuels. Vent = tendances porteuses.","Trous = risques internes Ã  surveiller.","Prioriser actions pour allÃ©ger les sacs et colmater les brÃ¨ches."],tip:"Cette mÃ©taphore fonctionne avec des Ã©quipes managÃ©riales qui rÃ©sistent aux formats trop classiques. Le dessin libÃ¨re une parole souvent plus authentique."},
+  {id:11,name:"Troika Consulting",icon:"ðŸ”º",phase:"production",phaseLabel:"Production",dur:"30â€“45 min",grp:"3 Ã  30 pers.",needs:["idees","lien"],tags:["co-dÃ©veloppement","conseil","pairs"],desc:"En groupes de 3, une personne expose un dÃ©fi pendant que les deux autres dÃ©battent dans son dos. Puissant et libÃ©rateur pour le co-dÃ©veloppement professionnel.",steps:["Former des trios. Personne A expose son dÃ©fi (2 min).","A tourne le dos. B et C dÃ©battent librement (8 min).","A revient et partage ce qui l'a touchÃ© (sans se justifier).","Rotation : B puis C partagent leur propre dÃ©fi.","DÃ©brief en plÃ©niÃ¨re."],tip:"La posture 'dos tournÃ©' libÃ¨re le conseilleur et la personne conseillÃ©e. PrÃ©parez le groupe Ã  l'inconfort initial â€” aprÃ¨s 2 min, tout le monde est dedans."},
+  {id:12,name:"Plan d'Action POST",icon:"ðŸ“‹",phase:"cloture",phaseLabel:"ClÃ´ture",dur:"20â€“30 min",grp:"4 Ã  25 pers.",needs:["decision"],tags:["engagement","suivi","plan"],desc:"Un cadre de clÃ´ture rigoureux : POST = PrioritÃ©, Owner (responsable), Steps (Ã©tapes), Timeline. Garantit que rien ne disparaÃ®t dans les boÃ®tes mail aprÃ¨s l'atelier.",steps:["Lister les dÃ©cisions et intentions de l'atelier.","Pour chacune : identifier le responsable, la prochaine Ã©tape, la date.","VÃ©rifier oralement que chaque responsable est d'accord.","Envoyer le compte-rendu POST dans les 24h.","Planifier un suivi Ã  J+15 ou J+30."],tip:"RÃ©sistez Ã  la tentation d'assigner plusieurs responsables. 'Tout le monde responsable' = personne ne l'est. Un seul nom par action."}
 ];
 
-const PHASE_LABELS = {all:'Toutes phases',avant:'Avant l\'atelier',ouverture:'Ouverture',production:'Production',cloture:'Clôture',apres:'Après l\'atelier'};
-const NEED_LABELS = {all:'Tous besoins',lien:'Créer du lien',idees:'Générer des idées',decision:'Prioriser / décider',conflits:'Gérer les conflits',energie:'Maintenir l\'énergie'};
+const PHASE_LABELS = {all:'Toutes phases',avant:'Avant l\'atelier',ouverture:'Ouverture',production:'Production',cloture:'ClÃ´ture',apres:'AprÃ¨s l\'atelier'};
+const NEED_LABELS = {all:'Tous besoins',lien:'CrÃ©er du lien',idees:'GÃ©nÃ©rer des idÃ©es',decision:'Prioriser / dÃ©cider',conflits:'GÃ©rer les conflits',energie:'Maintenir l\'Ã©nergie'};
 let libPhase='all', libNeed='all';
 
 function libRender(){
@@ -1254,10 +1254,10 @@ function libRender(){
         <span class="lib-meta-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3.5V6l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>${t.dur}</span>
         <span class="lib-meta-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="4.5" cy="3.5" r="1.8" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 9.5c0-2 1.5-3 3-3s3 1 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="4" r="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M11 9.5c0-1.5-1-2.5-2-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>${t.grp}</span>
       </div>
-      <p class="lib-card-desc">${t.desc.substring(0,120)}…</p>
+      <p class="lib-card-desc">${t.desc.substring(0,120)}â€¦</p>
       <div class="lib-card-footer">
         <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();toolOpen(${t.id})">Voir la fiche</button>
-        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})">⬇ PDF</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})">â¬‡ PDF</button>
       </div>
     </div>`).join('');
 }
@@ -1270,14 +1270,14 @@ function toolOpen(id){
   currentToolId=id;
   document.getElementById('modal-phase-badge').innerHTML=`<span class="tool-phase-badge ph-${t.phase}">${t.phaseLabel}</span>`;
   document.getElementById('modal-title').textContent=t.name;
-  document.getElementById('modal-meta').innerHTML=`<div class="modal-meta-card"><div class="n">${t.dur}</div><div class="l">Durée</div></div><div class="modal-meta-card"><div class="n" style="font-size:.95rem">${t.grp}</div><div class="l">Groupe</div></div><div class="modal-meta-card"><div class="n" style="font-size:.95rem">${t.needs.length}</div><div class="l">Type${t.needs.length>1?'s':''} de besoin</div></div>`;
+  document.getElementById('modal-meta').innerHTML=`<div class="modal-meta-card"><div class="n">${t.dur}</div><div class="l">DurÃ©e</div></div><div class="modal-meta-card"><div class="n" style="font-size:.95rem">${t.grp}</div><div class="l">Groupe</div></div><div class="modal-meta-card"><div class="n" style="font-size:.95rem">${t.needs.length}</div><div class="l">Type${t.needs.length>1?'s':''} de besoin</div></div>`;
   document.getElementById('modal-desc').textContent=t.desc;
   document.getElementById('modal-steps').innerHTML=t.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join('');
-  document.getElementById('modal-tip').innerHTML=`💡 <strong>Conseil du praticien</strong><br>${t.tip}`;
+  document.getElementById('modal-tip').innerHTML=`ðŸ’¡ <strong>Conseil du praticien</strong><br>${t.tip}`;
   document.getElementById('modal-preview').innerHTML=`
-    <div class="mprev-icon">${t.icon||'🔧'}</div>
+    <div class="mprev-icon">${t.icon||'ðŸ”§'}</div>
     <div><div class="mprev-label">Phase</div><span class="tool-phase-badge ph-${t.phase}" style="margin-bottom:0">${t.phaseLabel}</span></div>
-    <div><div class="mprev-label">Durée estimée</div><div class="mprev-val">${t.dur}</div></div>
+    <div><div class="mprev-label">DurÃ©e estimÃ©e</div><div class="mprev-val">${t.dur}</div></div>
     <div><div class="mprev-label">Taille du groupe</div><div class="mprev-val">${t.grp}</div></div>
     <div><div class="mprev-label">Besoins couverts</div><div style="display:flex;flex-direction:column;gap:5px;margin-top:4px">${t.needs.map(n=>`<span style="display:inline-block;padding:3px 10px;background:rgba(201,107,58,.1);color:var(--terra);border-radius:20px;font-size:.75rem;font-weight:600">${NEED_LABELS[n]||n}</span>`).join('')}</div></div>
     <div><div class="mprev-label">Tags</div><div class="mprev-tags" style="margin-top:4px">${t.tags.map(tag=>`<span class="mprev-tag">${tag}</span>`).join('')}</div></div>`;
@@ -1304,14 +1304,14 @@ function toolPDFById(id){
   doc.text(t.name,M,29);
   // Brand
   doc.setFontSize(11);doc.setTextColor(201,107,58);
-  doc.text('Facilithèque',W-M,29,{align:'right'});
+  doc.text('FacilithÃ¨que',W-M,29,{align:'right'});
   // Separator
   doc.setDrawColor(201,107,58);doc.setLineWidth(0.5);doc.line(M,33,W-M,33);doc.setLineWidth(0.2);
   // Meta box
   y=39;
   const needs=t.needs.map(n=>NEED_LABELS[n]||n).join(', ');
   doc.setFillColor(245,240,232); doc.roundedRect(M,y,W-M*2,20,2,2,'F');
-  [{l:'Durée',v:t.dur},{l:'Groupe',v:t.grp},{l:'Besoin',v:needs}].forEach((item,i)=>{
+  [{l:'DurÃ©e',v:t.dur},{l:'Groupe',v:t.grp},{l:'Besoin',v:needs}].forEach((item,i)=>{
     const cW=(W-M*2)/3, x=M+i*cW+cW/2;
     doc.setFontSize(7);doc.setFont('helvetica','bold');doc.setTextColor(138,128,120);
     doc.text(item.l.toUpperCase(),x,y+7,{align:'center'});
@@ -1328,7 +1328,7 @@ function toolPDFById(id){
   doc.text(descL,M,y); y+=descL.length*5+7;
   // Steps
   doc.setFontSize(7);doc.setFont('helvetica','bold');doc.setTextColor(138,128,120);
-  doc.text('DÉROULÉ EN PRATIQUE',M,y); y+=5;
+  doc.text('DÃ‰ROULÃ‰ EN PRATIQUE',M,y); y+=5;
   t.steps.forEach((step,i)=>{
     doc.setFillColor(201,107,58); doc.circle(M+3,y+1.5,3,'F');
     doc.setFontSize(7);doc.setFont('helvetica','bold');doc.setTextColor(255,255,255);
@@ -1350,18 +1350,18 @@ function toolPDFById(id){
   const pH=doc.internal.pageSize.height;
   doc.setDrawColor(235,228,214);doc.line(M,pH-16,W-M,pH-16);
   doc.setFontSize(8);doc.setFont('helvetica','normal');doc.setTextColor(138,128,120);
-  doc.text('Fiche outil Facilithèque · facilkit.vercel.app',W/2,pH-10,{align:'center'});
+  doc.text('Fiche outil FacilithÃ¨que Â· facilitheque.vercel.app',W/2,pH-10,{align:'center'});
   const safeName=t.name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
   doc.save(`fiche-${safeName}.pdf`);
 }
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') toolModalCloseBtn(); });
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // PARKING
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 const PARK = {
   items:[],
-  catLabels:{idee:'💡 Idée',question:'❓ Question',action:'✅ Action',blocage:'⚡ Blocage'},
+  catLabels:{idee:'ðŸ’¡ IdÃ©e',question:'â“ Question',action:'âœ… Action',blocage:'âš¡ Blocage'},
   save(){ try{localStorage.setItem('fk-park',JSON.stringify(PARK.items));}catch(e){} },
   saveTitle(){ try{localStorage.setItem('fk-park-title',document.getElementById('parking-title').value);}catch(e){} },
   load(){
@@ -1378,7 +1378,7 @@ const PARK = {
     empty.style.display='none';
     board.innerHTML=PARK.items.map(item=>`
       <div class="parking-note pk-${item.cat}">
-        <button class="parking-note-del" onclick="PARK.remove(${item.id})" title="Supprimer">✕</button>
+        <button class="parking-note-del" onclick="PARK.remove(${item.id})" title="Supprimer">âœ•</button>
         <div class="parking-note-cat">${PARK.catLabels[item.cat]||item.cat}</div>
         <div class="parking-note-text">${escHtml(item.text)}</div>
         <div class="parking-note-ts">${item.ts}</div>
@@ -1391,11 +1391,11 @@ const PARK = {
     const titre=document.getElementById('parking-title').value.trim();
     pdfHeader(doc,'PARKING',titre||'Notes en attente');
     doc.setFontSize(9);doc.setFont('helvetica','normal');doc.setTextColor(138,128,120);
-    doc.text(`Généré le ${new Date().toLocaleString('fr-FR')}`,M,36);
+    doc.text(`GÃ©nÃ©rÃ© le ${new Date().toLocaleString('fr-FR')}`,M,36);
     const rows=PARK.items.map(i=>[PARK.catLabels[i.cat],i.text,i.ts]);
     doc.autoTable({
       startY:44,
-      head:[['Catégorie','Contenu','Heure']],
+      head:[['CatÃ©gorie','Contenu','Heure']],
       body:rows,
       headStyles:{fillColor:[26,26,26],textColor:[255,255,255],fontSize:9,fontStyle:'bold'},
       bodyStyles:{fontSize:10,textColor:[26,26,26]},
@@ -1412,9 +1412,9 @@ function parkingKeydown(e){ if(e.key==='Enter') parkingAdd(); }
 function parkingClear(){ PARK.clear(); }
 function parkingPrint(){ PARK.print(); }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // UTILS
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 function pad(n){ return String(n).padStart(2,'0'); }
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
@@ -1426,18 +1426,18 @@ function pdfHeader(doc, label, title){
   doc.setFontSize(20); doc.setFont('helvetica','bold'); doc.setTextColor(26,26,26);
   doc.text(title,M,28);
   doc.setFontSize(11); doc.setTextColor(201,107,58);
-  doc.text('Facilithèque',W-M,28,{align:'right'});
+  doc.text('FacilithÃ¨que',W-M,28,{align:'right'});
 }
 function pdfFooter(doc){
   const W=210,M=20,pH=doc.internal.pageSize.height;
   doc.setDrawColor(235,228,214); doc.setLineWidth(0.2); doc.line(M,pH-16,W-M,pH-16);
   doc.setFontSize(8); doc.setFont('helvetica','normal'); doc.setTextColor(138,128,120);
-  doc.text('Généré par Facilithèque · facilkit.vercel.app',W/2,pH-10,{align:'center'});
+  doc.text('GÃ©nÃ©rÃ© par FacilithÃ¨que Â· facilitheque.vercel.app',W/2,pH-10,{align:'center'});
 }
 
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 // INIT
-// ════════════════════════════════════════════════════
+// â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
 PL.load();
 homeRefresh();
 RL.load();

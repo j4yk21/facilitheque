@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://facilkit.vercel.app/sitemap.xml
+Sitemap: https://facilitheque.vercel.app/sitemap.xml
