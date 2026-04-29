@@ -1,6 +1,6 @@
 {
   "rewrites": [
-    { "source": "/", "destination": "/facilkit-app.html" }
+    { "source": "/", "destination": "/facilitheque-app.html" }
   ],
   "headers": [
     {

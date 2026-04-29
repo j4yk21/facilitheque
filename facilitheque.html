@@ -1,0 +1,2479 @@
+﻿<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facilitheque — La boîte à outils des facilitateurs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   RESET & BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:     #F5F0E8;
+  --cream-dark:#EBE4D6;
+  --cream-mid: #E0D8C8;
+  --terra:     #C96B3A;
+  --terra-light:#D4845A;
+  --terra-dark: #A8542A;
+  --sage:      #6B8F71;
+  --sage-light:#8BAF91;
+  --sage-dark: #4E6E54;
+  --ink:       #1A1A1A;
+  --ink-soft:  #3D3730;
+  --warm-gray: #8A8078;
+  --gold:      #C4943A;
+  --blue-soft: #5B7FA6;
+  --red-soft:  #B85450;
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 32px;
+  --shadow-sm: 0 2px 8px rgba(26,26,26,0.07);
+  --shadow-md: 0 6px 24px rgba(26,26,26,0.10);
+  --shadow-lg: 0 16px 48px rgba(26,26,26,0.13);
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: 'Playfair Display', serif;
+  line-height: 1.2;
+}
+
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; font-family: 'DM Sans', sans-serif; }
+img { max-width: 100%; }
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section { padding: 100px 0; }
+
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terra);
+  margin-bottom: 18px;
+}
+.section-label::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--terra);
+  border-radius: 2px;
+}
+
+.section-title {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: var(--warm-gray);
+  max-width: 600px;
+  font-weight: 300;
+}
+
+/* ============================================================
+   HEADER / NAV
+   ============================================================ */
+#header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1000;
+  padding: 0 24px;
+  transition: var(--transition);
+}
+
+#header.scrolled {
+  background: rgba(245,240,232,0.96);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cream-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.nav-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo-mark {
+  width: 34px; height: 34px;
+  background: var(--terra);
+  border-radius: 50% 50% 50% 10px;
+  display: grid;
+  place-items: center;
+}
+.logo-mark svg { width: 18px; height: 18px; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 36px;
+  list-style: none;
+}
+.nav-links a {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--ink-soft);
+  transition: color var(--transition);
+  position: relative;
+}
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px; left: 0; right: 0;
+  height: 1.5px;
+  background: var(--terra);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+.nav-links a:hover { color: var(--terra); }
+.nav-links a:hover::after { transform: scaleX(1); }
+
+.nav-cta {
+  background: var(--ink);
+  color: var(--cream) !important;
+  padding: 9px 22px;
+  border-radius: 40px;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  transition: background var(--transition), transform var(--transition) !important;
+}
+.nav-cta:hover {
+  background: var(--terra) !important;
+  transform: translateY(-1px);
+}
+.nav-cta::after { display: none !important; }
+
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  padding: 4px;
+}
+.nav-hamburger span {
+  display: block;
+  width: 24px; height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: var(--transition);
+}
+
+/* ============================================================
+   HERO
+   ============================================================ */
+#hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 70px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+}
+.orb-1 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, var(--terra-light), transparent 70%);
+  top: -200px; right: -100px;
+}
+.orb-2 {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, var(--sage-light), transparent 70%);
+  bottom: -100px; left: -80px;
+}
+.orb-3 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, var(--gold), transparent 70%);
+  top: 40%; left: 40%;
+  opacity: 0.15;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  padding: 60px 0;
+}
+
+.hero-text { max-width: 560px; }
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(201,107,58,0.1);
+  border: 1px solid rgba(201,107,58,0.25);
+  color: var(--terra);
+  font-size: 0.8rem;
+  font-weight: 500;
+  padding: 6px 14px;
+  border-radius: 40px;
+  margin-bottom: 28px;
+}
+.hero-badge-dot {
+  width: 6px; height: 6px;
+  background: var(--terra);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+
+.hero-title {
+  font-size: clamp(2.4rem, 5vw, 3.8rem);
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 24px;
+  line-height: 1.1;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--terra);
+}
+
+.hero-subtitle {
+  font-size: 1.15rem;
+  color: var(--warm-gray);
+  font-weight: 300;
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--terra);
+  color: white;
+  padding: 15px 32px;
+  border-radius: 40px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: none;
+  transition: background var(--transition), transform var(--transition), box-shadow var(--transition);
+  box-shadow: 0 4px 20px rgba(201,107,58,0.3);
+}
+.btn-primary:hover {
+  background: var(--terra-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(201,107,58,0.4);
+}
+.btn-primary svg { transition: transform var(--transition); }
+.btn-primary:hover svg { transform: translateX(3px); }
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: transparent;
+  color: var(--ink);
+  padding: 15px 32px;
+  border-radius: 40px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border: 1.5px solid var(--cream-mid);
+  transition: border-color var(--transition), background var(--transition), transform var(--transition);
+}
+.btn-secondary:hover {
+  border-color: var(--ink);
+  background: rgba(26,26,26,0.04);
+  transform: translateY(-2px);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 40px;
+  margin-top: 56px;
+  padding-top: 40px;
+  border-top: 1px solid var(--cream-dark);
+}
+.hero-stat-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.hero-stat-label {
+  font-size: 0.82rem;
+  color: var(--warm-gray);
+  font-weight: 400;
+}
+
+/* Hero Illustration */
+.hero-illustration {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.hero-canvas {
+  position: relative;
+  width: 480px;
+  height: 480px;
+}
+
+.canvas-board {
+  position: absolute;
+  inset: 0;
+  background: white;
+  border-radius: 24px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--cream-dark);
+  overflow: hidden;
+}
+.canvas-board::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40px;
+  background: var(--cream-dark);
+  border-bottom: 1px solid var(--cream-mid);
+}
+
+.canvas-dot {
+  position: absolute;
+  top: 14px;
+  width: 12px; height: 12px;
+  border-radius: 50%;
+}
+.canvas-dot:nth-child(1) { left: 16px; background: #F0806A; }
+.canvas-dot:nth-child(2) { left: 34px; background: #F5C85A; }
+.canvas-dot:nth-child(3) { left: 52px; background: #65C97A; }
+
+.sticky-notes-grid {
+  position: absolute;
+  top: 60px; left: 20px; right: 20px; bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding: 16px;
+}
+
+.sticky {
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 9px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  line-height: 1.4;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.12);
+  transform-origin: center;
+  animation: floatSticky 4s ease-in-out infinite;
+}
+.sticky:nth-child(2) { animation-delay: 0.6s; }
+.sticky:nth-child(3) { animation-delay: 1.2s; }
+.sticky:nth-child(4) { animation-delay: 1.8s; }
+.sticky:nth-child(5) { animation-delay: 0.3s; }
+.sticky:nth-child(6) { animation-delay: 0.9s; }
+.sticky:nth-child(7) { animation-delay: 1.5s; }
+.sticky:nth-child(8) { animation-delay: 2.1s; }
+.sticky:nth-child(9) { animation-delay: 0.5s; }
+
+@keyframes floatSticky {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-4px) rotate(var(--r, 0deg)); }
+}
+
+.s-yellow { background: #FFF9A3; color: #5A4E00; --r: -1.5deg; }
+.s-pink   { background: #FFB3C6; color: #5A0020; --r: 1.2deg; }
+.s-blue   { background: #B3D9FF; color: #00305A; --r: -0.8deg; }
+.s-green  { background: #B3F0C0; color: #005A20; --r: 1.8deg; }
+.s-orange { background: #FFD4A3; color: #5A2A00; --r: -1.2deg; }
+.s-lavender { background: #D4B3FF; color: #2A005A; --r: 0.8deg; }
+
+/* ============================================================
+   TOOLS SECTION
+   ============================================================ */
+#outils { background: var(--cream); }
+
+.filters-container {
+  margin: 48px 0 36px;
+}
+
+.filter-group {
+  margin-bottom: 20px;
+}
+.filter-group-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  margin-bottom: 10px;
+}
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pill {
+  padding: 7px 16px;
+  border-radius: 40px;
+  font-size: 0.82rem;
+  font-weight: 500;
+  border: 1.5px solid var(--cream-mid);
+  background: white;
+  color: var(--ink-soft);
+  transition: all var(--transition);
+  white-space: nowrap;
+}
+.pill:hover {
+  border-color: var(--terra);
+  color: var(--terra);
+}
+.pill.active {
+  background: var(--terra);
+  border-color: var(--terra);
+  color: white;
+  box-shadow: 0 2px 12px rgba(201,107,58,0.25);
+}
+.pill[data-phase="ouverture"].active { background: var(--sage); border-color: var(--sage); }
+.pill[data-phase="production"].active { background: var(--terra); border-color: var(--terra); }
+.pill[data-phase="cloture"].active { background: var(--gold); border-color: var(--gold); color: white; }
+.pill[data-phase="avant"].active { background: var(--blue-soft); border-color: var(--blue-soft); }
+.pill[data-phase="apres"].active { background: var(--red-soft); border-color: var(--red-soft); }
+
+.tools-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.tool-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: 28px;
+  border: 1px solid var(--cream-dark);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.tool-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--terra);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform var(--transition);
+}
+.tool-card:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+.tool-card:hover::before { transform: scaleX(1); }
+
+.tool-card[data-phase="ouverture"]::before { background: var(--sage); }
+.tool-card[data-phase="production"]::before { background: var(--terra); }
+.tool-card[data-phase="cloture"]::before { background: var(--gold); }
+.tool-card[data-phase="avant"]::before { background: var(--blue-soft); }
+.tool-card[data-phase="apres"]::before { background: var(--red-soft); }
+
+.tool-card.hidden { display: none; }
+
+.tool-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.tool-icon {
+  width: 44px; height: 44px;
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.phase-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.phase-avant    { background: rgba(91,127,166,0.12); color: var(--blue-soft); }
+.phase-ouverture{ background: rgba(107,143,113,0.12); color: var(--sage-dark); }
+.phase-production{ background: rgba(201,107,58,0.12); color: var(--terra); }
+.phase-cloture  { background: rgba(196,148,58,0.12); color: var(--gold); }
+.phase-apres    { background: rgba(184,84,80,0.12); color: var(--red-soft); }
+
+.tool-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 8px;
+}
+
+.tool-meta {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.tool-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.78rem;
+  color: var(--warm-gray);
+}
+.tool-meta-item svg { opacity: 0.6; }
+
+.tool-desc {
+  font-size: 0.875rem;
+  color: var(--ink-soft);
+  line-height: 1.65;
+  margin-bottom: 20px;
+}
+
+.tool-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+.tool-tag {
+  padding: 3px 10px;
+  background: var(--cream);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--warm-gray);
+}
+
+.btn-fiche {
+  width: 100%;
+  padding: 11px;
+  background: var(--cream);
+  border: 1.5px solid var(--cream-mid);
+  border-radius: 10px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition);
+}
+.btn-fiche:hover {
+  background: var(--terra);
+  border-color: var(--terra);
+  color: white;
+}
+
+/* ============================================================
+   MODAL
+   ============================================================ */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,26,26,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+.modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modal {
+  background: white;
+  border-radius: var(--radius-xl);
+  max-width: 640px;
+  width: 100%;
+  max-height: 85vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  transform: translateY(20px) scale(0.97);
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.modal-overlay.open .modal {
+  transform: translateY(0) scale(1);
+}
+
+.modal-header {
+  padding: 32px 36px 24px;
+  border-bottom: 1px solid var(--cream-dark);
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+.modal-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+.modal-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.7rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.modal-close {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--cream);
+  border: none;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  transition: background var(--transition);
+}
+.modal-close:hover { background: var(--cream-dark); }
+
+.modal-body { padding: 28px 36px 36px; }
+
+.modal-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.modal-meta-card {
+  background: var(--cream);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  text-align: center;
+}
+.modal-meta-card .num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--terra);
+}
+.modal-meta-card .lbl {
+  font-size: 0.75rem;
+  color: var(--warm-gray);
+  margin-top: 2px;
+}
+
+.modal-section-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  margin-bottom: 12px;
+}
+
+.modal-desc {
+  font-size: 0.95rem;
+  line-height: 1.75;
+  color: var(--ink-soft);
+  margin-bottom: 28px;
+}
+
+.modal-steps {
+  list-style: none;
+  margin-bottom: 28px;
+}
+.modal-steps li {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 14px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.step-num {
+  width: 26px; height: 26px;
+  background: var(--terra);
+  color: white;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.modal-tips {
+  background: rgba(107,143,113,0.08);
+  border-left: 3px solid var(--sage);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+  padding: 16px 20px;
+}
+.modal-tips p {
+  font-size: 0.875rem;
+  color: var(--sage-dark);
+  line-height: 1.65;
+}
+
+/* ============================================================
+   SITUATIONS DIFFICILES
+   ============================================================ */
+#situations { background: var(--ink); }
+
+#situations .section-label { color: var(--terra-light); }
+#situations .section-label::before { background: var(--terra-light); }
+#situations .section-title { color: var(--cream); }
+#situations .section-subtitle { color: rgba(245,240,232,0.55); }
+
+.situations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.situation-card {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg);
+  padding: 30px;
+  transition: transform var(--transition), background var(--transition), border-color var(--transition);
+}
+.situation-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255,255,255,0.07);
+  border-color: rgba(201,107,58,0.3);
+}
+
+.situation-icon-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.situation-icon {
+  width: 42px; height: 42px;
+  background: rgba(201,107,58,0.15);
+  border-radius: var(--radius-sm);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+}
+.situation-alert {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--terra-light);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.situation-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.15rem;
+  color: var(--cream);
+  margin-bottom: 20px;
+  line-height: 1.3;
+}
+
+.strategies {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.strategies li {
+  display: flex;
+  gap: 12px;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: rgba(245,240,232,0.75);
+}
+.strategy-bullet {
+  width: 22px; height: 22px;
+  background: rgba(201,107,58,0.2);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.strategy-bullet svg { width: 10px; height: 10px; color: var(--terra-light); }
+
+/* ============================================================
+   MÉTHODES
+   ============================================================ */
+#methodes { background: var(--cream-dark); }
+
+.methodes-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin-top: 56px;
+}
+
+.methode-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--cream-mid);
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+.methode-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-lg);
+}
+
+.methode-header {
+  padding: 28px 28px 20px;
+  position: relative;
+}
+.methode-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 4rem;
+  font-weight: 700;
+  position: absolute;
+  top: 12px; right: 20px;
+  opacity: 0.06;
+  line-height: 1;
+  color: var(--ink);
+}
+.methode-icon-bg {
+  width: 50px; height: 50px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+.methode-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 10px;
+}
+.methode-desc {
+  font-size: 0.87rem;
+  color: var(--warm-gray);
+  line-height: 1.65;
+}
+
+.methode-footer {
+  padding: 20px 28px;
+  background: var(--cream);
+  display: flex;
+  gap: 20px;
+  border-top: 1px solid var(--cream-mid);
+}
+.methode-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: var(--warm-gray);
+}
+
+.methode-quand {
+  padding: 0 28px 24px;
+}
+.methode-quand-title {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--warm-gray);
+  margin-bottom: 8px;
+}
+.methode-quand-text {
+  font-size: 0.83rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* ============================================================
+   RESSOURCES
+   ============================================================ */
+#ressources { background: var(--cream); }
+
+.ressources-layout {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-top: 56px;
+}
+
+.ressource-col {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.ressource-col-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--cream-dark);
+}
+.ressource-col-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+}
+
+.ressource-item {
+  display: flex;
+  gap: 12px;
+  padding: 14px;
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--cream-dark);
+  transition: border-color var(--transition), transform var(--transition);
+}
+.ressource-item:hover {
+  border-color: var(--terra);
+  transform: translateX(4px);
+}
+.ressource-item-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.ressource-item-text { flex: 1; }
+.ressource-item-name {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.ressource-item-desc {
+  font-size: 0.78rem;
+  color: var(--warm-gray);
+  line-height: 1.5;
+}
+
+/* ============================================================
+   COMMUNAUTÉ
+   ============================================================ */
+#communaute { background: var(--cream-dark); }
+
+.communaute-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-top: 56px;
+}
+
+.communaute-visual {
+  position: relative;
+  height: 400px;
+}
+
+.comm-circle {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  animation: floatCircle 5s ease-in-out infinite;
+}
+@keyframes floatCircle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+.comm-c1 {
+  width: 180px; height: 180px;
+  background: white;
+  border: 2px solid var(--cream-mid);
+  box-shadow: var(--shadow-md);
+  top: 40px; left: 60px;
+  flex-direction: column;
+  gap: 8px;
+  animation-delay: 0s;
+}
+.comm-c2 {
+  width: 120px; height: 120px;
+  background: var(--terra);
+  color: white;
+  top: 0px; right: 80px;
+  flex-direction: column;
+  gap: 6px;
+  animation-delay: 1.5s;
+}
+.comm-c3 {
+  width: 140px; height: 140px;
+  background: var(--sage);
+  color: white;
+  bottom: 20px; left: 20px;
+  flex-direction: column;
+  gap: 6px;
+  animation-delay: 0.8s;
+}
+.comm-c4 {
+  width: 100px; height: 100px;
+  background: var(--gold);
+  color: white;
+  bottom: 40px; right: 40px;
+  flex-direction: column;
+  gap: 5px;
+  animation-delay: 2s;
+}
+.comm-c5 {
+  width: 80px; height: 80px;
+  background: var(--blue-soft);
+  color: white;
+  top: 160px; left: 220px;
+  animation-delay: 1s;
+}
+
+.comm-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-align: center;
+  padding: 0 12px;
+  line-height: 1.4;
+}
+.comm-num {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+.communaute-content {}
+
+.communaute-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 32px 0 40px;
+}
+.comm-feature {
+  display: flex;
+  gap: 16px;
+}
+.comm-feature-icon {
+  width: 40px; height: 40px;
+  background: rgba(201,107,58,0.1);
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+.comm-feature-title {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink);
+  margin-bottom: 3px;
+}
+.comm-feature-desc {
+  font-size: 0.83rem;
+  color: var(--warm-gray);
+  line-height: 1.5;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 12px;
+}
+.newsletter-input {
+  flex: 1;
+  padding: 13px 18px;
+  border: 1.5px solid var(--cream-mid);
+  border-radius: 40px;
+  background: white;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color var(--transition);
+}
+.newsletter-input:focus { border-color: var(--terra); }
+.newsletter-input::placeholder { color: var(--warm-gray); }
+
+.newsletter-btn {
+  padding: 13px 24px;
+  background: var(--terra);
+  color: white;
+  border: none;
+  border-radius: 40px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background var(--transition), transform var(--transition);
+  white-space: nowrap;
+}
+.newsletter-btn:hover {
+  background: var(--terra-dark);
+  transform: translateY(-1px);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  background: var(--ink);
+  padding: 60px 0 36px;
+}
+
+.footer-inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 48px;
+  margin-bottom: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.footer-brand .logo { color: var(--cream); margin-bottom: 16px; }
+.footer-brand p {
+  font-size: 0.85rem;
+  color: rgba(245,240,232,0.5);
+  line-height: 1.7;
+  max-width: 280px;
+}
+
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+.social-btn {
+  width: 36px; height: 36px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  transition: background var(--transition);
+}
+.social-btn:hover { background: var(--terra); }
+.social-btn svg { width: 16px; height: 16px; color: var(--cream); }
+
+.footer-col-title {
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,0.4);
+  margin-bottom: 20px;
+}
+.footer-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.footer-links a {
+  font-size: 0.875rem;
+  color: rgba(245,240,232,0.65);
+  transition: color var(--transition);
+}
+.footer-links a:hover { color: var(--cream); }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+.footer-bottom p {
+  font-size: 0.8rem;
+  color: rgba(245,240,232,0.35);
+}
+.footer-tagline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.78rem;
+  color: rgba(245,240,232,0.35);
+}
+.heart { color: var(--terra); }
+
+/* ============================================================
+   SCROLL ANIMATIONS
+   ============================================================ */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ============================================================
+   SCROLL TO TOP
+   ============================================================ */
+.scroll-top {
+  position: fixed;
+  bottom: 28px; right: 28px;
+  width: 46px; height: 46px;
+  background: var(--terra);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 16px rgba(201,107,58,0.35);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.3s, transform 0.3s, background 0.2s;
+  z-index: 500;
+  cursor: pointer;
+}
+.scroll-top.visible { opacity: 1; transform: translateY(0); }
+.scroll-top:hover { background: var(--terra-dark); }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+@media (max-width: 1024px) {
+  .methodes-grid { grid-template-columns: repeat(2, 1fr); }
+  .ressources-layout { grid-template-columns: repeat(2, 1fr); }
+  .footer-inner { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 768px) {
+  .section { padding: 70px 0; }
+
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+
+  .hero-content { grid-template-columns: 1fr; gap: 40px; }
+  .hero-canvas { width: 340px; height: 340px; }
+  .hero-stats { gap: 24px; }
+
+  .tools-grid { grid-template-columns: 1fr; }
+  .situations-grid { grid-template-columns: 1fr; }
+  .methodes-grid { grid-template-columns: 1fr; }
+  .ressources-layout { grid-template-columns: 1fr; }
+  .communaute-layout { grid-template-columns: 1fr; }
+  .communaute-visual { display: none; }
+
+  .modal-meta-grid { grid-template-columns: 1fr 1fr; }
+  .modal-header, .modal-body { padding-left: 24px; padding-right: 24px; }
+
+  .newsletter-form { flex-direction: column; }
+  .footer-inner { grid-template-columns: 1fr; gap: 32px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER
+     ============================================================ -->
+<header id="header">
+  <div class="nav-inner">
+    <a href="#" class="logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="9" cy="9" r="3.5" fill="white"/>
+          <path d="M9 2V4M9 14V16M2 9H4M14 9H16M3.5 3.5L5 5M13 13L14.5 14.5M3.5 14.5L5 13M13 5L14.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+      </div>
+      Facilitheque
+    </a>
+    <nav>
+      <ul class="nav-links">
+        <li><a href="#outils">Outils</a></li>
+        <li><a href="#methodes">Méthodes</a></li>
+        <li><a href="#situations">Situations difficiles</a></li>
+        <li><a href="#ressources">Ressources</a></li>
+        <li><a href="#communaute" class="nav-cta">Communauté</a></li>
+      </ul>
+    </nav>
+    <button class="nav-hamburger" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+
+<!-- ============================================================
+     HERO
+     ============================================================ -->
+<section id="hero">
+  <div class="hero-bg">
+    <div class="hero-orb orb-1"></div>
+    <div class="hero-orb orb-2"></div>
+    <div class="hero-orb orb-3"></div>
+  </div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-text">
+        <div class="hero-badge">
+          <span class="hero-badge-dot"></span>
+          La ressource des facilitateurs professionnels
+        </div>
+        <h1 class="hero-title">
+          Tout ce dont tu as besoin pour faciliter.<br>
+          <em>Sans chercher pendant 2h.</em>
+        </h1>
+        <p class="hero-subtitle">
+          La boîte à outils des facilitateurs et facilitatrices qui veulent se concentrer sur l'essentiel — la présence, la relation, le processus.
+        </p>
+        <div class="hero-actions">
+          <a href="#outils" class="btn-primary">
+            Explorer les outils
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <a href="#communaute" class="btn-secondary">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M1.5 13c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              <circle cx="12" cy="6" r="2" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M14.5 13c0-2-1.5-3.5-2.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+            Rejoindre la communauté
+          </a>
+        </div>
+        <div class="hero-stats">
+          <div>
+            <div class="hero-stat-num">48+</div>
+            <div class="hero-stat-label">Outils & méthodes</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">6</div>
+            <div class="hero-stat-label">Situations difficiles</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">1</div>
+            <div class="hero-stat-label">Communauté active</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-illustration">
+        <div class="hero-canvas">
+          <div class="canvas-board">
+            <div class="canvas-dot"></div>
+            <div class="canvas-dot"></div>
+            <div class="canvas-dot"></div>
+            <div class="sticky-notes-grid">
+              <div class="sticky s-yellow">World Café ☕<br>8-50 pers<br>90 min</div>
+              <div class="sticky s-pink">1-2-4-All 🔁<br>Inclusion<br>15 min</div>
+              <div class="sticky s-blue">Dot Voting ·<br>Prioriser<br>10 min</div>
+              <div class="sticky s-green">Fishbowl 🐠<br>Dialogue<br>45 min</div>
+              <div class="sticky s-orange">Speedboat 🚤<br>Rétrospective<br>30 min</div>
+              <div class="sticky s-lavender">Forum Ouvert<br>Auto-orga<br>Toute journée</div>
+              <div class="sticky s-yellow">Check-in Météo ☁️<br>Ouverture<br>10 min</div>
+              <div class="sticky s-pink">Six Chapeaux 🎩<br>Décision<br>60 min</div>
+              <div class="sticky s-green">ROTI ⭐<br>Évaluation<br>5 min</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     OUTILS
+     ============================================================ -->
+<section id="outils" class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Boîte à outils</span>
+      <h2 class="section-title">Les bons outils, au bon moment</h2>
+      <p class="section-subtitle">Filtre par phase d'atelier ou par besoin. Chaque fiche est prête à l'emploi.</p>
+    </div>
+
+    <div class="filters-container reveal reveal-delay-1">
+      <div class="filter-group">
+        <div class="filter-group-label">Phase de l'atelier</div>
+        <div class="filter-pills" id="phaseFilters">
+          <button class="pill active" data-filter="phase" data-value="all">Toutes les phases</button>
+          <button class="pill" data-filter="phase" data-value="avant" data-phase="avant">Avant l'atelier</button>
+          <button class="pill" data-filter="phase" data-value="ouverture" data-phase="ouverture">Ouverture</button>
+          <button class="pill" data-filter="phase" data-value="production" data-phase="production">Production</button>
+          <button class="pill" data-filter="phase" data-value="cloture" data-phase="cloture">Clôture</button>
+          <button class="pill" data-filter="phase" data-value="apres" data-phase="apres">Après l'atelier</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-label">Type de besoin</div>
+        <div class="filter-pills" id="needFilters">
+          <button class="pill active" data-filter="need" data-value="all">Tous les besoins</button>
+          <button class="pill" data-filter="need" data-value="lien">Créer du lien</button>
+          <button class="pill" data-filter="need" data-value="idees">Générer des idées</button>
+          <button class="pill" data-filter="need" data-value="decision">Prioriser / décider</button>
+          <button class="pill" data-filter="need" data-value="conflits">Gérer les conflits</button>
+          <button class="pill" data-filter="need" data-value="energie">Maintenir l'énergie</button>
+          <button class="pill" data-filter="need" data-value="distance">Facilitation à distance</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="tools-grid" id="toolsGrid">
+      <!-- Cards are injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     SITUATIONS DIFFICILES
+     ============================================================ -->
+<section id="situations" class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Le facilitateur sous pression</span>
+      <h2 class="section-title">Les situations difficiles ont des solutions</h2>
+      <p class="section-subtitle" style="color:rgba(245,240,232,0.55)">Ce qui distingue un bon facilitateur, c'est sa capacité à rester debout quand ça tremble.</p>
+    </div>
+    <div class="situations-grid" id="situationsGrid">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     MÉTHODES
+     ============================================================ -->
+<section id="methodes" class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Grands processus</span>
+      <h2 class="section-title">Les méthodes qui font la différence</h2>
+      <p class="section-subtitle">Quand un seul outil ne suffit pas — des processus complets pour des enjeux ambitieux.</p>
+    </div>
+    <div class="methodes-grid" id="methodesGrid">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     RESSOURCES
+     ============================================================ -->
+<section id="ressources" class="section">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-label">Ressources</span>
+      <h2 class="section-title">Tout pour continuer à progresser</h2>
+      <p class="section-subtitle">Les livres, outils numériques, communautés et modèles qui font la bibliothèque d'un facilitateur sérieux.</p>
+    </div>
+    <div class="ressources-layout" id="ressourcesGrid">
+      <!-- Injected by JS -->
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     COMMUNAUTÉ
+     ============================================================ -->
+<section id="communaute" class="section">
+  <div class="container">
+    <div class="communaute-layout">
+      <div class="communaute-visual reveal">
+        <div class="comm-circle comm-c1">
+          <span class="comm-num" style="color:var(--terra)">850+</span>
+          <span class="comm-label" style="color:var(--warm-gray);font-size:0.65rem">facilitateurs</span>
+        </div>
+        <div class="comm-circle comm-c2">
+          <span class="comm-num" style="font-size:1rem">Slack</span>
+          <span class="comm-label" style="font-size:0.6rem">communauté</span>
+        </div>
+        <div class="comm-circle comm-c3">
+          <span class="comm-num" style="font-size:1rem">Events</span>
+          <span class="comm-label" style="font-size:0.6rem">mensuels</span>
+        </div>
+        <div class="comm-circle comm-c4">
+          <span style="font-size:1.2rem">🧭</span>
+          <span class="comm-label" style="font-size:0.65rem">Mentorat</span>
+        </div>
+        <div class="comm-circle comm-c5">
+          <span style="font-size:1.5rem">✨</span>
+        </div>
+      </div>
+
+      <div class="communaute-content reveal reveal-delay-1">
+        <span class="section-label">Communauté</span>
+        <h2 class="section-title">Tu ne facilites pas seul·e</h2>
+        <p style="color:var(--warm-gray);font-size:1rem;line-height:1.7;margin-bottom:0">
+          La facilitation est un métier récent, souvent solitaire. Facilitheque, c'est aussi un espace où partager ses doutes, ses ficelles, ses ressources — avec des gens qui comprennent vraiment ce que tu fais.
+        </p>
+        <ul class="communaute-features">
+          <li class="comm-feature">
+            <div class="comm-feature-icon">💬</div>
+            <div>
+              <div class="comm-feature-title">Slack des facilitateurs</div>
+              <div class="comm-feature-desc">Canaux thématiques : retours d'ateliers, partage d'outils, entraide, off-topic chaleureux.</div>
+            </div>
+          </li>
+          <li class="comm-feature">
+            <div class="comm-feature-icon">🎙️</div>
+            <div>
+              <div class="comm-feature-title">Rendez-vous mensuels</div>
+              <div class="comm-feature-desc">Peer learning, retours d'expérience, décorticage de situations vécues. 1h, online, toujours utile.</div>
+            </div>
+          </li>
+          <li class="comm-feature">
+            <div class="comm-feature-icon">🧭</div>
+            <div>
+              <div class="comm-feature-title">Mentorat entre praticiens</div>
+              <div class="comm-feature-desc">Tu cherches un regard extérieur sur un atelier ? Tu veux en coacher un autre ? On met en relation.</div>
+            </div>
+          </li>
+        </ul>
+
+        <p style="font-size:0.85rem;color:var(--warm-gray);margin-bottom:14px;font-weight:500">
+          Reçois les nouvelles fiches outils et les ressources directement dans ta boîte mail.
+        </p>
+        <form class="newsletter-form" onsubmit="handleNewsletter(event)">
+          <input type="email" class="newsletter-input" placeholder="ton@email.pro" required>
+          <button type="submit" class="newsletter-btn">Je rejoins</button>
+        </form>
+        <p id="newsletterMsg" style="font-size:0.8rem;color:var(--sage);margin-top:10px;display:none;">
+          ✓ Parfait ! Tu recevras les prochaines ressources directement.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="logo">
+          <div class="logo-mark">
+            <svg viewBox="0 0 18 18" fill="none">
+              <circle cx="9" cy="9" r="3.5" fill="white"/>
+              <path d="M9 2V4M9 14V16M2 9H4M14 9H16M3.5 3.5L5 5M13 13L14.5 14.5M3.5 14.5L5 13M13 5L14.5 3.5" stroke="white" stroke-width="1.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          Facilitheque
+        </div>
+        <p>La boîte à outils des facilitateurs professionnels. Conçue par des praticiens, pour des praticiens.</p>
+        <div class="footer-socials">
+          <a href="#" class="social-btn" title="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="#" class="social-btn" title="Twitter/X">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+          </a>
+          <a href="#" class="social-btn" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Outils</div>
+        <ul class="footer-links">
+          <li><a href="#outils">Avant l'atelier</a></li>
+          <li><a href="#outils">Ouverture</a></li>
+          <li><a href="#outils">Production</a></li>
+          <li><a href="#outils">Clôture</a></li>
+          <li><a href="#outils">Après l'atelier</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Ressources</div>
+        <ul class="footer-links">
+          <li><a href="#methodes">Méthodes</a></li>
+          <li><a href="#situations">Situations difficiles</a></li>
+          <li><a href="#ressources">Livres & podcasts</a></li>
+          <li><a href="#ressources">Outils numériques</a></li>
+          <li><a href="#ressources">Modèles à télécharger</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <div class="footer-col-title">Communauté</div>
+        <ul class="footer-links">
+          <li><a href="#communaute">Rejoindre le Slack</a></li>
+          <li><a href="#communaute">Newsletter</a></li>
+          <li><a href="#communaute">Rendez-vous mensuels</a></li>
+          <li><a href="#communaute">Mentorat</a></li>
+          <li><a href="#">À propos</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2025 Facilitheque — Ressource libre pour les facilitateurs</p>
+      <div class="footer-tagline">
+        <span>Conçu par et pour les facilitateurs</span>
+        <span class="heart">♥</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Modal -->
+<div class="modal-overlay" id="toolModal" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div class="modal-title-row">
+        <div>
+          <div id="modalPhase" style="margin-bottom:8px"></div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+        </div>
+        <button class="modal-close" onclick="closeModalDirect()">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+            <path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-meta-grid" id="modalMeta"></div>
+      <div class="modal-section-title">Description</div>
+      <div class="modal-desc" id="modalDesc"></div>
+      <div class="modal-section-title">Déroulé</div>
+      <ul class="modal-steps" id="modalSteps"></ul>
+      <div class="modal-tips" id="modalTips"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Scroll to top -->
+<button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Haut de page">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+    <path d="M8 12V4M4 8l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+</button>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+
+const TOOLS = [
+  {
+    id: 1,
+    name: "World Café",
+    icon: "☕",
+    iconBg: "rgba(201,107,58,0.1)",
+    phase: "production",
+    phaseLabel: "Production",
+    duration: "90–120 min",
+    group: "8 à 50 pers.",
+    needs: ["lien", "idees"],
+    tags: ["dialogue", "intelligence collective", "émergence"],
+    desc: "Des tables rondes en rotation pour explorer un sujet sous différents angles. Chaque tour enrichit la nappe de la table précédente. Idéal pour faire émerger une vision partagée à grande échelle.",
+    steps: [
+      "Définir 3 à 5 questions directrices liées au sujet central de l'atelier.",
+      "Répartir les participants en tables de 4 à 6 personnes, avec un hôte fixe par table.",
+      "Lancer les rounds de 20 à 30 minutes, en demandant à chaque groupe de repartir des idées notées sur la nappe.",
+      "En clôture, inviter chaque hôte à partager les grandes convergences repérées sur sa table.",
+      "Synthétiser en plénière les thèmes transversaux qui émergent de l'ensemble."
+    ],
+    tip: "Conseil du praticien : ne forcez pas la synthèse — laissez les participants se reconnaître dans les convergences plutôt que de les imposer. La richesse est dans la diversité des parcours, pas dans l'accord forcé."
+  },
+  {
+    id: 2,
+    name: "1-2-4-All",
+    icon: "🔁",
+    iconBg: "rgba(107,143,113,0.1)",
+    phase: "ouverture",
+    phaseLabel: "Ouverture",
+    duration: "12–15 min",
+    group: "4 à 100+ pers.",
+    needs: ["idees", "lien"],
+    tags: ["inclusion", "libérateur", "parallèle"],
+    desc: "Une structure libératrice qui garantit que chaque voix compte, même dans un grand groupe. Chacun réfléchit seul, puis en binôme, en quatuor, puis partage en grand groupe.",
+    steps: [
+      "Poser une question claire et ouverte à l'ensemble du groupe (1 min de réflexion silencieuse).",
+      "Partage en binôme : chaque personne partage sa réflexion avec un voisin (2 min).",
+      "Les binômes se réunissent en groupes de 4 et synthétisent les idées clés (4 min).",
+      "Chaque groupe partage une idée forte en plénière, tour à tour."
+    ],
+    tip: "Conseil du praticien : cette structure brise l'accaparement de la parole dès le départ. Utilisez-la en tout début d'atelier pour égaliser les niveaux d'expression et éviter que les extravertis dominent."
+  },
+  {
+    id: 3,
+    name: "Dot Voting",
+    icon: "·",
+    iconBg: "rgba(196,148,58,0.1)",
+    phase: "cloture",
+    phaseLabel: "Clôture",
+    duration: "10–20 min",
+    group: "3 à 30 pers.",
+    needs: ["decision"],
+    tags: ["priorisation", "visualisation", "rapide"],
+    desc: "Chaque participant dispose d'un nombre limité de gommettes (ou votes) à attribuer librement aux idées ou options affichées. Le résultat est immédiatement visible et légitime.",
+    steps: [
+      "Afficher toutes les options ou idées à prioriser sur un mur ou tableau.",
+      "Distribuer 3 à 5 gommettes par personne (ou votes digitaux si à distance).",
+      "Laisser chacun voter en silence et simultanément.",
+      "Compter les points et identifier les 3 à 5 priorités émergentes.",
+      "Ouvrir une courte discussion si des résultats surprenants émergent."
+    ],
+    tip: "Conseil du praticien : autorisez les gens à mettre plusieurs gommettes sur un même item si c'est une priorité forte pour eux. Et ne laissez pas le score brut décider seul — c'est une aide à la discussion, pas un verdict."
+  },
+  {
+    id: 4,
+    name: "Fishbowl",
+    icon: "🐠",
+    iconBg: "rgba(91,127,166,0.1)",
+    phase: "production",
+    phaseLabel: "Production",
+    duration: "45–75 min",
+    group: "8 à 40 pers.",
+    needs: ["conflits", "lien"],
+    tags: ["dialogue", "tensions", "observation"],
+    desc: "Un cercle intérieur de 4 à 6 personnes débat en direct pendant que le reste du groupe observe. Favorise l'écoute profonde et permet de traiter des tensions sans que la salle entière s'embrase.",
+    steps: [
+      "Installer 4 à 6 chaises au centre et disposer le reste du groupe en cercle extérieur.",
+      "Définir clairement le sujet de la discussion et les règles du jeu (écoute, pas de couvertures).",
+      "Laisser le cercle intérieur débattre librement pendant 20 à 30 minutes.",
+      "Ouvrir une chaise vide : n'importe qui du cercle extérieur peut s'asseoir pour contribuer.",
+      "Débriefer avec tout le groupe sur ce qui a été observé et entendu."
+    ],
+    tip: "Conseil du praticien : le Fishbowl est particulièrement puissant pour révéler des non-dits ou des tensions que le groupe n'arrive pas à nommer en collectif. La position d'observateur crée une distance utile."
+  },
+  {
+    id: 5,
+    name: "Speedboat",
+    icon: "🚤",
+    iconBg: "rgba(107,143,113,0.1)",
+    phase: "cloture",
+    phaseLabel: "Clôture",
+    duration: "30–45 min",
+    group: "4 à 20 pers.",
+    needs: ["idees", "decision"],
+    tags: ["rétrospective", "ancres", "moteurs"],
+    desc: "Une métaphore visuelle pour identifier ce qui propulse le groupe (moteurs) et ce qui le freine (ancres). Idéal pour les rétrospectives d'équipe ou les bilans de projet.",
+    steps: [
+      "Dessiner un bateau rapide sur un grand papier avec des voiles et des ancres.",
+      "Inviter les participants à noter les 'vents favorables' (ce qui accélère) sur des post-its verts.",
+      "Inviter à noter les 'ancres' (obstacles, lenteurs, freins) sur des post-its rouges.",
+      "Afficher, regrouper et voter sur les ancres prioritaires à lever.",
+      "Définir 2 à 3 actions concrètes pour lever les ancres les plus lourdes."
+    ],
+    tip: "Conseil du praticien : ne laissez pas le temps aux 'ancres' s'étirer en plainte collective. Orientez rapidement vers 'qu'est-ce qu'on fait maintenant ?' dès que l'image est claire."
+  },
+  {
+    id: 6,
+    name: "Check-in Météo",
+    icon: "☁️",
+    iconBg: "rgba(91,127,166,0.1)",
+    phase: "ouverture",
+    phaseLabel: "Ouverture",
+    duration: "5–15 min",
+    group: "4 à 20 pers.",
+    needs: ["lien", "energie"],
+    tags: ["inclusion", "état d'esprit", "présence"],
+    desc: "Chaque participant décrit son état du moment à travers une météo : ensoleillé, nuageux, orageux… Un rituel d'ouverture simple qui crée immédiatement de la présence et de la connexion.",
+    steps: [
+      "Introduire la métaphore météo en montrant quelques exemples (soleil = en forme, nuages = préoccupé, orage = sous pression…).",
+      "Chaque participant dit son prénom, sa météo du moment et une phrase courte d'explication.",
+      "Le facilitateur note mentalement les états exprimés pour adapter son animation.",
+      "Remercier le groupe pour cette ouverture sans chercher à 'corriger' les météos difficiles."
+    ],
+    tip: "Conseil du praticien : modélisez une météo honnête vous-même. Si vous êtes fatigué, dites-le. La vulnérabilité du facilitateur ouvre la permission pour les autres d'être vrais."
+  },
+  {
+    id: 7,
+    name: "Six Chapeaux de Bono",
+    icon: "🎩",
+    iconBg: "rgba(196,148,58,0.1)",
+    phase: "production",
+    phaseLabel: "Production",
+    duration: "60–90 min",
+    group: "4 à 15 pers.",
+    needs: ["decision", "idees"],
+    tags: ["pensée critique", "décision", "angles"],
+    desc: "Six chapeaux de couleur représentent six modes de pensée. Le groupe explore une décision sous chaque chapeau simultanément, évitant les débats d'ego et enrichissant l'analyse collective.",
+    steps: [
+      "Présenter les 6 chapeaux : Blanc (faits), Rouge (émotions), Noir (risques), Jaune (optimisme), Vert (créativité), Bleu (processus).",
+      "Présenter la décision ou le sujet à explorer.",
+      "Faire passer le groupe sous chaque chapeau pendant 5 à 10 minutes — tous portent le même à la fois.",
+      "Compiler les perspectives par chapeau sur un tableau commun.",
+      "Synthétiser en chapeau Bleu : qu'est-ce que cela nous apprend sur la décision à prendre ?"
+    ],
+    tip: "Conseil du praticien : résistez à la tentation de sauter le chapeau Rouge. Les émotions et l'intuition sont souvent les signaux les plus précieux et les plus ignorés dans les organisations."
+  },
+  {
+    id: 8,
+    name: "ROTI",
+    icon: "⭐",
+    iconBg: "rgba(201,107,58,0.1)",
+    phase: "apres",
+    phaseLabel: "Après l'atelier",
+    duration: "5–10 min",
+    group: "4 à 100+ pers.",
+    needs: ["energie"],
+    tags: ["évaluation", "retour", "clôture"],
+    desc: "Return On Time Invested — chaque participant note l'atelier de 1 à 5 en fonction de ce que la session lui a apporté par rapport au temps investi. Simple, direct, actionnable.",
+    steps: [
+      "En fin d'atelier, présenter l'échelle de 1 à 5 avec leur signification.",
+      "Demander à chacun de noter (main levée, gommette, ou digital).",
+      "Pour les 1 et 2, inviter une courte explication anonyme ou publique selon le contexte.",
+      "Remercier les retours honnêtes, même les mauvaises notes.",
+      "Partager le résultat et s'engager à en tenir compte."
+    ],
+    tip: "Conseil du praticien : ne défendez jamais votre note. Le ROTI est un cadeau d'information, pas un jugement personnel. Un 2 expliqué vaut dix fois un 5 silencieux."
+  },
+  {
+    id: 9,
+    name: "Carte d'Empathie",
+    icon: "🗺️",
+    iconBg: "rgba(91,127,166,0.1)",
+    phase: "avant",
+    phaseLabel: "Avant l'atelier",
+    duration: "45–60 min",
+    group: "2 à 12 pers.",
+    needs: ["idees"],
+    tags: ["design", "persona", "besoins utilisateurs"],
+    desc: "Un canevas visuel qui aide à se mettre dans la peau d'un utilisateur ou d'une partie prenante : ce qu'il voit, entend, pense, ressent, dit et fait. Essentiel pour cadrer un atelier centré sur l'humain.",
+    steps: [
+      "Choisir le persona à explorer (utilisateur, client, partie prenante clé).",
+      "Compléter les 6 zones : Voit / Entend / Pense & Ressent / Dit & Fait / Douleurs / Gains.",
+      "Travailler en sous-groupes puis consolider les perspectives.",
+      "Identifier les contradictions entre ce que le persona dit et ce qu'il fait réellement.",
+      "Utiliser le résultat pour cadrer les questions clés de l'atelier."
+    ],
+    tip: "Conseil du praticien : la zone 'Pense & Ressent' est souvent laissée vide. Invitez les participants à se projeter dans les peurs non dites et les espoirs tacites — c'est là que se trouvent les vraies tensions créatives."
+  },
+  {
+    id: 10,
+    name: "Hot Air Balloon",
+    icon: "🎈",
+    iconBg: "rgba(201,107,58,0.1)",
+    phase: "cloture",
+    phaseLabel: "Clôture",
+    duration: "30–45 min",
+    group: "4 à 20 pers.",
+    needs: ["decision", "energie"],
+    tags: ["vision", "obstacles", "prospective"],
+    desc: "Une montgolfière symbolise l'ambition du groupe. Les sacs de sable (obstacles), le vent (tendances), les trous dans la nacelle (risques) permettent d'explorer la trajectoire de manière engageante.",
+    steps: [
+      "Dessiner une montgolfière avec nacelle, sacs de sable, vent et nuages.",
+      "Inviter à identifier la destination (vision à 12/24 mois) dans la montgolfière.",
+      "Les sacs de sable = ce qui freine aujourd'hui. Le vent = les tendances qui portent.",
+      "Les trous dans la nacelle = les risques internes à surveiller.",
+      "Définir les priorités d'action pour alléger les sacs et colmater les brèches."
+    ],
+    tip: "Conseil du praticien : cette métaphore fonctionne particulièrement bien avec des équipes managériales qui résistent aux formats trop 'classiques'. Le dessin libère une parole souvent plus authentique."
+  },
+  {
+    id: 11,
+    name: "Liberating Structures — Troika Consulting",
+    icon: "🔺",
+    iconBg: "rgba(107,143,113,0.1)",
+    phase: "production",
+    phaseLabel: "Production",
+    duration: "30–45 min",
+    group: "3 à 30 pers.",
+    needs: ["idees", "lien"],
+    tags: ["co-développement", "conseil", "pairs"],
+    desc: "En groupes de 3, une personne expose un défi réel pendant que les deux autres posent des questions ou formulent des suggestions — en s'adressant dans son dos, comme si elle n'était pas là. Puissant et libérateur.",
+    steps: [
+      "Former des trios. La personne A expose son défi en 2 minutes.",
+      "A tourne le dos. B et C débattent librement de conseils et d'hypothèses pendant 8 minutes.",
+      "A revient face au trio, partage ce qui l'a touché ou surpris (sans se justifier).",
+      "Rotation : B puis C partagent leur propre défi à leur tour.",
+      "Débrief en plénière : quelles idées inattendues ont émergé ?"
+    ],
+    tip: "Conseil du praticien : la posture 'dos tourné' libère le conseilleur et la personne conseillée. Préparez le groupe à l'inconfort initial — après 2 minutes, tout le monde est dedans."
+  },
+  {
+    id: 12,
+    name: "Plan d'Action POST",
+    icon: "📋",
+    iconBg: "rgba(196,148,58,0.1)",
+    phase: "cloture",
+    phaseLabel: "Clôture",
+    duration: "20–30 min",
+    group: "4 à 25 pers.",
+    needs: ["decision"],
+    tags: ["engagement", "suivi", "plan"],
+    desc: "Un cadre de clôture rigoureux pour transformer les décisions d'atelier en actions concrètes. POST = Priorité, Owner (responsable), Steps (étapes), Timeline. Garantit que rien ne disparaît dans les boîtes mail.",
+    steps: [
+      "Lister les décisions et intentions de l'atelier sur un tableau commun.",
+      "Pour chacune, identifier : qui est le responsable (une seule personne), quelle est la prochaine étape concrète, et la date d'échéance.",
+      "Vérifier oralement que chaque responsable est bien d'accord et comprend l'attente.",
+      "Envoyer un compte-rendu structuré autour des POST dans les 24h.",
+      "Planifier un point de suivi à J+15 ou J+30 pour vérifier l'avancement."
+    ],
+    tip: "Conseil du praticien : résistez à la tentation d'assigner plusieurs responsables. 'Tout le monde est responsable' = personne ne l'est. Un seul nom par action, même dans une équipe collective."
+  }
+];
+
+const SITUATIONS = [
+  {
+    icon: "🎭",
+    alert: "Risque éthique",
+    title: "Mon commanditaire veut orienter les résultats (facipulation)",
+    strategies: [
+      "Clarifier le contrat dès le brief : votre rôle est de garantir un processus équitable, pas d'assurer un résultat déterminé d'avance. Posez la question directement : 'Quel résultat serait un problème pour vous ?'",
+      "Si la pression persiste pendant l'atelier, nommer la tension avec le groupe sans désigner le commanditaire : 'Je sens qu'on s'oriente vers une direction prédéfinie. Est-ce que tout le monde est d'accord avec ça ?'",
+      "En dernier recours, vous avez le droit de refuser de conduire l'atelier ou de l'interrompre si l'intégrité du processus est compromise. Votre légitimité de facilitateur en dépend à long terme."
+    ]
+  },
+  {
+    icon: "📢",
+    alert: "Dynamique de groupe",
+    title: "Un participant monopolise la parole et coupe les autres",
+    strategies: [
+      "Utiliser la structure 1-2-4-All ou d'autres formats parallèles qui empêchent structurellement la monopolisation — le problème de posture devient un problème de design.",
+      "En plénière, intervenir avec bienveillance et fermeté : 'Merci pour cette contribution. Avant de continuer, j'aimerais entendre 2 ou 3 autres perspectives sur ce point.'",
+      "En pause ou à l'écart, parler directement à la personne : 'Je vois que tu as beaucoup de choses à dire — c'est précieux. J'ai besoin de ton aide pour créer de l'espace pour les voix plus discrètes. Est-ce que tu peux m'aider ?'"
+    ]
+  },
+  {
+    icon: "😴",
+    alert: "Énergie en berne",
+    title: "Le groupe est apathique — plus d'énergie, engagement minimal",
+    strategies: [
+      "Nommer l'état collectif sans jugement : 'Je perçois une baisse d'énergie. Qu'est-ce qui se passe pour vous en ce moment ?' Souvent, nommer suffit à débloquer quelque chose.",
+      "Changer physiquement l'espace : debout, en mouvement, changement de salle, pause courte de 10 minutes sans écrans. L'énergie suit le corps avant de suivre l'esprit.",
+      "Raccourcir les formats. Si vous aviez prévu 30 minutes, passez à 15. Un groupe fatigué produit moins mais souvent mieux quand on resserre le cadre temporel et la question."
+    ]
+  },
+  {
+    icon: "🌫️",
+    alert: "Cadrage insuffisant",
+    title: "Les objectifs de l'atelier ne sont pas clairs au moment de commencer",
+    strategies: [
+      "Démarrer l'atelier par une activité d'alignement explicite : 'Ce matin, avant de travailler, j'ai besoin qu'on aligne notre compréhension de pourquoi on est là.' Utilisez un 1-2-4-All sur la question : 'Quelle est votre attente principale pour aujourd'hui ?'",
+      "Proposer au commanditaire de reformuler l'objectif devant le groupe, puis de vérifier collectivement : 'Est-ce que c'est bien ça que vous êtes venu faire ici ?' Les désaccords qui émergent là valent mieux que ceux qui sortent après.",
+      "En cas d'objectifs vraiment contradictoires, proposer de consacrer les 30 premières minutes à clarifier et aligner avant de continuer. Ce n'est pas du temps perdu — c'est le travail le plus important."
+    ]
+  },
+  {
+    icon: "⚡",
+    alert: "Tension interpersonnelle",
+    title: "Conflit ouvert entre deux participants pendant l'atelier",
+    strategies: [
+      "Ne pas minimiser ni gérer à la place des personnes. Nommer sans juger : 'Je vois qu'il y a une tension importante entre vous deux. On va faire une pause de 5 minutes.' Sortir du contexte collectif immédiatement.",
+      "En pause, rencontrer chaque personne séparément. Reformuler leur position de manière bienveillante et vérifier : 'Est-ce que je comprends bien ce qui vous préoccupe ?' La reconnaissance du ressenti désamorce souvent plus vite que les arguments.",
+      "Proposer de transformer le conflit en ressource : 'Ces deux points de vue sont peut-être les deux faces d'une tension réelle dans votre organisation. Si on la nommait comme un sujet à explorer plutôt qu'un désaccord personnel ?'"
+    ]
+  },
+  {
+    icon: "💻",
+    alert: "Contexte hybride",
+    title: "Facilitation à distance : perte d'engagement progressif",
+    strategies: [
+      "Changer de format toutes les 20 à 25 minutes maximum en ligne. Alterner : plénière, travail en sous-groupes (breakout rooms), temps individuel, outil visuel collaboratif. L'attention en ligne est une ressource non renouvelable.",
+      "Nommer explicitement les silences et les caméras éteintes : 'Je vois beaucoup de caméras fermées — c'est ok, mais j'aimerais qu'on se voie pendant les moments de partage en plénière.' Ne pas imposer, mais inviter clairement.",
+      "Intégrer des micro-activités d'engagement régulières : sondage Mentimeter, réaction emoji, question écrite dans le chat. Le principe : si les gens ne parlent pas depuis 10 minutes, ils ont déjà décroché."
+    ]
+  }
+];
+
+const METHODES = [
+  {
+    number: "01",
+    icon: "☕",
+    iconBg: "rgba(201,107,58,0.1)",
+    name: "World Café",
+    desc: "Des conversations en rotation sur des tables rondes pour explorer un sujet en profondeur avec un grand nombre de personnes. La pollinisation croisée des idées entre tables crée une intelligence collective qui dépasse la somme des individus.",
+    duration: "3–4h",
+    group: "12 à 200+",
+    quand: "Quand on veut faire émerger une vision partagée ou explorer un sujet complexe avec un grand collectif. Éviter si une décision rapide est attendue."
+  },
+  {
+    number: "02",
+    icon: "⚡",
+    iconBg: "rgba(91,127,166,0.1)",
+    name: "Design Sprint",
+    desc: "Un processus structuré en 5 jours (ou version courte en 2 jours) pour aller de la problématique au prototype testé. Créé par Google Ventures, adapté à de nombreux contextes d'innovation.",
+    duration: "2 à 5 jours",
+    group: "5 à 8 pers.",
+    quand: "Quand une équipe doit prendre une décision importante sur un produit ou service avec peu de certitudes. Nécessite un engagement total sur la durée."
+  },
+  {
+    number: "03",
+    icon: "🕊️",
+    iconBg: "rgba(107,143,113,0.1)",
+    name: "Forum Ouvert",
+    desc: "Un format radicalement auto-organisé où les participants créent eux-mêmes l'agenda du jour. Principe : les bonnes personnes, les bonnes conversations, au bon moment. Fonctionne avec la loi des deux pieds.",
+    duration: "1 à 3 jours",
+    group: "20 à 1000+",
+    quand: "Quand les solutions traditionnelles ont échoué ou que le collectif est bloqué. Idéal pour des enjeux complexes où personne ne détient LA réponse."
+  },
+  {
+    number: "04",
+    icon: "🔥",
+    iconBg: "rgba(196,148,58,0.1)",
+    name: "Pro Action Café",
+    desc: "Un mélange entre World Café et coaching par les pairs. Des porteurs de projets ou d'enjeux reçoivent des perspectives croisées de groupes successifs qui les aident à avancer concrètement.",
+    duration: "3–4h",
+    group: "12 à 60 pers.",
+    quand: "Quand des individus ou équipes portent des projets et ont besoin de ressources collectives. Excellent pour accélérer sans importer les biais d'un seul consultant."
+  },
+  {
+    number: "05",
+    icon: "🌱",
+    iconBg: "rgba(107,143,113,0.1)",
+    name: "Appreciative Inquiry",
+    desc: "Une approche systémique qui part des forces et des succès du passé pour imaginer et construire un futur souhaité. Contre-intuitif dans les organisations habituées à partir des problèmes.",
+    duration: "1 à 2 jours",
+    group: "10 à 200 pers.",
+    quand: "Pour des transformations culturelles ou organisationnelles profondes. Particulièrement efficace quand le groupe est épuisé par des années de 'problem-solving'."
+  },
+  {
+    number: "06",
+    icon: "☕",
+    iconBg: "rgba(91,127,166,0.1)",
+    name: "Lean Coffee",
+    desc: "Un format de réunion structuré mais agendé en temps réel par les participants. Chaque sujet est voté et discuté avec un temps minuté. Décision collective à chaque fin de time-box : continuer ou passer ?",
+    duration: "1–2h",
+    group: "3 à 20 pers.",
+    quand: "Pour remplacer les réunions d'équipe classiques inefficaces. Fonctionne en présentiel comme à distance. Idéal pour les équipes agiles ou les collectifs avec beaucoup de sujets à aborder."
+  }
+];
+
+const RESSOURCES = [
+  {
+    title: "Livres essentiels",
+    icon: "📚",
+    iconBg: "rgba(201,107,58,0.1)",
+    items: [
+      { icon: "📖", name: "La boîte à outils de la facilitation", desc: "Béatrice Briançon — La référence en français. Complet et praticien." },
+      { icon: "📖", name: "The Art of Facilitation", desc: "Dale Hunter — Vision holistique de la posture, pas seulement des outils." },
+      { icon: "📖", name: "Liberating Structures", desc: "Lipmanowicz & McCandless — 33 structures pour libérer l'intelligence collective." },
+      { icon: "📖", name: "The Skilled Facilitator", desc: "Roger Schwarz — Approche systémique et cadre éthique solide." }
+    ]
+  },
+  {
+    title: "Outils numériques",
+    icon: "🛠️",
+    iconBg: "rgba(91,127,166,0.1)",
+    items: [
+      { icon: "🎨", name: "Miro", desc: "Tableau blanc collaboratif en ligne. Standard du secteur." },
+      { icon: "📊", name: "Mentimeter", desc: "Sondages et votes en temps réel. Idéal pour l'engagement à distance." },
+      { icon: "🃏", name: "Klaxoon", desc: "Plateforme tout-en-un pour ateliers hybrides et asynchrones." },
+      { icon: "🎯", name: "Mural", desc: "Alternative à Miro, très appréciée pour le design thinking." }
+    ]
+  },
+  {
+    title: "Communautés & podcasts",
+    icon: "🎙️",
+    iconBg: "rgba(107,143,113,0.1)",
+    items: [
+      { icon: "🌐", name: "IAF France", desc: "Association Internationale des Facilitateurs — section française." },
+      { icon: "🎧", name: "Facilitateurs dans la Cité", desc: "Le podcast francophone de référence sur la facilitation." },
+      { icon: "🌍", name: "Liberating Structures Network", desc: "Communauté internationale autour des 33 structures libératrices." },
+      { icon: "💬", name: "Slack Facilitation FR", desc: "Le Slack francophone des facilitateurs — entraide quotidienne." }
+    ]
+  },
+  {
+    title: "Modèles téléchargeables",
+    icon: "📄",
+    iconBg: "rgba(196,148,58,0.1)",
+    items: [
+      { icon: "📝", name: "Brief commanditaire", desc: "Questionnaire de cadrage pour aligner les attentes avant l'atelier." },
+      { icon: "⏱️", name: "Déroulé vierge", desc: "Trame de programme détaillé avec blocs temps et matériel nécessaire." },
+      { icon: "🔍", name: "Fiche debrief post-atelier", desc: "Outil de réflexivité pour le facilitateur après chaque session." },
+      { icon: "📋", name: "Plan d'action POST", desc: "Template de suivi des décisions prises en atelier." }
+    ]
+  }
+];
+
+// ============================================================
+// RENDER TOOLS
+// ============================================================
+
+function getPhaseBadgeClass(phase) {
+  const map = { avant: 'phase-avant', ouverture: 'phase-ouverture', production: 'phase-production', cloture: 'phase-cloture', apres: 'phase-apres' };
+  return map[phase] || 'phase-production';
+}
+
+function renderTools() {
+  const grid = document.getElementById('toolsGrid');
+  grid.innerHTML = TOOLS.map(t => `
+    <div class="tool-card reveal" data-phase="${t.phase}" data-needs="${t.needs.join(',')}" onclick="openModal(${t.id})">
+      <div class="tool-card-header">
+        <div class="tool-icon" style="background:${t.iconBg}">${t.icon}</div>
+        <span class="phase-badge ${getPhaseBadgeClass(t.phase)}">${t.phaseLabel}</span>
+      </div>
+      <div class="tool-name">${t.name}</div>
+      <div class="tool-meta">
+        <div class="tool-meta-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="6.5" cy="6.5" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M6.5 3.5v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          ${t.duration}
+        </div>
+        <div class="tool-meta-item">
+          <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><circle cx="5" cy="4" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M2 10c0-2 1.3-3 3-3s3 1 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9.5" cy="4.5" r="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M11.5 10c0-1.5-.8-2.5-2-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          ${t.group}
+        </div>
+      </div>
+      <p class="tool-desc">${t.desc}</p>
+      <div class="tool-tags">${t.tags.map(tag => `<span class="tool-tag">${tag}</span>`).join('')}</div>
+      <button class="btn-fiche">
+        Voir la fiche
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// RENDER SITUATIONS
+// ============================================================
+
+function renderSituations() {
+  const grid = document.getElementById('situationsGrid');
+  grid.innerHTML = SITUATIONS.map((s, i) => `
+    <div class="situation-card reveal" style="transition-delay:${(i % 3) * 0.1}s">
+      <div class="situation-icon-row">
+        <div class="situation-icon">${s.icon}</div>
+        <span class="situation-alert">▲ ${s.alert}</span>
+      </div>
+      <h3 class="situation-title">${s.title}</h3>
+      <ul class="strategies">
+        ${s.strategies.map(str => `
+          <li>
+            <div class="strategy-bullet">
+              <svg viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+                <path d="M2 5.5l2 2 4-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <span>${str}</span>
+          </li>
+        `).join('')}
+      </ul>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// RENDER MÉTHODES
+// ============================================================
+
+function renderMethodes() {
+  const grid = document.getElementById('methodesGrid');
+  grid.innerHTML = METHODES.map((m, i) => `
+    <div class="methode-card reveal" style="transition-delay:${(i % 3) * 0.1}s">
+      <div class="methode-header">
+        <span class="methode-number">${m.number}</span>
+        <div class="methode-icon-bg" style="background:${m.iconBg}">${m.icon}</div>
+        <div class="methode-name">${m.name}</div>
+        <p class="methode-desc">${m.desc}</p>
+      </div>
+      <div class="methode-quand">
+        <div class="methode-quand-title">Quand l'utiliser</div>
+        <p class="methode-quand-text">${m.quand}</p>
+      </div>
+      <div class="methode-footer">
+        <div class="methode-info">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3l2 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          ${m.duration}
+        </div>
+        <div class="methode-info">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="5" cy="4.5" r="2" stroke="currentColor" stroke-width="1.2"/><path d="M2 11c0-2.2 1.3-3.5 3-3.5s3 1.3 3 3.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="10" cy="5" r="1.7" stroke="currentColor" stroke-width="1.2"/><path d="M12.5 11c0-1.8-1-3-2.5-3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          ${m.group}
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// RENDER RESSOURCES
+// ============================================================
+
+function renderRessources() {
+  const grid = document.getElementById('ressourcesGrid');
+  grid.innerHTML = RESSOURCES.map(col => `
+    <div class="ressource-col reveal">
+      <div class="ressource-col-title">
+        <div class="ressource-col-icon" style="background:${col.iconBg}">${col.icon}</div>
+        ${col.title}
+      </div>
+      ${col.items.map(item => `
+        <div class="ressource-item">
+          <div class="ressource-item-icon">${item.icon}</div>
+          <div class="ressource-item-text">
+            <div class="ressource-item-name">${item.name}</div>
+            <div class="ressource-item-desc">${item.desc}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+
+function openModal(toolId) {
+  const tool = TOOLS.find(t => t.id === toolId);
+  if (!tool) return;
+
+  document.getElementById('modalTitle').textContent = tool.name;
+  document.getElementById('modalPhase').innerHTML = `<span class="phase-badge ${getPhaseBadgeClass(tool.phase)}">${tool.phaseLabel}</span>`;
+
+  document.getElementById('modalMeta').innerHTML = `
+    <div class="modal-meta-card">
+      <div class="num">${tool.duration}</div>
+      <div class="lbl">Durée estimée</div>
+    </div>
+    <div class="modal-meta-card">
+      <div class="num" style="font-size:1rem">${tool.group}</div>
+      <div class="lbl">Taille du groupe</div>
+    </div>
+    <div class="modal-meta-card">
+      <div class="num" style="font-size:1rem">${tool.needs.length} besoin${tool.needs.length > 1 ? 's' : ''}</div>
+      <div class="lbl">${tool.needs.map(n => {
+        const map = { lien: 'lien', idees: 'idées', decision: 'décision', conflits: 'conflits', energie: 'énergie', distance: 'distance' };
+        return map[n] || n;
+      }).join(', ')}</div>
+    </div>
+  `;
+
+  document.getElementById('modalDesc').textContent = tool.desc;
+
+  document.getElementById('modalSteps').innerHTML = tool.steps.map((s, i) => `
+    <li>
+      <span class="step-num">${i + 1}</span>
+      <span>${s}</span>
+    </li>
+  `).join('');
+
+  document.getElementById('modalTips').innerHTML = `<p>💡 <strong>Conseil du praticien</strong><br>${tool.tip}</p>`;
+
+  const overlay = document.getElementById('toolModal');
+  overlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('toolModal')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('toolModal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModalDirect(); });
+
+// ============================================================
+// FILTERS
+// ============================================================
+
+let activePhase = 'all';
+let activeNeed = 'all';
+
+function applyFilters() {
+  document.querySelectorAll('.tool-card').forEach(card => {
+    const phase = card.dataset.phase;
+    const needs = card.dataset.needs.split(',');
+
+    const phaseMatch = activePhase === 'all' || phase === activePhase;
+    const needMatch = activeNeed === 'all' || needs.includes(activeNeed);
+
+    if (phaseMatch && needMatch) {
+      card.classList.remove('hidden');
+    } else {
+      card.classList.add('hidden');
+    }
+  });
+}
+
+document.getElementById('phaseFilters').addEventListener('click', e => {
+  if (!e.target.classList.contains('pill')) return;
+  document.querySelectorAll('#phaseFilters .pill').forEach(p => p.classList.remove('active'));
+  e.target.classList.add('active');
+  activePhase = e.target.dataset.value;
+  applyFilters();
+});
+
+document.getElementById('needFilters').addEventListener('click', e => {
+  if (!e.target.classList.contains('pill')) return;
+  document.querySelectorAll('#needFilters .pill').forEach(p => p.classList.remove('active'));
+  e.target.classList.add('active');
+  activeNeed = e.target.dataset.value;
+  applyFilters();
+});
+
+// ============================================================
+// SCROLL BEHAVIOR
+// ============================================================
+
+window.addEventListener('scroll', () => {
+  const header = document.getElementById('header');
+  const scrollTop = document.getElementById('scrollTop');
+
+  if (window.scrollY > 60) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+
+  if (window.scrollY > 400) {
+    scrollTop.classList.add('visible');
+  } else {
+    scrollTop.classList.remove('visible');
+  }
+});
+
+// ============================================================
+// REVEAL ON SCROLL
+// ============================================================
+
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+function initReveal() {
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+}
+
+// ============================================================
+// NEWSLETTER
+// ============================================================
+
+function handleNewsletter(e) {
+  e.preventDefault();
+  const msg = document.getElementById('newsletterMsg');
+  msg.style.display = 'block';
+  e.target.reset();
+  setTimeout(() => { msg.style.display = 'none'; }, 5000);
+}
+
+// ============================================================
+// MOBILE NAV (basic toggle)
+// ============================================================
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  const navLinks = document.querySelector('.nav-links');
+  const isVisible = navLinks.style.display === 'flex';
+  if (isVisible) {
+    navLinks.style.display = 'none';
+  } else {
+    navLinks.style.cssText = `
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 70px; left: 0; right: 0;
+      background: rgba(245,240,232,0.98);
+      backdrop-filter: blur(12px);
+      padding: 24px;
+      gap: 20px;
+      border-bottom: 1px solid var(--cream-dark);
+      box-shadow: var(--shadow-md);
+      z-index: 999;
+    `;
+  }
+});
+
+// Close mobile nav on link click
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelector('.nav-links').style.display = '';
+  });
+});
+
+// ============================================================
+// INIT
+// ============================================================
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderTools();
+  renderSituations();
+  renderMethodes();
+  renderRessources();
+  setTimeout(initReveal, 100);
+});
+</script>
+</body>
+</html>
