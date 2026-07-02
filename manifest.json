@@ -1,0 +1,21 @@
+{
+  "name": "Facilithèque — Outils live pour facilitateurs",
+  "short_name": "Facilithèque",
+  "description": "Minuteur, roulette, temps de parole, séquenceur et planificateur d'atelier. Fonctionne hors ligne.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#1A1A1A",
+  "theme_color": "#1A1A1A",
+  "lang": "fr",
+  "categories": ["productivity", "business", "education"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

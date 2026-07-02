@@ -12,6 +12,11 @@
 <link rel="canonical" href="https://facilitheque.vercel.app/">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="shortcut icon" href="/favicon.svg">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#1A1A1A">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Facilithèque">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -34,7 +39,7 @@
   "@type": "SoftwareApplication",
   "name": "Facilitheque",
   "url": "https://facilitheque.vercel.app/",
-  "description": "Boîte à outils live pour facilitateurs : chronomètre, roulette, temps de parole, séquenceur, planificateur d'atelier et bibliothèque de 48 outils téléchargeables en PDF.",
+  "description": "Boîte à outils live pour facilitateurs : chronomètre, roulette, temps de parole, séquenceur, planificateur d'atelier et bibliothèque de 12 outils détaillés téléchargeables en PDF.",
   "applicationCategory": "BusinessApplication",
   "operatingSystem": "Web",
   "inLanguage": "fr-FR",
@@ -49,7 +54,7 @@
     "Minuteur temps de parole",
     "Séquenceur d'atelier",
     "Planificateur exportable en PDF",
-    "Bibliothèque de 48 outils de facilitation"
+    "Bibliothèque de 12 fiches outils de facilitation"
   ],
   "publisher": {
     "@type": "Organization",
@@ -91,6 +96,18 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
 .nav-item.active svg{opacity:1}
 .sb-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07)}
 .sb-footer p{font-size:.7rem;color:rgba(245,240,232,.2);line-height:1.5}
+
+/* ── MINI-TIMER PERSISTANT ── */
+#sb-mini-timer{display:none;margin:8px;padding:10px 12px;background:rgba(201,107,58,.16);border:1px solid rgba(201,107,58,.35);border-radius:var(--r12);cursor:pointer;transition:all var(--tr);align-items:center;gap:10px;width:calc(100% - 16px);text-align:left}
+#sb-mini-timer.visible{display:flex}
+#sb-mini-timer:hover{background:rgba(201,107,58,.28)}
+#sb-mini-timer .mt-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0;animation:mtPulse 1.2s ease infinite}
+#sb-mini-timer.paused .mt-dot{animation:none;background:var(--gold)}
+#sb-mini-timer.ended .mt-dot{animation:mtPulse .5s ease infinite;background:var(--red)}
+@keyframes mtPulse{0%,100%{opacity:1}50%{opacity:.3}}
+#sb-mini-timer .mt-time{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:var(--cream);font-variant-numeric:tabular-nums}
+#sb-mini-timer .mt-label{font-size:.62rem;color:rgba(245,240,232,.5);text-transform:uppercase;letter-spacing:.06em}
+@media(max-width:900px){#sb-mini-timer .mt-label{display:none}#sb-mini-timer{padding:8px;justify-content:center}}
 
 /* ── MAIN ── */
 #main{flex:1;overflow-y:auto;background:var(--cream);position:relative}
@@ -412,6 +429,10 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
         <span>Parking</span>
       </button>
     </nav>
+    <button id="sb-mini-timer" onclick="goPanel('timer')" title="Retourner au minuteur">
+      <span class="mt-dot"></span>
+      <span><span class="mt-time" id="mt-time">00:00</span><br><span class="mt-label" id="mt-label">Minuteur</span></span>
+    </button>
     <div class="sb-footer"><p>Facilitheque · Open source<br>Fait pour les facilitateurs</p></div>
   </aside>
 
@@ -456,7 +477,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
         <div class="home-tool-card" onclick="goPanel('library')">
           <div class="home-tool-icon" style="background:rgba(196,148,58,.12)">🛠</div>
           <div class="home-tool-name">Bibliothèque</div>
-          <div class="home-tool-desc">48 outils filtrables, téléchargeables en PDF</div>
+          <div class="home-tool-desc">12 fiches outils filtrables, téléchargeables en PDF</div>
         </div>
         <div class="home-tool-card" onclick="goPanel('parking')">
           <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">🅿️</div>
@@ -633,6 +654,15 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
       <h1 class="panel-title">Séquence de timers</h1>
       <p class="panel-sub">Enchaîne des phases minutées. L'alerte passe automatiquement à la suivante.</p>
       <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Séquenceur d'atelier : programme plusieurs phases minutées qui s'enchaînent automatiquement. Idéal pour les ateliers structurés (World Café, design sprint, hackathon) où chaque activité a une durée définie. Passe à la phase suivante avec alerte sonore.</p>
+      <div style="margin-bottom:18px">
+        <div class="text-xs text-gray fw6" style="letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px">⚡ Démarrage rapide</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="pill" onclick="seqLoadTemplate('retro')">Rétrospective · 60 min</button>
+          <button class="pill" onclick="seqLoadTemplate('brainstorm')">Brainstorming · 45 min</button>
+          <button class="pill" onclick="seqLoadTemplate('reunion')">Réunion efficace · 30 min</button>
+          <button class="pill" onclick="seqLoadTemplate('icebreaker')">Ouverture d'atelier · 15 min</button>
+        </div>
+      </div>
       <div class="two-col" style="align-items:start">
         <div>
           <div class="flex-between" style="margin-bottom:12px">
@@ -746,7 +776,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif}
     <!-- LIBRARY -->
     <section class="panel" id="p-library">
       <h1 class="panel-title">Bibliothèque d'outils</h1>
-      <p class="panel-sub">48 outils classés par phase et besoin. Chaque fiche est téléchargeable en PDF.</p>
+      <p class="panel-sub">12 outils détaillés, classés par phase et besoin. Chaque fiche est téléchargeable en PDF.</p>
       <div class="lib-filters" id="lib-phase-filters"></div>
       <div class="lib-filters" id="lib-need-filters"></div>
       <div class="lib-grid" id="lib-grid">
@@ -869,7 +899,10 @@ document.querySelectorAll('.panel').forEach(p => panels[p.id.replace('p-','')] =
 document.querySelectorAll('.nav-item').forEach(btn => {
   btn.addEventListener('click', () => goPanel(btn.dataset.panel));
 });
+let currentPanel = 'home';
+let appReady = false;
 function goPanel(id) {
+  currentPanel = id;
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   const p = document.getElementById('p-'+id);
@@ -881,6 +914,7 @@ function goPanel(id) {
   if (id === 'library') libRender();
   if (id === 'planner') plannerRender();
   if (id === 'sequence') { seqRender(); seqUpdateDisplay(); }
+  miniSync();
 }
 
 // ════════════════════════════════════════════════════
@@ -938,6 +972,7 @@ const T = {
     const str=`${pad(m)}:${pad(s)}`;
     document.getElementById('timer-display').textContent=str;
     document.getElementById('fs-time').textContent=str;
+    miniSync();
   },
   updateRing(){
     const prog = T.total>0 ? T.remaining/T.total : 1;
@@ -955,6 +990,7 @@ const T = {
     const t = T.running?'⏸ Pause':'▶ Démarrer';
     document.getElementById('timer-toggle-btn').textContent=t;
     document.getElementById('fs-toggle-btn').textContent=t;
+    miniSync();
   }
 };
 T.set(300);
@@ -965,7 +1001,55 @@ function timerReset(){ T.reset(); }
 function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; }
 function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); }
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') fsClose(); });
+
+// ── Mini-timer persistant (sidebar) ──
+function miniSync(){
+  if(!appReady) return;
+  const el=document.getElementById('sb-mini-timer');
+  if(!el) return;
+  const seqLive = SEQ.running && SEQ.remaining>0 && currentPanel!=='sequence';
+  const tEngaged = (T.running || T.remaining<T.total) && currentPanel!=='timer';
+  if(seqLive){
+    const ph=SEQ.phases[SEQ.curIdx];
+    el.querySelector('#mt-time').textContent=`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`;
+    el.querySelector('#mt-label').textContent=(ph&&ph.name?ph.name:'Séquence').substring(0,18);
+    el.onclick=()=>goPanel('sequence');
+    el.className='visible';
+  } else if(tEngaged){
+    el.querySelector('#mt-time').textContent=`${pad(Math.floor(T.remaining/60))}:${pad(T.remaining%60)}`;
+    const lbl=document.getElementById('timer-label-inp');
+    el.querySelector('#mt-label').textContent=(lbl&&lbl.value?lbl.value:'Minuteur').substring(0,18);
+    el.onclick=()=>goPanel('timer');
+    el.className='visible'+(T.remaining===0?' ended':T.running?'':' paused');
+  } else {
+    el.className='';
+  }
+}
+
+// ── Raccourcis clavier ──
+// Espace = start/pause · R = reset · F = plein écran · L = tour (chrono)
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ fsClose(); return; }
+  const tag=(e.target.tagName||'').toLowerCase();
+  if(tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable) return;
+  if(e.ctrlKey||e.metaKey||e.altKey) return;
+  const fsOpen_ = document.getElementById('fs-ov').classList.contains('open');
+  if(e.key===' '||e.code==='Space'){
+    e.preventDefault();
+    if(fsOpen_||currentPanel==='timer') T.toggle();
+    else if(currentPanel==='chrono') CH.toggle();
+    else if(currentPanel==='sequence'){ if(SEQ.remaining>0) SEQ.toggle(); else SEQ.start(); }
+    else if(T.running||T.remaining<T.total) T.toggle();
+  } else if(e.key==='r'||e.key==='R'){
+    if(fsOpen_||currentPanel==='timer') T.reset();
+    else if(currentPanel==='chrono') CH.reset();
+    else if(currentPanel==='sequence') SEQ.reset();
+  } else if(e.key==='f'||e.key==='F'){
+    if(currentPanel==='timer') fsOpen_?fsClose():fsOpen();
+  } else if(e.key==='l'||e.key==='L'){
+    if(currentPanel==='chrono') CH.lap();
+  }
+});
 
 // ════════════════════════════════════════════════════
 // CHRONO
@@ -1150,6 +1234,19 @@ const SEQ = {
   reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='▶'; },
   end(){ SEQ.running=false; beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='✓ Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
 };
+const SEQ_TEMPLATES = {
+  retro: {name:'Rétrospective agile', phases:[['Accueil & météo',5],['Ce qui a bien marché',10],['Ce qui a coincé',10],['Analyse & échanges',15],['Actions à prendre',15],['Clôture & ROTI',5]]},
+  brainstorm: {name:'Brainstorming', phases:[['Cadrage de la question',5],['Divergence silencieuse',10],['Partage des idées',10],['Regroupement en thèmes',10],['Dot voting',5],['Prochaines étapes',5]]},
+  reunion: {name:'Réunion efficace', phases:[['Check-in',3],['Objectif & ordre du jour',2],['Sujet principal',15],['Décisions & actions',7],['Check-out',3]]},
+  icebreaker: {name:'Ouverture d\'atelier', phases:[['Accueil',3],['Icebreaker',7],['Cadre & objectifs',5]]}
+};
+function seqLoadTemplate(key){
+  const t=SEQ_TEMPLATES[key]; if(!t) return;
+  if(SEQ.phases.length && !confirm(`Remplacer la séquence actuelle par « ${t.name} » ?`)) return;
+  SEQ.reset();
+  SEQ.phases=t.phases.map(([n,d],i)=>({id:Date.now()+i,name:n,duration:d}));
+  seqRender(); seqUpdateDisplay();
+}
 function seqStart(){ SEQ.start(); }
 function seqToggle(){ SEQ.toggle(); }
 function seqSkip(){ SEQ.skip(); }
@@ -1183,6 +1280,7 @@ function seqUpdateDisplay(){
   document.getElementById('seq-display').textContent=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'—';
   if(ph){ const pct=SEQ.remaining/(ph.duration*60)*100; document.getElementById('seq-prog-fill').style.width=pct+'%'; }
   document.getElementById('seq-progress-label').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'—';
+  miniSync();
 }
 seqRender();
 seqUpdateDisplay();
@@ -1555,6 +1653,13 @@ homeRefresh();
 RL.load();
 PA.load();
 PARK.load();
+appReady = true;
+miniSync();
+
+// ── PWA : service worker ──
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(()=>{}));
+}
 </script>
 </body>
 </html>
