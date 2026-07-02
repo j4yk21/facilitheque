@@ -270,9 +270,9 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 /* ── MODAL ── */
 .modal-ov{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
 .modal-ov.open{opacity:1;visibility:visible}
-.modal-box{background:var(--card);border-radius:var(--r24);max-width:980px;width:100%;max-height:96vh;overflow:hidden;box-shadow:var(--sh2);display:flex;flex-direction:column;transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
+.modal-box{background:var(--card);border-radius:var(--r24);max-width:1080px;width:100%;max-height:96vh;overflow:hidden;box-shadow:var(--sh2);display:flex;flex-direction:column;transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
 .modal-ov.open .modal-box{transform:translateY(0) scale(1)}
-.modal-hdr{padding:24px 32px 18px;border-bottom:1px solid var(--cream-dark);background:var(--card);z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-shrink:0}
+.modal-hdr{padding:18px 28px 14px;border-bottom:1px solid var(--cream-dark);background:var(--card);z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-shrink:0}
 .modal-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--ink)}
 .modal-close{width:34px;height:34px;border-radius:50%;background:var(--cream);border:none;display:grid;place-items:center;flex-shrink:0;cursor:pointer;transition:background var(--tr)}
 .modal-close:hover{background:var(--cream-dark)}
@@ -280,14 +280,14 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .modal-content{flex:1;overflow-y:auto;min-width:0}
 .modal-content::-webkit-scrollbar{width:4px}
 .modal-content::-webkit-scrollbar-thumb{background:var(--cream-mid);border-radius:4px}
-.modal-body{padding:22px 32px 32px}
+.modal-body{padding:16px 28px 24px}
 .modal-meta-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
 .modal-meta-card{background:var(--cream);border-radius:var(--r12);padding:14px;text-align:center}
 .modal-meta-card .n{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--terra)}
 .modal-meta-card .l{font-size:.72rem;color:var(--gray);margin-top:2px}
-.modal-sec{font-size:.72rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:10px;margin-top:20px}
-.modal-steps{list-style:none;display:flex;flex-direction:column;gap:12px}
-.modal-steps li{display:flex;gap:12px;font-size:.88rem;line-height:1.65;color:var(--ink-s)}
+.modal-sec{font-size:.7rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--gray);margin-bottom:8px;margin-top:14px}
+.modal-steps{list-style:none;display:flex;flex-direction:column;gap:7px}
+.modal-steps li{display:flex;gap:10px;font-size:.85rem;line-height:1.5;color:var(--ink-s);align-items:flex-start}
 .step-n{width:24px;height:24px;background:var(--terra);color:#fff;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:1px}
 .modal-preview{width:250px;min-width:250px;background:var(--cream);border-left:1px solid var(--cream-dark);padding:28px 22px;overflow-y:auto;display:flex;flex-direction:column;gap:22px}
 .modal-preview::-webkit-scrollbar{width:3px}
@@ -297,7 +297,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .mprev-val{font-size:.88rem;font-weight:600;color:var(--ink);line-height:1.4}
 .mprev-tags{display:flex;flex-wrap:wrap;gap:5px}
 .mprev-tag{display:inline-block;padding:3px 9px;background:var(--card);border:1px solid var(--cream-dark);color:var(--ink-s);border-radius:20px;font-size:.7rem}
-.modal-tip{background:rgba(107,143,113,.08);border-left:3px solid var(--sage);border-radius:0 var(--r12) var(--r12) 0;padding:14px 18px;margin-top:18px;font-size:.85rem;color:var(--sage-d);line-height:1.65}
+.modal-tip{background:rgba(107,143,113,.08);border-left:3px solid var(--sage);border-radius:0 var(--r12) var(--r12) 0;padding:10px 14px;margin-top:14px;font-size:.82rem;color:var(--sage-d);line-height:1.5}
 
 /* ── FULLSCREEN TIMER ── */
 #fs-ov{position:fixed;inset:0;background:#111;z-index:3000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:32px}
@@ -931,9 +931,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
     <div class="modal-inner">
       <div class="modal-content">
         <div class="modal-body">
-          <div class="modal-meta-row" id="modal-meta"></div>
           <div class="modal-sec">Description</div>
-          <p id="modal-desc" style="font-size:.9rem;line-height:1.75;color:var(--ink-s)"></p>
+          <p id="modal-desc" style="font-size:.87rem;line-height:1.55;color:var(--ink-s)"></p>
           <div class="modal-sec" style="margin-top:20px">Déroulé en pratique</div>
           <ul class="modal-steps" id="modal-steps"></ul>
           <div class="modal-tip" id="modal-tip"></div>
@@ -1701,7 +1700,6 @@ function toolOpen(id){
   currentToolId=id;
   document.getElementById('modal-phase-badge').innerHTML=`<span class="tool-phase-badge ph-${t.phase}">${t.phaseLabel}</span>`;
   document.getElementById('modal-title').textContent=t.name;
-  document.getElementById('modal-meta').innerHTML=`<div class="modal-meta-card"><div class="n">${t.dur}</div><div class="l">Durée</div></div><div class="modal-meta-card"><div class="n" style="font-size:.95rem">${t.grp}</div><div class="l">Groupe</div></div><div class="modal-meta-card"><div class="n" style="font-size:.95rem">${t.needs.length}</div><div class="l">Type${t.needs.length>1?'s':''} de besoin</div></div>`;
   document.getElementById('modal-desc').textContent=t.desc;
   document.getElementById('modal-steps').innerHTML=t.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join('');
   document.getElementById('modal-tip').innerHTML=`💡 <strong>Conseil du praticien</strong><br>${t.tip}`;
