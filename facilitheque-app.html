@@ -68,6 +68,8 @@
 <script>try{document.documentElement.dataset.theme=localStorage.getItem('fk-theme')||''}catch(e){}</script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script defer src="/_vercel/insights/script.js"></script>
 <style>
 :root{--cream:#F5F0E8;--cream-dark:#EBE4D6;--cream-mid:#E0D8C8;--terra:#C96B3A;--terra-d:#A8542A;--sage:#6B8F71;--sage-d:#4E6E54;--ink:#1A1A1A;--ink-s:#3D3730;--gray:#8A8078;--gold:#C4943A;--blue:#5B7FA6;--red:#B85450;--r8:8px;--r12:12px;--r16:16px;--r24:24px;--sh:0 4px 20px rgba(0,0,0,.09);--sh2:0 12px 40px rgba(0,0,0,.13);--card:#fff;--card-line:var(--cream-dark);--tr:.22s cubic-bezier(.4,0,.2,1)}
 
@@ -81,6 +83,8 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 h1,h2,h3,h4{font-family:'Playfair Display',serif;line-height:1.2}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:'DM Sans',sans-serif}
+button:active{transform:translateY(1px) scale(.97)}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 
 /* ── APP SHELL ── */
@@ -500,6 +504,16 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
     <section class="panel active" id="p-home">
       <h1 class="panel-title">Tableau de bord</h1>
       <p class="panel-sub">Lance un outil rapidement ou reprends là où tu en étais.</p>
+      <div id="onboard-banner" style="display:none;position:relative;background:linear-gradient(135deg,rgba(201,107,58,.1),rgba(107,143,113,.08));border:1px solid rgba(201,107,58,.25);border-radius:var(--r16);padding:18px 44px 18px 20px;margin-bottom:24px">
+        <button onclick="onboardDismiss()" title="Fermer" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--gray);font-size:14px;cursor:pointer;padding:4px 8px">✕</button>
+        <div style="font-weight:600;margin-bottom:4px">👋 Première fois ici ?</div>
+        <p style="font-size:.85rem;color:var(--ink-s);margin-bottom:12px;line-height:1.5">Facilithèque rassemble tous les outils pour animer tes ateliers : timers, tirage au sort, temps de parole, et 48 fiches méthodes. Tout est gratuit, sans compte, et fonctionne même hors ligne.</p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn btn-primary btn-sm" onclick="onboardDismiss();goPanel('timer')">⏱ Lancer un minuteur</button>
+          <button class="btn btn-secondary btn-sm" onclick="onboardDismiss();goPanel('sequence')">⚡ Essayer une séquence type</button>
+          <button class="btn btn-ghost btn-sm" onclick="onboardDismiss();goPanel('library')">📚 Parcourir les 48 outils</button>
+        </div>
+      </div>
       <div class="home-grid">
         <div class="home-tool-card" onclick="goPanel('timer')">
           <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">⏱</div>
@@ -963,7 +977,7 @@ function goPanel(id) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
   const p = document.getElementById('p-'+id);
-  if (p) p.classList.add('active');
+  if (p) { p.classList.add('active'); animPanel(p); }
   const btn = document.querySelector(`.nav-item[data-panel="${id}"]`);
   if (btn) btn.classList.add('active');
   document.getElementById('main').scrollTop = 0;
@@ -972,6 +986,47 @@ function goPanel(id) {
   if (id === 'planner') plannerRender();
   if (id === 'sequence') { seqRender(); seqUpdateDisplay(); }
   miniSync();
+}
+
+
+// ════════════════════════════════════════════════════
+// MOTION (GSAP) — entrées en cascade, pops, micro-feedback
+// ════════════════════════════════════════════════════
+function MOTION(){ return typeof gsap!=='undefined' && !window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+// Entrée d'un panneau : les blocs montent en cascade
+function animPanel(panel){
+  if(!MOTION()) return;
+  panel.style.animation='none';
+  const kids=[...panel.children].slice(0,12);
+  gsap.fromTo(kids,{y:16,opacity:0},{y:0,opacity:1,duration:.45,stagger:.055,ease:'power3.out',clearProps:'all',overwrite:'auto'});
+}
+// Cascade d'une grille (bibliothèque, cartes)
+function animGrid(container,sel){
+  if(!MOTION()) return;
+  const items=container.querySelectorAll(sel);
+  if(!items.length) return;
+  gsap.fromTo(items,{y:12,opacity:0,scale:.985},{y:0,opacity:1,scale:1,duration:.35,stagger:{amount:.35},ease:'power2.out',clearProps:'all',overwrite:'auto'});
+}
+// Pop élastique (moment de récompense : gagnant roulette)
+function animPop(el){
+  if(!MOTION()||!el) return;
+  gsap.fromTo(el,{scale:.55},{scale:1,duration:.75,ease:'elastic.out(1,0.45)',clearProps:'transform',overwrite:'auto'});
+}
+// Apparition d'une note / d'un badge
+function animIn(el,from){
+  if(!MOTION()||!el) return;
+  gsap.fromTo(el,Object.assign({opacity:0},from||{y:10,scale:.9}),{opacity:1,y:0,x:0,scale:1,duration:.38,ease:'back.out(1.9)',clearProps:'all',overwrite:'auto'});
+}
+// Pulsation douce (changement de phase de séquence)
+function animPulse(el){
+  if(!MOTION()||!el) return;
+  gsap.fromTo(el,{scale:1.07},{scale:1,duration:.5,ease:'power2.out',clearProps:'transform',overwrite:'auto'});
+}
+// Overlays (plein écran / projection) : contenu qui monte
+function animOverlay(root){
+  if(!MOTION()||!root) return;
+  const kids=root.querySelectorAll(':scope > *:not(.fs-exit)');
+  gsap.fromTo(kids,{y:24,opacity:0},{y:0,opacity:1,duration:.5,stagger:.08,ease:'power3.out',clearProps:'all',overwrite:'auto'});
 }
 
 // ════════════════════════════════════════════════════
@@ -1056,14 +1111,16 @@ function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-m
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
 function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; }
-function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); }
+function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); animOverlay(document.getElementById('fs-ov')); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); }
 
 // ── Mini-timer persistant (sidebar) ──
+let miniWasVisible=false;
 function miniSync(){
   if(!appReady) return;
   const el=document.getElementById('sb-mini-timer');
   if(!el) return;
+  const wasVisible=miniWasVisible;
   const seqLive = SEQ.running && SEQ.remaining>0 && currentPanel!=='sequence';
   const tEngaged = (T.running || T.remaining<T.total) && currentPanel!=='timer';
   if(seqLive){
@@ -1081,6 +1138,8 @@ function miniSync(){
   } else {
     el.className='';
   }
+  miniWasVisible=el.classList.contains('visible');
+  if(miniWasVisible&&!wasVisible) animIn(el,{x:-14});
 }
 
 // ── Thème clair / sombre ──
@@ -1103,6 +1162,7 @@ function projOpen(tool){
   document.querySelectorAll('.proj-pane').forEach(p=>p.classList.remove('active'));
   document.getElementById('proj-'+tool).classList.add('active');
   document.getElementById('proj-ov').classList.add('open');
+  animOverlay(document.getElementById('proj-'+tool));
   if(tool==='sequence') seqUpdateDisplay();
   if(tool==='parole') PA.renderProj();
   if(tool==='roulette'){
@@ -1194,6 +1254,7 @@ const RL = {
       if(++step>=total){
         const wi=Math.floor(Math.random()*pool.length), winner=pool[wi];
         slot.textContent=winner; slot.className='roulette-slot winner'; projRSlot(winner,'winner');
+        animPop(slot); if(projTool==='roulette') animPop(document.getElementById('proj-r-slot'));
         RL.history.unshift(winner);
         if(remove){ const idx=RL.names.indexOf(winner); if(idx>=0){RL.names.splice(idx,1); RL.renderTags();} }
         RL.renderHistory(); beep(SND_WIN); return;
@@ -1333,6 +1394,8 @@ const SEQ = {
     SEQ.running=true;
     clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,1000);
     seqUpdateDisplay(); seqRender();
+    animPulse(document.getElementById('seq-current-name'));
+    if(projTool==='sequence') animPulse(document.getElementById('proj-s-name'));
     document.getElementById('seq-toggle-btn').textContent='⏸';
   },
   tick(){
@@ -1690,6 +1753,7 @@ function libRender(){
         <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})">⬇ PDF</button>
       </div>
     </div>`).join('');
+  animGrid(grid,'.lib-card');
 }
 function libSetPhase(v){ libPhase=v; libRender(); }
 function libSetNeed(v){ libNeed=v; libRender(); }
@@ -1712,6 +1776,10 @@ function toolOpen(id){
     <div><div class="mprev-label">Tags</div><div class="mprev-tags" style="margin-top:4px">${t.tags.map(tag=>`<span class="mprev-tag">${tag}</span>`).join('')}</div></div>`;
   document.getElementById('tool-modal').classList.add('open');
   document.body.style.overflow='hidden';
+  if(MOTION()){
+    gsap.fromTo('#modal-steps li',{x:-10,opacity:0},{x:0,opacity:1,duration:.3,stagger:.045,ease:'power2.out',clearProps:'all',delay:.1});
+    gsap.fromTo('#modal-preview > *',{y:8,opacity:0},{y:0,opacity:1,duration:.3,stagger:.05,ease:'power2.out',clearProps:'all',delay:.15});
+  }
   if(location.hash!=='#outil/'+t.slug) history.replaceState(null,'','#outil/'+t.slug);
 }
 function toolModalClose(e){ if(e.target===document.getElementById('tool-modal')) toolModalCloseBtn(); }
@@ -1784,7 +1852,7 @@ const PARK = {
     try{const s=localStorage.getItem('fk-park');if(s){PARK.items=JSON.parse(s);PARK.render();}}catch(e){}
     try{const t=localStorage.getItem('fk-park-title');if(t){document.getElementById('parking-title').value=t;}}catch(e){}
   },
-  add(text,cat){ if(!text.trim()) return; PARK.items.push({id:Date.now(),text:text.trim(),cat,ts:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}); PARK.save(); PARK.render(); },
+  add(text,cat){ if(!text.trim()) return; PARK.items.push({id:Date.now(),text:text.trim(),cat,ts:new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})}); PARK.save(); PARK.render(); animIn(document.getElementById('parking-board').lastElementChild); },
   remove(id){ PARK.items=PARK.items.filter(i=>i.id!==id); PARK.save(); PARK.render(); },
   clear(){ if(PARK.items.length&&!confirm('Vider tout le parking ?')) return; PARK.items=[]; PARK.save(); PARK.render(); },
   render(){
@@ -1901,6 +1969,13 @@ PARK.load();
 appReady = true;
 miniSync();
 themeBtnSync();
+// Onboarding première visite
+function onboardDismiss(){
+  document.getElementById('onboard-banner').style.display='none';
+  try{localStorage.setItem('fk-onboarded','1');}catch(e){}
+}
+window.onboardDismiss=onboardDismiss;
+try{ if(!localStorage.getItem('fk-onboarded')) document.getElementById('onboard-banner').style.display='block'; }catch(e){}
 
 // ── Routage par hash : #plan=… (import) et #outil/slug (fiche) ──
 function routeFromHash(){
