@@ -74,9 +74,9 @@
 :root{--cream:#F5F0E8;--cream-dark:#EBE4D6;--cream-mid:#E0D8C8;--terra:#C96B3A;--terra-d:#A8542A;--sage:#6B8F71;--sage-d:#4E6E54;--ink:#1A1A1A;--ink-s:#3D3730;--gray:#8A8078;--gold:#C4943A;--blue:#5B7FA6;--red:#B85450;--r8:8px;--r12:12px;--r16:16px;--r24:24px;--sh:0 4px 20px rgba(0,0,0,.09);--sh2:0 12px 40px rgba(0,0,0,.13);--card:#fff;--card-line:var(--cream-dark);--tr:.22s cubic-bezier(.4,0,.2,1)}
 
 /* ── PALETTES CHALEUREUSES ── */
-[data-palette=terre]{--cream:#FAF3E4;--cream-dark:#F0E4CC;--cream-mid:#E3D2AF;--terra:#C05A2E;--terra-d:#9C4522;--gold:#D99E3B;--sage:#7C8B5F;--sage-d:#5D6B45;--ink:#211A14;--ink-s:#43382E;--gray:#8D8072}
-[data-palette=epices]{--cream:#FBF1E0;--cream-dark:#F2E2C6;--cream-mid:#E6D0A9;--terra:#B3492A;--terra-d:#92351C;--gold:#D9A13F;--sage:#8A9268;--sage-d:#68704B;--ink:#2A1E15;--ink-s:#4C3D30;--gray:#93826F}
-[data-palette=argile]{--cream:#F9F0E7;--cream-dark:#EFE0D0;--cream-mid:#E2CDB6;--terra:#BE6A45;--terra-d:#9C5030;--gold:#C99277;--sage:#94A07E;--sage-d:#71805E;--ink:#2E241C;--ink-s:#504236;--gray:#94857A}
+[data-palette=rose]{--cream:#FAEFEC;--cream-dark:#F2DDD5;--cream-mid:#E7C9BD;--terra:#C05F6C;--terra-d:#9E4753;--gold:#D6975F;--sage:#8E9B7A;--sage-d:#6C7A59;--ink:#2B1E20;--ink-s:#4E3A3D;--gray:#94807E}
+[data-palette=miel]{--cream:#FBF3DD;--cream-dark:#F3E5BF;--cream-mid:#E8D49D;--terra:#B98A2A;--terra-d:#966D1D;--gold:#CE6A42;--sage:#7E8F62;--sage-d:#5F6E48;--ink:#27200F;--ink-s:#473E26;--gray:#8F846B}
+[data-palette=sauge]{--cream:#F1F3E7;--cream-dark:#E2E6CF;--cream-mid:#CFD6B3;--terra:#6E8558;--terra-d:#556B42;--gold:#C4943A;--sage:#B57B4E;--sage-d:#8F5C36;--ink:#20241A;--ink-s:#3D4433;--gray:#83887A}
 
 /* Sélecteur de palette (sidebar) */
 .pal-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.18);cursor:pointer;background:linear-gradient(135deg,var(--pb) 50%,var(--pd) 50%);transition:all .2s;padding:0;flex-shrink:0}
@@ -504,10 +504,10 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
     <div class="sb-footer">
       <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.35);text-align:center;margin-bottom:7px">Couleurs</div>
       <div style="display:flex;gap:9px;justify-content:center;margin-bottom:10px">
-        <button class="pal-dot" data-pal="" onclick="setPalette('')" title="Classique" style="--pd:#C96B3A;--pb:#F5F0E8"></button>
-        <button class="pal-dot" data-pal="terre" onclick="setPalette('terre')" title="Terre &amp; Safran" style="--pd:#C05A2E;--pb:#FAF3E4"></button>
-        <button class="pal-dot" data-pal="epices" onclick="setPalette('epices')" title="Épices — Paprika &amp; Miel" style="--pd:#B3492A;--pb:#FBF1E0"></button>
-        <button class="pal-dot" data-pal="argile" onclick="setPalette('argile')" title="Argile douce — Sienne &amp; Rosé" style="--pd:#BE6A45;--pb:#F9F0E7"></button>
+        <button class="pal-dot" data-pal="" onclick="setPalette('')" title="Terracotta (classique)" style="--pd:#C96B3A;--pb:#F5F0E8"></button>
+        <button class="pal-dot" data-pal="rose" onclick="setPalette('rose')" title="Rose poudré" style="--pd:#C05F6C;--pb:#FAEFEC"></button>
+        <button class="pal-dot" data-pal="miel" onclick="setPalette('miel')" title="Miel doré" style="--pd:#B98A2A;--pb:#FBF3DD"></button>
+        <button class="pal-dot" data-pal="sauge" onclick="setPalette('sauge')" title="Vert sauge" style="--pd:#6E8558;--pb:#F1F3E7"></button>
       </div>
       <button id="theme-toggle" onclick="themeToggle()" title="Basculer clair / sombre" style="width:100%;margin-bottom:10px;padding:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r8);color:rgba(245,240,232,.7);font-size:.75rem;cursor:pointer;transition:background .2s">🌙 Mode sombre</button>
       <p>Facilitheque · Open source<br>Fait pour les facilitateurs</p>
