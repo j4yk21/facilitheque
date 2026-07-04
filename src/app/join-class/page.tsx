@@ -37,12 +37,13 @@ function JoinClassContent() {
     async function joinClass() {
       setStatus("joining");
 
-      // Find classroom by token
-      const { data: classroom } = await supabase
-        .from("classrooms")
-        .select("id, name")
-        .eq("invite_token", token!)
-        .single();
+      // Find classroom by token (RPC: tokens are no longer enumerable
+      // through a public SELECT policy)
+      const { data: classrooms } = await supabase.rpc(
+        "get_classroom_by_token",
+        { p_token: token! }
+      );
+      const classroom = classrooms?.[0];
 
       if (!classroom) {
         setError("Lien d'invitation invalide ou expire.");

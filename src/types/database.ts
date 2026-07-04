@@ -209,6 +209,27 @@ export interface Database {
         Args: Record<string, never>;
         Returns: string;
       };
+      get_classroom_by_token: {
+        Args: { p_token: string };
+        Returns: { id: string; name: string }[];
+      };
+      get_session_by_battle_code: {
+        Args: { p_battle_code: string };
+        Returns: {
+          id: string;
+          template_id: string;
+          teacher_id: string;
+          battle_code: string;
+          expected_student_count: number;
+          status: string;
+          current_boss_hp: number | null;
+          max_boss_hp: number | null;
+        }[];
+      };
+      is_session_participant: {
+        Args: { p_session_id: string };
+        Returns: boolean;
+      };
     };
   };
 }

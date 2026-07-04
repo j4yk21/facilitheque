@@ -97,12 +97,19 @@ export function useSession() {
     async (battleCode: string) => {
       if (!profile) return null;
 
-      const { data: session } = await supabase
-        .from("sessions")
-        .select("*, session_state(*)")
-        .eq("battle_code", battleCode.toUpperCase())
-        .single();
+      // Lookup goes through a SECURITY DEFINER RPC: students can no longer
+      // enumerate waiting sessions (and their battle codes) via SELECT.
+      const { data: rows, error: lookupError } = await supabase.rpc(
+        "get_session_by_battle_code",
+        { p_battle_code: battleCode.toUpperCase() }
+      );
 
+      if (lookupError) {
+        console.error("joinSession lookup error:", lookupError);
+        return null;
+      }
+
+      const session = rows?.[0];
       if (!session) return null;
 
       // Insert participant with character class snapshot
@@ -118,17 +125,15 @@ export function useSession() {
         return null;
       }
 
-      const state = Array.isArray(session.session_state)
-        ? session.session_state[0]
-        : session.session_state;
-
-      if (state) {
+      if (session.max_boss_hp != null) {
         battleStore.setSession(
           session.id,
-          state.max_boss_hp,
+          session.max_boss_hp,
           session.expected_student_count
         );
-        battleStore.updateBossHp(state.current_boss_hp);
+        battleStore.updateBossHp(
+          session.current_boss_hp ?? session.max_boss_hp
+        );
       }
 
       return session;
@@ -185,11 +190,17 @@ export function useSession() {
     async (sessionId: string, questionIndex: number) => {
       if (!profile) return;
 
-      await supabase
+      const { error } = await supabase
         .from("session_participants")
         .update({ current_question_index: questionIndex })
         .eq("session_id", sessionId)
         .eq("student_id", profile.id);
+
+      if (error) {
+        // Surface silently-dropped saves: a failed write here means the
+        // student will re-answer questions after a refresh.
+        console.error("updateQuestionProgress error:", error);
+      }
     },
     [profile, supabase]
   );
