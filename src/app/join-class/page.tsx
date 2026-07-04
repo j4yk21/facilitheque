@@ -39,11 +39,25 @@ function JoinClassContent() {
 
       // Find classroom by token (RPC: tokens are no longer enumerable
       // through a public SELECT policy)
-      const { data: classrooms } = await supabase.rpc(
+      const { data: classrooms, error: rpcError } = await supabase.rpc(
         "get_classroom_by_token",
         { p_token: token! }
       );
-      const classroom = classrooms?.[0];
+      let classroom = classrooms?.[0];
+
+      if (
+        !classroom &&
+        (rpcError?.code === "PGRST202" || rpcError?.code === "42883")
+      ) {
+        // Migration 00005 not applied yet (RPC missing): fall back to the
+        // direct lookup the old policy allows. Remove once 00005 is deployed.
+        const { data: legacy } = await supabase
+          .from("classrooms")
+          .select("id, name")
+          .eq("invite_token", token!)
+          .single();
+        classroom = legacy ?? undefined;
+      }
 
       if (!classroom) {
         setError("Lien d'invitation invalide ou expire.");

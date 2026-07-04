@@ -113,12 +113,41 @@ export function useSession() {
         { p_battle_code: battleCode.toUpperCase() }
       );
 
+      let session = rows?.[0] ?? null;
+
       if (lookupError) {
-        console.error("joinSession lookup error:", lookupError);
-        return null;
+        // Migration 00005 not applied yet (RPC missing): fall back to the
+        // direct lookup that the old policies still allow. Remove this
+        // branch once 00005 is deployed.
+        if (lookupError.code === "PGRST202" || lookupError.code === "42883") {
+          const { data: legacy } = await supabase
+            .from("sessions")
+            .select("*, session_state(*)")
+            .eq("battle_code", battleCode.toUpperCase())
+            .single();
+
+          if (!legacy) return null;
+
+          const legacyState = Array.isArray(legacy.session_state)
+            ? legacy.session_state[0]
+            : legacy.session_state;
+
+          session = {
+            id: legacy.id,
+            template_id: legacy.template_id,
+            teacher_id: legacy.teacher_id,
+            battle_code: legacy.battle_code,
+            expected_student_count: legacy.expected_student_count,
+            status: legacy.status,
+            current_boss_hp: legacyState?.current_boss_hp ?? null,
+            max_boss_hp: legacyState?.max_boss_hp ?? null,
+          };
+        } else {
+          console.error("joinSession lookup error:", lookupError);
+          return null;
+        }
       }
 
-      const session = rows?.[0];
       if (!session) return null;
 
       // Insert participant with character class snapshot
