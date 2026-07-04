@@ -21,6 +21,7 @@ export default function BattleLobby({
   const supabase = useSupabase();
 
   const [session, setSession] = useState<any>(null);
+  const [rpcBossName, setRpcBossName] = useState<string | null>(null);
 
   useEffect(() => {
     getSession(sessionId).then((data) => {
@@ -29,7 +30,20 @@ export default function BattleLobby({
       if (data?.status === "active") {
         router.push(`/student/battle/${sessionId}`);
       }
+
+      // After migration 00006 students can no longer read templates
+      // directly (solutions live there): the boss name comes from the
+      // sanitized RPC instead.
+      if (data && !data.templates?.boss_name) {
+        supabase
+          .rpc("get_battle_questions", { p_session_id: sessionId })
+          .then(({ data: payload }) => {
+            const name = (payload as { boss_name?: string } | null)?.boss_name;
+            if (name) setRpcBossName(name);
+          });
+      }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sessionId, getSession, router]);
 
   // Safety net: if the realtime event is missed (websocket hiccup),
@@ -75,7 +89,7 @@ export default function BattleLobby({
     };
   }, [sessionId, router, supabase]);
 
-  const bossName = session?.templates?.boss_name ?? "???";
+  const bossName = session?.templates?.boss_name ?? rpcBossName ?? "???";
 
   return (
     <div className="flex min-h-[80vh] flex-col items-center justify-center gap-8">
