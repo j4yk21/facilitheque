@@ -8,6 +8,8 @@ interface VictoryScreenProps {
   bossName: string;
   totalDamage: number;
   xpEarned: number;
+  /** Level reached during this battle (shown only when a level-up happened) */
+  newLevel?: number | null;
   onContinue: () => void;
 }
 
@@ -15,6 +17,7 @@ export function VictoryScreen({
   bossName,
   totalDamage,
   xpEarned,
+  newLevel = null,
   onContinue,
 }: VictoryScreenProps) {
   return (
@@ -66,6 +69,23 @@ export function VictoryScreen({
           <p className="text-sm text-gray-400">XP Earned</p>
         </div>
       </motion.div>
+
+      {/* Level up */}
+      {newLevel != null && (
+        <motion.div
+          initial={{ scale: 0.5, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 260, delay: 1.0 }}
+          className="rounded-xl border border-yellow-500/50 bg-yellow-900/20 px-8 py-4 text-center"
+        >
+          <p className="text-2xl font-black text-yellow-400">
+            ⭐ LEVEL UP !
+          </p>
+          <p className="text-sm text-yellow-200">
+            Tu atteins le niveau {newLevel}
+          </p>
+        </motion.div>
+      )}
 
       {/* Continue button */}
       <motion.div

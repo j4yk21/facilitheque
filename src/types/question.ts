@@ -25,4 +25,9 @@ export interface Question {
   items?: string[];
   /** Term-definition pairs for matching questions */
   pairs?: MatchingPair[];
+  /**
+   * Alternative accepted answers for text questions (short_answer,
+   * fill_blank). Checked server-side with accent normalization.
+   */
+  accepted_answers?: string[];
 }

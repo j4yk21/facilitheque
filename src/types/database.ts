@@ -230,6 +230,29 @@ export interface Database {
         Args: { p_session_id: string };
         Returns: boolean;
       };
+      submit_answer: {
+        Args: {
+          p_session_id: string;
+          p_question_index: number;
+          p_answer: string;
+        };
+        Returns: {
+          is_correct: boolean;
+          already_answered: boolean;
+          damage: number;
+          xp: number;
+          new_boss_hp: number;
+          boss_defeated: boolean;
+          new_total_xp: number;
+          new_level: number;
+          leveled_up: boolean;
+          solution: Json;
+        }[];
+      };
+      get_battle_questions: {
+        Args: { p_session_id: string };
+        Returns: Json;
+      };
     };
   };
 }

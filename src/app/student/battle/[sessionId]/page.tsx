@@ -1,11 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback, use } from "react";
+import { useEffect, useState, useCallback, useRef, use } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { useSession } from "@/hooks/use-session";
-import { useBattle } from "@/hooks/use-battle";
+import { useBattle, type SubmitAnswerResult } from "@/hooks/use-battle";
 import { IsometricScene, type PartyMember } from "@/components/battle/isometric-scene";
 import { QuestionCard } from "@/components/battle/question-card";
 import { BattleLog } from "@/components/battle/battle-log";
@@ -44,11 +44,14 @@ export default function BattleArena({
     logs,
     participantCount,
     expectedStudentCount,
-    dealDamage,
+    submitAnswer,
   } = useBattle(sessionId);
 
   const [session, setSession] = useState<any>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [bossName, setBossName] = useState("Boss");
+  const [reachedLevel, setReachedLevel] = useState<number | null>(null);
+  const lastResultRef = useRef<SubmitAnswerResult | null>(null);
   const [currentQIndex, setCurrentQIndex] = useState(0);
   const [totalDamage, setTotalDamage] = useState(0);
   const [totalXp, setTotalXp] = useState(0);
@@ -67,8 +70,39 @@ export default function BattleArena({
       const data = await getSession(sessionId);
       if (data) {
         setSession(data);
-        const qs = (data.templates?.questions as Question[]) ?? [];
+
+        // Sanitized questions via RPC (no solutions in the payload).
+        // Falls back to the embedded template while migration 00006 is
+        // not applied — in that mode the questions still carry solutions
+        // and validation happens locally.
+        let qs: Question[] = [];
+        let name = data.templates?.boss_name ?? "Boss";
+
+        const { data: payload, error: rpcError } = await supabase.rpc(
+          "get_battle_questions",
+          { p_session_id: sessionId }
+        );
+
+        if (!rpcError && payload) {
+          const p = payload as {
+            boss_name?: string;
+            questions?: Question[];
+          };
+          qs = p.questions ?? [];
+          name = p.boss_name ?? name;
+        } else {
+          qs = (data.templates?.questions as Question[]) ?? [];
+          if (
+            rpcError &&
+            rpcError.code !== "PGRST202" &&
+            rpcError.code !== "42883"
+          ) {
+            console.error("get_battle_questions error:", rpcError);
+          }
+        }
+
         setQuestions(qs);
+        setBossName(name);
 
         // Restore student progress
         const progress = await getParticipantProgress(sessionId);
@@ -118,69 +152,102 @@ export default function BattleArena({
     }
   }, [currentBossHp, maxBossHp]);
 
+  // Server-side validation for the current question. Called by the
+  // QuestionCard BEFORE it shows the verdict: the full result is cached
+  // for handleAnswer, and the revealed solution is merged back into the
+  // question so the result display works on sanitized questions.
+  const checkCurrentAnswer = useCallback(
+    async (answer: string) => {
+      const question = questions[currentQIndex];
+      if (!question) return null;
+
+      const result = await submitAnswer(currentQIndex, question, answer);
+      if (!result) return null;
+
+      lastResultRef.current = result;
+
+      if (result.solution) {
+        const solution = result.solution;
+        setQuestions((prev) =>
+          prev.map((q, i) =>
+            i === currentQIndex ? { ...q, ...solution } : q
+          )
+        );
+      }
+
+      if (result.leveledUp && result.newLevel) {
+        setReachedLevel(result.newLevel);
+      }
+
+      return { isCorrect: result.isCorrect };
+    },
+    [questions, currentQIndex, submitAnswer]
+  );
+
   const handleAnswer = useCallback(
     async (_answer: string, isCorrect: boolean) => {
-      if (isCorrect) {
-        const result = await dealDamage(questions[currentQIndex]);
+      const result = lastResultRef.current;
+      lastResultRef.current = null;
 
-        if (result) {
-          setTotalDamage((d) => d + result.damage);
-          setTotalXp((x) => x + result.xpReward);
+      if (isCorrect && result && result.damage > 0) {
+        setTotalDamage((d) => d + result.damage);
+        setTotalXp((x) => x + result.xpReward);
 
-          const myClass = profile?.character_class ?? "warrior";
+        const myClass = profile?.character_class ?? "warrior";
 
-          // Trigger attack animation for current player
+        // Trigger attack animation for current player
+        setParty((prev) =>
+          prev.map((m) =>
+            m.id === profile?.id
+              ? { ...m, state: "attack" as const }
+              : m
+          )
+        );
+
+        // Reset to idle after attack
+        setTimeout(() => {
           setParty((prev) =>
             prev.map((m) =>
               m.id === profile?.id
-                ? { ...m, state: "attack" as const }
+                ? { ...m, state: "idle" as const }
                 : m
             )
           );
+        }, 700);
 
-          // Reset to idle after attack
-          setTimeout(() => {
-            setParty((prev) =>
-              prev.map((m) =>
-                m.id === profile?.id
-                  ? { ...m, state: "idle" as const }
-                  : m
-              )
-            );
-          }, 700);
+        // Attack effect
+        setAttackEffects((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            characterClass: myClass,
+            damage: result.damage,
+          },
+        ]);
 
-          // Attack effect
-          setAttackEffects((prev) => [
-            ...prev,
-            {
-              id: crypto.randomUUID(),
-              characterClass: myClass,
-              damage: result.damage,
-            },
-          ]);
+        // Floating damage number
+        setFloatingDamages((prev) => [
+          ...prev,
+          {
+            id: crypto.randomUUID(),
+            value: result.damage,
+            playerName: profile?.display_name ?? "Toi",
+          },
+        ]);
 
-          // Floating damage number
-          setFloatingDamages((prev) => [
-            ...prev,
-            {
-              id: crypto.randomUUID(),
-              value: result.damage,
-              playerName: profile?.display_name ?? "Toi",
-            },
-          ]);
+        // Screen shake
+        setScreenShake(true);
+        setTimeout(() => setScreenShake(false), 500);
 
-          // Screen shake
-          setScreenShake(true);
-          setTimeout(() => setScreenShake(false), 500);
-
-          if (result.bossDefeated) {
-            await updateQuestionProgress(sessionId, currentQIndex + 1);
-            return;
-          }
+        if (result.bossDefeated) {
+          await updateQuestionProgress(sessionId, currentQIndex + 1);
+          return;
         }
       }
 
-      // Move to next question or finish
+      // Move to next question or finish. Progress is also advanced
+      // server-side by submit_answer; this call covers the legacy path
+      // and is monotonic either way.
       const nextIndex = currentQIndex + 1;
       await updateQuestionProgress(sessionId, nextIndex);
 
@@ -193,7 +260,6 @@ export default function BattleArena({
     [
       currentQIndex,
       questions,
-      dealDamage,
       profile,
       sessionId,
       updateQuestionProgress,
@@ -215,8 +281,6 @@ export default function BattleArena({
     );
   }
 
-  const bossName = session.templates?.boss_name ?? "Boss";
-
   // Victory screen
   if (finished && currentBossHp === 0) {
     return (
@@ -224,6 +288,7 @@ export default function BattleArena({
         bossName={bossName}
         totalDamage={totalDamage}
         xpEarned={totalXp}
+        newLevel={reachedLevel}
         onContinue={() => router.push("/student/dashboard")}
       />
     );
@@ -286,6 +351,7 @@ export default function BattleArena({
           questionIndex={currentQIndex}
           totalQuestions={questions.length}
           onAnswer={handleAnswer}
+          checkAnswerAsync={checkCurrentAnswer}
         />
       )}
 

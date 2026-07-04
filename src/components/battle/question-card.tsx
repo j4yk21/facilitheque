@@ -16,6 +16,12 @@ interface QuestionCardProps {
   questionIndex: number;
   totalQuestions: number;
   onAnswer: (answer: string, isCorrect: boolean) => void;
+  /**
+   * Server-side validation (submit_answer RPC). When provided, the local
+   * checkAnswer is skipped — sanitized questions carry no solutions.
+   * Return null if the submission failed (the student can retry).
+   */
+  checkAnswerAsync?: (answer: string) => Promise<{ isCorrect: boolean } | null>;
   disabled?: boolean;
 }
 
@@ -24,15 +30,27 @@ export function QuestionCard({
   questionIndex,
   totalQuestions,
   onAnswer,
+  checkAnswerAsync,
   disabled = false,
 }: QuestionCardProps) {
   const [selected, setSelected] = useState<string | null>(null);
   const [textAnswer, setTextAnswer] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
+  const [checking, setChecking] = useState(false);
 
-  const handleSubmit = (answer: string) => {
-    const correct = checkAnswer(question, answer);
+  const handleSubmit = async (answer: string) => {
+    let correct: boolean;
+
+    if (checkAnswerAsync) {
+      setChecking(true);
+      const result = await checkAnswerAsync(answer);
+      setChecking(false);
+      if (!result) return; // submission failed — leave inputs enabled
+      correct = result.isCorrect;
+    } else {
+      correct = checkAnswer(question, answer);
+    }
 
     setIsCorrect(correct);
     setShowResult(true);
@@ -44,6 +62,9 @@ export function QuestionCard({
       setShowResult(false);
     }, 1500);
   };
+
+  // While a server check is in flight, lock the inputs
+  const isDisabled = disabled || checking;
 
   const questionTypeLabel: Record<string, string> = {
     multiple_choice: "Multiple Choice",
@@ -123,11 +144,11 @@ export function QuestionCard({
             <button
               key={idx}
               onClick={() => {
-                if (disabled || showResult) return;
+                if (isDisabled || showResult) return;
                 setSelected(option);
                 handleSubmit(option);
               }}
-              disabled={disabled || showResult}
+              disabled={isDisabled || showResult}
               className={cn(
                 "w-full rounded-lg border px-4 py-3 text-left transition-all",
                 selected === option
@@ -137,7 +158,7 @@ export function QuestionCard({
                       : "border-orange-500 bg-orange-900/30 text-orange-300"
                     : "border-purple-500 bg-purple-900/30 text-purple-200"
                   : "border-gray-700 bg-gray-800 text-gray-200 hover:border-gray-500 hover:bg-gray-700",
-                (disabled || showResult) && "cursor-not-allowed opacity-60"
+                (isDisabled || showResult) && "cursor-not-allowed opacity-60"
               )}
             >
               <span className="mr-3 font-mono text-sm text-gray-500">
@@ -161,13 +182,14 @@ export function QuestionCard({
                 handleSubmit(textAnswer);
               }
             }}
-            disabled={disabled || showResult}
+            disabled={isDisabled || showResult}
             placeholder="Type your answer..."
             className="w-full rounded-lg border border-gray-700 bg-gray-800 px-4 py-3 text-white placeholder:text-gray-500 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500/30"
           />
           <Button
             onClick={() => handleSubmit(textAnswer)}
-            disabled={disabled || showResult || !textAnswer.trim()}
+            disabled={isDisabled || showResult || !textAnswer.trim()}
+            isLoading={checking}
             className="w-full bg-purple-600 hover:bg-purple-700"
           >
             Submit Answer
@@ -179,7 +201,7 @@ export function QuestionCard({
       {question.type === "true_false" && (
         <TrueFalseInput
           question={question}
-          disabled={disabled}
+          disabled={isDisabled}
           showResult={showResult}
           onSubmit={handleSubmit}
         />
@@ -189,7 +211,7 @@ export function QuestionCard({
       {question.type === "ordering" && (
         <OrderingInput
           question={question}
-          disabled={disabled}
+          disabled={isDisabled}
           showResult={showResult}
           onSubmit={handleSubmit}
         />
@@ -199,7 +221,7 @@ export function QuestionCard({
       {question.type === "matching" && (
         <MatchingInput
           question={question}
-          disabled={disabled}
+          disabled={isDisabled}
           showResult={showResult}
           onSubmit={handleSubmit}
         />
@@ -209,7 +231,7 @@ export function QuestionCard({
       {question.type === "fill_blank" && (
         <FillBlankInput
           question={question}
-          disabled={disabled}
+          disabled={isDisabled}
           showResult={showResult}
           onSubmit={handleSubmit}
         />

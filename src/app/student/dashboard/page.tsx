@@ -9,6 +9,7 @@ import { CharacterSelector } from "@/components/rpg/character-selector";
 import { CHARACTER_CLASSES } from "@/lib/rpg/character-classes";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { AccessibilityToggle } from "@/components/shared/accessibility-toggle";
+import { xpIntoLevel, levelProgressPercent, XP_PER_LEVEL } from "@/lib/rpg/level";
 import { formatXP } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 import type { CharacterClass } from "@/types/database";
@@ -98,9 +99,8 @@ export default function StudentDashboard() {
     ? CHARACTER_CLASSES[profile.character_class]
     : null;
 
-  const xpForNextLevel = profile.level * 500;
-  const xpProgress = profile.total_xp % 500;
-  const xpPercent = Math.round((xpProgress / 500) * 100);
+  const xpProgress = xpIntoLevel(profile.total_xp);
+  const xpPercent = levelProgressPercent(profile.total_xp);
 
   return (
     <div className="space-y-8">
@@ -156,7 +156,7 @@ export default function StudentDashboard() {
           <div className="mb-1 flex justify-between text-xs text-gray-500">
             <span>Niveau {profile.level}</span>
             <span>
-              {xpProgress} / {xpForNextLevel > 500 ? 500 : xpForNextLevel} XP
+              {xpProgress} / {XP_PER_LEVEL} XP
             </span>
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-gray-800">

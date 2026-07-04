@@ -8,10 +8,23 @@ import {
   calculateQuestionDamage,
   calculateXpReward,
 } from "@/lib/battle/calculate-battle-state";
+import { checkAnswer } from "@/lib/battle/check-answer";
 import { computeTeamBonuses, type TeamBonuses } from "@/lib/rpg/character-classes";
 import type { CharacterClass } from "@/types/database";
 import type { Question } from "@/types/question";
 import type { BattleLogEntry } from "@/types/battle";
+
+export interface SubmitAnswerResult {
+  isCorrect: boolean;
+  alreadyAnswered: boolean;
+  damage: number;
+  xpReward: number;
+  bossDefeated: boolean;
+  newLevel: number | null;
+  leveledUp: boolean;
+  /** Solution fields to merge back into the question for result display */
+  solution: Partial<Question> | null;
+}
 
 export function useBattle(sessionId: string | null) {
   const supabase = useSupabase();
@@ -199,6 +212,80 @@ export function useBattle(sessionId: string | null) {
     [sessionId, profile, supabase, teamBonuses]
   );
 
+  // Submit an answer for server-side validation (migration 00006). Falls
+  // back to the legacy client-side path (checkAnswer + deal_damage) while
+  // the RPC does not exist on the database yet.
+  const submitAnswer = useCallback(
+    async (
+      questionIndex: number,
+      question: Question,
+      answer: string
+    ): Promise<SubmitAnswerResult | null> => {
+      if (!sessionId || !profile) return null;
+
+      const { data, error } = await supabase.rpc("submit_answer", {
+        p_session_id: sessionId,
+        p_question_index: questionIndex,
+        p_answer: answer,
+      });
+
+      if (error) {
+        if (error.code === "PGRST202" || error.code === "42883") {
+          // Migration 00006 not applied: legacy local validation. The
+          // question still carries its solutions in this mode.
+          const isCorrect = checkAnswer(question, answer);
+          if (!isCorrect) {
+            return {
+              isCorrect: false,
+              alreadyAnswered: false,
+              damage: 0,
+              xpReward: 0,
+              bossDefeated: false,
+              newLevel: null,
+              leveledUp: false,
+              solution: null,
+            };
+          }
+          const legacy = await dealDamage(question);
+          if (!legacy) return null;
+          return {
+            isCorrect: true,
+            alreadyAnswered: false,
+            damage: legacy.damage,
+            xpReward: legacy.xpReward,
+            bossDefeated: legacy.bossDefeated,
+            newLevel: null,
+            leveledUp: false,
+            solution: null,
+          };
+        }
+        console.error("submit_answer error:", error);
+        return null;
+      }
+
+      const row = data?.[0];
+      if (!row) return null;
+
+      // Same monotonic HP application as dealDamage
+      const battleStore = useBattleStore.getState();
+      if (row.new_boss_hp < battleStore.currentBossHp) {
+        battleStore.updateBossHp(row.new_boss_hp);
+      }
+
+      return {
+        isCorrect: row.is_correct,
+        alreadyAnswered: row.already_answered,
+        damage: row.damage,
+        xpReward: row.xp,
+        bossDefeated: row.boss_defeated,
+        newLevel: row.new_level,
+        leveledUp: row.leveled_up,
+        solution: (row.solution as Partial<Question> | null) ?? null,
+      };
+    },
+    [sessionId, profile, supabase, dealDamage]
+  );
+
   return {
     currentBossHp: store.currentBossHp,
     maxBossHp: store.maxBossHp,
@@ -207,5 +294,6 @@ export function useBattle(sessionId: string | null) {
     expectedStudentCount: store.expectedStudentCount,
     teamBonuses,
     dealDamage,
+    submitAnswer,
   };
 }
