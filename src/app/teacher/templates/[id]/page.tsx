@@ -12,6 +12,7 @@ import { QuestionEditor } from "@/components/dashboard/question-editor";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { BOSS_AVATARS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { validateQuestions } from "@/lib/battle/validate-template";
 import type { Question } from "@/types/question";
 
 export default function EditTemplate({
@@ -53,6 +54,9 @@ export default function EditTemplate({
     if (!bossName.trim()) return setError("Boss name is required");
     if (questions.length === 0)
       return setError("Add at least one question");
+
+    const validationError = validateQuestions(questions);
+    if (validationError) return setError(validationError);
 
     setSaving(true);
     setError("");

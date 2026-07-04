@@ -25,13 +25,30 @@ export function useBattle(sessionId: string | null) {
 
     // Initial fetch
     const fetchState = async () => {
-      const { data } = await supabase
-        .from("session_state")
-        .select("*")
-        .eq("session_id", sessionId)
-        .single();
+      const [{ data }, { data: sessionRow }] = await Promise.all([
+        supabase
+          .from("session_state")
+          .select("*")
+          .eq("session_id", sessionId)
+          .single(),
+        supabase
+          .from("sessions")
+          .select("expected_student_count")
+          .eq("id", sessionId)
+          .single(),
+      ]);
 
       if (data) {
+        // After a full page refresh the Zustand store is empty: restore
+        // max_boss_hp and expected_student_count or the HP bar shows 0/0
+        // and victory can never be detected.
+        if (useBattleStore.getState().sessionId !== sessionId) {
+          store.setSession(
+            sessionId,
+            data.max_boss_hp,
+            sessionRow?.expected_student_count ?? 0
+          );
+        }
         store.updateBossHp(data.current_boss_hp);
         store.setLogs((data.logs as BattleLogEntry[]) ?? []);
       }
@@ -164,7 +181,15 @@ export function useBattle(sessionId: string | null) {
         return null;
       }
 
-      return { damage, xpReward, bossDefeated: data?.[0]?.boss_defeated ?? false };
+      // Apply the authoritative HP returned by the RPC immediately so the
+      // HP bar and victory detection don't depend on the realtime event
+      // (which can be missed or not published).
+      const result = data?.[0];
+      if (result) {
+        useBattleStore.getState().updateBossHp(result.new_boss_hp);
+      }
+
+      return { damage, xpReward, bossDefeated: result?.boss_defeated ?? false };
     },
     [sessionId, profile, supabase, teamBonuses]
   );
