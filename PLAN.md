@@ -23,7 +23,7 @@ Le MVP est visuellement et fonctionnellement avancé : 6 types de questions, sc�
 ## Phases
 
 ### Phase 1 — Urgence sécurité
-- [ ] **[TOI]** Rotater la clé `service_role` (dashboard Supabase) puis purger l'historique git avant tout push public
+- [ ] **[TOI — IMMÉDIAT]** Rotater la clé `service_role` (dashboard Supabase → Settings → API → « Reset » sur service_role, puis mettre à jour `.env.local`). La branche `claude/jovial-dhawan` avec la clé dans son historique est **en ligne sur le repo PUBLIC j4yk21/facilitheque** — considérer la clé comme compromise publiquement. Supprimer aussi la branche distante (`git push origin --delete claude/jovial-dhawan`) et prévoir un repo BattleLearn dédié avec un historique propre (squash initial ou git-filter-repo).
 - [ ] Sortir les secrets de `scripts/test-battle.mjs` vers `process.env` (+ fix difficulté `easy` → `1|2|3`)
 - [ ] Authentifier la route `create-profile` (userId depuis la session, pas du body)
 - [ ] Verrouiller l'UPDATE de `profiles` (role, total_xp, level non modifiables par l'utilisateur)
