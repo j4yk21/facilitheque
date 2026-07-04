@@ -48,6 +48,7 @@ export default function ClassroomDetail({
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
   const [showRejected, setShowRejected] = useState(false);
+  const [actionError, setActionError] = useState("");
 
   // Action loading states
   const [approvingAll, setApprovingAll] = useState(false);
@@ -112,12 +113,20 @@ export default function ClassroomDetail({
     setTimeout(() => setCopied(false), 2000);
   };
 
+  const reportError = (context: string, error: { message: string } | null) => {
+    if (error) {
+      setActionError(`${context} : ${error.message}`);
+    }
+  };
+
   const handleUpdateStudentStatus = async (studentRowId: string, newStatus: StudentStatus) => {
+    setActionError("");
     setUpdatingStatus((prev) => new Set(prev).add(studentRowId));
-    await supabase
+    const { error } = await supabase
       .from("classroom_students")
       .update({ status: newStatus })
       .eq("id", studentRowId);
+    reportError("Impossible de changer le statut", error);
     await loadData();
     setUpdatingStatus((prev) => {
       const next = new Set(prev);
@@ -127,13 +136,15 @@ export default function ClassroomDetail({
   };
 
   const handleApproveAll = async () => {
+    setActionError("");
     setApprovingAll(true);
     const pendingIds = pendingStudents.map((s) => s.id);
     if (pendingIds.length > 0) {
-      await supabase
+      const { error } = await supabase
         .from("classroom_students")
         .update({ status: "approved" })
         .in("id", pendingIds);
+      reportError("Impossible d'approuver les eleves", error);
       await loadData();
     }
     setApprovingAll(false);
@@ -143,11 +154,13 @@ export default function ClassroomDetail({
     const trimmed = newGroupName.trim();
     if (!trimmed) return;
 
+    setActionError("");
     setCreatingGroup(true);
-    await supabase.from("classroom_groups").insert({
+    const { error } = await supabase.from("classroom_groups").insert({
       classroom_id: classroomId,
       name: trimmed,
     });
+    reportError("Impossible de creer le groupe", error);
     setNewGroupName("");
     setCreatingGroup(false);
     setShowGroupModal(false);
@@ -155,15 +168,22 @@ export default function ClassroomDetail({
   };
 
   const handleDeleteGroup = async (groupId: string) => {
-    await supabase.from("classroom_groups").delete().eq("id", groupId);
+    setActionError("");
+    const { error } = await supabase
+      .from("classroom_groups")
+      .delete()
+      .eq("id", groupId);
+    reportError("Impossible de supprimer le groupe", error);
     await loadData();
   };
 
   const handleRemoveStudent = async (studentRowId: string) => {
-    await supabase
+    setActionError("");
+    const { error } = await supabase
       .from("classroom_students")
       .delete()
       .eq("id", studentRowId);
+    reportError("Impossible de retirer l'eleve", error);
     await loadData();
   };
 
@@ -187,11 +207,13 @@ export default function ClassroomDetail({
   const handleSaveGroupMembers = async () => {
     if (!editingGroup) return;
 
+    setActionError("");
     // Delete current members then re-insert
-    await supabase
+    const { error: deleteError } = await supabase
       .from("classroom_group_members")
       .delete()
       .eq("group_id", editingGroup);
+    reportError("Impossible de modifier le groupe", deleteError);
 
     const inserts = Array.from(selectedStudents).map((studentId) => ({
       group_id: editingGroup,
@@ -199,7 +221,10 @@ export default function ClassroomDetail({
     }));
 
     if (inserts.length > 0) {
-      await supabase.from("classroom_group_members").insert(inserts);
+      const { error: insertError } = await supabase
+        .from("classroom_group_members")
+        .insert(inserts);
+      reportError("Impossible d'enregistrer les membres", insertError);
     }
 
     setEditingGroup(null);
@@ -248,6 +273,12 @@ export default function ClassroomDetail({
 
   return (
     <div className="space-y-8">
+      {actionError && (
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+          {actionError}
+        </div>
+      )}
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

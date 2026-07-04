@@ -33,6 +33,7 @@ export default function EditTemplate({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
 
   useEffect(() => {
     supabase
@@ -149,8 +150,13 @@ export default function EditTemplate({
       >
         <p className="mb-6 text-gray-600">
           Are you sure you want to delete &quot;{bossName}&quot;? This cannot be
-          undone. Sessions using this template will not be affected.
+          undone.
         </p>
+        {deleteError && (
+          <div className="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-600">
+            {deleteError}
+          </div>
+        )}
         <div className="flex justify-end gap-3">
           <Button variant="ghost" onClick={() => setShowDeleteModal(false)}>
             Cancel
@@ -158,8 +164,16 @@ export default function EditTemplate({
           <Button
             variant="danger"
             onClick={async () => {
+              setDeleteError("");
               const ok = await deleteTemplate(id);
-              if (ok) router.push("/teacher/dashboard");
+              if (ok) {
+                router.push("/teacher/dashboard");
+              } else {
+                // sessions reference templates with ON DELETE RESTRICT
+                setDeleteError(
+                  "This boss cannot be deleted because battle sessions already use it."
+                );
+              }
             }}
           >
             Delete Template

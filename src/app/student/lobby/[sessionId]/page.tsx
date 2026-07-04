@@ -23,8 +23,32 @@ export default function BattleLobby({
   const [session, setSession] = useState<any>(null);
 
   useEffect(() => {
-    getSession(sessionId).then(setSession);
-  }, [sessionId, getSession]);
+    getSession(sessionId).then((data) => {
+      setSession(data);
+      // Already started (late join or missed event): go straight in
+      if (data?.status === "active") {
+        router.push(`/student/battle/${sessionId}`);
+      }
+    });
+  }, [sessionId, getSession, router]);
+
+  // Safety net: if the realtime event is missed (websocket hiccup),
+  // a light poll still gets the student out of the lobby.
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const { data } = await supabase
+        .from("sessions")
+        .select("status")
+        .eq("id", sessionId)
+        .single();
+
+      if (data?.status === "active") {
+        router.push(`/student/battle/${sessionId}`);
+      }
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [sessionId, router, supabase]);
 
   // Listen for session status change to "active"
   useEffect(() => {

@@ -48,12 +48,21 @@ export function useSession() {
           .single();
 
         if (!error && session) {
-          // Create session_state
-          await supabase.from("session_state").insert({
-            session_id: session.id,
-            current_boss_hp: battleState.max_boss_hp,
-            max_boss_hp: battleState.max_boss_hp,
-          });
+          // Create session_state — without it the battle has no HP row,
+          // so a failure here must not leave an orphaned session behind.
+          const { error: stateError } = await supabase
+            .from("session_state")
+            .insert({
+              session_id: session.id,
+              current_boss_hp: battleState.max_boss_hp,
+              max_boss_hp: battleState.max_boss_hp,
+            });
+
+          if (stateError) {
+            console.error("createSession state error:", stateError);
+            await supabase.from("sessions").delete().eq("id", session.id);
+            return null;
+          }
 
           battleStore.setSession(
             session.id,

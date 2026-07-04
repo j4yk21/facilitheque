@@ -24,6 +24,7 @@ export default function SessionControlPanel({
 
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [actionError, setActionError] = useState("");
 
   useEffect(() => {
     getSession(id).then((data) => {
@@ -32,29 +33,53 @@ export default function SessionControlPanel({
     });
   }, [id, getSession]);
 
-  const handlePause = async () => {
+  // Follow status changes made elsewhere — most importantly the session
+  // flipping to "completed" when the boss dies (done by deal_damage).
+  useEffect(() => {
+    const channel = supabase
+      .channel(`teacher-session:${id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "sessions",
+          filter: `id=eq.${id}`,
+        },
+        (payload) => {
+          setSession((prev: any) =>
+            prev ? { ...prev, ...payload.new } : prev
+          );
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [id, supabase]);
+
+  const updateStatus = async (fields: Record<string, unknown>) => {
+    setActionError("");
     const { error } = await supabase
       .from("sessions")
-      .update({ status: "paused" })
+      .update(fields)
       .eq("id", id);
-    if (!error) setSession({ ...session, status: "paused" });
+
+    if (error) {
+      setActionError(`Could not update the session: ${error.message}`);
+      return;
+    }
+    setSession({ ...session, ...fields });
   };
 
-  const handleResume = async () => {
-    const { error } = await supabase
-      .from("sessions")
-      .update({ status: "active" })
-      .eq("id", id);
-    if (!error) setSession({ ...session, status: "active" });
-  };
-
-  const handleEnd = async () => {
-    const { error } = await supabase
-      .from("sessions")
-      .update({ status: "completed", completed_at: new Date().toISOString() })
-      .eq("id", id);
-    if (!error) setSession({ ...session, status: "completed" });
-  };
+  const handlePause = () => updateStatus({ status: "paused" });
+  const handleResume = () => updateStatus({ status: "active" });
+  const handleEnd = () =>
+    updateStatus({
+      status: "completed",
+      completed_at: new Date().toISOString(),
+    });
 
   if (loading) return <LoadingSpinner className="mt-32" size="lg" />;
   if (!session)
@@ -106,6 +131,12 @@ export default function SessionControlPanel({
           </p>
         </CardContent>
       </Card>
+
+      {actionError && (
+        <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+          {actionError}
+        </div>
+      )}
 
       {/* Action buttons */}
       <div className="flex flex-wrap gap-3">
