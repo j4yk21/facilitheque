@@ -1,6 +1,36 @@
 import type { Question } from "@/types/question";
 
 /**
+ * Normalizes questions before validation and saving: trims text fields and
+ * drops empty options/items/incomplete pairs. Without this, half-filled
+ * editor rows (the editor pre-creates empty slots) are stored as-is and
+ * show up as blank buttons during battle.
+ */
+export function sanitizeQuestions(questions: Question[]): Question[] {
+  return questions.map((q) => {
+    const clean: Question = {
+      ...q,
+      text: q.text?.trim() ?? "",
+      correct_answer: q.correct_answer?.trim() ?? "",
+    };
+
+    if (q.options) {
+      clean.options = q.options.map((o) => o.trim()).filter(Boolean);
+    }
+    if (q.items) {
+      clean.items = q.items.map((it) => it.trim()).filter(Boolean);
+    }
+    if (q.pairs) {
+      clean.pairs = q.pairs
+        .map((p) => ({ term: p.term.trim(), definition: p.definition.trim() }))
+        .filter((p) => p.term && p.definition);
+    }
+
+    return clean;
+  });
+}
+
+/**
  * Validates a template's questions before saving.
  *
  * Each question type has different required fields (ordering uses `items`,

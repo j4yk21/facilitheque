@@ -183,10 +183,15 @@ export function useBattle(sessionId: string | null) {
 
       // Apply the authoritative HP returned by the RPC immediately so the
       // HP bar and victory detection don't depend on the realtime event
-      // (which can be missed or not published).
+      // (which can be missed or not published). HP only ever decreases:
+      // never overwrite a newer (lower) realtime value with a staler RPC
+      // response that raced with a teammate's hit.
       const result = data?.[0];
       if (result) {
-        useBattleStore.getState().updateBossHp(result.new_boss_hp);
+        const battleStore = useBattleStore.getState();
+        if (result.new_boss_hp < battleStore.currentBossHp) {
+          battleStore.updateBossHp(result.new_boss_hp);
+        }
       }
 
       return { damage, xpReward, bossDefeated: result?.boss_defeated ?? false };

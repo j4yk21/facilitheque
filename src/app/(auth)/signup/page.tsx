@@ -18,6 +18,7 @@ export default function SignUpPage() {
   const [role, setRole] = useState<"teacher" | "student">("student");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [info, setInfo] = useState("");
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +41,18 @@ export default function SignUpPage() {
     if (authError) {
       setLoading(false);
       setError(authError.message);
+      return;
+    }
+
+    // If email confirmation is enabled on the Supabase project, signUp
+    // returns no session: the authenticated create-profile call would 401.
+    // The DB trigger (handle_new_user) has already created the profile —
+    // just tell the user to confirm their email.
+    if (authData.user && !authData.session) {
+      setLoading(false);
+      setInfo(
+        "Account created! Please confirm your email address, then log in."
+      );
       return;
     }
 
@@ -85,6 +98,12 @@ export default function SignUpPage() {
         {error && (
           <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
             {error}
+          </div>
+        )}
+
+        {info && (
+          <div className="rounded-lg bg-green-50 p-3 text-sm text-green-700">
+            {info}
           </div>
         )}
 

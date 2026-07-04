@@ -12,7 +12,10 @@ import { QuestionEditor } from "@/components/dashboard/question-editor";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
 import { BOSS_AVATARS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { validateQuestions } from "@/lib/battle/validate-template";
+import {
+  sanitizeQuestions,
+  validateQuestions,
+} from "@/lib/battle/validate-template";
 import type { Question } from "@/types/question";
 
 export default function EditTemplate({
@@ -56,7 +59,8 @@ export default function EditTemplate({
     if (questions.length === 0)
       return setError("Add at least one question");
 
-    const validationError = validateQuestions(questions);
+    const cleanedQuestions = sanitizeQuestions(questions);
+    const validationError = validateQuestions(cleanedQuestions);
     if (validationError) return setError(validationError);
 
     setSaving(true);
@@ -67,7 +71,7 @@ export default function EditTemplate({
       .update({
         boss_name: bossName.trim(),
         boss_avatar_id: bossAvatarId,
-        questions,
+        questions: cleanedQuestions,
       })
       .eq("id", id);
 

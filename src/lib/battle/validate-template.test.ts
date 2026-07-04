@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { validateQuestions } from "./validate-template";
+import { sanitizeQuestions, validateQuestions } from "./validate-template";
 import type { Question } from "@/types/question";
 
 function base(overrides: Partial<Question>): Question {
@@ -127,6 +127,36 @@ describe("validateQuestions", () => {
           base({ type: "ordering", correct_answer: "", items: ["First", " "] }),
         ])
       ).toMatch(/2 items/);
+    });
+  });
+
+  describe("sanitizeQuestions", () => {
+    it("drops empty options, items and incomplete pairs", () => {
+      const [q] = sanitizeQuestions([
+        base({
+          type: "multiple_choice",
+          options: ["Paris", "", "Lyon ", "  "],
+          correct_answer: " Paris ",
+          items: ["A", " ", "B"],
+          pairs: [
+            { term: "chat", definition: "cat" },
+            { term: "chien", definition: "  " },
+          ],
+        }),
+      ]);
+
+      expect(q.options).toEqual(["Paris", "Lyon"]);
+      expect(q.items).toEqual(["A", "B"]);
+      expect(q.pairs).toEqual([{ term: "chat", definition: "cat" }]);
+      expect(q.correct_answer).toBe("Paris");
+    });
+
+    it("trims question text and leaves absent fields untouched", () => {
+      const [q] = sanitizeQuestions([base({ text: "  2 + 2 ?  " })]);
+      expect(q.text).toBe("2 + 2 ?");
+      expect(q.options).toBeUndefined();
+      expect(q.items).toBeUndefined();
+      expect(q.pairs).toBeUndefined();
     });
   });
 

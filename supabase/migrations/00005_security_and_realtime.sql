@@ -69,9 +69,11 @@ CREATE TRIGGER protect_profile_columns
 -- replaces this function entirely:
 --   - the caller can only deal damage as themselves,
 --   - the caller must be a participant of the session,
---   - damage and XP are capped: the worst-case single question is ~75
---     damage / ~295 XP (35-student class stacking team bonuses), so
---     150/300 blocks one-shot cheating without false rejections,
+--   - damage and XP are capped: team bonuses stack per student with no
+--     ceiling, so the caps are sized for a 60-student session (~105
+--     damage / ~470 XP worst case). 200/500 blocks one-shot cheating
+--     (boss HP is in the thousands at that size) without rejecting any
+--     legitimate answer,
 --   - the log entry is built server-side from trusted values.
 
 CREATE OR REPLACE FUNCTION public.deal_damage(
@@ -105,7 +107,7 @@ BEGIN
   END IF;
 
   -- Bounds
-  IF p_damage < 0 OR p_damage > 150 OR p_xp_reward < 0 OR p_xp_reward > 300 THEN
+  IF p_damage < 0 OR p_damage > 200 OR p_xp_reward < 0 OR p_xp_reward > 500 THEN
     RAISE EXCEPTION 'Damage or XP out of allowed range';
   END IF;
 
@@ -186,8 +188,14 @@ GRANT EXECUTE ON FUNCTION public.deal_damage(UUID, UUID, INTEGER, INTEGER, JSONB
 -- 4. session_participants: team visibility + progress persistence
 -- -----------------------------------------------
 
--- Helper to avoid infinite RLS recursion when a session_participants
--- policy needs to look up the caller's own participation.
+-- Helpers to break the RLS recursion cycle between sessions and
+-- session_participants. Postgres expands the policies of every table
+-- referenced inside a policy subquery: a session_participants policy
+-- doing EXISTS(sessions) while a sessions policy does
+-- EXISTS(session_participants) fails with 42P17 ("infinite recursion
+-- detected in policy") on EVERY query touching either table. SECURITY
+-- DEFINER functions bypass RLS, so BOTH sides of the cycle must go
+-- through one.
 CREATE OR REPLACE FUNCTION public.is_session_participant(p_session_id UUID)
 RETURNS BOOLEAN
 LANGUAGE sql SECURITY DEFINER SET search_path = public
@@ -198,8 +206,20 @@ AS $$
   );
 $$;
 
+CREATE OR REPLACE FUNCTION public.is_session_teacher(p_session_id UUID)
+RETURNS BOOLEAN
+LANGUAGE sql SECURITY DEFINER SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.sessions
+    WHERE id = p_session_id AND teacher_id = auth.uid()
+  );
+$$;
+
 REVOKE EXECUTE ON FUNCTION public.is_session_participant(UUID) FROM PUBLIC, anon;
 GRANT EXECUTE ON FUNCTION public.is_session_participant(UUID) TO authenticated, service_role;
+REVOKE EXECUTE ON FUNCTION public.is_session_teacher(UUID) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.is_session_teacher(UUID) TO authenticated, service_role;
 
 -- Students could only see their own row: the isometric scene, the team
 -- counter and team bonuses were blind to teammates.
@@ -208,11 +228,7 @@ CREATE POLICY "Session members can view participants"
   ON public.session_participants FOR SELECT
   USING (
     student_id = auth.uid()
-    OR EXISTS (
-      SELECT 1 FROM public.sessions s
-      WHERE s.id = session_participants.session_id
-        AND s.teacher_id = auth.uid()
-    )
+    OR public.is_session_teacher(session_participants.session_id)
     OR public.is_session_participant(session_participants.session_id)
   );
 
@@ -277,15 +293,22 @@ GRANT EXECUTE ON FUNCTION public.get_classroom_by_token(TEXT) TO authenticated, 
 
 -- sessions "OR status = 'waiting'" exposed every waiting session (and
 -- its battle_code) to every student. Lookup now requires the exact code.
+-- The participation check goes through the SECURITY DEFINER helper —
+-- a direct EXISTS on session_participants here recreates the 42P17
+-- recursion cycle described above.
 DROP POLICY IF EXISTS "Students can view sessions they participate in" ON public.sessions;
 CREATE POLICY "Students can view sessions they participate in"
   ON public.sessions FOR SELECT
+  USING (public.is_session_participant(sessions.id));
+
+-- session_state's SELECT policy (from 00001) walks the same
+-- sessions → session_participants cycle: rebuild it on the helpers.
+DROP POLICY IF EXISTS "Anyone in the session can view state" ON public.session_state;
+CREATE POLICY "Anyone in the session can view state"
+  ON public.session_state FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1 FROM public.session_participants sp
-      WHERE sp.session_id = sessions.id
-        AND sp.student_id = auth.uid()
-    )
+    public.is_session_teacher(session_state.session_id)
+    OR public.is_session_participant(session_state.session_id)
   );
 
 CREATE OR REPLACE FUNCTION public.get_session_by_battle_code(p_battle_code TEXT)
@@ -308,7 +331,9 @@ AS $$
   FROM public.sessions s
   LEFT JOIN public.session_state st ON st.session_id = s.id
   WHERE s.battle_code = upper(p_battle_code)
-    AND s.status IN ('waiting', 'active');
+    -- 'paused' included: a student who closed their tab must be able to
+    -- come back through the battle code while the teacher has paused.
+    AND s.status IN ('waiting', 'active', 'paused');
 $$;
 
 REVOKE EXECUTE ON FUNCTION public.get_session_by_battle_code(TEXT) FROM PUBLIC, anon;
@@ -319,3 +344,61 @@ DROP POLICY IF EXISTS "Students can join classrooms" ON public.classroom_student
 CREATE POLICY "Students can request to join classrooms"
   ON public.classroom_students FOR INSERT
   WITH CHECK (auth.uid() = student_id AND status = 'pending');
+
+-- -----------------------------------------------
+-- 6. Break the classrooms <-> classroom_students RLS recursion
+-- -----------------------------------------------
+-- Same 42P17 cycle as sessions/session_participants, inherited from
+-- 00003/00004: classrooms policies referenced classroom_students while
+-- classroom_students policies referenced classrooms. Every policy that
+-- crosses between the two tables now goes through a SECURITY DEFINER
+-- helper.
+
+CREATE OR REPLACE FUNCTION public.is_classroom_teacher(p_classroom_id UUID)
+RETURNS BOOLEAN
+LANGUAGE sql SECURITY DEFINER SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.classrooms
+    WHERE id = p_classroom_id AND teacher_id = auth.uid()
+  );
+$$;
+
+CREATE OR REPLACE FUNCTION public.is_classroom_member(p_classroom_id UUID)
+RETURNS BOOLEAN
+LANGUAGE sql SECURITY DEFINER SET search_path = public
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.classroom_students
+    WHERE classroom_id = p_classroom_id AND student_id = auth.uid()
+  );
+$$;
+
+REVOKE EXECUTE ON FUNCTION public.is_classroom_teacher(UUID) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.is_classroom_teacher(UUID) TO authenticated, service_role;
+REVOKE EXECUTE ON FUNCTION public.is_classroom_member(UUID) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.is_classroom_member(UUID) TO authenticated, service_role;
+
+DROP POLICY IF EXISTS "Students can view classrooms they belong to" ON public.classrooms;
+CREATE POLICY "Students can view classrooms they belong to"
+  ON public.classrooms FOR SELECT
+  USING (public.is_classroom_member(classrooms.id));
+
+DROP POLICY IF EXISTS "Teachers and students can view classroom members" ON public.classroom_students;
+CREATE POLICY "Teachers and students can view classroom members"
+  ON public.classroom_students FOR SELECT
+  USING (
+    student_id = auth.uid()
+    OR public.is_classroom_teacher(classroom_students.classroom_id)
+  );
+
+DROP POLICY IF EXISTS "Teachers can remove students from classrooms" ON public.classroom_students;
+CREATE POLICY "Teachers can remove students from classrooms"
+  ON public.classroom_students FOR DELETE
+  USING (public.is_classroom_teacher(classroom_students.classroom_id));
+
+DROP POLICY IF EXISTS "Teachers can update students in their classrooms" ON public.classroom_students;
+CREATE POLICY "Teachers can update students in their classrooms"
+  ON public.classroom_students FOR UPDATE
+  USING (public.is_classroom_teacher(classroom_students.classroom_id))
+  WITH CHECK (public.is_classroom_teacher(classroom_students.classroom_id));

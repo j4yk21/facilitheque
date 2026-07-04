@@ -9,7 +9,10 @@ import { Input } from "@/components/ui/input";
 import { QuestionEditor } from "@/components/dashboard/question-editor";
 import { BOSS_AVATARS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { validateQuestions } from "@/lib/battle/validate-template";
+import {
+  sanitizeQuestions,
+  validateQuestions,
+} from "@/lib/battle/validate-template";
 import type { Question } from "@/types/question";
 
 export default function NewTemplate() {
@@ -29,7 +32,8 @@ export default function NewTemplate() {
     if (questions.length === 0)
       return setError("Add at least one question");
 
-    const validationError = validateQuestions(questions);
+    const cleanedQuestions = sanitizeQuestions(questions);
+    const validationError = validateQuestions(cleanedQuestions);
     if (validationError) return setError(validationError);
 
     setSaving(true);
@@ -41,7 +45,7 @@ export default function NewTemplate() {
         teacher_id: profile.id,
         boss_name: bossName.trim(),
         boss_avatar_id: bossAvatarId,
-        questions,
+        questions: cleanedQuestions,
       })
       .select()
       .single();
