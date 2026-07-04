@@ -2,12 +2,31 @@
  * BattleLearn E2E Battle Test
  * Creates a template, launches a session, registers 5 students,
  * and simulates them answering questions to defeat the boss.
+ *
+ * Reads credentials from the environment (loads .env.local if present):
+ *   NEXT_PUBLIC_SUPABASE_URL   — project URL
+ *   SUPABASE_SERVICE_ROLE_KEY  — service role key (server-side only, NEVER commit)
+ *   TEACHER_ID                 — optional; defaults to the first teacher profile
  */
 
-const SB_URL = "https://tjopdsxwepnfgcurtpuj.supabase.co";
-const SB_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqb3Bkc3h3ZXBuZmdjdXJ0cHVqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NDE4NTYyNywiZXhwIjoyMDg5NzYxNjI3fQ.u-umBD1dZgGAYn2xnvbJ-7Yh5Jox_mC0usWEfrkuQ8o";
-const ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRqb3Bkc3h3ZXBuZmdjdXJ0cHVqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxODU2MjcsImV4cCI6MjA4OTc2MTYyN30.kBqaxihsbjGefZNgjCl0mSs2rD5oIrBKqkBZoM78H-c";
-const TEACHER_ID = "ba387656-bfd2-4b88-9975-82f8cb5993a6";
+import { fileURLToPath } from "node:url";
+
+try {
+  process.loadEnvFile(fileURLToPath(new URL("../.env.local", import.meta.url)));
+} catch {
+  // .env.local absent — rely on the ambient environment
+}
+
+const SB_URL = process.env.NEXT_PUBLIC_SUPABASE_URL;
+const SB_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+if (!SB_URL || !SB_KEY) {
+  console.error(
+    "Missing NEXT_PUBLIC_SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY.\n" +
+      "Set them in .env.local or in the environment before running this script."
+  );
+  process.exit(1);
+}
 
 const headers = {
   apikey: SB_KEY,
@@ -49,10 +68,27 @@ function generateBattleCode() {
   return code;
 }
 
+async function resolveTeacherId() {
+  if (process.env.TEACHER_ID) return process.env.TEACHER_ID;
+
+  const teachers = await rest(
+    "GET",
+    "profiles?role=eq.teacher&select=id&limit=1"
+  );
+  if (!teachers.length) {
+    throw new Error(
+      "No teacher profile found. Set TEACHER_ID or create a teacher account first."
+    );
+  }
+  return teachers[0].id;
+}
+
 async function main() {
   console.log("╔══════════════════════════════════════════╗");
   console.log("║   BattleLearn E2E Battle Test — 5 Students   ║");
   console.log("╚══════════════════════════════════════════╝\n");
+
+  const TEACHER_ID = await resolveTeacherId();
 
   // 1. Create template with 6 question types
   console.log("📝 Step 1: Creating quiz template with 6 question types...");
@@ -61,7 +97,7 @@ async function main() {
       id: crypto.randomUUID(),
       type: "multiple_choice",
       text: "What is the capital of France?",
-      difficulty: "easy",
+      difficulty: 1,
       options: ["London", "Paris", "Berlin", "Madrid"],
       correct_answer: "Paris",
     },
@@ -69,28 +105,28 @@ async function main() {
       id: crypto.randomUUID(),
       type: "true_false",
       text: "The Earth is flat.",
-      difficulty: "easy",
+      difficulty: 1,
       correct_answer: "false",
     },
     {
       id: crypto.randomUUID(),
       type: "short_answer",
       text: "What gas do plants absorb from the atmosphere?",
-      difficulty: "medium",
+      difficulty: 2,
       correct_answer: "CO2",
     },
     {
       id: crypto.randomUUID(),
       type: "fill_blank",
       text: "Water boils at ___ degrees Celsius.",
-      difficulty: "easy",
+      difficulty: 1,
       correct_answer: "100",
     },
     {
       id: crypto.randomUUID(),
       type: "ordering",
       text: "Arrange these planets from closest to farthest from the Sun:",
-      difficulty: "hard",
+      difficulty: 3,
       items: ["Mercury", "Venus", "Earth", "Mars"],
       correct_answer: JSON.stringify(["Mercury", "Venus", "Earth", "Mars"]),
     },
@@ -98,7 +134,7 @@ async function main() {
       id: crypto.randomUUID(),
       type: "matching",
       text: "Match the countries to their capitals:",
-      difficulty: "medium",
+      difficulty: 2,
       pairs: [
         { term: "France", definition: "Paris" },
         { term: "Germany", definition: "Berlin" },
@@ -213,7 +249,8 @@ async function main() {
     multiple_choice: 1.0, short_answer: 1.3, true_false: 0.7,
     ordering: 1.5, matching: 1.3, fill_blank: 1.2,
   };
-  const diffMultipliers = { easy: 0.8, medium: 1.0, hard: 1.4 };
+  // Difficulty is numeric in the app schema: 1 = easy, 2 = medium, 3 = hard
+  const diffMultipliers = { 1: 0.8, 2: 1.0, 3: 1.4 };
 
   let totalDamage = 0;
   let currentHp = maxBossHp;
