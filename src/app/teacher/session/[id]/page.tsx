@@ -9,6 +9,8 @@ import { useSupabase } from "@/hooks/use-supabase";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/shared/loading-spinner";
+import { CHARACTER_CLASSES } from "@/lib/rpg/character-classes";
+import type { Question } from "@/types/question";
 
 export default function SessionControlPanel({
   params,
@@ -25,6 +27,10 @@ export default function SessionControlPanel({
   const [session, setSession] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [actionError, setActionError] = useState("");
+  const [results, setResults] = useState<any[]>([]);
+  const [answerStats, setAnswerStats] = useState<
+    Record<number, { correct: number; total: number }>
+  >({});
 
   useEffect(() => {
     getSession(id).then((data) => {
@@ -58,6 +64,42 @@ export default function SessionControlPanel({
       supabase.removeChannel(channel);
     };
   }, [id, supabase]);
+
+  // End-of-session results: who did what, and which questions hurt.
+  useEffect(() => {
+    if (session?.status !== "completed") return;
+
+    const loadResults = async () => {
+      const { data: parts } = await supabase
+        .from("session_participants")
+        .select(
+          "student_id, character_class, damage_dealt, xp_earned, current_question_index, profiles(display_name)"
+        )
+        .eq("session_id", id)
+        .order("damage_dealt", { ascending: false });
+
+      setResults(parts ?? []);
+
+      // session_answers only exists once migration 00006 is applied —
+      // silently skip the per-question breakdown before that.
+      const { data: answers, error: answersError } = await supabase
+        .from("session_answers")
+        .select("question_index, is_correct")
+        .eq("session_id", id);
+
+      if (!answersError && answers) {
+        const stats: Record<number, { correct: number; total: number }> = {};
+        for (const a of answers) {
+          const s = (stats[a.question_index] ??= { correct: 0, total: 0 });
+          s.total++;
+          if (a.is_correct) s.correct++;
+        }
+        setAnswerStats(stats);
+      }
+    };
+
+    loadResults();
+  }, [session?.status, id, supabase]);
 
   const updateStatus = async (fields: Record<string, unknown>) => {
     setActionError("");
@@ -219,6 +261,113 @@ export default function SessionControlPanel({
               style={{ width: `${hpPercent}%` }}
             />
           </div>
+        </div>
+      )}
+
+      {/* End-of-session results */}
+      {isCompleted && results.length > 0 && (
+        <div className="space-y-6">
+          <div>
+            <h2 className="mb-3 text-lg font-semibold">Résultats des élèves</h2>
+            <div className="overflow-x-auto rounded-lg border">
+              <table className="w-full text-sm">
+                <thead className="bg-gray-50 text-left text-xs uppercase tracking-wider text-gray-500">
+                  <tr>
+                    <th className="px-4 py-3">Élève</th>
+                    <th className="px-4 py-3">Classe</th>
+                    <th className="px-4 py-3 text-right">Dégâts</th>
+                    <th className="px-4 py-3 text-right">XP</th>
+                    <th className="px-4 py-3 text-right">Progression</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {results.map((p: any, i: number) => {
+                    const cls = p.character_class
+                      ? CHARACTER_CLASSES[
+                          p.character_class as keyof typeof CHARACTER_CLASSES
+                        ]
+                      : null;
+                    const totalQuestions =
+                      (session.templates?.questions as Question[] | undefined)
+                        ?.length ?? 0;
+                    return (
+                      <tr key={p.student_id} className="border-t">
+                        <td className="px-4 py-3 font-medium">
+                          {i === 0 && "🥇 "}
+                          {i === 1 && "🥈 "}
+                          {i === 2 && "🥉 "}
+                          {p.profiles?.display_name ?? "Élève"}
+                        </td>
+                        <td className="px-4 py-3 text-gray-500">
+                          {cls ? cls.name : "—"}
+                        </td>
+                        <td className="px-4 py-3 text-right font-mono">
+                          {p.damage_dealt}
+                        </td>
+                        <td className="px-4 py-3 text-right font-mono">
+                          {p.xp_earned}
+                        </td>
+                        <td className="px-4 py-3 text-right text-gray-500">
+                          {p.current_question_index}
+                          {totalQuestions > 0 && ` / ${totalQuestions}`}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {Object.keys(answerStats).length > 0 && (
+            <div>
+              <h2 className="mb-3 text-lg font-semibold">
+                Réussite par question
+              </h2>
+              <div className="space-y-2">
+                {((session.templates?.questions as Question[]) ?? []).map(
+                  (q, idx) => {
+                    const stat = answerStats[idx];
+                    const percent = stat
+                      ? Math.round((stat.correct / stat.total) * 100)
+                      : null;
+                    return (
+                      <div
+                        key={q.id ?? idx}
+                        className="rounded-lg border bg-white p-3"
+                      >
+                        <div className="mb-1 flex items-center justify-between gap-4 text-sm">
+                          <span className="truncate">
+                            <span className="font-medium">Q{idx + 1}.</span>{" "}
+                            {q.text}
+                          </span>
+                          <span className="shrink-0 text-gray-500">
+                            {stat
+                              ? `${stat.correct} / ${stat.total} (${percent}%)`
+                              : "aucune réponse"}
+                          </span>
+                        </div>
+                        <div className="h-2 overflow-hidden rounded-full bg-gray-100">
+                          <div
+                            className={
+                              percent != null && percent < 50
+                                ? "h-full rounded-full bg-red-400"
+                                : "h-full rounded-full bg-green-500"
+                            }
+                            style={{ width: `${percent ?? 0}%` }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  }
+                )}
+              </div>
+              <p className="mt-2 text-xs text-gray-400">
+                Les questions en rouge (moins de 50 % de réussite) méritent
+                d&apos;être retravaillées en classe.
+              </p>
+            </div>
+          )}
         </div>
       )}
 
