@@ -249,7 +249,7 @@ export default function BattleArena({
           animate={{ opacity: [1, 0.5, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
         >
-          Tu as repondu a toutes les questions ! En attente du reste de l'equipe...
+          Tu as r&eacute;pondu &agrave; toutes les questions ! En attente du reste de l&apos;&eacute;quipe...
         </motion.p>
         <BattleLog logs={logs} className="w-full max-w-xl" />
       </div>

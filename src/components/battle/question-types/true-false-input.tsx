@@ -53,7 +53,6 @@ export function TrueFalseInput({
         whileTap={!disabled && !showResult ? { scale: 0.98 } : undefined}
         onClick={() => handleClick("True")}
         disabled={disabled || showResult}
-        aria-label="True"
         aria-pressed={selected === "True"}
         className={cn(
           "flex flex-col items-center justify-center gap-2 rounded-xl border-2 px-6 py-8 text-lg font-bold transition-all",
@@ -72,7 +71,6 @@ export function TrueFalseInput({
         whileTap={!disabled && !showResult ? { scale: 0.98 } : undefined}
         onClick={() => handleClick("False")}
         disabled={disabled || showResult}
-        aria-label="False"
         aria-pressed={selected === "False"}
         className={cn(
           "flex flex-col items-center justify-center gap-2 rounded-xl border-2 px-6 py-8 text-lg font-bold transition-all",

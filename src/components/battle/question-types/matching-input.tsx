@@ -153,7 +153,7 @@ export function MatchingInput({
 
       <div className="grid grid-cols-2 gap-4">
         {/* Terms column */}
-        <div className="space-y-2" role="list" aria-label="Terms">
+        <div className="space-y-2" role="group" aria-label="Terms">
           <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
             Terms
           </span>
@@ -165,7 +165,6 @@ export function MatchingInput({
               }
               onClick={() => handleTermClick(pair.term)}
               disabled={disabled || showResult}
-              role="listitem"
               aria-label={`Term: ${pair.term}`}
               aria-pressed={selectedTerm === pair.term}
               className={cn(
@@ -180,7 +179,7 @@ export function MatchingInput({
         </div>
 
         {/* Definitions column */}
-        <div className="space-y-2" role="list" aria-label="Definitions">
+        <div className="space-y-2" role="group" aria-label="Definitions">
           <span className="text-xs font-semibold uppercase tracking-wider text-gray-500">
             Definitions
           </span>
@@ -194,7 +193,6 @@ export function MatchingInput({
               }
               onClick={() => handleDefinitionClick(def)}
               disabled={disabled || showResult || !selectedTerm}
-              role="listitem"
               aria-label={`Definition: ${def}`}
               className={cn(
                 "w-full rounded-lg border px-3 py-2.5 text-left text-sm transition-all",
