@@ -19,11 +19,21 @@ interface QuestionCardProps {
   /**
    * Server-side validation (submit_answer RPC). When provided, the local
    * checkAnswer is skipped — sanitized questions carry no solutions.
-   * Return null if the submission failed (the student can retry).
+   * Return { error } for a failure the student must see (they can retry),
+   * or null for a failure already handled elsewhere.
    */
-  checkAnswerAsync?: (answer: string) => Promise<{ isCorrect: boolean } | null>;
+  checkAnswerAsync?: (
+    answer: string
+  ) => Promise<{ isCorrect: boolean } | { error: string } | null>;
   disabled?: boolean;
 }
+
+const SUBMIT_ERROR_MESSAGES: Record<string, string> = {
+  session_inactive:
+    "La session a été mise en pause ou terminée par ton professeur.",
+  failed:
+    "Impossible d'envoyer ta réponse — vérifie ta connexion et réessaie.",
+};
 
 export function QuestionCard({
   question,
@@ -38,15 +48,23 @@ export function QuestionCard({
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState(false);
   const [checking, setChecking] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
   const handleSubmit = async (answer: string) => {
     let correct: boolean;
 
     if (checkAnswerAsync) {
       setChecking(true);
+      setSubmitError(null);
       const result = await checkAnswerAsync(answer);
       setChecking(false);
-      if (!result) return; // submission failed — leave inputs enabled
+      if (!result) return; // failure already handled by the caller
+      if ("error" in result) {
+        setSubmitError(
+          SUBMIT_ERROR_MESSAGES[result.error] ?? SUBMIT_ERROR_MESSAGES.failed
+        );
+        return;
+      }
       correct = result.isCorrect;
     } else {
       correct = checkAnswer(question, answer);
@@ -117,6 +135,17 @@ export function QuestionCard({
         <h3 className="mb-6 text-xl font-semibold text-white">
           {question.text}
         </h3>
+      )}
+
+      {/* Submission error (network, paused/ended session) */}
+      {submitError && !showResult && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mb-4 rounded-lg bg-red-900/40 px-4 py-3 text-center text-sm font-medium text-red-300"
+        >
+          {submitError}
+        </motion.div>
       )}
 
       {/* Result feedback */}

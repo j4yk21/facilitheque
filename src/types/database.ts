@@ -193,6 +193,23 @@ export interface Database {
           Database["public"]["Tables"]["session_state"]["Insert"]
         >;
       };
+      session_answers: {
+        Row: {
+          id: string;
+          session_id: string;
+          student_id: string;
+          question_index: number;
+          question_id: string;
+          answer: string;
+          is_correct: boolean;
+          damage: number;
+          xp: number;
+          answered_at: string;
+        };
+        // Writes only happen inside submit_answer (SECURITY DEFINER)
+        Insert: never;
+        Update: never;
+      };
     };
     Functions: {
       deal_damage: {
@@ -252,6 +269,18 @@ export interface Database {
       get_battle_questions: {
         Args: { p_session_id: string };
         Returns: Json;
+      };
+      get_my_battle_history: {
+        Args: { p_limit?: number };
+        Returns: {
+          id: string;
+          session_id: string;
+          damage_dealt: number;
+          xp_earned: number;
+          joined_at: string;
+          session_status: string;
+          boss_name: string;
+        }[];
       };
     };
   };

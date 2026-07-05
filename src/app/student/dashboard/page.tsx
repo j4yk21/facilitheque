@@ -46,14 +46,39 @@ export default function StudentDashboard() {
     }
 
     async function load() {
-      const { data } = await supabase
-        .from("session_participants")
-        .select("id, session_id, damage_dealt, xp_earned, joined_at, sessions(status, templates(boss_name))")
-        .eq("student_id", profile!.id)
-        .order("joined_at", { ascending: false })
-        .limit(20);
+      // Post-00006 students cannot read templates directly: the history
+      // (with boss names) comes from a SECURITY DEFINER RPC. Fall back to
+      // the legacy embed while the migration is not applied.
+      let sessions: SessionHistory[] = [];
 
-      const sessions = (data ?? []) as unknown as SessionHistory[];
+      const { data: rpcRows, error: rpcError } = await supabase.rpc(
+        "get_my_battle_history",
+        { p_limit: 20 }
+      );
+
+      if (!rpcError && rpcRows) {
+        sessions = (rpcRows as any[]).map((h) => ({
+          id: h.id,
+          session_id: h.session_id,
+          damage_dealt: h.damage_dealt,
+          xp_earned: h.xp_earned,
+          joined_at: h.joined_at,
+          sessions: {
+            status: h.session_status,
+            templates: { boss_name: h.boss_name },
+          },
+        }));
+      } else {
+        const { data } = await supabase
+          .from("session_participants")
+          .select("id, session_id, damage_dealt, xp_earned, joined_at, sessions(status, templates(boss_name))")
+          .eq("student_id", profile!.id)
+          .order("joined_at", { ascending: false })
+          .limit(20);
+
+        sessions = (data ?? []) as unknown as SessionHistory[];
+      }
+
       setHistory(sessions);
 
       setStats({

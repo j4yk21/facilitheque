@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback, useState } from "react";
+import { useEffect, useCallback, useRef, useState } from "react";
 import { useSupabase } from "./use-supabase";
 import { useBattleStore } from "@/stores/battle-store";
 import { useAuthStore } from "@/stores/auth-store";
@@ -24,6 +24,19 @@ export interface SubmitAnswerResult {
   leveledUp: boolean;
   /** Solution fields to merge back into the question for result display */
   solution: Partial<Question> | null;
+}
+
+/** Submission failed for a reason the student must see. */
+export interface SubmitAnswerError {
+  error: "session_inactive" | "failed";
+}
+
+export type SubmitAnswerOutcome = SubmitAnswerResult | SubmitAnswerError;
+
+export function isSubmitError(
+  outcome: SubmitAnswerOutcome
+): outcome is SubmitAnswerError {
+  return "error" in outcome;
 }
 
 export function useBattle(sessionId: string | null) {
@@ -212,6 +225,10 @@ export function useBattle(sessionId: string | null) {
     [sessionId, profile, supabase, teamBonuses]
   );
 
+  // Migration 00006 absent (detected once): skip the doomed RPC round
+  // trip on every subsequent submission.
+  const legacyModeRef = useRef(false);
+
   // Submit an answer for server-side validation (migration 00006). Falls
   // back to the legacy client-side path (checkAnswer + deal_damage) while
   // the RPC does not exist on the database yet.
@@ -220,8 +237,40 @@ export function useBattle(sessionId: string | null) {
       questionIndex: number,
       question: Question,
       answer: string
-    ): Promise<SubmitAnswerResult | null> => {
+    ): Promise<SubmitAnswerOutcome | null> => {
       if (!sessionId || !profile) return null;
+
+      // Legacy local validation — the question still carries its
+      // solutions in this mode.
+      const runLegacy = async (): Promise<SubmitAnswerOutcome | null> => {
+        const isCorrect = checkAnswer(question, answer);
+        if (!isCorrect) {
+          return {
+            isCorrect: false,
+            alreadyAnswered: false,
+            damage: 0,
+            xpReward: 0,
+            bossDefeated: false,
+            newLevel: null,
+            leveledUp: false,
+            solution: null,
+          };
+        }
+        const legacy = await dealDamage(question);
+        if (!legacy) return { error: "failed" };
+        return {
+          isCorrect: true,
+          alreadyAnswered: false,
+          damage: legacy.damage,
+          xpReward: legacy.xpReward,
+          bossDefeated: legacy.bossDefeated,
+          newLevel: null,
+          leveledUp: false,
+          solution: null,
+        };
+      };
+
+      if (legacyModeRef.current) return runLegacy();
 
       const { data, error } = await supabase.rpc("submit_answer", {
         p_session_id: sessionId,
@@ -231,36 +280,17 @@ export function useBattle(sessionId: string | null) {
 
       if (error) {
         if (error.code === "PGRST202" || error.code === "42883") {
-          // Migration 00006 not applied: legacy local validation. The
-          // question still carries its solutions in this mode.
-          const isCorrect = checkAnswer(question, answer);
-          if (!isCorrect) {
-            return {
-              isCorrect: false,
-              alreadyAnswered: false,
-              damage: 0,
-              xpReward: 0,
-              bossDefeated: false,
-              newLevel: null,
-              leveledUp: false,
-              solution: null,
-            };
-          }
-          const legacy = await dealDamage(question);
-          if (!legacy) return null;
-          return {
-            isCorrect: true,
-            alreadyAnswered: false,
-            damage: legacy.damage,
-            xpReward: legacy.xpReward,
-            bossDefeated: legacy.bossDefeated,
-            newLevel: null,
-            leveledUp: false,
-            solution: null,
-          };
+          legacyModeRef.current = true;
+          return runLegacy();
         }
         console.error("submit_answer error:", error);
-        return null;
+        // The student must see WHY nothing happened: paused/ended
+        // session vs a transient failure worth retrying.
+        return {
+          error: error.message?.includes("not active")
+            ? "session_inactive"
+            : "failed",
+        };
       }
 
       const row = data?.[0];

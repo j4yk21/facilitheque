@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/use-auth";
 import { useSession } from "@/hooks/use-session";
-import { useBattle, type SubmitAnswerResult } from "@/hooks/use-battle";
+import {
+  useBattle,
+  isSubmitError,
+  type SubmitAnswerResult,
+} from "@/hooks/use-battle";
 import { IsometricScene, type PartyMember } from "@/components/battle/isometric-scene";
 import { QuestionCard } from "@/components/battle/question-card";
 import { BattleLog } from "@/components/battle/battle-log";
@@ -60,6 +64,9 @@ export default function BattleArena({
   const [screenShake, setScreenShake] = useState(false);
   const [loading, setLoading] = useState(true);
   const [finished, setFinished] = useState(false);
+  const [loadError, setLoadError] = useState(false);
+  const [retryKey, setRetryKey] = useState(0);
+  const [liveStatus, setLiveStatus] = useState<string | null>(null);
 
   // Party members for the isometric scene
   const [party, setParty] = useState<PartyMember[]>([]);
@@ -90,15 +97,21 @@ export default function BattleArena({
           };
           qs = p.questions ?? [];
           name = p.boss_name ?? name;
-        } else {
+        } else if (
+          rpcError &&
+          (rpcError.code === "PGRST202" || rpcError.code === "42883")
+        ) {
+          // Migration 00006 absent: the template embed still carries the
+          // questions for students.
           qs = (data.templates?.questions as Question[]) ?? [];
-          if (
-            rpcError &&
-            rpcError.code !== "PGRST202" &&
-            rpcError.code !== "42883"
-          ) {
-            console.error("get_battle_questions error:", rpcError);
-          }
+        } else {
+          // Transient failure (network, 5xx): with the template embed
+          // hidden post-00006 we would continue with zero questions and
+          // show a bogus "all answered" screen — surface a retry instead.
+          console.error("get_battle_questions error:", rpcError);
+          setLoadError(true);
+          setLoading(false);
+          return;
         }
 
         setQuestions(qs);
@@ -110,7 +123,7 @@ export default function BattleArena({
           setTotalDamage(progress.damage_dealt);
           setTotalXp(progress.xp_earned);
 
-          if (progress.current_question_index >= qs.length) {
+          if (qs.length > 0 && progress.current_question_index >= qs.length) {
             setFinished(true);
           } else {
             setCurrentQIndex(progress.current_question_index);
@@ -137,9 +150,34 @@ export default function BattleArena({
       setLoading(false);
     }
 
+    setLoadError(false);
+    setLoading(true);
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [sessionId]);
+  }, [sessionId, retryKey]);
+
+  // React to the teacher pausing or ending the session while answering
+  useEffect(() => {
+    const channel = supabase
+      .channel(`battle-session-status:${sessionId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "UPDATE",
+          schema: "public",
+          table: "sessions",
+          filter: `id=eq.${sessionId}`,
+        },
+        (payload) => {
+          setLiveStatus((payload.new as { status?: string }).status ?? null);
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [sessionId, supabase]);
 
   // Check for boss defeat via realtime
   useEffect(() => {
@@ -161,13 +199,17 @@ export default function BattleArena({
       const question = questions[currentQIndex];
       if (!question) return null;
 
-      const result = await submitAnswer(currentQIndex, question, answer);
-      if (!result) return null;
+      const outcome = await submitAnswer(currentQIndex, question, answer);
+      if (!outcome) return null;
 
-      lastResultRef.current = result;
+      if (isSubmitError(outcome)) {
+        return { error: outcome.error };
+      }
 
-      if (result.solution) {
-        const solution = result.solution;
+      lastResultRef.current = outcome;
+
+      if (outcome.solution) {
+        const solution = outcome.solution;
         setQuestions((prev) =>
           prev.map((q, i) =>
             i === currentQIndex ? { ...q, ...solution } : q
@@ -175,11 +217,11 @@ export default function BattleArena({
         );
       }
 
-      if (result.leveledUp && result.newLevel) {
-        setReachedLevel(result.newLevel);
+      if (outcome.leveledUp && outcome.newLevel) {
+        setReachedLevel(outcome.newLevel);
       }
 
-      return { isCorrect: result.isCorrect };
+      return { isCorrect: outcome.isCorrect };
     },
     [questions, currentQIndex, submitAnswer]
   );
@@ -275,9 +317,52 @@ export default function BattleArena({
   }, []);
 
   if (loading) return <LoadingSpinner className="mt-32" size="lg" />;
+
+  if (loadError) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
+        <h1 className="text-xl font-bold text-red-400">
+          Impossible de charger le combat
+        </h1>
+        <p className="text-gray-400">
+          V&eacute;rifie ta connexion puis r&eacute;essaie.
+        </p>
+        <button
+          onClick={() => setRetryKey((k) => k + 1)}
+          className="rounded-lg bg-purple-600 px-6 py-2 font-medium text-white hover:bg-purple-700"
+        >
+          R&eacute;essayer
+        </button>
+      </div>
+    );
+  }
+
   if (!session) {
     return (
       <p className="mt-16 text-center text-gray-400">Combat introuvable.</p>
+    );
+  }
+
+  const sessionStatus = liveStatus ?? session.status;
+
+  // Teacher ended the battle before the boss died
+  if (sessionStatus === "completed" && currentBossHp > 0 && !finished) {
+    return (
+      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-4 text-center">
+        <h1 className="text-2xl font-bold text-purple-300">
+          Le combat a &eacute;t&eacute; termin&eacute; par ton professeur
+        </h1>
+        <p className="text-gray-400">
+          Tes d&eacute;g&acirc;ts&nbsp;: {totalDamage} — XP gagn&eacute;e&nbsp;:
+          {" "}{totalXp}
+        </p>
+        <button
+          onClick={() => router.push("/student/dashboard")}
+          className="rounded-lg bg-purple-600 px-6 py-2 font-medium text-white hover:bg-purple-700"
+        >
+          Retour au dashboard
+        </button>
+      </div>
     );
   }
 
@@ -344,6 +429,14 @@ export default function BattleArena({
         <span>Tes degats: {totalDamage}</span>
       </div>
 
+      {/* Paused by the teacher */}
+      {sessionStatus === "paused" && (
+        <div className="rounded-lg border border-yellow-600/50 bg-yellow-900/20 px-6 py-3 text-center text-sm font-medium text-yellow-300">
+          &#9208; Combat en pause — attends que ton professeur reprenne la
+          partie.
+        </div>
+      )}
+
       {/* Question */}
       {questions[currentQIndex] && (
         <QuestionCard
@@ -352,6 +445,7 @@ export default function BattleArena({
           totalQuestions={questions.length}
           onAnswer={handleAnswer}
           checkAnswerAsync={checkCurrentAnswer}
+          disabled={sessionStatus === "paused"}
         />
       )}
 

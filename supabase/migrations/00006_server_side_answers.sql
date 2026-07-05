@@ -57,14 +57,16 @@ CREATE POLICY "Teachers can view session answers"
 -- -----------------------------------------------
 
 -- French-friendly normalization: case, trim, common diacritics/ligatures.
+-- Ligatures expand to two letters (cœur = coeur), so they go through
+-- replace(); translate() only maps single chars.
 CREATE OR REPLACE FUNCTION public.normalize_answer(p_text TEXT)
 RETURNS TEXT
 LANGUAGE sql IMMUTABLE
 AS $$
   SELECT translate(
-    lower(btrim(coalesce(p_text, ''))),
-    'àâäáãåéèêëíìîïóòôöõúùûüýÿçñœæ',
-    'aaaaaaeeeeiiiiooooouuuuyycnoa'
+    replace(replace(lower(btrim(coalesce(p_text, ''))), 'œ', 'oe'), 'æ', 'ae'),
+    'àâäáãåéèêëíìîïóòôöõúùûüýÿçñ',
+    'aaaaaaeeeeiiiiooooouuuuyycn'
   );
 $$;
 
@@ -362,9 +364,16 @@ BEGIN
     RAISE EXCEPTION 'Session state not found';
   END IF;
 
-  -- Boss already dead (teammate landed the killing blow first): record
-  -- stands, no damage applied.
+  -- Boss already dead (teammate landed the killing blow first): the
+  -- verdict stands but nothing is applied — zero the recorded values so
+  -- session_answers never shows damage/XP that was not granted.
   IF v_current_hp <= 0 THEN
+    UPDATE public.session_answers sa
+    SET damage = 0, xp = 0
+    WHERE sa.session_id = p_session_id
+      AND sa.student_id = v_student
+      AND sa.question_index = p_question_index;
+
     RETURN QUERY SELECT
       true, false, 0, 0, 0, true,
       v_old_xp, v_old_level, false, v_solution;
@@ -433,7 +442,9 @@ DECLARE
   v_clean JSONB;
   v_terms TEXT[];
   v_defs TEXT[];
+  v_orig_defs TEXT[];
   v_pairs JSONB;
+  v_shuffled JSONB;
   i INTEGER;
   j INTEGER;
 BEGIN
@@ -470,18 +481,35 @@ BEGIN
       v_clean := v_clean || jsonb_build_object('options', v_q->'options');
 
     ELSIF v_q->>'type' = 'ordering' THEN
-      -- Shuffle server-side: the authored order IS the solution.
-      v_clean := v_clean || jsonb_build_object('items', (
-        SELECT coalesce(jsonb_agg(value ORDER BY random()), '[]'::jsonb)
-        FROM jsonb_array_elements(coalesce(v_q->'items', '[]'::jsonb))
-      ));
+      -- Shuffle server-side: the authored order IS the solution. If the
+      -- shuffle lands on the authored order (1/n! chance), rotate — the
+      -- client cannot detect the solved arrangement on its own anymore.
+      SELECT coalesce(jsonb_agg(value ORDER BY random()), '[]'::jsonb)
+      INTO v_shuffled
+      FROM jsonb_array_elements(coalesce(v_q->'items', '[]'::jsonb));
+
+      IF v_shuffled = coalesce(v_q->'items', '[]'::jsonb)
+         AND jsonb_array_length(v_shuffled) > 1 THEN
+        v_shuffled := jsonb_build_array(v_shuffled->(jsonb_array_length(v_shuffled) - 1))
+          || (v_shuffled - (jsonb_array_length(v_shuffled) - 1));
+      END IF;
+
+      v_clean := v_clean || jsonb_build_object('items', v_shuffled);
 
     ELSIF v_q->>'type' = 'matching' THEN
       -- Decorrelate: terms keep their order, definitions are shuffled,
-      -- so the returned pairs carry no mapping information.
-      SELECT array_agg(value->>'term'), array_agg(value->>'definition' ORDER BY random())
-      INTO v_terms, v_defs
+      -- so the returned pairs carry no mapping information. Same
+      -- rotation guard if the shuffle reproduces the authored mapping.
+      SELECT array_agg(value->>'term'),
+             array_agg(value->>'definition' ORDER BY random()),
+             array_agg(value->>'definition')
+      INTO v_terms, v_defs, v_orig_defs
       FROM jsonb_array_elements(coalesce(v_q->'pairs', '[]'::jsonb));
+
+      IF v_defs = v_orig_defs AND array_length(v_defs, 1) > 1 THEN
+        v_defs := v_defs[array_length(v_defs, 1):array_length(v_defs, 1)]
+          || v_defs[1:array_length(v_defs, 1) - 1];
+      END IF;
 
       v_pairs := '[]'::jsonb;
       IF v_terms IS NOT NULL THEN
@@ -515,3 +543,35 @@ GRANT EXECUTE ON FUNCTION public.get_battle_questions(UUID) TO authenticated, se
 -- owning teacher reads templates directly.
 
 DROP POLICY IF EXISTS "Anyone can view templates in active sessions" ON public.templates;
+
+-- -----------------------------------------------
+-- 6. Battle history for the student dashboard
+-- -----------------------------------------------
+-- The dashboard used to embed templates(boss_name), which students can
+-- no longer read. This RPC exposes only the boss name of sessions the
+-- student actually fought.
+
+CREATE OR REPLACE FUNCTION public.get_my_battle_history(p_limit INTEGER DEFAULT 20)
+RETURNS TABLE(
+  id UUID,
+  session_id UUID,
+  damage_dealt INTEGER,
+  xp_earned INTEGER,
+  joined_at TIMESTAMPTZ,
+  session_status session_status,
+  boss_name TEXT
+)
+LANGUAGE sql SECURITY DEFINER SET search_path = public
+AS $$
+  SELECT sp.id, sp.session_id, sp.damage_dealt, sp.xp_earned, sp.joined_at,
+         s.status, t.boss_name
+  FROM public.session_participants sp
+  JOIN public.sessions s ON s.id = sp.session_id
+  JOIN public.templates t ON t.id = s.template_id
+  WHERE sp.student_id = auth.uid()
+  ORDER BY sp.joined_at DESC
+  LIMIT GREATEST(1, LEAST(coalesce(p_limit, 20), 100));
+$$;
+
+REVOKE EXECUTE ON FUNCTION public.get_my_battle_history(INTEGER) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.get_my_battle_history(INTEGER) TO authenticated, service_role;

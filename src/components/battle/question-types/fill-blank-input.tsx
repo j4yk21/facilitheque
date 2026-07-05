@@ -13,6 +13,16 @@ interface FillBlankInputProps {
   onSubmit: (answer: string) => void;
 }
 
+// Match the server's accent-insensitive comparison (normalize_answer in
+// migration 00006) so the border color agrees with the verdict banner.
+function normalize(text: string): string {
+  return text
+    .trim()
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[̀-ͯ]/g, "");
+}
+
 export function FillBlankInput({
   question,
   disabled,
@@ -59,8 +69,8 @@ export function FillBlankInput({
                     className={cn(
                       "inline-block w-40 rounded-md border-b-2 bg-gray-900 px-2 py-1 text-center text-base font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-purple-500/30",
                       showResult
-                        ? value.trim().toLowerCase() ===
-                          question.correct_answer.trim().toLowerCase()
+                        ? normalize(value) ===
+                          normalize(question.correct_answer)
                           ? "border-green-500 text-green-300"
                           : "border-red-500 text-red-300"
                         : "border-purple-500 text-white",
