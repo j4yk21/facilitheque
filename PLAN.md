@@ -24,42 +24,42 @@ Le MVP est visuellement et fonctionnellement avancé : 6 types de questions, sc�
 
 ### Phase 1 — Urgence sécurité
 - [ ] **[TOI — IMMÉDIAT]** Rotater la clé `service_role` (dashboard Supabase → Settings → API → « Reset » sur service_role, puis mettre à jour `.env.local`). La branche `claude/jovial-dhawan` avec la clé dans son historique est **en ligne sur le repo PUBLIC j4yk21/facilitheque** — considérer la clé comme compromise publiquement. Supprimer aussi la branche distante (`git push origin --delete claude/jovial-dhawan`) et prévoir un repo BattleLearn dédié avec un historique propre (squash initial ou git-filter-repo).
-- [ ] Sortir les secrets de `scripts/test-battle.mjs` vers `process.env` (+ fix difficulté `easy` → `1|2|3`)
-- [ ] Authentifier la route `create-profile` (userId depuis la session, pas du body)
-- [ ] Verrouiller l'UPDATE de `profiles` (role, total_xp, level non modifiables par l'utilisateur)
-- [ ] Durcissement minimal de `deal_damage` (auth.uid(), participation vérifiée, plafonds, REVOKE PUBLIC)
-- [ ] Anti-énumération : RPC de lookup par `invite_token` / `battle_code` exacts, `status='pending'` forcé à l'INSERT
+- [x] Sortir les secrets de `scripts/test-battle.mjs` vers `process.env` (+ fix difficulté `easy` → `1|2|3`)
+- [x] Authentifier la route `create-profile` (userId depuis la session, pas du body)
+- [x] Verrouiller l'UPDATE de `profiles` (role, total_xp, level non modifiables par l'utilisateur)
+- [x] Durcissement minimal de `deal_damage` (auth.uid(), participation vérifiée, plafonds, REVOKE PUBLIC)
+- [x] Anti-énumération : RPC de lookup par `invite_token` / `battle_code` exacts, `status='pending'` forcé à l'INSERT
 
 ### Phase 2 — Débloquer le cycle de jeu en classe
-- [ ] Renuméroter `00002_classrooms_and_characters.sql` → `00004`
-- [ ] Migration : `ALTER PUBLICATION supabase_realtime ADD TABLE sessions, session_participants` (le fix n°1 du projet)
-- [ ] Fallback au lobby (vérif du status au mount + polling de secours) et victoire fiable (`setFinished` sur retour RPC)
-- [ ] RLS `session_participants` : visibilité d'équipe + persistance de `current_question_index`
-- [ ] Restaurer `max_boss_hp` et l'effectif attendu après refresh (store Zustand)
-- [ ] Validation de templates par type (débloque ordering/matching, sécurise fill_blank)
-- [ ] Fiabiliser le panneau prof (abonnement UPDATE sessions, erreurs de mutations remontées)
+- [x] Renuméroter `00002_classrooms_and_characters.sql` → `00004`
+- [x] Migration : `ALTER PUBLICATION supabase_realtime ADD TABLE sessions, session_participants` (le fix n°1 du projet)
+- [x] Fallback au lobby (vérif du status au mount + polling de secours) et victoire fiable (`setFinished` sur retour RPC)
+- [x] RLS `session_participants` : visibilité d'équipe + persistance de `current_question_index`
+- [x] Restaurer `max_boss_hp` et l'effectif attendu après refresh (store Zustand)
+- [x] Validation de templates par type (débloque ordering/matching, sécurise fill_blank)
+- [x] Fiabiliser le panneau prof (abonnement UPDATE sessions, erreurs de mutations remontées)
 
 ### Phase 3 — Validation serveur des réponses (anti-triche structurel)
-- [ ] RPC `submit_answer` + table `session_answers` (validation SQL, dégâts/XP serveur, dédup par question)
-- [ ] Ne plus envoyer les solutions au navigateur (projection du JSONB sans `correct_answer`)
-- [ ] Level-up calculé côté serveur (formule `floor(total_xp/500)+1` extraite dans `src/lib/rpg`)
-- [ ] Bonus d'équipe déterministes (refetch de la composition sur INSERT participant)
-- [ ] Normalisation française des réponses texte (accents, `accepted_answers[]`, vrai/faux neutre)
+- [x] RPC `submit_answer` + table `session_answers` (validation SQL, dégâts/XP serveur, dédup par question)
+- [x] Ne plus envoyer les solutions au navigateur (projection du JSONB sans `correct_answer`)
+- [x] Level-up calculé côté serveur (formule `floor(total_xp/500)+1` extraite dans `src/lib/rpg`)
+- [x] Bonus d'équipe déterministes (refetch de la composition sur INSERT participant)
+- [x] Normalisation française des réponses texte (accents, `accepted_answers[]`, vrai/faux neutre)
 
 ### Phase 4 — Compléter les parcours prof et élève
-- [ ] Écran de résultats de fin de session côté prof (la valeur pédagogique centrale — données déjà en base)
+- [x] Écran de résultats de fin de session côté prof (la valeur pédagogique centrale — données déjà en base)
 - [ ] Liste nominative des élèves connectés dans l'écran d'attente prof
 - [ ] Suivi de progression individuelle en direct pendant le combat
 - [ ] **[TOI]** Relier sessions ↔ classes/approbation (décision : garder un mode « code ouvert » sans classe ?)
 - [ ] **[TOI]** Rééquilibrage du boss + fin sans victoire (décision : seuil de victoire ? défaite explicite ?)
 - [ ] **[TOI]** Timer de question (décision : pénalité, auto-passage ou simple affichage ?)
-- [ ] Retardataires et statut `paused` gérés côté élève
+- [x] Retardataires et statut `paused` gérés côté élève
 
 ### Phase 5 — Qualité, accessibilité, langue, polish RPG
 - [ ] Persistance réelle des préférences d'accessibilité (hook existant, actuellement code mort)
 - [ ] `prefers-reduced-motion` respecté + mode contraste réellement effectif
 - [ ] **[TOI]** Unifier la langue en français (décision : tutoiement ? bilingue à terme ?)
-- [ ] README réel + `.env.example` complet
+- [x] README réel + `.env.example` complet
 - [ ] Tests composants (jsdom + Testing Library) + CI GitHub Actions
 - [ ] Combat visiblement coopératif (animer les coups des coéquipiers depuis les logs realtime)
 - [ ] Scène isométrique > 5 élèves (grille dynamique)
