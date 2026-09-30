@@ -229,6 +229,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .parole-bar.warn{background:var(--terra)}
 .parole-mic{font-size:1.2rem;margin-bottom:4px}
 .parole-pct{font-size:.7rem;color:var(--gray);margin-top:4px}
+.parole-key{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:6px;background:var(--cream);border:1px solid var(--cream-mid);border-bottom-width:2px;font:600 .7rem/1 'DM Sans',sans-serif;color:var(--gray);transition:all var(--tr)}
+.active-spk .parole-key{background:var(--terra);border-color:var(--terra-d);color:#fff}
 .parole-pct.warn{color:var(--terra);font-weight:600}
 .parole-totals{display:flex;gap:20px;padding:16px;background:var(--cream-dark);border-radius:var(--r12);font-size:.85rem}
 
@@ -239,7 +241,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .seq-num{width:28px;height:28px;background:var(--cream-dark);border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--gray);flex-shrink:0}
 .seq-active .seq-num{background:var(--terra);color:#fff}
 .seq-done .seq-num{background:var(--sage);color:#fff}
-.seq-name-inp{flex:1;min-width:0;border:none;background:transparent;font-size:.9rem;font-weight:500;color:var(--ink);outline:none}
+.seq-name-inp{flex:1;width:0;min-width:0;border:none;background:transparent;font-size:.9rem;font-weight:500;color:var(--ink);outline:none}
+.seq-dur{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;font-size:.85rem;color:var(--ink-s)}
 .seq-dur-inp{width:70px;border:1.5px solid var(--cream-mid);border-radius:var(--r8);padding:6px 10px;font-size:.85rem;text-align:center;color:var(--ink);outline:none;transition:border-color var(--tr)}
 .seq-dur-inp:focus{border-color:var(--terra)}
 .seq-display{font-family:'Fraunces',serif;font-size:3.6rem;font-weight:700;text-align:center;color:var(--ink);line-height:1;margin:10px 0 4px}
@@ -249,6 +252,14 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 
 /* ── PLANNER ── */
 .planner-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0 28px;padding:14px 16px;background:var(--cream-dark);border-radius:var(--r12)}
+.plan-switch{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.plan-select-wrap{position:relative;flex:0 1 400px;min-width:0}
+.plan-select-wrap select{appearance:none;-webkit-appearance:none;width:100%;height:44px;padding:0 42px 0 18px;border:1.5px solid var(--cream-mid);border-radius:40px;background:var(--card);font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--ink);cursor:pointer;text-overflow:ellipsis;outline:none;transition:border-color var(--tr),box-shadow var(--tr)}
+.plan-select-wrap select:hover{border-color:var(--gray)}
+.plan-select-wrap select:focus-visible{border-color:var(--terra);box-shadow:0 0 0 4px rgba(201,107,58,.1)}
+.plan-select-wrap select option{font-family:'DM Sans',sans-serif;font-weight:400;background:var(--card);color:var(--ink)}
+.plan-select-wrap svg{position:absolute;right:16px;top:50%;width:12px;height:12px;transform:translateY(-50%);color:var(--gray);pointer-events:none}
+.plan-count{margin-left:auto;font-size:.75rem;color:var(--gray)}
 .planner-header{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
 .planner-phase-row{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r12);padding:18px 18px 18px 12px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr 90px 170px auto;grid-template-areas:"move main dur tool del";gap:12px;align-items:start;transition:box-shadow var(--tr)}
 .planner-phase-row .phase-move{grid-area:move}.pp-main{grid-area:main;min-width:0}.pp-dur{grid-area:dur}.pp-tool{grid-area:tool;min-width:0}.pp-del{grid-area:del}
@@ -275,7 +286,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 
 /* ── LIBRARY ── */
 .lib-filters{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
-.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.lib-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(280px,100%),1fr));gap:18px}
 .lib-card{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r16);padding:22px;cursor:pointer;transition:all var(--tr);position:relative;overflow:hidden}
 .lib-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--terra);transform:scaleX(0);transform-origin:left;transition:transform var(--tr)}
 .lib-card:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:transparent}
@@ -388,6 +399,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .proj-pa-name{font-family:'Fraunces',serif;font-weight:600;font-size:1.7vw;color:#F5F0E8;margin-bottom:1vh}
 .proj-pa-time{font-family:'Fraunces',serif;font-weight:700;font-size:3.4vw;color:var(--terra);font-variant-numeric:tabular-nums}
 .proj-pa-pct{font-size:1vw;color:rgba(245,240,232,.45);margin-top:.6vh}
+.proj-pa-key{display:inline-grid;place-items:center;min-width:2.2em;height:2.2em;margin-bottom:1vh;border-radius:8px;border:1px solid rgba(245,240,232,.2);border-bottom-width:2px;font:600 max(11px,.9vw)/1 'DM Sans',sans-serif;color:rgba(245,240,232,.5)}
+.proj-pa-card.speaking .proj-pa-key{background:var(--terra);border-color:var(--terra);color:#fff}
 @media(max-width:900px){#proj-r-slot{font-size:13vw}#proj-s-name{font-size:8vw}#proj-s-time{font-size:24vw}#proj-s-next{font-size:3.5vw}.proj-pa-name{font-size:5vw}.proj-pa-time{font-size:9vw}.proj-pa-pct{font-size:3vw}}
 
 /* ── TOAST (confirmation discrète) ── */
@@ -447,6 +460,38 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
   .home-grid{grid-template-columns:repeat(2,1fr)}
   .planner-header{grid-template-columns:1fr 1fr}
   .methodes-grid{grid-template-columns:1fr}
+  .two-col{grid-template-columns:minmax(0,1fr);gap:20px}
+  .home-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .home-tool-card{padding:16px;gap:10px}
+  /* Plan : poignée à gauche, nom en haut, durée et outil dessous */
+  .planner-phase-row{grid-template-columns:auto minmax(0,1fr) minmax(0,1.6fr) auto;grid-template-areas:"move main main del" "move dur tool tool";padding:14px 12px 14px 8px;gap:10px}
+  .pp-del{padding-top:0}
+  .modal-inner{flex-direction:column;overflow-y:auto}
+  .modal-content{overflow:visible}
+  .modal-preview{width:auto;min-width:0;border-left:none;border-top:1px solid var(--cream-dark);padding:20px 22px;gap:16px}
+  .mprev-icon{display:none}
+  .modal-hdr,.modal-body{padding-left:20px;padding-right:20px}
+}
+@media(max-width:560px){
+  .planner-header{grid-template-columns:1fr}
+  .timer-ring-wrap,.timer-ring-wrap svg{width:min(280px,100%);height:auto;aspect-ratio:1}
+  .chrono-display{font-size:3.2rem}
+  /* Séquence : nom sur toute la largeur, durée dessous */
+  .seq-phase-row{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-areas:"mv num name del" "mv num dur del";column-gap:8px;row-gap:2px;padding:8px 10px 8px 6px}
+  .seq-phase-row .phase-move{grid-area:mv}
+  .seq-num{grid-area:num}
+  .seq-name-inp{grid-area:name;width:auto}
+  .seq-dur{grid-area:dur;font-size:.78rem;color:var(--gray)}
+  .seq-phase-row .btn-icon{grid-area:del}
+  .seq-dur-inp{width:54px;padding:4px}
+  .seq-display{font-size:3rem}
+  .lib-seg{flex:1 1 100%}
+  .lib-seg button{flex:1;padding:0 6px}
+  .lib-seg-label{display:none}
+  .lib-field{flex:1 1 auto}
+  .plan-select-wrap{flex:1 1 100%}
+  .plan-count{margin-left:0}
+  #toast{bottom:16px;border-radius:18px}
 }
 </style>
 </head>
@@ -768,9 +813,9 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <!-- TEMPS DE PAROLE -->
     <section class="panel" id="p-parole">
       <h1 class="panel-title">Temps de parole</h1>
-      <p class="panel-sub">Clique sur un participant pour démarrer / stopper son chrono.</p>
+      <p class="panel-sub">Clique sur un participant ou appuie sur son numéro pour démarrer ou arrêter son chrono. La touche 0 arrête tout.</p>
       <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Outil de gestion du temps de parole en atelier : chronomètre individuel par participant, visualisation des déséquilibres en temps réel. Favorise une prise de parole équilibrée dans les groupes et aide le facilitateur à réguler sans intervenir verbalement.</p>
-      <div class="flex-row" style="margin-bottom:20px">
+      <div class="flex-row" style="margin-bottom:20px;flex-wrap:wrap">
         <input class="input" id="parole-inp" placeholder="Ajouter un participant…" onkeydown="paroleKeydown(event)" style="max-width:280px">
         <button class="btn btn-primary btn-sm" onclick="paroleAdd()">+ Ajouter</button>
         <button class="btn btn-ghost btn-sm" onclick="paroleReset()">↺ Remettre à zéro</button>
@@ -836,12 +881,21 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       <h1 class="panel-title">Planificateur d'atelier</h1>
       <p class="panel-sub">Construis ton déroulé. Sauvegardé automatiquement.</p>
       <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Planificateur de déroulé d'atelier : crée ton agenda de facilitation phase par phase avec durées, objectifs et matériel. Sauvegarde automatique locale, export PDF prêt à imprimer ou partager avec ton client. Conçu pour les facilitateurs professionnels.</p>
+      <div class="plan-switch">
+        <div class="plan-select-wrap">
+          <select id="plan-select" onchange="plannerSwitch(this.value)" aria-label="Choisir le plan affiché"></select>
+          <svg viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="plannerNew()">＋ Nouveau plan</button>
+        <button class="btn btn-ghost btn-sm" onclick="plannerDuplicate()">⧉ Dupliquer</button>
+        <span class="plan-count" id="plan-count"></span>
+      </div>
       <div class="planner-actions">
         <button class="btn btn-primary" onclick="plannerToSequence()" title="Transformer ce déroulé en séquence minutée">▶ &nbsp;Lancer en séquence</button>
         <button class="btn btn-secondary" onclick="plannerExportPDF()">⬇ &nbsp;Exporter en PDF</button>
         <button class="btn btn-secondary" id="plan-share-btn" onclick="plannerShare()">🔗 &nbsp;Partager le lien</button>
         <span style="flex:1"></span>
-        <button class="btn btn-ghost btn-sm" onclick="plannerClear()" title="Effacer tout le plan">🗑 &nbsp;Tout effacer</button>
+        <button class="btn btn-ghost btn-sm" onclick="plannerClear()" title="Supprimer définitivement ce plan">🗑 &nbsp;Supprimer ce plan</button>
       </div>
       <div class="planner-header">
         <div>
@@ -1053,6 +1107,9 @@ const panels = {};
 document.querySelectorAll('.panel').forEach(p => panels[p.id.replace('p-','')] = p);
 document.querySelectorAll('.nav-item').forEach(btn => {
   btn.addEventListener('click', () => goPanel(btn.dataset.panel));
+  // Libellé lisible quand le menu n'affiche que les icônes (mobile) : survol et lecteurs d'écran
+  const label = btn.querySelector('span').textContent.trim();
+  btn.setAttribute('aria-label', label); btn.title = label;
 });
 let currentPanel = 'home';
 let appReady = false;
@@ -1092,14 +1149,14 @@ function animPanel(panel){
   if(!MOTION()) return;
   panel.style.animation='none';
   const kids=[...panel.children].slice(0,12);
-  gsap.fromTo(kids,{y:16,opacity:0},{y:0,opacity:1,duration:.45,stagger:.055,ease:'power3.out',clearProps:'all',overwrite:'auto'});
+  gsap.fromTo(kids,{y:16,opacity:0},{y:0,opacity:1,duration:.45,stagger:.055,ease:'power3.out',clearProps:'transform,opacity',overwrite:'auto'});
 }
 // Cascade d'une grille (bibliothèque, cartes)
 function animGrid(container,sel){
   if(!MOTION()) return;
   const items=container.querySelectorAll(sel);
   if(!items.length) return;
-  gsap.fromTo(items,{y:12,opacity:0,scale:.985},{y:0,opacity:1,scale:1,duration:.35,stagger:{amount:.35},ease:'power2.out',clearProps:'all',overwrite:'auto'});
+  gsap.fromTo(items,{y:12,opacity:0,scale:.985},{y:0,opacity:1,scale:1,duration:.35,stagger:{amount:.35},ease:'power2.out',clearProps:'transform,opacity',overwrite:'auto'});
 }
 // Pop élastique (moment de récompense : gagnant roulette)
 function animPop(el){
@@ -1109,7 +1166,7 @@ function animPop(el){
 // Apparition d'une note / d'un badge
 function animIn(el,from){
   if(!MOTION()||!el) return;
-  gsap.fromTo(el,Object.assign({opacity:0},from||{y:10,scale:.9}),{opacity:1,y:0,x:0,scale:1,duration:.38,ease:'back.out(1.9)',clearProps:'all',overwrite:'auto'});
+  gsap.fromTo(el,Object.assign({opacity:0},from||{y:10,scale:.9}),{opacity:1,y:0,x:0,scale:1,duration:.38,ease:'back.out(1.9)',clearProps:'transform,opacity',overwrite:'auto'});
 }
 // Pulsation douce (changement de phase de séquence)
 function animPulse(el){
@@ -1120,7 +1177,7 @@ function animPulse(el){
 function animOverlay(root){
   if(!MOTION()||!root) return;
   const kids=root.querySelectorAll(':scope > *:not(.fs-exit)');
-  gsap.fromTo(kids,{y:24,opacity:0},{y:0,opacity:1,duration:.5,stagger:.08,ease:'power3.out',clearProps:'all',overwrite:'auto'});
+  gsap.fromTo(kids,{y:24,opacity:0},{y:0,opacity:1,duration:.5,stagger:.08,ease:'power3.out',clearProps:'transform,opacity',overwrite:'auto'});
 }
 
 // ════════════════════════════════════════════════════
@@ -1356,6 +1413,13 @@ document.addEventListener('keydown',e=>{
   if(tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable) return;
   if(e.ctrlKey||e.metaKey||e.altKey) return;
   const fsOpen_ = document.getElementById('fs-ov').classList.contains('open');
+  // Temps de parole : 1 à 9 = chrono du participant correspondant, 0 = tout arrêter
+  if(/^[0-9]$/.test(e.key) && (projTool==='parole' || (!projTool && !fsOpen_ && currentPanel==='parole'))){
+    e.preventDefault();
+    if(e.key==='0'){ if(PA.activeIdx!==null) PA.stop(PA.activeIdx); }
+    else if(PA.parts[+e.key-1]) PA.toggle(+e.key-1);
+    return;
+  }
   if(e.key===' '||e.code==='Space'){
     e.preventDefault();
     if(projTool==='roulette'){ RL.spin(); return; }
@@ -1491,6 +1555,7 @@ const PA = {
     g.innerHTML=PA.parts.map((p,i)=>{
       const pct=Math.round(p.time/tot*100);
       return `<div class="proj-pa-card${p.active?' speaking':''}" onclick="PA.toggle(${i})">
+        ${i<9?`<kbd class="proj-pa-key">${i+1}</kbd>`:''}
         <div class="proj-pa-name">${p.active?'🎙 ':''}${escHtml(p.name)}</div>
         <div class="proj-pa-time">${fmtSec(p.time)}</div>
         <div class="proj-pa-pct">${pct}% du total</div>
@@ -1511,7 +1576,7 @@ const PA = {
       const pct=Math.round(p.time/tot*100);
       const warn=pct>40&&PA.parts.length>1;
       return `<div class="parole-card${p.active?' active-spk':''}" onclick="PA.toggle(${i})">
-        <div style="display:flex;justify-content:flex-end;margin-bottom:4px"><button onclick="event.stopPropagation();PA.remove(${i})" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;transition:color .2s" title="Retirer ce participant" onmouseenter="this.style.color='var(--red)'" onmouseleave="this.style.color='var(--gray)'">✕</button></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">${i<9?`<kbd class="parole-key" title="Touche ${i+1}">${i+1}</kbd>`:'<span></span>'}<button onclick="event.stopPropagation();PA.remove(${i})" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;transition:color .2s" title="Retirer ce participant" aria-label="Retirer ${escHtml(p.name)}" onmouseenter="this.style.color='var(--red)'" onmouseleave="this.style.color='var(--gray)'">✕</button></div>
         <div class="parole-mic">${p.active?'🎙':'🎤'}</div>
         <div class="parole-name">${escHtml(p.name)}</div>
         <div class="parole-time-disp">${fmtSec(p.time)}</div>
@@ -1709,7 +1774,7 @@ function seqRender(){
       ${moveHandle(p.id,i,SEQ.phases.length,'SEQ.move')}
       <div class="seq-num">${i<SEQ.curIdx?'✓':i+1}</div>
       <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" placeholder="Nom de la phase">
-      <input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.edit(${i},'duration',this.value)" title="Durée en minutes"> min
+      <span class="seq-dur"><input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.edit(${i},'duration',this.value)" title="Durée en minutes" aria-label="Durée en minutes"> min</span>
       <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})">
         <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
@@ -1740,9 +1805,18 @@ seqUpdateDisplay();
 // ════════════════════════════════════════════════════
 // PLANNER
 // ════════════════════════════════════════════════════
+// Plusieurs plans : fk-plans = { current, plans:[…] } · PL.data = plan en cours.
+// L'ancien plan unique (fk-plan) est migré au premier chargement et laissé intact en sauvegarde.
 const PL = {
+  store:{ current:null, plans:[] },
   data:{ name:'', date:'', fac:'', loc:'', notes:'', phases:[] },
-  // save : lit le formulaire affiché puis enregistre · persist : enregistre PL.data tel quel
+  blank(){ return {id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:'',date:'',fac:'',loc:'',notes:'',phases:[]}; },
+  normalize(d){
+    return Object.assign(PL.blank(),{name:String(d.name||''),date:String(d.date||''),fac:String(d.fac||''),loc:String(d.loc||''),notes:String(d.notes||''),
+      phases:(Array.isArray(d.phases)?d.phases:[]).map((p,i)=>({id:Date.now()+i,name:String(p.name||''),duration:parseInt(p.duration)||0,tool:String(p.tool||''),desc:String(p.desc||'')}))});
+  },
+  label(p){ return p.name||'Plan sans titre'; },
+  // save : lit le formulaire affiché puis enregistre · persist : enregistre les plans tels quels
   save(){
     PL.data.name=document.getElementById('plan-name').value;
     PL.data.date=document.getElementById('plan-date').value;
@@ -1751,8 +1825,33 @@ const PL = {
     PL.data.notes=document.getElementById('plan-notes').value;
     PL.persist();
     PL.updateTotal();
+    PL.renderSwitcher();
   },
-  persist(){ try{ localStorage.setItem('fk-plan', JSON.stringify(PL.data)); }catch(e){} },
+  persist(){ try{ localStorage.setItem('fk-plans', JSON.stringify(PL.store)); }catch(e){} },
+  load(){
+    let s=null;
+    try{ s=JSON.parse(localStorage.getItem('fk-plans')||'null'); }catch(e){}
+    const migrate=!s||!Array.isArray(s.plans);
+    if(migrate){
+      s={current:null,plans:[]};
+      try{ const old=JSON.parse(localStorage.getItem('fk-plan')||'null'); if(old&&typeof old==='object') s.plans.push(PL.normalize(old)); }catch(e){}
+    }
+    if(!s.plans.length) s.plans.push(PL.blank());
+    if(!s.plans.some(p=>p.id===s.current)) s.current=s.plans[0].id;
+    PL.store=s; PL.data=s.plans.find(p=>p.id===s.current);
+    if(migrate) PL.persist();
+  },
+  select(id){ PL.store.current=id; PL.data=PL.store.plans.find(p=>p.id===id)||PL.store.plans[0]; PL.persist(); },
+  add(p){ PL.store.plans.push(p); PL.select(p.id); },
+  renderSwitcher(){
+    const sel=document.getElementById('plan-select'); if(!sel) return;
+    sel.innerHTML=PL.store.plans.map(p=>{
+      const n=p.phases.length, meta=[p.date&&new Date(p.date+'T12:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'}),`${n} phase${n>1?'s':''}`].filter(Boolean).join(' · ');
+      return `<option value="${escHtml(p.id)}"${p.id===PL.store.current?' selected':''}>${escHtml(PL.label(p))} (${meta})</option>`;
+    }).join('');
+    const c=PL.store.plans.length;
+    document.getElementById('plan-count').textContent=`${c} plan${c>1?'s':''} enregistré${c>1?'s':''}`;
+  },
   move(id,dir){
     const i=PL.data.phases.findIndex(p=>p.id===id);
     if(i<0||!PL.data.phases[i+dir]) return;
@@ -1762,9 +1861,6 @@ const PL = {
   moveTo(from,to){
     const [p]=PL.data.phases.splice(from,1); PL.data.phases.splice(to,0,p);
     PL.save(); PL.renderPhases();
-  },
-  load(){
-    try{ const s=localStorage.getItem('fk-plan'); if(s) PL.data=JSON.parse(s); }catch(e){}
   },
   addPhase(){
     PL.data.phases.push({id:Date.now(),name:'',duration:15,tool:'',desc:''});
@@ -1874,17 +1970,32 @@ const PL = {
     const safeName=(d.name||'atelier').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
     doc.save(`plan-${safeName}.pdf`);
   },
-  clearAll(){
-    if(!confirm('Effacer tout le plan ?')) return;
-    PL.data={name:'',date:'',fac:'',loc:'',notes:'',phases:[]};
-    localStorage.removeItem('fk-plan');
+  remove(){
+    if(!confirm(`Supprimer le plan « ${PL.label(PL.data)} » ? Cette action est définitive.`)) return;
+    const label=PL.label(PL.data);
+    PL.store.plans=PL.store.plans.filter(p=>p.id!==PL.data.id);
+    if(!PL.store.plans.length) PL.store.plans.push(PL.blank());
+    PL.select(PL.store.plans[PL.store.plans.length-1].id);
     plannerRender();
+    toast(`Plan « ${label} » supprimé.`);
   }
 };
 function plannerSave(){ PL.save(); }
 function plannerAddPhase(){ PL.addPhase(); }
 function plannerExportPDF(){ PL.exportPDF(); }
-function plannerClear(){ PL.clearAll(); }
+function plannerClear(){ PL.remove(); }
+function plannerSwitch(id){ PL.save(); PL.select(id); plannerRender(); }
+function plannerNew(){
+  PL.save(); PL.add(PL.blank()); plannerRender();
+  document.getElementById('plan-name').focus();
+  toast('Nouveau plan créé. Donne-lui un nom pour le retrouver.');
+}
+function plannerDuplicate(){
+  PL.save();
+  const c=PL.normalize(PL.data); c.name=PL.label(PL.data)+' (copie)';
+  PL.add(c); plannerRender();
+  toast(`Plan dupliqué : « ${c.name} ».`);
+}
 // Préparer → Animer : le déroulé du plan devient la séquence minutée
 function plannerToSequence(){
   PL.save();
@@ -1910,7 +2021,8 @@ function planDecode(str){
 function plannerShare(){
   PL.save();
   if(!PL.data.name && !PL.data.phases.length){ alert('Ton plan est vide — ajoute au moins un nom ou une phase avant de le partager.'); return; }
-  const url=`${location.origin}${location.pathname}#plan=${planEncode(PL.data)}`;
+  const {name,date,fac,loc,notes,phases}=PL.data;
+  const url=`${location.origin}${location.pathname}#plan=${planEncode({name,date,fac,loc,notes,phases:phases.map(({name,duration,tool,desc})=>({name,duration,tool,desc}))})}`;
   const btn=document.getElementById('plan-share-btn');
   const done=()=>{ btn.textContent='✓ Lien copié !'; setTimeout(()=>btn.textContent='🔗 Partager le lien',2200); };
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -1923,16 +2035,12 @@ function planImportFromHash(){
   try{
     const data=planDecode(m[1]);
     if(!data||typeof data!=='object'||!Array.isArray(data.phases)) throw 0;
-    const label=data.name||'Plan sans titre';
+    // Le plan reçu s'ajoute à côté des tiens : rien n'est écrasé
     PL.load();
-    const localBusy=PL.data.name||PL.data.phases.length;
-    if(localBusy && !confirm(`Un plan partagé a été reçu : « ${label} » (${data.phases.length} phase${data.phases.length>1?'s':''}).\n\nL'importer remplacera ton plan actuel. Continuer ?`)){
-      history.replaceState(null,'',location.pathname); return false;
-    }
-    PL.data={name:data.name||'',date:data.date||'',fac:data.fac||'',loc:data.loc||'',notes:data.notes||'',
-      phases:data.phases.map(p=>({id:p.id||Date.now()+Math.random(),name:String(p.name||''),duration:parseInt(p.duration)||0,tool:String(p.tool||''),desc:String(p.desc||'')}))};
-    localStorage.setItem('fk-plan',JSON.stringify(PL.data));
+    const p=PL.normalize(data);
+    PL.add(p);
     goPanel('planner','replace');
+    toast(`Plan partagé ajouté : « ${PL.label(p)} » (${p.phases.length} phase${p.phases.length>1?'s':''}).`);
     return true;
   }catch(e){ history.replaceState(null,'',location.pathname); return false; }
 }
@@ -1944,6 +2052,7 @@ function plannerRender(){
   document.getElementById('plan-loc').value=PL.data.loc||'';
   document.getElementById('plan-notes').value=PL.data.notes||'';
   PL.renderPhases();
+  PL.renderSwitcher();
 }
 
 // ════════════════════════════════════════════════════
@@ -2113,8 +2222,8 @@ function toolOpen(id){
   document.getElementById('tool-modal').classList.add('open');
   document.body.style.overflow='hidden';
   if(MOTION()){
-    gsap.fromTo('#modal-steps li',{x:-10,opacity:0},{x:0,opacity:1,duration:.3,stagger:.045,ease:'power2.out',clearProps:'all',delay:.1});
-    gsap.fromTo('#modal-preview > *',{y:8,opacity:0},{y:0,opacity:1,duration:.3,stagger:.05,ease:'power2.out',clearProps:'all',delay:.15});
+    gsap.fromTo('#modal-steps li',{x:-10,opacity:0},{x:0,opacity:1,duration:.3,stagger:.045,ease:'power2.out',clearProps:'transform,opacity',delay:.1});
+    gsap.fromTo('#modal-preview > *',{y:8,opacity:0},{y:0,opacity:1,duration:.3,stagger:.05,ease:'power2.out',clearProps:'transform,opacity',delay:.15});
   }
   // Nouvelle entrée d'historique : le bouton Retour referme la fiche
   if(location.hash!=='#outil/'+t.slug){
