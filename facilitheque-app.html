@@ -1096,28 +1096,62 @@ const LIVE = {
   set(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 };
 
+// ── Écran allumé pendant un décompte ou une projection (Wake Lock) ──
+// Sans prise en charge du navigateur : on ne fait rien, sans message.
+const WL = {
+  lock:null, busy:false, dirty:false,
+  needed(){ return T.running || SEQ.running || !!projTool || document.getElementById('fs-ov').classList.contains('open'); },
+  async sync(){
+    if(!appReady || !('wakeLock' in navigator)) return;
+    if(WL.busy){ WL.dirty=true; return; }
+    WL.busy=true;
+    const need=WL.needed() && document.visibilityState==='visible';
+    try{
+      if(need && !WL.lock){
+        const l=await navigator.wakeLock.request('screen');
+        l.addEventListener('release',()=>{ if(WL.lock===l) WL.lock=null; });
+        WL.lock=l;
+      } else if(!need && WL.lock){ const l=WL.lock; WL.lock=null; await l.release(); }
+    }catch(e){ WL.lock=null; }
+    WL.busy=false;
+    if(WL.dirty){ WL.dirty=false; WL.sync(); }
+  }
+};
+
 // ════════════════════════════════════════════════════
 // TIMER
 // ════════════════════════════════════════════════════
 const CIRC_280 = 753.98, CIRC_380 = 1005.3;
 const T = {
-  total: 300, remaining: 300, running: false, iv: null,
-  set(s){ T.total=s; T.remaining=s; T.running=false; clearInterval(T.iv);
-    T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.persist(); },
+  // Le décompte se cale sur l'heure de fin (endAt), pas sur le nombre de tics :
+  // il reste exact quand l'onglet passe en arrière-plan. msLeft = temps restant en pause.
+  total: 300, remaining: 300, msLeft: 300000, endAt: 0, running: false, iv: null,
+  set(s){ T.total=s; T.remaining=s; T.msLeft=s*1000; T.running=false; clearInterval(T.iv);
+    T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.persist(); WL.sync(); },
   toggle(){ T.remaining>0 && (T.running ? T.pause() : T.start()); },
-  start(){ T.running=true; T.iv=setInterval(T.tick,1000); T.updateBtn(); T.setRingClass('running'); T.persist(); },
-  pause(){ T.running=false; clearInterval(T.iv); T.updateBtn(); T.setRingClass(''); T.persist(); },
-  reset(){ T.pause(); T.remaining=T.total; T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.setRingClass(''); T.persist(); },
+  start(){
+    if(T.remaining<=0) return;
+    T.endAt=Date.now()+(T.msLeft>0?T.msLeft:T.remaining*1000);
+    T.running=true; clearInterval(T.iv); T.iv=setInterval(T.tick,250);
+    T.updateBtn(); T.setRingClass('running'); T.persist(); WL.sync();
+  },
+  pause(){
+    if(T.running) T.msLeft=Math.max(0,T.endAt-Date.now());
+    T.running=false; clearInterval(T.iv); T.updateBtn(); T.setRingClass(''); T.persist(); WL.sync();
+  },
+  reset(){ T.pause(); T.remaining=T.total; T.msLeft=T.total*1000; T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.setRingClass(''); T.persist(); },
   persist(){
     if(!appReady) return;
-    LIVE.set('fk-live-timer',{total:T.total,remaining:T.remaining,running:T.running,
-      endAt:T.running?Date.now()+T.remaining*1000:null,label:document.getElementById('timer-label-inp').value});
+    LIVE.set('fk-live-timer',{total:T.total,remaining:T.remaining,msLeft:T.msLeft,running:T.running,
+      endAt:T.running?T.endAt:null,label:document.getElementById('timer-label-inp').value});
   },
   restore(){
     const s=LIVE.get('fk-live-timer');
     if(!s||!(s.total>0)) return false;
-    T.total=s.total; T.remaining=Math.max(0,Math.min(parseInt(s.remaining)||0,s.total));
-    if(s.running&&s.endAt) T.remaining=Math.max(0,Math.ceil((s.endAt-Date.now())/1000));
+    T.total=s.total;
+    T.msLeft=s.running&&s.endAt ? s.endAt-Date.now() : (s.msLeft!=null ? s.msLeft : (parseInt(s.remaining)||0)*1000);
+    T.msLeft=Math.max(0,Math.min(T.msLeft,T.total*1000));
+    T.remaining=Math.ceil(T.msLeft/1000);
     if(s.label){ document.getElementById('timer-label-inp').value=s.label; timerLabelUpdate(); }
     document.querySelectorAll('.preset-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)*60===T.total));
     T.updateDisplay(); T.updateRing(); T.updateColor();
@@ -1128,8 +1162,10 @@ const T = {
   },
   setRingClass(cls){ ['running','ended'].forEach(c=>{document.getElementById('timer-ring-wrap').classList.toggle(c,c===cls); document.getElementById('fs-ring-wrap').classList.toggle(c,c===cls);}); },
   tick(){
-    if(T.remaining>0){ T.remaining--; T.updateDisplay(); T.updateRing(); T.updateColor(); }
-    if(T.remaining===0){ T.pause(); T.onEnd(); }
+    if(!T.running) return;
+    const left=T.endAt-Date.now(), r=Math.max(0,Math.ceil(left/1000));
+    if(r!==T.remaining){ T.remaining=r; T.updateDisplay(); T.updateRing(); T.updateColor(); }
+    if(left<=0){ T.pause(); T.onEnd(); }
   },
   onEnd(){
     if(document.getElementById('timer-sound').checked) beep(SND_TIMER_END);
@@ -1176,8 +1212,8 @@ function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-m
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
 function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; T.persist(); }
-function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); animOverlay(document.getElementById('fs-ov')); }
-function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); }
+function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); animOverlay(document.getElementById('fs-ov')); WL.sync(); }
+function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); WL.sync(); }
 
 // ── Mini-timer persistant (sidebar) ──
 let miniWasVisible=false;
@@ -1245,8 +1281,9 @@ function projOpen(tool){
     if(cur.classList.contains('winner')){ s.textContent=cur.textContent; s.className='winner'; }
     else { s.innerHTML='Prêt à tirer au sort'; s.className='proj-r-idle'; }
   }
+  WL.sync();
 }
-function projClose(){ projTool=null; document.getElementById('proj-ov').classList.remove('open'); }
+function projClose(){ projTool=null; document.getElementById('proj-ov').classList.remove('open'); WL.sync(); }
 function projRSlot(txt,cls){
   if(projTool!=='roulette') return;
   const s=document.getElementById('proj-r-slot');
@@ -1380,7 +1417,14 @@ const PA = {
     if(PA.activeIdx!==null&&PA.activeIdx!==i) PA.stop(PA.activeIdx);
     PA.parts[i].active ? PA.stop(i) : PA.startP(i);
   },
-  startP(i){ PA.activeIdx=i; PA.parts[i].active=true; clearInterval(PA.iv); PA.iv=setInterval(()=>{ if(PA.activeIdx===null) return; PA.parts[PA.activeIdx].time++; PA.updateCard(PA.activeIdx); PA.updateTotals(); PA.renderProj(); PA.save(); },1000); PA.render(); PA.save(); },
+  // Temps calculé depuis l'heure de prise de parole (t0) : exact même onglet en arrière-plan
+  startP(i){ PA.activeIdx=i; PA.parts[i].active=true; PA.t0=Date.now()-PA.parts[i].time*1000; clearInterval(PA.iv); PA.iv=setInterval(PA.sync,250); PA.render(); PA.save(); },
+  sync(){
+    if(PA.activeIdx===null) return;
+    const p=PA.parts[PA.activeIdx], t=Math.floor((Date.now()-PA.t0)/1000);
+    if(t===p.time) return;
+    p.time=t; PA.updateCard(PA.activeIdx); PA.updateTotals(); PA.renderProj(); PA.save();
+  },
   renderProj(){
     if(projTool!=='parole') return;
     const g=document.getElementById('proj-pa-grid');
@@ -1395,7 +1439,7 @@ const PA = {
       </div>`;
     }).join('');
   },
-  stop(i){ PA.parts[i].active=false; clearInterval(PA.iv); PA.activeIdx=null; PA.render(); PA.save(); },
+  stop(i){ PA.sync(); PA.parts[i].active=false; clearInterval(PA.iv); PA.activeIdx=null; PA.render(); PA.save(); },
   total(){ return PA.parts.reduce((s,p)=>s+p.time,0); },
   reset(){ clearInterval(PA.iv); PA.activeIdx=null; PA.parts.forEach(p=>{p.time=0;p.active=false;}); PA.render(); PA.save(); },
   render(){
@@ -1472,7 +1516,7 @@ function fmtSec(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
 // SEQUENCE
 // ════════════════════════════════════════════════════
 const SEQ = {
-  phases:[], curIdx:0, remaining:0, running:false, iv:null,
+  phases:[], curIdx:0, remaining:0, msLeft:0, endAt:0, running:false, iv:null,
   save(){ try{localStorage.setItem('fk-seq',JSON.stringify(SEQ.phases.map(p=>({id:p.id,name:p.name,duration:p.duration}))));}catch(e){} },
   load(){
     try{
@@ -1483,28 +1527,34 @@ const SEQ = {
   persist(){
     if(!appReady) return;
     LIVE.set('fk-live-seq',SEQ.remaining>0?{curIdx:SEQ.curIdx,remaining:SEQ.remaining,running:SEQ.running,
-      endAt:SEQ.running?Date.now()+SEQ.remaining*1000:null}:null);
+      endAt:SEQ.running?SEQ.endAt:null,msLeft:SEQ.running?null:SEQ.msLeft}:null);
   },
-  // Reprend la séquence là où elle en était, en rattrapant les phases écoulées pendant l'absence
+  // Avance jusqu'à la phase en cours à l'instant présent (fin de phase, onglet endormi, rechargement).
+  // Chaque phase démarre à l'heure exacte où la précédente s'est terminée. false = séquence finie.
+  catchUp(idx,end){
+    const now=Date.now();
+    while(end<=now){
+      idx++;
+      if(idx>=SEQ.phases.length) return false;
+      end+=SEQ.phases[idx].duration*60000;
+    }
+    SEQ.runPhase(idx,end);
+    return true;
+  },
+  // Reprend la séquence là où elle en était avant le rechargement
   restore(){
     const s=LIVE.get('fk-live-seq');
     if(!s||!SEQ.phases.length||!(s.curIdx<SEQ.phases.length)) return false;
-    let idx=s.curIdx, left=Math.max(0,parseInt(s.remaining)||0)*1000;
     if(s.running&&s.endAt){
-      let end=s.endAt; const now=Date.now();
-      while(end<=now){
-        idx++;
-        if(idx>=SEQ.phases.length){ LIVE.set('fk-live-seq',null); return false; }
-        end+=SEQ.phases[idx].duration*60000;
-      }
-      left=end-now;
+      if(SEQ.catchUp(s.curIdx,s.endAt)) return true;
+      LIVE.set('fk-live-seq',null); return false;
     }
-    SEQ.curIdx=idx; SEQ.remaining=Math.ceil(left/1000);
-    if(SEQ.remaining<=0) return false;
-    if(s.running){ SEQ.running=true; clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,1000); }
-    document.getElementById('seq-toggle-btn').textContent=SEQ.running?'⏸':'▶';
+    const ms=s.msLeft!=null?s.msLeft:(parseInt(s.remaining)||0)*1000;
+    if(!(ms>0)) return false;
+    SEQ.curIdx=s.curIdx; SEQ.msLeft=ms; SEQ.remaining=Math.ceil(ms/1000); SEQ.running=false;
+    document.getElementById('seq-toggle-btn').textContent='▶';
     seqRender(); seqUpdateDisplay();
-    return SEQ.running;
+    return false;
   },
   addPhase(){ SEQ.phases.push({id:Date.now(),name:'Phase '+(SEQ.phases.length+1),duration:10}); SEQ.save(); seqRender(); },
   removePhase(id){ SEQ.phases=SEQ.phases.filter(p=>p.id!==id); SEQ.save(); seqRender(); },
@@ -1515,33 +1565,43 @@ const SEQ = {
   },
   start(){
     if(!SEQ.phases.length) return;
-    SEQ.curIdx=0; SEQ.running=false; clearInterval(SEQ.iv);
     SEQ.loadPhase(0);
   },
-  loadPhase(i){
+  loadPhase(i,startAt){
     if(i>=SEQ.phases.length){ SEQ.end(); return; }
-    SEQ.curIdx=i; SEQ.remaining=SEQ.phases[i].duration*60;
-    SEQ.running=true;
-    clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,1000);
+    SEQ.runPhase(i,(startAt||Date.now())+SEQ.phases[i].duration*60000);
+  },
+  runPhase(i,endAt){
+    SEQ.curIdx=i; SEQ.endAt=endAt; SEQ.running=true; SEQ.msLeft=0;
+    SEQ.remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));
+    clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,250);
     seqUpdateDisplay(); seqRender();
     animPulse(document.getElementById('seq-current-name'));
     if(projTool==='sequence') animPulse(document.getElementById('proj-s-name'));
     document.getElementById('seq-toggle-btn').textContent='⏸';
-    SEQ.persist();
+    SEQ.persist(); WL.sync();
   },
   tick(){
-    SEQ.remaining--;
-    if(SEQ.remaining<=0){ clearInterval(SEQ.iv); beep(SND_PHASE); setTimeout(()=>SEQ.loadPhase(SEQ.curIdx+1),800); }
-    seqUpdateDisplay();
+    if(!SEQ.running) return;
+    const left=SEQ.endAt-Date.now();
+    if(left>0){ const r=Math.ceil(left/1000); if(r!==SEQ.remaining){ SEQ.remaining=r; seqUpdateDisplay(); } return; }
+    clearInterval(SEQ.iv); beep(SND_PHASE);
+    if(!SEQ.catchUp(SEQ.curIdx,SEQ.endAt)) SEQ.end();
   },
   toggle(){
-    if(!SEQ.running&&SEQ.remaining>0){ SEQ.running=true; SEQ.iv=setInterval(SEQ.tick,1000); document.getElementById('seq-toggle-btn').textContent='⏸'; }
-    else { SEQ.running=false; clearInterval(SEQ.iv); document.getElementById('seq-toggle-btn').textContent='▶'; }
-    SEQ.persist();
+    if(!SEQ.running&&SEQ.remaining>0){
+      SEQ.endAt=Date.now()+(SEQ.msLeft>0?SEQ.msLeft:SEQ.remaining*1000);
+      SEQ.running=true; clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,250);
+      document.getElementById('seq-toggle-btn').textContent='⏸';
+    } else {
+      if(SEQ.running) SEQ.msLeft=Math.max(0,SEQ.endAt-Date.now());
+      SEQ.running=false; clearInterval(SEQ.iv); document.getElementById('seq-toggle-btn').textContent='▶';
+    }
+    SEQ.persist(); WL.sync(); seqUpdateDisplay();
   },
   skip(){ clearInterval(SEQ.iv); beep(SND_PHASE); SEQ.loadPhase(SEQ.curIdx+1); },
-  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='▶'; SEQ.persist(); },
-  end(){ SEQ.running=false; SEQ.remaining=0; SEQ.persist(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='✓ Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
+  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; SEQ.msLeft=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='▶'; SEQ.persist(); WL.sync(); },
+  end(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.remaining=0; SEQ.msLeft=0; SEQ.persist(); WL.sync(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='✓ Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
 };
 const SEQ_TEMPLATES = {
   retro: {name:'Rétrospective agile', phases:[['Accueil & météo',5],['Ce qui a bien marché',10],['Ce qui a coincé',10],['Analyse & échanges',15],['Actions à prendre',15],['Clôture & ROTI',5]]},
@@ -2123,6 +2183,12 @@ appReady = true;
 // Reprise de ce qui tournait avant le rechargement
 const tLive = T.restore(), sLive = SEQ.restore();
 miniSync();
+WL.sync();
+// Retour sur l'onglet : affichage à jour tout de suite, et verrou de veille redemandé
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState!=='visible') return;
+  T.tick(); SEQ.tick(); PA.sync(); WL.sync();
+});
 {
   const live = [tLive&&'le minuteur', sLive&&'la séquence', paLive&&'le temps de parole'].filter(Boolean);
   if (live.length) toast('Reprise en cours : '+live.join(', ').replace(/, ([^,]*)$/,' et $1')+'.');
