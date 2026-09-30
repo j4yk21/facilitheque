@@ -233,13 +233,13 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .parole-totals{display:flex;gap:20px;padding:16px;background:var(--cream-dark);border-radius:var(--r12);font-size:.85rem}
 
 /* ── SEQUENCE ── */
-.seq-phase-row{display:flex;align-items:center;gap:14px;padding:15px 18px;background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r12);margin-bottom:10px;transition:all var(--tr)}
+.seq-phase-row{display:flex;align-items:center;gap:12px;padding:10px 18px 10px 10px;background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r12);margin-bottom:10px;transition:all var(--tr)}
 .seq-phase-row.seq-active{border-color:var(--terra);background:rgba(201,107,58,.04);box-shadow:0 0 0 3px rgba(201,107,58,.1)}
 .seq-phase-row.seq-done{opacity:.45}
 .seq-num{width:28px;height:28px;background:var(--cream-dark);border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--gray);flex-shrink:0}
 .seq-active .seq-num{background:var(--terra);color:#fff}
 .seq-done .seq-num{background:var(--sage);color:#fff}
-.seq-name-inp{flex:1;border:none;background:transparent;font-size:.9rem;font-weight:500;color:var(--ink);outline:none}
+.seq-name-inp{flex:1;min-width:0;border:none;background:transparent;font-size:.9rem;font-weight:500;color:var(--ink);outline:none}
 .seq-dur-inp{width:70px;border:1.5px solid var(--cream-mid);border-radius:var(--r8);padding:6px 10px;font-size:.85rem;text-align:center;color:var(--ink);outline:none;transition:border-color var(--tr)}
 .seq-dur-inp:focus{border-color:var(--terra)}
 .seq-display{font-family:'Fraunces',serif;font-size:3.6rem;font-weight:700;text-align:center;color:var(--ink);line-height:1;margin:10px 0 4px}
@@ -250,10 +250,24 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 /* ── PLANNER ── */
 .planner-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0 28px;padding:14px 16px;background:var(--cream-dark);border-radius:var(--r12)}
 .planner-header{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
-.planner-phase-row{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r12);padding:18px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr 80px 140px 80px;gap:12px;align-items:start;transition:box-shadow var(--tr)}
+.planner-phase-row{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r12);padding:18px 18px 18px 12px;margin-bottom:10px;display:grid;grid-template-columns:auto 1fr 90px 170px auto;grid-template-areas:"move main dur tool del";gap:12px;align-items:start;transition:box-shadow var(--tr)}
+.planner-phase-row .phase-move{grid-area:move}.pp-main{grid-area:main;min-width:0}.pp-dur{grid-area:dur}.pp-tool{grid-area:tool;min-width:0}.pp-del{grid-area:del}
 .planner-phase-row:hover{box-shadow:var(--sh)}
-.phase-drag{color:var(--gray);cursor:grab;display:flex;align-items:center;padding-top:2px}
+.phase-drag{color:var(--gray);cursor:grab;display:flex;align-items:center;justify-content:center;padding:3px 4px;border-radius:6px;touch-action:none;transition:color var(--tr),background var(--tr)}
+.phase-drag:hover{color:var(--terra);background:rgba(201,107,58,.08)}
 .phase-drag svg{width:14px;height:14px}
+.pp-del{padding-top:22px}
+
+/* Réordonner : ↑ poignée ↓ */
+.phase-move{display:flex;flex-direction:column;align-items:center;gap:1px;flex-shrink:0}
+.move-btn{width:24px;height:18px;padding:0;border:none;background:none;color:var(--gray);border-radius:6px;display:grid;place-items:center;transition:color var(--tr),background var(--tr)}
+.move-btn svg{width:10px;height:10px}
+.move-btn:hover:not(:disabled){color:var(--ink);background:var(--cream-dark)}
+.move-btn:disabled{opacity:.22;cursor:default}
+.move-btn:focus-visible,.phase-drag:focus-visible{outline:2px solid var(--terra);outline-offset:1px}
+.dragging{position:relative;z-index:5;border-color:var(--terra)!important;box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 3px rgba(201,107,58,.14)!important;transition:none!important}
+.dragging .phase-drag{color:var(--terra);cursor:grabbing}
+body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .planner-total{display:flex;align-items:center;gap:16px;padding:16px 20px;background:#1A1A1A;border-radius:var(--r12);color:var(--cream);margin-top:16px}
 .planner-total-num{font-family:'Fraunces',serif;font-size:1.8rem;font-weight:700;color:var(--terra)}
 .planner-total-label{font-size:.8rem;color:rgba(245,240,232,.5)}
@@ -800,7 +814,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
       <p class="panel-sub">Construis ton déroulé. Sauvegardé automatiquement.</p>
       <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Planificateur de déroulé d'atelier : crée ton agenda de facilitation phase par phase avec durées, objectifs et matériel. Sauvegarde automatique locale, export PDF prêt à imprimer ou partager avec ton client. Conçu pour les facilitateurs professionnels.</p>
       <div class="planner-actions">
-        <button class="btn btn-primary" onclick="plannerExportPDF()">⬇ &nbsp;Exporter en PDF</button>
+        <button class="btn btn-primary" onclick="plannerToSequence()" title="Transformer ce déroulé en séquence minutée">▶ &nbsp;Lancer en séquence</button>
+        <button class="btn btn-secondary" onclick="plannerExportPDF()">⬇ &nbsp;Exporter en PDF</button>
         <button class="btn btn-secondary" id="plan-share-btn" onclick="plannerShare()">🔗 &nbsp;Partager le lien</button>
         <span style="flex:1"></span>
         <button class="btn btn-ghost btn-sm" onclick="plannerClear()" title="Effacer tout le plan">🗑 &nbsp;Tout effacer</button>
@@ -828,6 +843,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
         <button class="btn btn-primary btn-sm" onclick="plannerAddPhase()">+ Ajouter une phase</button>
       </div>
       <div id="planner-phases"></div>
+      <datalist id="tools-datalist"></datalist>
       <div class="planner-total" id="planner-total">
         <div>
           <div class="planner-total-label">Durée totale de l'atelier</div>
@@ -981,9 +997,10 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
           <div class="modal-sec" style="margin-top:20px">Déroulé en pratique</div>
           <ul class="modal-steps" id="modal-steps"></ul>
           <div class="modal-tip" id="modal-tip"></div>
-          <div style="margin-top:24px;display:flex;gap:10px">
+          <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
             <button class="btn btn-primary" onclick="toolPDF()">⬇ Fiche PDF</button>
-            <button class="btn btn-secondary" onclick="toolModalCloseBtn()">Fermer</button>
+            <button class="btn btn-secondary" onclick="toolAddToPlan()">＋ Ajouter au plan</button>
+            <button class="btn btn-ghost" onclick="toolModalCloseBtn()">Fermer</button>
           </div>
         </div>
       </div>
@@ -1095,6 +1112,11 @@ const LIVE = {
   get(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } },
   set(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 };
+
+// Icônes des poignées de réorganisation (utilisées dès le premier rendu)
+const SVG_UP='<svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5L5 3.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SVG_DOWN='<svg viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const SVG_GRIP='<svg viewBox="0 0 10 14" fill="none"><circle cx="3.5" cy="3" r="1" fill="currentColor"/><circle cx="6.5" cy="3" r="1" fill="currentColor"/><circle cx="3.5" cy="7" r="1" fill="currentColor"/><circle cx="6.5" cy="7" r="1" fill="currentColor"/><circle cx="3.5" cy="11" r="1" fill="currentColor"/><circle cx="6.5" cy="11" r="1" fill="currentColor"/></svg>';
 
 // ── Écran allumé pendant un décompte ou une projection (Wake Lock) ──
 // Sans prise en charge du navigateur : on ne fait rien, sans message.
@@ -1563,6 +1585,19 @@ const SEQ = {
     SEQ.phases[i][field]=field==='duration'?Math.max(1,parseInt(val)||1):val;
     SEQ.save(); seqRender();
   },
+  move(id,dir){
+    const i=SEQ.phases.findIndex(p=>p.id===id);
+    if(i<0||!SEQ.phases[i+dir]) return;
+    SEQ.moveTo(i,i+dir);
+    focusMoveBtn('seq-phases-list',id,dir);
+  },
+  // La phase en cours reste la même après réorganisation
+  moveTo(from,to){
+    const cur=SEQ.remaining>0?SEQ.phases[SEQ.curIdx]:null;
+    const [p]=SEQ.phases.splice(from,1); SEQ.phases.splice(to,0,p);
+    if(cur) SEQ.curIdx=SEQ.phases.indexOf(cur);
+    SEQ.save(); SEQ.persist(); seqRender(); seqUpdateDisplay();
+  },
   start(){
     if(!SEQ.phases.length) return;
     SEQ.loadPhase(0);
@@ -1635,6 +1670,7 @@ function seqRender(){
   totalRow.style.display='flex';
   el.innerHTML=SEQ.phases.map((p,i)=>`
     <div class="seq-phase-row${i===SEQ.curIdx&&SEQ.running?' seq-active':i<SEQ.curIdx?' seq-done':''}">
+      ${moveHandle(p.id,i,SEQ.phases.length,'SEQ.move')}
       <div class="seq-num">${i<SEQ.curIdx?'✓':i+1}</div>
       <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" placeholder="Nom de la phase">
       <input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.edit(${i},'duration',this.value)" title="Durée en minutes"> min
@@ -1670,14 +1706,26 @@ seqUpdateDisplay();
 // ════════════════════════════════════════════════════
 const PL = {
   data:{ name:'', date:'', fac:'', loc:'', notes:'', phases:[] },
+  // save : lit le formulaire affiché puis enregistre · persist : enregistre PL.data tel quel
   save(){
     PL.data.name=document.getElementById('plan-name').value;
     PL.data.date=document.getElementById('plan-date').value;
     PL.data.fac=document.getElementById('plan-fac').value;
     PL.data.loc=document.getElementById('plan-loc').value;
     PL.data.notes=document.getElementById('plan-notes').value;
-    localStorage.setItem('fk-plan', JSON.stringify(PL.data));
+    PL.persist();
     PL.updateTotal();
+  },
+  persist(){ try{ localStorage.setItem('fk-plan', JSON.stringify(PL.data)); }catch(e){} },
+  move(id,dir){
+    const i=PL.data.phases.findIndex(p=>p.id===id);
+    if(i<0||!PL.data.phases[i+dir]) return;
+    PL.moveTo(i,i+dir);
+    focusMoveBtn('planner-phases',id,dir);
+  },
+  moveTo(from,to){
+    const [p]=PL.data.phases.splice(from,1); PL.data.phases.splice(to,0,p);
+    PL.save(); PL.renderPhases();
   },
   load(){
     try{ const s=localStorage.getItem('fk-plan'); if(s) PL.data=JSON.parse(s); }catch(e){}
@@ -1700,23 +1748,24 @@ const PL = {
   renderPhases(){
     const el=document.getElementById('planner-phases');
     if(!PL.data.phases.length){ el.innerHTML=`<div class="empty-state" style="padding:32px"><div class="es-icon">📋</div><p>Clique sur "+ Ajouter une phase" pour commencer ton déroulé</p></div>`; PL.updateTotal(); return; }
+    const n=PL.data.phases.length;
     el.innerHTML=PL.data.phases.map((p,i)=>`
       <div class="planner-phase-row">
-        <div class="phase-drag"><svg viewBox="0 0 10 14" fill="none"><circle cx="3.5" cy="3" r="1" fill="currentColor"/><circle cx="6.5" cy="3" r="1" fill="currentColor"/><circle cx="3.5" cy="7" r="1" fill="currentColor"/><circle cx="6.5" cy="7" r="1" fill="currentColor"/><circle cx="3.5" cy="11" r="1" fill="currentColor"/><circle cx="6.5" cy="11" r="1" fill="currentColor"/></svg></div>
-        <div>
+        ${moveHandle(p.id,i,n,'PL.move')}
+        <div class="pp-main">
           <input class="input" placeholder="Nom de la phase / activité" value="${escHtml(p.name)}" oninput="PL.phaseChange(${p.id},'name',this.value)" style="margin-bottom:6px">
           <input class="input" placeholder="Description, outils, matériel…" value="${escHtml(p.desc)}" oninput="PL.phaseChange(${p.id},'desc',this.value)" style="font-size:.82rem">
         </div>
-        <div>
+        <div class="pp-dur">
           <label class="label text-xs">Durée (min)</label>
           <input class="input" type="number" min="0" value="${p.duration}" oninput="PL.phaseChange(${p.id},'duration',this.value)" style="text-align:center">
         </div>
-        <div>
+        <div class="pp-tool">
           <label class="label text-xs">Outil utilisé</label>
-          <input class="input" placeholder="World Café, 1-2-4-All…" value="${escHtml(p.tool)}" oninput="PL.phaseChange(${p.id},'tool',this.value)" style="font-size:.82rem">
+          <input class="input" list="tools-datalist" placeholder="World Café, 1-2-4-All…" value="${escHtml(p.tool)}" oninput="PL.phaseChange(${p.id},'tool',this.value)" style="font-size:.82rem">
         </div>
-        <div style="padding-top:22px">
-          <button class="btn btn-danger btn-sm" onclick="PL.removePhase(${p.id})">✕</button>
+        <div class="pp-del">
+          <button class="btn btn-danger btn-sm" onclick="PL.removePhase(${p.id})" aria-label="Supprimer la phase" title="Supprimer la phase">✕</button>
         </div>
       </div>`).join('');
     PL.updateTotal();
@@ -1800,6 +1849,19 @@ function plannerSave(){ PL.save(); }
 function plannerAddPhase(){ PL.addPhase(); }
 function plannerExportPDF(){ PL.exportPDF(); }
 function plannerClear(){ PL.clearAll(); }
+// Préparer → Animer : le déroulé du plan devient la séquence minutée
+function plannerToSequence(){
+  PL.save();
+  const phases=PL.data.phases.filter(p=>(parseInt(p.duration)||0)>0);
+  if(!phases.length){ toast('Ajoute au moins une phase avec une durée pour lancer la séquence.'); return; }
+  const label=PL.data.name||'ce plan';
+  if(SEQ.phases.length && !confirm(`Remplacer la séquence actuelle par « ${label} » ?`)) return;
+  SEQ.reset();
+  SEQ.phases=phases.map((p,i)=>({id:Date.now()+i,name:p.name||p.tool||'Phase '+(i+1),duration:parseInt(p.duration)}));
+  SEQ.save();
+  goPanel('sequence');
+  toast(`${phases.length} phase${phases.length>1?'s':''} prête${phases.length>1?'s':''}. Lance la séquence quand tu veux.`);
+}
 
 // ── Partage du plan par lien ──
 function planEncode(data){
@@ -1916,7 +1978,15 @@ const TOOLS = [
 ];
 
 function slugify(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
-TOOLS.forEach(t=>t.slug=slugify(t.name));
+// Durée minimale d'une fiche, en minutes (« 90–120 min », « 20–30 min / pers. », « ½ à 2 jours »)
+function toolMinDur(t){
+  const m=String(t.dur).match(/½|\d+/);
+  if(!m) return 15;
+  const n=m[0]==='½'?.5:parseInt(m[0]);
+  return Math.round(/jour/.test(t.dur)?n*480:n);
+}
+TOOLS.forEach(t=>{ t.slug=slugify(t.name); t.minDur=toolMinDur(t); });
+document.getElementById('tools-datalist').innerHTML=TOOLS.map(t=>`<option value="${escHtml(t.name)}">`).join('');
 
 const PHASE_LABELS = {all:'Toutes phases',avant:'Avant l\'atelier',ouverture:'Ouverture',production:'Production',cloture:'Clôture',apres:'Après l\'atelier'};
 const NEED_LABELS = {all:'Tous besoins',lien:'Créer du lien',idees:'Générer des idées',decision:'Prioriser / décider',conflits:'Gérer les conflits',energie:'Maintenir l\'énergie'};
@@ -1992,6 +2062,17 @@ function toolModalCloseBtn(){
   else history.replaceState(null,'',panelUrl(currentPanel));
 }
 function toolPDF(){ if(currentToolId) toolPDFById(currentToolId); }
+// Ajoute la fiche ouverte comme nouvelle phase du plan en cours
+function toolAddToPlan(){
+  const t=TOOLS.find(x=>x.id===currentToolId); if(!t) return;
+  PL.load();
+  PL.data.phases.push({id:Date.now(),name:t.name,duration:t.minDur,tool:t.name,desc:''});
+  PL.persist();
+  const plan=PL.data.name?` « ${PL.data.name} »`:'';
+  toast(`${t.name} ajouté au plan${plan} (${t.minDur} min).`,'Voir le plan',()=>{
+    modalPushed=false; toolModalHide(); goPanel('planner','replace');
+  });
+}
 function toolPDFById(id){
   const t=TOOLS.find(x=>x.id===id); if(!t) return;
   const {jsPDF}=window.jspdf;
@@ -2108,6 +2189,55 @@ function parkingPrint(){ PARK.print(); }
 // UTILS
 // ════════════════════════════════════════════════════
 function pad(n){ return String(n).padStart(2,'0'); }
+// ── Réordonner des phases : poignée à glisser + boutons ↑ ↓ au clavier ──
+function moveHandle(key,i,n,fn){
+  return `<div class="phase-move">
+    <button class="move-btn" data-move="${key}:-1" onclick="${fn}(${key},-1)" aria-label="Monter la phase" title="Monter"${i===0?' disabled':''}>${SVG_UP}</button>
+    <div class="phase-drag" title="Glisser pour réordonner">${SVG_GRIP}</div>
+    <button class="move-btn" data-move="${key}:1" onclick="${fn}(${key},1)" aria-label="Descendre la phase" title="Descendre"${i===n-1?' disabled':''}>${SVG_DOWN}</button>
+  </div>`;
+}
+// Après un déplacement au clavier, garde le focus sur le bouton (ou son voisin s'il devient inactif)
+function focusMoveBtn(containerId,key,dir){
+  const c=document.getElementById(containerId);
+  const b=c.querySelector(`[data-move="${key}:${dir}"]`);
+  (b&&!b.disabled ? b : c.querySelector(`[data-move="${key}:${-dir}"]`))?.focus();
+}
+// Glisser-déposer sans bibliothèque (Pointer Events : souris, stylet, tactile)
+function sortable(container,rowSel,onDrop){
+  container.addEventListener('pointerdown',e=>{
+    const h=e.target.closest('.phase-drag');
+    if(!h||!container.contains(h)||e.button>0) return;
+    const row=h.closest(rowSel); if(!row) return;
+    e.preventDefault();
+    if(document.activeElement) document.activeElement.blur();
+    const rows=()=>[...container.querySelectorAll(rowSel)];
+    const from=rows().indexOf(row), y0=e.clientY, top0=row.getBoundingClientRect().top;
+    let tf=0, done=false;
+    row.classList.add('dragging'); document.body.classList.add('is-sorting');
+    const move=ev=>{
+      const y=ev.clientY, list=rows(), i=list.indexOf(row), prev=list[i-1], next=list[i+1];
+      if(next){ const r=next.getBoundingClientRect(); if(y>r.top+r.height/2) container.insertBefore(next,row); }
+      if(prev){ const r=prev.getBoundingClientRect(); if(y<r.top+r.height/2) container.insertBefore(row,prev); }
+      const layoutTop=row.getBoundingClientRect().top-tf;
+      tf=top0+(y-y0)-layoutTop;
+      row.style.transform=`translateY(${tf}px)`;
+    };
+    const up=()=>{
+      if(done) return; done=true;
+      window.removeEventListener('pointermove',move);
+      window.removeEventListener('pointerup',up);
+      window.removeEventListener('pointercancel',up);
+      row.style.transform=''; row.classList.remove('dragging'); document.body.classList.remove('is-sorting');
+      const to=rows().indexOf(row);
+      if(to!==from) onDrop(from,to);
+    };
+    window.addEventListener('pointermove',move);
+    window.addEventListener('pointerup',up);
+    window.addEventListener('pointercancel',up);
+  });
+}
+
 // Confirmation discrète en bas d'écran, avec action facultative
 let toastTO=null;
 function toast(msg, actLabel, act){
@@ -2181,6 +2311,8 @@ const paLive = PA.load();
 PARK.load();
 appReady = true;
 // Reprise de ce qui tournait avant le rechargement
+sortable(document.getElementById('planner-phases'),'.planner-phase-row',(a,b)=>PL.moveTo(a,b));
+sortable(document.getElementById('seq-phases-list'),'.seq-phase-row',(a,b)=>SEQ.moveTo(a,b));
 const tLive = T.restore(), sLive = SEQ.restore();
 miniSync();
 WL.sync();
