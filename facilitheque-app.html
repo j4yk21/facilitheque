@@ -228,6 +228,8 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .parole-bar{height:100%;background:var(--sage);border-radius:2px;transition:width .5s}
 .parole-bar.warn{background:var(--terra)}
 .parole-mic{font-size:1.2rem;margin-bottom:4px}
+.parole-pct{font-size:.7rem;color:var(--gray);margin-top:4px}
+.parole-pct.warn{color:var(--terra);font-weight:600}
 .parole-totals{display:flex;gap:20px;padding:16px;background:var(--cream-dark);border-radius:var(--r12);font-size:.85rem}
 
 /* ── SEQUENCE ── */
@@ -350,6 +352,15 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .proj-pa-time{font-family:'Fraunces',serif;font-weight:700;font-size:3.4vw;color:var(--terra);font-variant-numeric:tabular-nums}
 .proj-pa-pct{font-size:1vw;color:rgba(245,240,232,.45);margin-top:.6vh}
 @media(max-width:900px){#proj-r-slot{font-size:13vw}#proj-s-name{font-size:8vw}#proj-s-time{font-size:24vw}#proj-s-next{font-size:3.5vw}.proj-pa-name{font-size:5vw}.proj-pa-time{font-size:9vw}.proj-pa-pct{font-size:3vw}}
+
+/* ── TOAST (confirmation discrète) ── */
+#toast{position:fixed;left:50%;bottom:26px;z-index:2500;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px);padding:11px 12px 11px 18px;background:#1A1A1A;color:#F5F0E8;border:1px solid rgba(255,255,255,.08);border-radius:40px;box-shadow:0 14px 40px rgba(0,0,0,.28);font-size:.84rem;line-height:1.35;opacity:0;visibility:hidden;transform:translate(-50%,14px);transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1),visibility .25s}
+#toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
+#toast .toast-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0;box-shadow:0 0 0 4px rgba(201,107,58,.22)}
+#toast .toast-msg{min-width:0}
+#toast .toast-act{background:none;border:none;color:var(--terra);font-weight:600;font-size:.8rem;padding:6px 10px;border-radius:20px;white-space:nowrap;transition:background var(--tr)}
+#toast .toast-act:hover{background:rgba(255,255,255,.08)}
+#toast .toast-act:empty{display:none}
 
 /* ── PILLS ── */
 .pill{padding:6px 14px;border-radius:40px;font-size:.78rem;font-weight:500;border:1.5px solid var(--cream-mid);background:var(--card);color:var(--ink-s);cursor:pointer;transition:all var(--tr)}
@@ -947,6 +958,9 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
   </main>
 </div>
 
+<!-- TOAST -->
+<div id="toast" role="status" aria-live="polite"><span class="toast-dot"></span><span class="toast-msg" id="toast-msg"></span><button class="toast-act" id="toast-act"></button></div>
+
 <!-- TOOL MODAL -->
 <div class="modal-ov" id="tool-modal" onclick="toolModalClose(event)">
   <div class="modal-box">
@@ -989,7 +1003,17 @@ document.querySelectorAll('.nav-item').forEach(btn => {
 });
 let currentPanel = 'home';
 let appReady = false;
-function goPanel(id) {
+// Adresse de chaque outil (#minuteur…) : F5 et bouton Retour restent dans l'app
+const PANEL_SLUGS = {home:'',timer:'minuteur',chrono:'chronometre',roulette:'roulette',parole:'parole',sequence:'sequence',planner:'planificateur',library:'bibliotheque',parking:'parking'};
+function panelUrl(id){ const s=PANEL_SLUGS[id]; return s ? '#'+s : location.pathname+location.search; }
+// mode : 'push' (clic, par défaut) · 'replace' (chargement) · 'none' (navigation Retour/Avancer)
+function goPanel(id, mode) {
+  if (!panels[id]) id = 'home';
+  mode = mode || 'push';
+  if (mode !== 'none') {
+    const cur = location.hash, want = PANEL_SLUGS[id] ? '#'+PANEL_SLUGS[id] : '';
+    if (cur !== want) history[mode==='replace'?'replaceState':'pushState'](null,'',panelUrl(id));
+  }
   currentPanel = id;
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
@@ -1066,6 +1090,12 @@ const SND_TIMER_END = [[880,0,.3],[880,.35,.3],[1047,.7,.4]];
 const SND_WIN = [[523,0,.18],[659,.16,.18],[784,.32,.18],[1047,.48,.3]];
 const SND_PHASE = [[660,0,.2],[880,.22,.2]];
 
+// ── État live persistant (reprise après rechargement) ──
+const LIVE = {
+  get(k){ try{ return JSON.parse(localStorage.getItem(k)||'null'); }catch(e){ return null; } },
+  set(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
+};
+
 // ════════════════════════════════════════════════════
 // TIMER
 // ════════════════════════════════════════════════════
@@ -1073,11 +1103,29 @@ const CIRC_280 = 753.98, CIRC_380 = 1005.3;
 const T = {
   total: 300, remaining: 300, running: false, iv: null,
   set(s){ T.total=s; T.remaining=s; T.running=false; clearInterval(T.iv);
-    T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); },
+    T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.persist(); },
   toggle(){ T.remaining>0 && (T.running ? T.pause() : T.start()); },
-  start(){ T.running=true; T.iv=setInterval(T.tick,1000); T.updateBtn(); T.setRingClass('running'); },
-  pause(){ T.running=false; clearInterval(T.iv); T.updateBtn(); T.setRingClass(''); },
-  reset(){ T.pause(); T.remaining=T.total; T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.setRingClass(''); },
+  start(){ T.running=true; T.iv=setInterval(T.tick,1000); T.updateBtn(); T.setRingClass('running'); T.persist(); },
+  pause(){ T.running=false; clearInterval(T.iv); T.updateBtn(); T.setRingClass(''); T.persist(); },
+  reset(){ T.pause(); T.remaining=T.total; T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.setRingClass(''); T.persist(); },
+  persist(){
+    if(!appReady) return;
+    LIVE.set('fk-live-timer',{total:T.total,remaining:T.remaining,running:T.running,
+      endAt:T.running?Date.now()+T.remaining*1000:null,label:document.getElementById('timer-label-inp').value});
+  },
+  restore(){
+    const s=LIVE.get('fk-live-timer');
+    if(!s||!(s.total>0)) return false;
+    T.total=s.total; T.remaining=Math.max(0,Math.min(parseInt(s.remaining)||0,s.total));
+    if(s.running&&s.endAt) T.remaining=Math.max(0,Math.ceil((s.endAt-Date.now())/1000));
+    if(s.label){ document.getElementById('timer-label-inp').value=s.label; timerLabelUpdate(); }
+    document.querySelectorAll('.preset-btn').forEach(b=>b.classList.toggle('sel',parseInt(b.textContent)*60===T.total));
+    T.updateDisplay(); T.updateRing(); T.updateColor();
+    if(s.running&&T.remaining>0){ T.start(); return true; }
+    if(s.running){ T.setRingClass('ended'); T.persist(); }
+    T.updateBtn();
+    return false;
+  },
   setRingClass(cls){ ['running','ended'].forEach(c=>{document.getElementById('timer-ring-wrap').classList.toggle(c,c===cls); document.getElementById('fs-ring-wrap').classList.toggle(c,c===cls);}); },
   tick(){
     if(T.remaining>0){ T.remaining--; T.updateDisplay(); T.updateRing(); T.updateColor(); }
@@ -1127,7 +1175,7 @@ function timerSet(m,btn){ T.set(m*60); document.querySelectorAll('.preset-btn').
 function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-min').value)||0, s=parseInt(document.getElementById('custom-sec').value)||0; if(m||s){ T.set(m*60+s); document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('sel')); if(btn) btn.classList.add('sel'); } }
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
-function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; }
+function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; T.persist(); }
 function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); animOverlay(document.getElementById('fs-ov')); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); }
 
@@ -1258,8 +1306,11 @@ function fmtMs(ms){ const m=Math.floor(ms/60000),s=Math.floor((ms%60000)/1000),c
 // ════════════════════════════════════════════════════
 const RL = {
   names:[], history:[],
-  save(){ try{localStorage.setItem('fk-rl',JSON.stringify(RL.names));}catch(e){} },
-  load(){ try{const s=localStorage.getItem('fk-rl');if(s){RL.names=JSON.parse(s);RL.renderTags();}}catch(e){} },
+  save(){ try{localStorage.setItem('fk-rl',JSON.stringify(RL.names));localStorage.setItem('fk-rl-hist',JSON.stringify(RL.history.slice(0,50)));}catch(e){} },
+  load(){
+    try{const s=localStorage.getItem('fk-rl');if(s){RL.names=JSON.parse(s);RL.renderTags();}}catch(e){}
+    try{const h=JSON.parse(localStorage.getItem('fk-rl-hist')||'[]');if(Array.isArray(h)){RL.history=h.map(String);RL.renderHistory();}}catch(e){}
+  },
   addName(n){ n=n.trim(); if(n&&!RL.names.includes(n)){RL.names.push(n); RL.renderTags(); RL.save();} },
   removeName(i){ RL.names.splice(i,1); RL.renderTags(); RL.save(); },
   clear(){ RL.names=[]; RL.history=[]; RL.renderTags(); RL.renderHistory(); RL.save(); document.getElementById('roulette-slot').className='roulette-idle'; document.getElementById('roulette-slot').innerHTML='Entre des noms<br>et lance la roulette !'; },
@@ -1283,7 +1334,7 @@ const RL = {
         animPop(slot); if(projTool==='roulette') animPop(document.getElementById('proj-r-slot'));
         RL.history.unshift(winner);
         if(remove){ const idx=RL.names.indexOf(winner); if(idx>=0){RL.names.splice(idx,1); RL.renderTags();} }
-        RL.renderHistory(); beep(SND_WIN); return;
+        RL.renderHistory(); RL.save(); beep(SND_WIN); return;
       }
       delay=Math.min(delay*1.18,700); setTimeout(tick,delay);
     };
@@ -1294,7 +1345,7 @@ const RL = {
     const el=document.getElementById('roulette-hist');
     if(!RL.history.length){h.style.display='none';return;}
     h.style.display='block';
-    el.innerHTML=RL.history.slice(0,8).map((n,i)=>`<div class="hist-item"><span class="hist-num">${i+1}</span><span>${n}</span></div>`).join('');
+    el.innerHTML=RL.history.slice(0,8).map((n,i)=>`<div class="hist-item"><span class="hist-num">${i+1}</span><span>${escHtml(n)}</span></div>`).join('');
   }
 };
 function rouletteAddFromInput(){ const inp=document.getElementById('roulette-inp'); RL.addName(inp.value); inp.value=''; inp.focus(); }
@@ -1308,15 +1359,28 @@ function rouletteClear(){ RL.clear(); }
 // ════════════════════════════════════════════════════
 const PA = {
   parts:[], activeIdx:null, iv:null,
-  save(){ try{localStorage.setItem('fk-pa',JSON.stringify(PA.parts.map(p=>p.name)));}catch(e){} },
-  load(){ try{const s=localStorage.getItem('fk-pa');if(s){PA.parts=JSON.parse(s).map(n=>({name:n,time:0,active:false}));PA.render();}}catch(e){} },
+  save(){ try{localStorage.setItem('fk-pa',JSON.stringify({parts:PA.parts.map(p=>({name:p.name,time:p.time})),activeIdx:PA.activeIdx,savedAt:Date.now()}));}catch(e){} },
+  load(){
+    let s=null; try{ s=JSON.parse(localStorage.getItem('fk-pa')||'null'); }catch(e){}
+    if(!s) return false;
+    // Ancien format : simple liste de noms
+    if(Array.isArray(s)){ PA.parts=s.map(n=>({name:String(n),time:0,active:false})); PA.render(); return false; }
+    if(!Array.isArray(s.parts)) return false;
+    PA.parts=s.parts.map(p=>({name:String(p.name),time:parseInt(p.time)||0,active:false}));
+    const i=s.activeIdx;
+    if(i!=null&&PA.parts[i]){
+      PA.parts[i].time+=Math.max(0,Math.floor((Date.now()-(s.savedAt||Date.now()))/1000));
+      PA.startP(i); return true;
+    }
+    PA.render(); return false;
+  },
   add(n){ n=n.trim(); if(!n||PA.parts.find(p=>p.name===n)) return; PA.parts.push({name:n,time:0,active:false}); PA.render(); PA.save(); },
   remove(i){ if(PA.activeIdx===i){clearInterval(PA.iv);PA.activeIdx=null;} else if(PA.activeIdx!==null&&PA.activeIdx>i){PA.activeIdx--;} PA.parts.splice(i,1); PA.render(); PA.save(); },
   toggle(i){
     if(PA.activeIdx!==null&&PA.activeIdx!==i) PA.stop(PA.activeIdx);
     PA.parts[i].active ? PA.stop(i) : PA.startP(i);
   },
-  startP(i){ PA.activeIdx=i; PA.parts[i].active=true; clearInterval(PA.iv); PA.iv=setInterval(()=>{ if(PA.activeIdx===null) return; PA.parts[PA.activeIdx].time++; PA.updateCard(PA.activeIdx); PA.updateTotals(); PA.renderProj(); },1000); PA.render(); },
+  startP(i){ PA.activeIdx=i; PA.parts[i].active=true; clearInterval(PA.iv); PA.iv=setInterval(()=>{ if(PA.activeIdx===null) return; PA.parts[PA.activeIdx].time++; PA.updateCard(PA.activeIdx); PA.updateTotals(); PA.renderProj(); PA.save(); },1000); PA.render(); PA.save(); },
   renderProj(){
     if(projTool!=='parole') return;
     const g=document.getElementById('proj-pa-grid');
@@ -1331,9 +1395,9 @@ const PA = {
       </div>`;
     }).join('');
   },
-  stop(i){ PA.parts[i].active=false; clearInterval(PA.iv); PA.activeIdx=null; PA.render(); },
+  stop(i){ PA.parts[i].active=false; clearInterval(PA.iv); PA.activeIdx=null; PA.render(); PA.save(); },
   total(){ return PA.parts.reduce((s,p)=>s+p.time,0); },
-  reset(){ clearInterval(PA.iv); PA.activeIdx=null; PA.parts.forEach(p=>{p.time=0;p.active=false;}); PA.render(); },
+  reset(){ clearInterval(PA.iv); PA.activeIdx=null; PA.parts.forEach(p=>{p.time=0;p.active=false;}); PA.render(); PA.save(); },
   render(){
     const grid=document.getElementById('parole-grid');
     const empty=document.getElementById('parole-empty');
@@ -1349,7 +1413,7 @@ const PA = {
         <div class="parole-mic">${p.active?'🎙':'🎤'}</div>
         <div class="parole-name">${escHtml(p.name)}</div>
         <div class="parole-time-disp">${fmtSec(p.time)}</div>
-        <div style="font-size:.7rem;color:${warn?'var(--terra)':'var(--gray)'};margin-top:4px;font-weight:${warn?'600':'400'}">${pct}% du total${warn?' ⚠':''}</div>
+        <div class="parole-pct${warn?' warn':''}">${pct}% du total${warn?' ⚠':''}</div>
         <div class="parole-bar-wrap"><div class="parole-bar${warn?' warn':''}" style="width:${pct}%"></div></div>
       </div>`;
     }).join('');
@@ -1366,13 +1430,15 @@ const PA = {
     cards[i].querySelector('.parole-time-disp').textContent=fmtSec(p.time);
     cards[i].querySelector('.parole-bar').style.width=pct+'%';
     cards[i].querySelector('.parole-bar').className='parole-bar'+(warn?' warn':'');
-    cards[i].querySelector('[style*="du total"]').textContent=pct+'% du total';
+    const pctEl=cards[i].querySelector('.parole-pct');
+    pctEl.textContent=pct+'% du total'+(warn?' ⚠':'');
+    pctEl.classList.toggle('warn',warn);
   },
   updateTotals(){
     const el=document.getElementById('parole-totals');
     const tot=PA.total();
     el.innerHTML=`<div><span class="fw6">Total : </span>${fmtSec(tot)}</div>`+
-      PA.parts.map(p=>`<div><span style="color:var(--gray)">${p.name}</span> : ${fmtSec(p.time)} (${Math.round(p.time/(tot||1)*100)}%)</div>`).join('');
+      PA.parts.map(p=>`<div><span style="color:var(--gray)">${escHtml(p.name)}</span> : ${fmtSec(p.time)} (${Math.round(p.time/(tot||1)*100)}%)</div>`).join('');
   }
 };
 function paroleAdd(){ const inp=document.getElementById('parole-inp'); PA.add(inp.value); inp.value=''; }
@@ -1407,8 +1473,46 @@ function fmtSec(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
 // ════════════════════════════════════════════════════
 const SEQ = {
   phases:[], curIdx:0, remaining:0, running:false, iv:null,
-  addPhase(){ SEQ.phases.push({id:Date.now(),name:'Phase '+(SEQ.phases.length+1),duration:10}); seqRender(); },
-  removePhase(id){ SEQ.phases=SEQ.phases.filter(p=>p.id!==id); seqRender(); },
+  save(){ try{localStorage.setItem('fk-seq',JSON.stringify(SEQ.phases.map(p=>({id:p.id,name:p.name,duration:p.duration}))));}catch(e){} },
+  load(){
+    try{
+      const s=JSON.parse(localStorage.getItem('fk-seq')||'null');
+      if(Array.isArray(s)) SEQ.phases=s.map((p,i)=>({id:p.id||Date.now()+i,name:String(p.name||''),duration:Math.max(1,parseInt(p.duration)||1)}));
+    }catch(e){}
+  },
+  persist(){
+    if(!appReady) return;
+    LIVE.set('fk-live-seq',SEQ.remaining>0?{curIdx:SEQ.curIdx,remaining:SEQ.remaining,running:SEQ.running,
+      endAt:SEQ.running?Date.now()+SEQ.remaining*1000:null}:null);
+  },
+  // Reprend la séquence là où elle en était, en rattrapant les phases écoulées pendant l'absence
+  restore(){
+    const s=LIVE.get('fk-live-seq');
+    if(!s||!SEQ.phases.length||!(s.curIdx<SEQ.phases.length)) return false;
+    let idx=s.curIdx, left=Math.max(0,parseInt(s.remaining)||0)*1000;
+    if(s.running&&s.endAt){
+      let end=s.endAt; const now=Date.now();
+      while(end<=now){
+        idx++;
+        if(idx>=SEQ.phases.length){ LIVE.set('fk-live-seq',null); return false; }
+        end+=SEQ.phases[idx].duration*60000;
+      }
+      left=end-now;
+    }
+    SEQ.curIdx=idx; SEQ.remaining=Math.ceil(left/1000);
+    if(SEQ.remaining<=0) return false;
+    if(s.running){ SEQ.running=true; clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,1000); }
+    document.getElementById('seq-toggle-btn').textContent=SEQ.running?'⏸':'▶';
+    seqRender(); seqUpdateDisplay();
+    return SEQ.running;
+  },
+  addPhase(){ SEQ.phases.push({id:Date.now(),name:'Phase '+(SEQ.phases.length+1),duration:10}); SEQ.save(); seqRender(); },
+  removePhase(id){ SEQ.phases=SEQ.phases.filter(p=>p.id!==id); SEQ.save(); seqRender(); },
+  edit(i,field,val){
+    if(!SEQ.phases[i]) return;
+    SEQ.phases[i][field]=field==='duration'?Math.max(1,parseInt(val)||1):val;
+    SEQ.save(); seqRender();
+  },
   start(){
     if(!SEQ.phases.length) return;
     SEQ.curIdx=0; SEQ.running=false; clearInterval(SEQ.iv);
@@ -1423,6 +1527,7 @@ const SEQ = {
     animPulse(document.getElementById('seq-current-name'));
     if(projTool==='sequence') animPulse(document.getElementById('proj-s-name'));
     document.getElementById('seq-toggle-btn').textContent='⏸';
+    SEQ.persist();
   },
   tick(){
     SEQ.remaining--;
@@ -1432,10 +1537,11 @@ const SEQ = {
   toggle(){
     if(!SEQ.running&&SEQ.remaining>0){ SEQ.running=true; SEQ.iv=setInterval(SEQ.tick,1000); document.getElementById('seq-toggle-btn').textContent='⏸'; }
     else { SEQ.running=false; clearInterval(SEQ.iv); document.getElementById('seq-toggle-btn').textContent='▶'; }
+    SEQ.persist();
   },
   skip(){ clearInterval(SEQ.iv); beep(SND_PHASE); SEQ.loadPhase(SEQ.curIdx+1); },
-  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='▶'; },
-  end(){ SEQ.running=false; beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='✓ Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
+  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='▶'; SEQ.persist(); },
+  end(){ SEQ.running=false; SEQ.remaining=0; SEQ.persist(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='✓ Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
 };
 const SEQ_TEMPLATES = {
   retro: {name:'Rétrospective agile', phases:[['Accueil & météo',5],['Ce qui a bien marché',10],['Ce qui a coincé',10],['Analyse & échanges',15],['Actions à prendre',15],['Clôture & ROTI',5]]},
@@ -1448,7 +1554,7 @@ function seqLoadTemplate(key){
   if(SEQ.phases.length && !confirm(`Remplacer la séquence actuelle par « ${t.name} » ?`)) return;
   SEQ.reset();
   SEQ.phases=t.phases.map(([n,d],i)=>({id:Date.now()+i,name:n,duration:d}));
-  seqRender(); seqUpdateDisplay();
+  SEQ.save(); seqRender(); seqUpdateDisplay();
 }
 function seqStart(){ SEQ.start(); }
 function seqToggle(){ SEQ.toggle(); }
@@ -1470,8 +1576,8 @@ function seqRender(){
   el.innerHTML=SEQ.phases.map((p,i)=>`
     <div class="seq-phase-row${i===SEQ.curIdx&&SEQ.running?' seq-active':i<SEQ.curIdx?' seq-done':''}">
       <div class="seq-num">${i<SEQ.curIdx?'✓':i+1}</div>
-      <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.phases[${i}].name=this.value;seqRender()" placeholder="Nom de la phase">
-      <input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.phases[${i}].duration=parseInt(this.value)||1;seqRender()" title="Durée en minutes"> min
+      <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" placeholder="Nom de la phase">
+      <input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.edit(${i},'duration',this.value)" title="Durée en minutes"> min
       <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})">
         <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
@@ -1495,6 +1601,7 @@ function seqUpdateDisplay(){
   }
   miniSync();
 }
+SEQ.load();
 seqRender();
 seqUpdateDisplay();
 
@@ -1667,8 +1774,7 @@ function planImportFromHash(){
     PL.data={name:data.name||'',date:data.date||'',fac:data.fac||'',loc:data.loc||'',notes:data.notes||'',
       phases:data.phases.map(p=>({id:p.id||Date.now()+Math.random(),name:String(p.name||''),duration:parseInt(p.duration)||0,tool:String(p.tool||''),desc:String(p.desc||'')}))};
     localStorage.setItem('fk-plan',JSON.stringify(PL.data));
-    history.replaceState(null,'',location.pathname);
-    goPanel('planner');
+    goPanel('planner','replace');
     return true;
   }catch(e){ history.replaceState(null,'',location.pathname); return false; }
 }
@@ -1806,13 +1912,24 @@ function toolOpen(id){
     gsap.fromTo('#modal-steps li',{x:-10,opacity:0},{x:0,opacity:1,duration:.3,stagger:.045,ease:'power2.out',clearProps:'all',delay:.1});
     gsap.fromTo('#modal-preview > *',{y:8,opacity:0},{y:0,opacity:1,duration:.3,stagger:.05,ease:'power2.out',clearProps:'all',delay:.15});
   }
-  if(location.hash!=='#outil/'+t.slug) history.replaceState(null,'','#outil/'+t.slug);
+  // Nouvelle entrée d'historique : le bouton Retour referme la fiche
+  if(location.hash!=='#outil/'+t.slug){
+    if(location.hash.startsWith('#outil/')) history.replaceState(null,'','#outil/'+t.slug);
+    else { history.pushState(null,'','#outil/'+t.slug); modalPushed=true; }
+  }
 }
+let modalPushed=false;
 function toolModalClose(e){ if(e.target===document.getElementById('tool-modal')) toolModalCloseBtn(); }
-function toolModalCloseBtn(){
+function toolModalHide(){
   document.getElementById('tool-modal').classList.remove('open');
   document.body.style.overflow='';
-  if(location.hash.startsWith('#outil/')) history.replaceState(null,'',location.pathname);
+}
+function toolModalCloseBtn(){
+  if(!document.getElementById('tool-modal').classList.contains('open')) return;
+  toolModalHide();
+  if(!location.hash.startsWith('#outil/')) return;
+  if(modalPushed){ modalPushed=false; history.back(); }
+  else history.replaceState(null,'',panelUrl(currentPanel));
 }
 function toolPDF(){ if(currentToolId) toolPDFById(currentToolId); }
 function toolPDFById(id){
@@ -1931,6 +2048,16 @@ function parkingPrint(){ PARK.print(); }
 // UTILS
 // ════════════════════════════════════════════════════
 function pad(n){ return String(n).padStart(2,'0'); }
+// Confirmation discrète en bas d'écran, avec action facultative
+let toastTO=null;
+function toast(msg, actLabel, act){
+  const el=document.getElementById('toast'), b=document.getElementById('toast-act');
+  document.getElementById('toast-msg').textContent=msg;
+  b.textContent=actLabel||'';
+  b.onclick=()=>{ el.classList.remove('show'); if(act) act(); };
+  el.classList.add('show');
+  clearTimeout(toastTO); toastTO=setTimeout(()=>el.classList.remove('show'),actLabel?5200:3200);
+}
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 
 // Bandeau éditorial pleine largeur (encre + filet terracotta)
@@ -1990,10 +2117,16 @@ function pdfMetaChips(doc, items, y){
 PL.load();
 homeRefresh();
 RL.load();
-PA.load();
+const paLive = PA.load();
 PARK.load();
 appReady = true;
+// Reprise de ce qui tournait avant le rechargement
+const tLive = T.restore(), sLive = SEQ.restore();
 miniSync();
+{
+  const live = [tLive&&'le minuteur', sLive&&'la séquence', paLive&&'le temps de parole'].filter(Boolean);
+  if (live.length) toast('Reprise en cours : '+live.join(', ').replace(/, ([^,]*)$/,' et $1')+'.');
+}
 themeBtnSync();
 paletteBtnSync();
 // Onboarding première visite
@@ -2005,15 +2138,21 @@ window.onboardDismiss=onboardDismiss;
 try{ if(!localStorage.getItem('fk-onboarded')) document.getElementById('onboard-banner').style.display='block'; }catch(e){}
 
 // ── Routage par hash : #plan=… (import) et #outil/slug (fiche) ──
-function routeFromHash(){
+function routeFromHash(mode){
+  mode=mode||'replace';
   if(location.hash.startsWith('#plan=')){ planImportFromHash(); return; }
   const m=location.hash.match(/^#outil\/(.+)$/);
   if(m){
     const t=TOOLS.find(x=>x.slug===decodeURIComponent(m[1]));
-    if(t){ goPanel('library'); toolOpen(t.id); }
+    if(t){ goPanel('library','none'); toolOpen(t.id); return; }
   }
+  // Une fiche ouverte se referme si l'adresse ne la désigne plus (bouton Retour)
+  if(document.getElementById('tool-modal').classList.contains('open')){ modalPushed=false; toolModalHide(); }
+  const slug=location.hash.replace(/^#/,'');
+  const id=Object.keys(PANEL_SLUGS).find(k=>PANEL_SLUGS[k]===slug);
+  goPanel(id||'home', id ? mode : 'replace');
 }
-window.addEventListener('hashchange',routeFromHash);
+window.addEventListener('popstate',()=>routeFromHash('none'));
 routeFromHash();
 
 // ── PWA : service worker ──
