@@ -296,6 +296,29 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .lib-card-desc{font-size:.82rem;color:var(--ink-s);line-height:1.6;margin-bottom:14px}
 .lib-card-footer{display:flex;gap:8px}
 .lib-card.hidden{display:none}
+.lib-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
+.lib-search{flex:1 1 280px;display:flex;align-items:center;gap:10px;height:44px;padding:0 18px;background:var(--card);border:1.5px solid var(--cream-mid);border-radius:40px;color:var(--gray);transition:border-color var(--tr),box-shadow var(--tr)}
+.lib-search:focus-within,.lib-field:focus-within{border-color:var(--terra);box-shadow:0 0 0 4px rgba(201,107,58,.1)}
+.lib-search svg{width:16px;height:16px;flex-shrink:0}
+.lib-search input{flex:1;min-width:0;border:none;background:none;outline:none;font-size:.9rem}
+.lib-search input::placeholder,.lib-field input::placeholder{color:var(--gray)}
+.lib-field{display:flex;align-items:center;gap:8px;height:44px;padding:0 6px 0 16px;background:var(--card);border:1.5px solid var(--cream-mid);border-radius:40px;font-size:.8rem;font-weight:500;color:var(--ink-s);cursor:text;transition:border-color var(--tr),box-shadow var(--tr)}
+.lib-field svg{width:14px;height:14px;color:var(--gray)}
+.lib-field input{width:58px;height:32px;border:none;border-radius:20px;background:var(--cream);text-align:center;font-size:.88rem;font-weight:600;outline:none;-moz-appearance:textfield}
+.lib-field input::-webkit-inner-spin-button{opacity:.5}
+.lib-seg{display:flex;align-items:center;height:44px;padding:4px;background:var(--card);border:1.5px solid var(--cream-mid);border-radius:40px;gap:2px}
+.lib-seg-label{font-size:.72rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gray);padding:0 8px 0 10px}
+.lib-seg button{height:100%;padding:0 12px;border:none;border-radius:30px;background:none;font-size:.8rem;font-weight:500;color:var(--ink-s);white-space:nowrap;transition:background var(--tr),color var(--tr)}
+.lib-seg button:hover{color:var(--terra)}
+.lib-seg button.active{background:var(--terra);color:#fff}
+.lib-count{display:flex;align-items:center;gap:14px;min-height:28px;margin:-6px 0 16px;font-size:.8rem;color:var(--gray)}
+.lib-count strong{font-family:'Fraunces',serif;font-size:1rem;color:var(--ink)}
+.lib-reset{background:none;border:none;padding:4px 0;font-size:.8rem;font-weight:600;color:var(--terra);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(201,107,58,.35)}
+.lib-reset:hover{text-decoration-color:var(--terra)}
+.lib-reset[hidden]{display:none}
+.lib-empty{grid-column:1/-1;text-align:center;padding:56px 20px;border:1.5px dashed var(--cream-mid);border-radius:var(--r16);color:var(--gray)}
+.lib-empty .es-icon{font-size:2.4rem;margin-bottom:10px}
+.lib-empty p{font-size:.9rem;line-height:1.6;margin-bottom:16px}
 
 /* ── MODAL ── */
 .modal-ov{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
@@ -893,8 +916,21 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel" id="p-library">
       <h1 class="panel-title">Bibliothèque d'outils</h1>
       <p class="panel-sub">48 outils détaillés, classés par phase et besoin. Chaque fiche est téléchargeable en PDF.</p>
+      <div class="lib-toolbar">
+        <label class="lib-search">
+          <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="4.8" stroke="currentColor" stroke-width="1.4"/><path d="M10.6 10.6L14 14" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+          <input type="search" id="lib-q" placeholder="Rechercher un outil, un thème, un mot-clé…" oninput="libRender(false)" aria-label="Rechercher dans la bibliothèque" autocomplete="off">
+        </label>
+        <label class="lib-field" title="Garde les outils adaptés à ce nombre de participants">
+          <svg viewBox="0 0 12 12" fill="none" aria-hidden="true"><circle cx="4.5" cy="3.5" r="1.8" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 9.5c0-2 1.5-3 3-3s3 1 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="4" r="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M11 9.5c0-1.5-1-2.5-2-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          <span>Participants</span>
+          <input type="number" id="lib-grp" min="1" max="999" inputmode="numeric" placeholder="nb" oninput="libRender(false)" aria-label="Nombre de participants">
+        </label>
+        <div class="lib-seg" id="lib-time-filters" role="group" aria-label="Temps disponible"></div>
+      </div>
       <div class="lib-filters" id="lib-phase-filters"></div>
       <div class="lib-filters" id="lib-need-filters"></div>
+      <div class="lib-count" aria-live="polite"><span id="lib-count"></span><button class="lib-reset" id="lib-reset" onclick="libReset()">Réinitialiser les filtres</button></div>
       <div class="lib-grid" id="lib-grid">
         <article class="lib-card" data-phase="production" onclick="toolOpen(1)">
           <div class="tool-phase-badge ph-production">Production</div>
@@ -1990,17 +2026,49 @@ document.getElementById('tools-datalist').innerHTML=TOOLS.map(t=>`<option value=
 
 const PHASE_LABELS = {all:'Toutes phases',avant:'Avant l\'atelier',ouverture:'Ouverture',production:'Production',cloture:'Clôture',apres:'Après l\'atelier'};
 const NEED_LABELS = {all:'Tous besoins',lien:'Créer du lien',idees:'Générer des idées',decision:'Prioriser / décider',conflits:'Gérer les conflits',energie:'Maintenir l\'énergie'};
-let libPhase='all', libNeed='all';
+const TIME_LIMITS = [[0,'Tout'],[15,'≤ 15 min'],[30,'≤ 30 min'],[60,'≤ 60 min']];
+let libPhase='all', libNeed='all', libTime=0;
 
-function libRender(){
+// Recherche : sans accents ni casse, sur le nom, la description et les tags
+function normTxt(s){ return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
+// Fourchette de participants (« 8 à 50 pers. », « 4 à 100+ pers. », « 6 pers. / table »)
+function toolGroupRange(t){
+  const nums=[...String(t.grp).matchAll(/(\d+)(\+?)/g)];
+  if(!nums.length) return [1,Infinity];
+  const min=parseInt(nums[0][1]);
+  if(nums.length>1) return [min, nums[1][2]?Infinity:parseInt(nums[1][1])];
+  return [min, /table/.test(t.grp)?Infinity:min]; // « par table » : autant de tables que nécessaire
+}
+TOOLS.forEach(t=>{ t.hay=normTxt([t.name,t.desc,t.tags.join(' ')].join(' ')); [t.grpMin,t.grpMax]=toolGroupRange(t); });
+function libMatch(t,terms,n){
+  if(libPhase!=='all'&&t.phase!==libPhase) return false;
+  if(libNeed!=='all'&&!t.needs.includes(libNeed)) return false;
+  if(libTime&&t.minDur>libTime) return false;
+  if(n&&(n<t.grpMin||n>t.grpMax)) return false;
+  // Radical léger : « vote » trouve aussi « voting », « voter »
+  return terms.every(w=>{ const r=w.replace(/(es|er|e|s)$/,''); return t.hay.includes(r.length>=3?r:w); });
+}
+
+function libRender(animate){
   // Filters
   const pf=document.getElementById('lib-phase-filters');
   pf.innerHTML=Object.entries(PHASE_LABELS).map(([k,v])=>`<button class="pill${libPhase===k?' active':''}" data-phase="${k}" onclick="libSetPhase('${k}')">${v}</button>`).join('');
   const nf=document.getElementById('lib-need-filters');
   nf.innerHTML=Object.entries(NEED_LABELS).map(([k,v])=>`<button class="pill${libNeed===k?' active':''}" onclick="libSetNeed('${k}')">${v}</button>`).join('');
+  document.getElementById('lib-time-filters').innerHTML='<span class="lib-seg-label">Durée</span>'+
+    TIME_LIMITS.map(([m,l])=>`<button class="${libTime===m?'active':''}" aria-pressed="${libTime===m}" onclick="libSetTime(${m})">${l}</button>`).join('');
   // Cards
+  const q=document.getElementById('lib-q').value, n=parseInt(document.getElementById('lib-grp').value)||0;
+  const terms=normTxt(q).split(/\s+/).filter(Boolean);
   const grid=document.getElementById('lib-grid');
-  const filtered=TOOLS.filter(t=>(libPhase==='all'||t.phase===libPhase)&&(libNeed==='all'||t.needs.includes(libNeed)));
+  const filtered=TOOLS.filter(t=>libMatch(t,terms,n));
+  const active=terms.length||n||libTime||libPhase!=='all'||libNeed!=='all';
+  document.getElementById('lib-count').innerHTML=`<strong>${filtered.length}</strong> outil${filtered.length>1?'s':''}${active?' sur '+TOOLS.length:''}`;
+  document.getElementById('lib-reset').hidden=!active;
+  if(!filtered.length){
+    grid.innerHTML=`<div class="lib-empty"><div class="es-icon">🔍</div><p>Aucun outil ne correspond à ces critères.<br>Élargis la durée, le nombre de participants ou la recherche.</p><button class="btn btn-secondary btn-sm" onclick="libReset()">Réinitialiser les filtres</button></div>`;
+    return;
+  }
   grid.innerHTML=filtered.map(t=>`
     <div class="lib-card" data-phase="${t.phase}" onclick="toolOpen(${t.id})">
       <div class="tool-phase-badge ph-${t.phase}">${t.phaseLabel}</div>
@@ -2015,10 +2083,16 @@ function libRender(){
         <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})">⬇ PDF</button>
       </div>
     </div>`).join('');
-  animGrid(grid,'.lib-card');
+  if(animate!==false) animGrid(grid,'.lib-card');
 }
 function libSetPhase(v){ libPhase=v; libRender(); }
 function libSetNeed(v){ libNeed=v; libRender(); }
+function libSetTime(v){ libTime=v; libRender(); }
+function libReset(){
+  libPhase='all'; libNeed='all'; libTime=0;
+  document.getElementById('lib-q').value=''; document.getElementById('lib-grp').value='';
+  libRender();
+}
 
 let currentToolId = null;
 function toolOpen(id){
