@@ -64,7 +64,74 @@ const needUrl = k => `/outils/besoin/${NEEDS[k].slug}/`;
 
 // ── Gabarit commun ──
 const SUN = '<svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="8" cy="8" r="3" fill="white"/><path d="M8 1.5V3M8 13v1.5M1.5 8H3M13 8h1.5M3.1 3.1l1.1 1.1M11.8 11.8l1.1 1.1M3.1 12.9l1.1-1.1M11.8 4.2l1.1-1.1" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>';
-export const LIVE_LINKS = [];   // complété par les pages outils live (partie 2)
+// ── Outils live : une page d'atterrissage par outil de l'application ──
+const LIVE = [
+  { slug: 'minuteur-atelier', short: 'Minuteur', app: '#minuteur', cta: 'Lancer le minuteur',
+    title: 'Minuteur atelier en ligne gratuit, en plein écran',
+    h1: "Un minuteur d'atelier visible depuis le fond de la salle",
+    lede: "Anneau de progression coloré, durées prêtes à l'emploi, plein écran pour projeter et alarme de fin. Lance un décompte en un clic, sans compte ni installation.",
+    description: "Minuteur visuel pour animer ateliers et réunions : anneau coloré, durées de 2 à 30 min, plein écran pour projeter, alarme. Gratuit, sans compte, hors ligne.",
+    steps: ['Choisis une durée : 2, 5, 10, 15, 20, 30 minutes ou une durée libre.', "Ajoute un libellé si tu veux, par exemple « Travail en sous-groupes ».", 'Lance le décompte avec le bouton Démarrer ou la barre Espace.', 'Passe en plein écran avec la touche F pour projeter le décompte.'],
+    features: [['Un code couleur lisible', "L'anneau passe du vert à l'or, puis au terracotta et au rouge à l'approche de la fin."], ['Exact en arrière-plan', 'Le décompte reste juste même quand tu bascules sur tes slides ou ta visio.'], ['Écran toujours allumé', "L'ordinateur ne se met pas en veille pendant le décompte."], ['Reprise après rechargement', 'Une fausse manipulation ? Le minuteur reprend exactement où il en était.']],
+    faq: [['Le minuteur fonctionne-t-il hors ligne ?', 'Oui. Une fois le site ouvert une première fois, il fonctionne sans connexion.'], ['Faut-il créer un compte ?', "Non. Tout fonctionne directement dans ton navigateur, sans inscription."], ['Peut-on l\'utiliser en visio ?', "Oui : passe en plein écran et partage cette fenêtre. Les participants voient le décompte et sa couleur."]],
+    related: ['1-2-4-all', 'crazy-8s', 'brainwriting-6-3-5'] },
+  { slug: 'tirage-au-sort-participants', short: 'Tirage au sort', app: '#roulette', cta: 'Lancer la roulette',
+    title: 'Tirage au sort de participants : roulette en ligne gratuite',
+    h1: 'Tirer au sort un participant, sans biais et sans débat',
+    lede: "Colle la liste du groupe, lance la roulette et laisse le hasard désigner qui commence, qui rapporte ou qui pose la première question. Mode projection inclus.",
+    description: "Roulette en ligne pour tirer au sort un participant : liste collée en un clic, retrait après tirage, historique, mode projection. Gratuit, sans compte.",
+    steps: ['Ajoute les prénoms un par un ou colle une liste, un nom par ligne.', 'Lance la roulette : le nom tiré s\'affiche en grand.', 'Coche « Retirer après le tirage » pour ne jamais tirer deux fois la même personne.', 'Passe en mode projection pour que tout le groupe suive le tirage.'],
+    features: [['Équitable', 'Chaque participant a exactement la même chance d\'être tiré.'], ['Historique', 'Les derniers tirages restent affichés et sont conservés.'], ['Pensé pour la salle', 'Le mode projection affiche le nom en très grand, la barre Espace relance.'], ['Confidentiel', 'Les noms restent dans ton navigateur, rien n\'est envoyé.']],
+    faq: [['À quoi sert un tirage au sort en atelier ?', "À désigner qui commence un tour de table, choisir des rapporteurs ou former des groupes sans que le facilitateur paraisse favoriser quelqu'un."], ['Les noms sont-ils enregistrés en ligne ?', 'Non. Ils restent uniquement dans ton navigateur.'], ['Peut-on tirer plusieurs personnes à la suite ?', 'Oui. Active le retrait après tirage et relance autant de fois que nécessaire.']],
+    related: ['check-in-meteo', 'cercle-d-inclusion', 'deux-verites-un-mensonge'] },
+  { slug: 'temps-de-parole', short: 'Temps de parole', app: '#parole', cta: 'Mesurer le temps de parole',
+    title: 'Mesurer le temps de parole en réunion : outil gratuit',
+    h1: 'Rendre visible qui parle, et combien de temps',
+    lede: "Un chrono par participant, la part de chacun en temps réel et une alerte quand une voix dépasse 40 %. Pour réguler sans avoir à couper la parole.",
+    description: "Mesure le temps de parole de chaque participant en réunion : chrono individuel, pourcentage en direct, raccourcis clavier, projection et export PDF. Gratuit.",
+    steps: ['Ajoute les participants.', 'Quand quelqu\'un parle, clique sur sa carte ou appuie sur son numéro (1 à 9).', 'Appuie sur 0 pour tout arrêter pendant un silence ou une pause.', 'Exporte le bilan en PDF à la fin de la réunion.'],
+    features: [['En direct', 'Temps et pourcentage de chacun se mettent à jour à chaque seconde.'], ['Alerte de déséquilibre', 'Une carte passe en terracotta quand une personne dépasse 40 % du temps total.'], ['Au clavier', 'Les touches 1 à 9 suffisent pour suivre la discussion sans quitter le groupe des yeux.'], ['Projection et PDF', 'Affiche les temps à tout le groupe, puis garde une trace du bilan.']],
+    faq: [['Pourquoi mesurer le temps de parole ?', "Parce que les déséquilibres sont presque toujours invisibles pour ceux qui parlent le plus. Les rendre visibles suffit souvent à les corriger."], ['Faut-il le montrer aux participants ?', "C'est un choix : affiché, il pousse à l'autorégulation ; gardé pour toi, il t'aide à distribuer la parole."], ['Le suivi est-il perdu si je recharge la page ?', 'Non. Les temps sont conservés et le chrono en cours reprend.']],
+    related: ['fishbowl', 'cercle-d-inclusion', '1-2-4-all'] },
+  { slug: 'sequence-de-timers', short: 'Séquence', app: '#sequence', cta: 'Créer une séquence',
+    title: 'Séquence de timers : enchaîne les phases de ton atelier',
+    h1: "Toutes les phases de ton atelier, minutées et enchaînées",
+    lede: "Construis la suite de tes activités, lance-la, et la séquence passe d'elle-même à la phase suivante avec une alerte sonore. Tu animes, elle garde le temps.",
+    description: "Enchaîne automatiquement les phases minutées d'un atelier : modèles prêts (rétro, brainstorming, réunion), alerte sonore, projection avec phase suivante. Gratuit.",
+    steps: ['Pars d\'un modèle (rétrospective, brainstorming, réunion, ouverture) ou crée tes phases.', 'Réorganise-les par glisser-déposer et ajuste les durées.', 'Lance la séquence : chaque phase démarre à la fin de la précédente.', 'Projette-la : le groupe voit la phase en cours et celle qui suit.'],
+    features: [['Modèles prêts', 'Quatre déroulés classiques à lancer en un clic.'], ['Passage automatique', 'Alerte sonore et phase suivante, sans intervention.'], ['Depuis ton plan', 'Le planificateur transforme ton déroulé en séquence en un clic.'], ['Fiable', 'Rattrapage exact si l\'ordinateur se met en veille ou si la page est rechargée.']],
+    faq: [['Quelle différence avec un simple minuteur ?', 'Le minuteur gère une durée ; la séquence gère tout le déroulé et enchaîne les phases sans que tu aies à y penser.'], ['Peut-on mettre en pause ?', 'Oui, et passer directement à la phase suivante si le groupe a fini plus tôt.']],
+    related: ['world-cafe', 'start-stop-continue', 'retrospective-4l'] },
+  { slug: 'planificateur-atelier', short: 'Planificateur', app: '#planificateur', cta: 'Préparer mon atelier',
+    title: "Planificateur d'atelier : construis ton déroulé et exporte-le en PDF",
+    h1: 'Construis le déroulé de ton atelier, phase par phase',
+    lede: "Nom, date, phases, durées et outils : prépare ton atelier, vois l'horaire se calculer, exporte un PDF propre ou partage un lien. Puis lance-le en séquence minutée.",
+    description: "Prépare le déroulé de ton atelier : phases, durées, outils issus de 48 fiches, export PDF, lien de partage et lancement en séquence minutée. Gratuit, sans compte.",
+    steps: ['Donne un nom, une date et un lieu à ton atelier.', 'Ajoute les phases, leur durée et l\'outil utilisé (suggestions parmi 48 fiches).', 'Réorganise par glisser-déposer : la durée totale se met à jour.', 'Exporte en PDF, partage un lien, ou lance le déroulé en séquence.'],
+    features: [['Plusieurs plans', 'Garde, duplique et retrouve tous tes déroulés.'], ['Export PDF', 'Un document avec horaires cumulés, prêt à envoyer à ton commanditaire.'], ['Lien de partage', 'Ton plan s\'ouvre chez ton co-animateur, sans compte.'], ['Préparer puis animer', 'Un clic transforme le plan en séquence minutée.']],
+    faq: [['Mes plans sont-ils sauvegardés ?', 'Oui, automatiquement dans ton navigateur. Tu peux en garder plusieurs.'], ['Comment partager un plan ?', 'Le bouton « Partager le lien » copie une adresse qui contient tout le plan. La personne qui l\'ouvre le retrouve dans ses propres plans.']],
+    related: ['canvas-des-7p', 'cartographie-des-parties-prenantes', 'plan-d-action-post'] },
+  { slug: 'chronometre-atelier', short: 'Chronomètre', app: '#chronometre', cta: 'Lancer le chronomètre',
+    title: 'Chronomètre en ligne avec tours, pour ateliers et réunions',
+    h1: 'Un chronomètre avec tours pour mesurer chaque prise de parole',
+    lede: "Mesure une durée libre au centième, enregistre des tours et garde l'historique : pratique pour les pitchs, les tours de table et le co-développement.",
+    description: "Chronomètre en ligne au centième avec tours et historique : idéal pour tours de table, pitchs et co-développement. Raccourcis clavier, gratuit, sans compte.",
+    steps: ['Lance le chronomètre avec Démarrer ou la barre Espace.', 'Appuie sur Tour (touche L) à chaque changement d\'intervenant.', 'Consulte le temps de chaque tour et le temps cumulé.', 'Remets à zéro avec la touche R.'],
+    features: [['Au centième', 'Une mesure précise, affichée en grand.'], ['Tours enregistrés', 'Temps de chaque tour et temps cumulé, du plus récent au plus ancien.'], ['Au clavier', 'Espace, L et R : tout se pilote sans souris.']],
+    faq: [['Chronomètre ou minuteur ?', 'Le chronomètre mesure une durée qui s\'écoule ; le minuteur décompte une durée fixée à l\'avance.']],
+    related: ['troika-consulting', 'wise-crowds', 'impromptu-networking'] },
+  { slug: 'parking-a-idees', short: "Parking à idées", app: '#parking', cta: 'Ouvrir le parking',
+    title: 'Parking à idées : capture les sujets hors sujet en atelier',
+    h1: 'Le parking : accueillir chaque idée sans perdre le fil',
+    lede: "Une remarque intéressante mais hors sujet ? Gare-la au parking. Idées, questions, actions et blocages restent visibles, puis s'exportent en PDF en fin de séance.",
+    description: "Parking à idées pour atelier : capture idées, questions, actions et blocages hors sujet sans couper le fil, puis exporte-les en PDF. Gratuit, sans compte.",
+    steps: ['Note l\'idée en une phrase.', 'Choisis sa catégorie : idée, question, action ou blocage.', 'Reviens-y en fin d\'atelier pour décider de leur suite.', 'Exporte le parking en PDF pour le compte rendu.'],
+    features: [['Quatre catégories', 'Chaque note a sa couleur pour un tri immédiat.'], ['Horodaté', 'Chaque note garde l\'heure à laquelle elle a été garée.'], ['Export PDF', 'Le parking complet, prêt à joindre au compte rendu.']],
+    faq: [['Pourquoi un parking en atelier ?', "Il permet de reconnaître une contribution sans dévier de l'objectif. La personne se sent entendue, et le groupe garde son cap."]],
+    related: ['diagramme-d-affinites', 'plan-d-action-post', 'what-so-what-now-what'] },
+];
+LIVE.forEach(l => { l.url = `/${l.slug}/`; });
+const LIVE_LINKS = LIVE;
 
 function header(current) {
   const nav = [['/outils/', 'Fiches outils', true], ...LIVE_LINKS.slice(0, 3).map(l => [l.url, l.short])];
@@ -255,11 +322,49 @@ function categoryPage(kind, key, def, tools) {
 for (const k of Object.keys(PHASES)) categoryPage('moment', k, PHASES[k], TOOLS.filter(t => t.phase === k));
 for (const k of Object.keys(NEEDS)) categoryPage('besoin', k, NEEDS[k], TOOLS.filter(t => t.needs.includes(k)));
 
+// ── Pages outils live ──
+const bySlug = Object.fromEntries(TOOLS.map(t => [t.slug, t]));
+for (const l of LIVE) {
+  const rel = l.related.map(s => { if (!bySlug[s]) throw new Error(`Fiche inconnue dans ${l.slug} : ${s}`); return bySlug[s]; });
+  const trail = [['/', 'Accueil'], [null, l.short]];
+  const body = `${crumbs(trail)}
+<header class="hero wrap">
+  <span class="kicker">Outil gratuit · sans compte · hors ligne</span>
+  <h1>${esc(l.h1)}</h1>
+  <p class="lede">${esc(l.lede)}</p>
+  <div class="hero-cta"><a class="btn btn-primary btn-lg" href="/${l.app}">${esc(l.cta)}</a><a class="btn btn-ghost btn-lg" href="/outils/">Voir les ${TOOLS.length} fiches</a></div>
+</header>
+<section class="block"><div class="wrap">
+  <div class="block-head"><h2>Comment ça marche</h2></div>
+  <ol class="howto">${l.steps.map(s => `<li>${esc(s)}</li>`).join('')}</ol>
+</div></section>
+<section class="block" style="padding-top:0"><div class="wrap">
+  <div class="block-head"><h2>Pensé pour l'animation</h2></div>
+  <div class="feature-grid">${l.features.map(([h, p]) => `<div class="feature"><h3>${esc(h)}</h3><p>${esc(p)}</p></div>`).join('')}</div>
+</div></section>
+<section class="block" style="padding-top:0"><div class="wrap">
+  <div class="block-head"><h2>Questions fréquentes</h2></div>
+  <div class="faq">${l.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('')}</div>
+</div></section>
+<section class="block" style="background:var(--cream-dark)"><div class="wrap">
+  <div class="block-head"><h2>Des fiches pour aller avec</h2><div class="chips">${LIVE.filter(o => o !== l).map(o => `<a class="chip" href="${o.url}">${esc(o.short)}</a>`).join('')}</div></div>
+  <div class="cards">${rel.map(card).join('')}</div>
+</div></section>
+<div class="wrap"><div class="band"><div><h2>${esc(l.cta)} maintenant</h2><p>Gratuit, sans inscription, et ça marche même hors ligne.</p></div><a class="btn btn-primary btn-lg" href="/${l.app}">${esc(l.cta)}</a></div></div>`;
+  const appLd = { '@context': 'https://schema.org', '@type': 'WebApplication', name: `${l.short} · ${BRAND}`, url: SITE + l.url,
+    description: l.description, applicationCategory: 'BusinessApplication', operatingSystem: 'Web', inLanguage: 'fr-FR',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' } };
+  const faqLd = { '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: l.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
+  write(l.url, page({ path: l.url, current: l.url, title: `${l.title} | ${BRAND}`, description: l.description,
+    image: `/assets/og/${l.slug}.png`, body, jsonld: [appLd, faqLd, crumbsLd(trail)] }));
+}
+
 // ── Sitemap ──
 const urls = ['/', ...written];
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${urls.map(u => `  <url><loc>${SITE}${u}</loc><lastmod>${TODAY}</lastmod><priority>${u === '/' ? '1.0' : u === '/outils/' ? '0.9' : '0.7'}</priority></url>`).join('\n')}
+${urls.map(u => `  <url><loc>${SITE}${u}</loc><lastmod>${TODAY}</lastmod><priority>${u === '/' ? '1.0' : u === '/outils/' ? '0.9' : LIVE.some(l => l.url === u) ? '0.8' : '0.7'}</priority></url>`).join('\n')}
 </urlset>
 `);
 console.log(`${written.length} pages générées, sitemap : ${urls.length} adresses.`);
