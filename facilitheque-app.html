@@ -1951,7 +1951,8 @@ function seqLoadTemplate(key){
   SEQ.save(); seqRender(); seqUpdateDisplay();
 }
 function seqStart(){ SEQ.start(); }
-function seqToggle(){ SEQ.toggle(); }
+// Rien en cours ni en pause : le bouton ▶ lance la séquence (comme la barre Espace)
+function seqToggle(){ if(!SEQ.running&&SEQ.remaining<=0) SEQ.start(); else SEQ.toggle(); }
 function seqSkip(){ SEQ.skip(); }
 function seqReset(){ SEQ.reset(); }
 function seqAddPhase(){ SEQ.addPhase(); }
@@ -1981,12 +1982,14 @@ function seqRender(){
 function seqUpdateDisplay(){
   const ph=SEQ.phases[SEQ.curIdx];
   document.getElementById('seq-current-name').textContent=ph?ph.name:'—';
-  document.getElementById('seq-display').textContent=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'—';
+  // Avant le lancement : durée de la phase à venir plutôt qu'un tiret
+  const shown=SEQ.remaining>0?SEQ.remaining:(ph?(parseInt(ph.duration)||0)*60:0);
+  const timeStr=shown>0?`${pad(Math.floor(shown/60))}:${pad(shown%60)}`:'—';
+  document.getElementById('seq-display').textContent=timeStr;
   if(ph){ const pct=SEQ.remaining/(ph.duration*60)*100; document.getElementById('seq-prog-fill').style.width=pct+'%'; }
   document.getElementById('seq-progress-label').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'—';
   // Miroir projection
   if(projTool==='sequence'){
-    const timeStr=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'—';
     const prog=ph&&SEQ.remaining>0?SEQ.remaining/(ph.duration*60):1;
     const next=SEQ.phases[SEQ.curIdx+1];
     const both=(id,v,html)=>{ document.getElementById(id)[html?'innerHTML':'textContent']=v; };
@@ -1995,7 +1998,7 @@ function seqUpdateDisplay(){
     both('proj-s-time',timeStr);
     both('proj-s-next',next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':''));
     tideSet(document.getElementById('proj-sequence'),prog);
-    document.getElementById('proj-s-toggle').textContent=SEQ.running?'⏸ Pause':'▶ Reprendre';
+    document.getElementById('proj-s-toggle').textContent=SEQ.running?'⏸ Pause':SEQ.remaining>0?'▶ Reprendre':'▶ Lancer';
     // Frise du déroulé : chaque phase a une largeur proportionnelle à sa durée
     const live=SEQ.remaining>0;
     both('proj-s-road',SEQ.phases.map((p,i)=>{
