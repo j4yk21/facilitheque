@@ -144,6 +144,12 @@ img,svg{display:block;max-width:100%}
 .site-foot ul{list-style:none;display:flex;flex-direction:column;gap:7px}
 .site-foot a{text-decoration:none}.site-foot a:hover{color:#F5F0E8}
 .site-foot .brand{margin-bottom:12px}
+.link-btn{background:none;border:none;padding:0;font:inherit;color:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+.link-btn:hover{color:#F5F0E8}
+.prose{max-width:720px;padding-bottom:64px}
+.prose h2{font-size:1.4rem;margin:36px 0 10px}
+.prose p,.prose li{color:var(--ink-s);margin-bottom:10px}
+.prose ul{padding-left:20px}
 .foot-bottom{margin-top:40px;padding-top:20px;border-top:1px solid rgba(255,255,255,.08);font-size:.78rem;color:rgba(245,240,232,.35)}
 @media(max-width:820px){.foot-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.foot-grid{grid-template-columns:1fr}}

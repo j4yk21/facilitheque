@@ -75,6 +75,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
+<script defer src="/assets/analytics.js"></script>
 <style>
 :root{--cream:#F5F0E8;--cream-dark:#EBE4D6;--cream-mid:#E0D8C8;--terra:#C96B3A;--terra-d:#A8542A;--sage:#6B8F71;--sage-d:#4E6E54;--ink:#1A1A1A;--ink-s:#3D3730;--gray:#8A8078;--gold:#C4943A;--blue:#5B7FA6;--red:#B85450;--r8:8px;--r12:12px;--r16:16px;--r24:24px;--sh:0 4px 20px rgba(0,0,0,.09);--sh2:0 12px 40px rgba(0,0,0,.13);--card:#fff;--card-line:var(--cream-dark);--tr:.22s cubic-bezier(.4,0,.2,1)}
 
@@ -122,6 +123,9 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .nav-item.active svg{opacity:1}
 .sb-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07)}
 .sb-footer p{font-size:.7rem;color:rgba(245,240,232,.2);line-height:1.5}
+.sb-legal{margin-top:6px}
+.sb-legal a,.sb-legal button{color:rgba(245,240,232,.4);font-size:.7rem;background:none;border:none;padding:0;text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(245,240,232,.2)}
+.sb-legal a:hover,.sb-legal button:hover{color:#F5F0E8}
 
 /* ── MINI-TIMER PERSISTANT ── */
 #sb-mini-timer{display:none;margin:8px;padding:10px 12px;background:rgba(201,107,58,.16);border:1px solid rgba(201,107,58,.35);border-radius:var(--r12);cursor:pointer;transition:all var(--tr);align-items:center;gap:10px;width:calc(100% - 16px);text-align:left}
@@ -616,6 +620,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       </div>
       <button id="theme-toggle" onclick="themeToggle()" title="Basculer clair / sombre" style="width:100%;margin-bottom:10px;padding:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r8);color:rgba(245,240,232,.7);font-size:.75rem;cursor:pointer;transition:background .2s">🌙 Mode sombre</button>
       <p>Facilithèque · Open source<br>Fait pour les facilitateurs</p>
+      <p class="sb-legal"><a href="/confidentialite/">Confidentialité</a> · <button type="button" onclick="window.fkConsentReset&&fkConsentReset()">Cookies</button></p>
     </div>
   </aside>
 
@@ -1249,6 +1254,11 @@ const LIVE = {
   set(k,v){ try{ v==null ? localStorage.removeItem(k) : localStorage.setItem(k,JSON.stringify(v)); }catch(e){} }
 };
 
+// ── Mesure d'audience (assets/analytics.js, après accord du visiteur) ──
+// Ignorée pendant la reprise au chargement pour ne compter que les actions réelles.
+let trackReady=false;
+function track(name,params){ if(trackReady&&window.fkTrack) window.fkTrack(name,params); }
+
 // Icônes des poignées de réorganisation (utilisées dès le premier rendu)
 const SVG_UP='<svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5L5 3.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const SVG_DOWN='<svg viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1289,6 +1299,7 @@ const T = {
   toggle(){ T.remaining>0 && (T.running ? T.pause() : T.start()); },
   start(){
     if(T.remaining<=0) return;
+    if(T.remaining===T.total) track('timer_start',{minutes:Math.round(T.total/60)});
     T.endAt=Date.now()+(T.msLeft>0?T.msLeft:T.remaining*1000);
     T.running=true; clearInterval(T.iv); T.iv=setInterval(T.tick,250);
     T.updateBtn(); T.setRingClass('running'); T.persist(); WL.sync();
@@ -1370,7 +1381,7 @@ function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-m
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
 function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; T.persist(); }
-function fsOpen(){ document.getElementById('fs-ov').classList.add('open'); animOverlay(document.getElementById('fs-ov')); WL.sync(); }
+function fsOpen(){ track('projection_open',{tool:'timer'}); document.getElementById('fs-ov').classList.add('open'); animOverlay(document.getElementById('fs-ov')); WL.sync(); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); WL.sync(); }
 
 // ── Mini-timer persistant (sidebar) ──
@@ -1426,6 +1437,7 @@ function themeBtnSync(){
 // ── Mode projection ──
 let projTool=null;
 function projOpen(tool){
+  track('projection_open',{tool});
   projTool=tool;
   document.querySelectorAll('.proj-pane').forEach(p=>p.classList.remove('active'));
   document.getElementById('proj-'+tool).classList.add('active');
@@ -1523,6 +1535,7 @@ const RL = {
   },
   spin(){
     if(RL.names.length===0) return;
+    track('roulette_spin',{participants:RL.names.length});
     const slot=document.getElementById('roulette-slot');
     slot.className='roulette-slot';
     const remove=document.getElementById('roulette-remove').checked;
@@ -1655,6 +1668,7 @@ function paroleAdd(){ const inp=document.getElementById('parole-inp'); PA.add(in
 function paroleKeydown(e){ if(e.key==='Enter') paroleAdd(); }
 function paroleReset(){ PA.reset(); }
 function parolePrint(){
+  track('parole_export',{participants:PA.parts.length});
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF('p','mm','a4');
   const M=20, tot=PA.total();
@@ -1744,6 +1758,7 @@ const SEQ = {
   },
   start(){
     if(!SEQ.phases.length) return;
+    track('sequence_start',{phases:SEQ.phases.length});
     SEQ.loadPhase(0);
   },
   loadPhase(i,startAt){
@@ -1946,6 +1961,7 @@ const PL = {
     PL.updateTotal();
   },
   exportPDF(){
+    track('plan_pdf',{phases:PL.data.phases.length});
     const {jsPDF}=window.jspdf;
     const doc=new jsPDF('p','mm','a4');
     const d=PL.data, W=210, M=20;
@@ -2049,6 +2065,7 @@ function plannerToSequence(){
   SEQ.reset();
   SEQ.phases=phases.map((p,i)=>({id:Date.now()+i,name:p.name||p.tool||'Phase '+(i+1),duration:parseInt(p.duration)}));
   SEQ.save();
+  track('plan_to_sequence',{phases:phases.length});
   goPanel('sequence');
   toast(`${phases.length} phase${phases.length>1?'s':''} prête${phases.length>1?'s':''}. Lance la séquence quand tu veux.`);
 }
@@ -2066,6 +2083,7 @@ function plannerShare(){
   if(!PL.data.name && !PL.data.phases.length){ alert('Ton plan est vide — ajoute au moins un nom ou une phase avant de le partager.'); return; }
   const {name,date,fac,loc,notes,phases}=PL.data;
   const url=`${location.origin}${location.pathname}#plan=${planEncode({name,date,fac,loc,notes,phases:phases.map(({name,duration,tool,desc})=>({name,duration,tool,desc}))})}`;
+  track('plan_share',{phases:PL.data.phases.length});
   const btn=document.getElementById('plan-share-btn');
   const done=()=>{ btn.textContent='✓ Lien copié !'; setTimeout(()=>btn.textContent='🔗 Partager le lien',2200); };
   if(navigator.clipboard&&navigator.clipboard.writeText){
@@ -2179,7 +2197,7 @@ document.getElementById('tools-datalist').innerHTML=TOOLS.map(t=>`<option value=
 const PHASE_LABELS = {all:'Toutes phases',avant:'Avant l\'atelier',ouverture:'Ouverture',production:'Production',cloture:'Clôture',apres:'Après l\'atelier'};
 const NEED_LABELS = {all:'Tous besoins',lien:'Créer du lien',idees:'Générer des idées',decision:'Prioriser / décider',conflits:'Gérer les conflits',energie:'Maintenir l\'énergie'};
 const TIME_LIMITS = [[0,'Tout'],[15,'≤ 15 min'],[30,'≤ 30 min'],[60,'≤ 60 min']];
-let libPhase='all', libNeed='all', libTime=0;
+let libPhase='all', libNeed='all', libTime=0, libTrackTO=null;
 
 // Recherche : sans accents ni casse, sur le nom, la description et les tags
 function normTxt(s){ return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
@@ -2214,6 +2232,9 @@ function libRender(animate){
   const terms=normTxt(q).split(/\s+/).filter(Boolean);
   const grid=document.getElementById('lib-grid');
   const filtered=TOOLS.filter(t=>libMatch(t,terms,n));
+  // Recherche mesurée une fois la frappe terminée : révèle les outils que les gens cherchent sans les trouver
+  clearTimeout(libTrackTO);
+  if(terms.length) libTrackTO=setTimeout(()=>track('library_search',{search_term:terms.join(' '),results:filtered.length}),1500);
   const active=terms.length||n||libTime||libPhase!=='all'||libNeed!=='all';
   document.getElementById('lib-count').innerHTML=`<strong>${filtered.length}</strong> outil${filtered.length>1?'s':''}${active?' sur '+TOOLS.length:''}`;
   document.getElementById('lib-reset').hidden=!active;
@@ -2250,6 +2271,7 @@ let currentToolId = null;
 function toolOpen(id){
   const t=TOOLS.find(x=>x.id===id); if(!t) return;
   currentToolId=id;
+  track('tool_open',{tool:t.slug});
   document.getElementById('modal-phase-badge').innerHTML=`<span class="tool-phase-badge ph-${t.phase}">${t.phaseLabel}</span>`;
   document.getElementById('modal-title').textContent=t.name;
   document.getElementById('modal-permalink').href='/outils/'+t.slug+'/';
@@ -2295,6 +2317,7 @@ function toolAddToPlan(){
   PL.load();
   PL.data.phases.push({id:Date.now(),name:t.name,duration:t.minDur,tool:t.name,desc:''});
   PL.persist();
+  track('add_to_plan',{tool:t.slug});
   const plan=PL.data.name?` « ${PL.data.name} »`:'';
   toast(`${t.name} ajouté au plan${plan} (${t.minDur} min).`,'Voir le plan',()=>{
     modalPushed=false; toolModalHide(); goPanel('planner','replace');
@@ -2302,6 +2325,7 @@ function toolAddToPlan(){
 }
 function toolPDFById(id){
   const t=TOOLS.find(x=>x.id===id); if(!t) return;
+  track('tool_pdf',{tool:t.slug});
   const {jsPDF}=window.jspdf;
   const doc=new jsPDF('p','mm','a4');
   const W=210, M=20;
@@ -2410,7 +2434,7 @@ const PARK = {
 function parkingAdd(){ const inp=document.getElementById('parking-inp'),cat=document.getElementById('parking-cat').value; PARK.add(inp.value,cat); inp.value=''; inp.focus(); }
 function parkingKeydown(e){ if(e.key==='Enter') parkingAdd(); }
 function parkingClear(){ PARK.clear(); }
-function parkingPrint(){ PARK.print(); }
+function parkingPrint(){ track('parking_export',{notes:PARK.items.length}); PARK.print(); }
 
 // ════════════════════════════════════════════════════
 // UTILS
@@ -2541,6 +2565,7 @@ appReady = true;
 sortable(document.getElementById('planner-phases'),'.planner-phase-row',(a,b)=>PL.moveTo(a,b));
 sortable(document.getElementById('seq-phases-list'),'.seq-phase-row',(a,b)=>SEQ.moveTo(a,b));
 const tLive = T.restore(), sLive = SEQ.restore();
+trackReady = true;
 miniSync();
 WL.sync();
 // Retour sur l'onglet : affichage à jour tout de suite, et verrou de veille redemandé

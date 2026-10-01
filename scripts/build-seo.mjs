@@ -151,7 +151,7 @@ function footer() {
     <div><h2>Par besoin</h2>${list(Object.keys(NEEDS).map(k => [needUrl(k), NEEDS[k].label]))}</div>
     <div><h2>Outils live</h2>${list(LIVE_LINKS.length ? LIVE_LINKS.map(l => [l.url, l.short]) : [['/', "Ouvrir l'application"]])}</div>
   </div>
-  <p class="foot-bottom">${BRAND} est un projet open source · <a href="https://github.com/j4yk21/facilitheque">Code sur GitHub</a></p>
+  <p class="foot-bottom">${BRAND} est un projet open source · <a href="https://github.com/j4yk21/facilitheque">Code sur GitHub</a> · <a href="/confidentialite/">Confidentialité</a> · <button type="button" class="link-btn" onclick="window.fkConsentReset&&fkConsentReset()">Gérer les cookies</button></p>
 </div></footer>`;
 }
 function page({ path: p, title, description, h = '', body, jsonld = [], current, image = '/assets/og/default.png' }) {
@@ -180,6 +180,7 @@ function page({ path: p, title, description, h = '', body, jsonld = [], current,
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
+<script defer src="/assets/analytics.js"></script>
 <script>try{document.documentElement.dataset.theme=localStorage.getItem('fk-theme')||'';document.documentElement.dataset.palette=localStorage.getItem('fk-palette')||''}catch(e){}</script>
 ${jsonld.map(j => `<script type="application/ld+json">${JSON.stringify(j)}</script>`).join('\n')}${h}
 </head>
@@ -358,6 +359,34 @@ for (const l of LIVE) {
     mainEntity: l.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) };
   write(l.url, page({ path: l.url, current: l.url, title: `${l.title} | ${BRAND}`, description: l.description,
     image: `/assets/og/${l.slug}.png`, body, jsonld: [appLd, faqLd, crumbsLd(trail)] }));
+}
+
+// ── Confidentialité ──
+{
+  const trail = [['/', 'Accueil'], [null, 'Confidentialité']];
+  const body = `${crumbs(trail)}
+<header class="hero wrap"><span class="kicker">Données personnelles</span><h1>Confidentialité</h1>
+<p class="lede">${BRAND} fonctionne sans compte. Ce que tu prépares et animes reste sur ton appareil.</p></header>
+<div class="wrap prose">
+  <h2>Tes données d'atelier restent chez toi</h2>
+  <p>Plans, séquences, listes de participants, temps de parole et notes du parking sont enregistrés uniquement dans ton navigateur (stockage local). Ils ne sont jamais envoyés à un serveur. Effacer les données du site dans ton navigateur les supprime définitivement.</p>
+  <p>Exception : quand tu partages un plan par lien, son contenu est inscrit dans l'adresse du lien. Seules les personnes à qui tu envoies ce lien peuvent le lire.</p>
+  <h2>Mesure d'audience</h2>
+  <p>Si tu l'acceptes, nous utilisons Google Analytics pour comprendre quels outils sont utiles : pages consultées, actions comme « minuteur lancé » ou « fiche téléchargée », mots cherchés dans la bibliothèque, type d'appareil et pays approximatif. Ces informations sont traitées par Google et conservées au plus 14 mois. Les noms de participants et le contenu de tes plans ne sont jamais transmis.</p>
+  <p>Sans ton accord, Google Analytics n'est pas chargé et aucun cookie de mesure n'est déposé. Tu peux changer d'avis à tout moment : <button type="button" class="link-btn" onclick="window.fkConsentReset&&fkConsentReset()">gérer les cookies</button>.</p>
+  <p>L'hébergeur (Vercel) compte aussi les visites de façon anonyme, sans cookie.</p>
+  <h2>Services tiers</h2>
+  <ul>
+    <li>Hébergement : Vercel Inc.</li>
+    <li>Polices de caractères : Google Fonts (ton navigateur les télécharge depuis les serveurs de Google).</li>
+    <li>Bibliothèques d'export PDF et d'animation : cdnjs (Cloudflare).</li>
+  </ul>
+  <h2>Contact</h2>
+  <p>Une question sur tes données ? Ouvre un ticket sur <a href="https://github.com/j4yk21/facilitheque/issues">GitHub</a>.</p>
+</div>`;
+  write('/confidentialite/', page({ path: '/confidentialite/', title: `Confidentialité | ${BRAND}`,
+    description: `${BRAND} fonctionne sans compte : tes données d'atelier restent dans ton navigateur. Mesure d'audience uniquement avec ton accord.`,
+    body, jsonld: [crumbsLd(trail)] }));
 }
 
 // ── Liste des images de partage, rendues ensuite par scripts/build-og.mjs ──
