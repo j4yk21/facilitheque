@@ -190,9 +190,6 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .timer-ring-wrap.running svg{filter:drop-shadow(0 0 8px rgba(107,143,113,.3))}
 .timer-ring-wrap.ended svg{filter:drop-shadow(0 0 12px rgba(184,84,80,.5))}
 .timer-ring-wrap.ended .timer-time{color:var(--red)}
-#fs-ring-wrap.running svg{filter:drop-shadow(0 0 16px rgba(107,143,113,.4))}
-#fs-ring-wrap.ended svg{filter:drop-shadow(0 0 24px rgba(184,84,80,.6))}
-#fs-ring-wrap.ended #fs-time{color:var(--red)}
 .timer-face{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;pointer-events:none}
 .timer-time{font-family:'Fraunces',serif;font-size:3.2rem;font-weight:700;color:var(--ink);line-height:1;letter-spacing:-.02em}
 .timer-label-disp{font-size:.75rem;color:var(--gray);margin-top:6px;font-weight:500}
@@ -382,9 +379,9 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 /* ── PROJECTION (plein écran du minuteur + roulette / séquence / temps de parole) ──
    Style « feuille de route » : clair par défaut, sombre au choix (bouton ◐ ou touche T).
    Couleurs fixes : la projection reste claire même si l'app est en mode sombre. */
-.proj-skin{--p-bg:#F6F1E9;--p-ink:#1A1A1A;--p-muted:#7A7068;--p-line:#E4DBCB;--p-card:#FFFFFF;--p-btn:rgba(26,26,26,.05);
+.proj-skin{--p-bg:#F6F1E9;--p-ink:#1A1A1A;--p-muted:#6B625B;--p-accent:#A8542A;--p-line:#E4DBCB;--p-card:#FFFFFF;--p-solid:#FFFFFF;--p-btn:rgba(26,26,26,.05);
   position:fixed;inset:0;display:none;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,120px) clamp(20px,5vw,96px) clamp(96px,14vh,150px);background:var(--p-bg);color:var(--p-ink);overflow:hidden;transition:background .35s,color .35s}
-[data-proj=dark] .proj-skin{--p-bg:#141210;--p-ink:#F5F0E8;--p-muted:rgba(245,240,232,.55);--p-line:rgba(255,255,255,.12);--p-card:rgba(255,255,255,.05);--p-btn:rgba(255,255,255,.07)}
+[data-proj=dark] .proj-skin{--p-bg:#141210;--p-ink:#F5F0E8;--p-muted:#A39B92;--p-accent:#D9875A;--p-line:rgba(255,255,255,.12);--p-card:rgba(255,255,255,.05);--p-solid:#26221E;--p-btn:rgba(255,255,255,.07)}
 .proj-skin.open{display:flex}
 #fs-ov{z-index:3000}
 #proj-ov{z-index:3200}
@@ -411,7 +408,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-hint{position:absolute;left:0;right:0;bottom:clamp(12px,2.2vh,26px);text-align:center;font-size:clamp(11px,.85vw,15px);color:var(--p-muted)}
 /* Typographie commune */
 .pj-split{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:5vw;width:100%;max-width:1680px;margin:0 auto}
-.pj-kicker{font:700 clamp(12px,1.2vw,22px) 'DM Sans',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--terra)}
+.pj-kicker{font:700 clamp(12px,1.2vw,22px) 'DM Sans',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--p-accent)}
 .pj-title{font:700 clamp(26px,4.4vw,84px)/1.08 'Fraunces',serif;letter-spacing:-.01em;margin-top:.35em;overflow-wrap:anywhere}
 .pj-title:empty{display:none}
 .pj-num{font:700 min(19vw,38vh)/.9 'Fraunces',serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin:.1em 0 0 -.04em;transition:color .4s}
@@ -421,8 +418,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-ring circle{fill:none;stroke-width:16}
 .pj-ring .pj-ring-bg{stroke:var(--p-line)}
 .pj-ring .pj-ring-fg{stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .6s}
-#fs-ov:has(#fs-ring-wrap.ended) .pj-num{color:var(--red)}
-#fs-ring-wrap.ended .pj-ring-fg{stroke:var(--red)!important}
 /* Séquence : frise du déroulé */
 .pj-road{display:flex;gap:clamp(4px,.5vw,10px);width:100%;max-width:1680px;margin:clamp(24px,6vh,64px) auto 0}
 .pj-road div{flex:var(--w) 1 0;min-width:0;position:relative;padding-top:clamp(14px,1.5vw,24px);font-size:clamp(10px,.95vw,17px);color:var(--p-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -430,6 +425,23 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-road .done::before{background:var(--sage)}
 .pj-road .now{color:var(--p-ink);font-weight:700}
 .pj-road .now::before{background:linear-gradient(90deg,var(--terra) var(--p),var(--p-line) var(--p))}
+/* Minuteur plein écran : fond qui avance de gauche à droite (--fp = temps écoulé).
+   Couleurs du remplissage et de son texte posées par T.updateColor, contraste ≥ 4,5:1. */
+.fs-tide{padding:0}
+.fs-tide .pj-layer{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,120px) clamp(20px,6vw,112px) clamp(96px,14vh,150px)}
+.fs-tide .pj-fill{background:var(--fill,#4E6E54);color:var(--fill-ink,#FFFFFF);clip-path:inset(0 calc(100% - var(--fp,0%)) 0 0);transition:clip-path 1s linear,background-color .8s,color .8s}
+.fs-tide .pj-fill .pj-kicker,.fs-tide .pj-fill .pj-clock,.fs-tide .pj-fill .pj-hint{color:inherit}
+.fs-tide .pj-fill .pj-brand{opacity:.9}
+.fs-tide .pj-fill .pj-mark{background:currentColor}
+.fs-tide .pj-num{font-size:min(25vw,46vh);margin-top:.06em}
+.fs-tide .pj-title{max-width:22ch}
+.fs-tide .pj-top-r{margin-right:104px}
+.pj-actions{position:absolute;top:clamp(14px,2.4vw,36px);right:clamp(16px,3vw,48px);display:flex;gap:10px;z-index:2}
+/* Boutons pleins : lisibles quelle que soit la couleur qui passe dessous */
+.fs-tide .pj-icon,.fs-tide .pj-btn{background:var(--p-solid);color:var(--p-ink);border-color:var(--p-line);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.fs-tide .pj-controls{z-index:2}
+#fs-ov.ended .pj-fill .pj-num{animation:fsBlink 1s ease 3}
+@keyframes fsBlink{50%{opacity:.25}}
 /* Roulette */
 .proj-pane{display:none;flex-direction:column;width:100%}
 .proj-pane.active{display:flex}
@@ -559,34 +571,36 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 </head>
 <body>
 
-<!-- PLEIN ÉCRAN DU MINUTEUR -->
-<div id="fs-ov" class="proj-skin" role="dialog" aria-label="Minuteur en plein écran">
-  <div class="pj-top">
-    <div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div>
-    <div class="pj-top-r">
-      <span class="pj-clock" data-pj-clock></span>
-      <button class="pj-icon proj-ui" onclick="projThemeToggle()" aria-label="Basculer clair ou sombre" title="Clair ou sombre (T)" data-pj-theme></button>
-      <button class="pj-icon proj-ui" onclick="fsClose()" aria-label="Quitter le plein écran" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
-    </div>
-  </div>
-  <div class="pj-split">
-    <div>
+<!-- PLEIN ÉCRAN DU MINUTEUR
+     Un fond coloré avance de gauche à droite sur tout l'écran. Deux calques identiques sont superposés :
+     le second, coloré, est découpé à la progression, et porte ses propres couleurs de texte (contraste AA). -->
+<div id="fs-ov" class="proj-skin fs-tide" role="dialog" aria-label="Minuteur en plein écran">
+  <div class="pj-layer">
+    <div class="pj-top"><div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div><div class="pj-top-r"><span class="pj-clock" data-pj-clock></span></div></div>
+    <div class="fs-body">
       <div class="pj-kicker">Minuteur</div>
       <div class="pj-title" id="fs-label"></div>
       <div class="pj-num" id="fs-time">00:00</div>
     </div>
-    <div class="pj-ring" id="fs-ring-wrap">
-      <svg viewBox="0 0 380 380" aria-hidden="true">
-        <circle class="pj-ring-bg" cx="190" cy="190" r="160"/>
-        <circle class="pj-ring-fg" id="fs-ring" cx="190" cy="190" r="160" stroke="#6B8F71" stroke-dasharray="1005.3" stroke-dashoffset="0" transform="rotate(-90 190 190)"/>
-      </svg>
+    <div class="pj-hint proj-ui">Espace : pause · R : remettre à zéro · T : clair ou sombre · Échap : quitter</div>
+  </div>
+  <div class="pj-layer pj-fill" aria-hidden="true">
+    <div class="pj-top"><div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div><div class="pj-top-r"><span class="pj-clock" data-pj-clock></span></div></div>
+    <div class="fs-body">
+      <div class="pj-kicker">Minuteur</div>
+      <div class="pj-title" id="fs-label-fill"></div>
+      <div class="pj-num" id="fs-time-fill">00:00</div>
     </div>
+    <div class="pj-hint proj-ui">Espace : pause · R : remettre à zéro · T : clair ou sombre · Échap : quitter</div>
+  </div>
+  <div class="pj-actions proj-ui">
+    <button class="pj-icon" onclick="projThemeToggle()" aria-label="Basculer clair ou sombre" title="Clair ou sombre (T)" data-pj-theme></button>
+    <button class="pj-icon" onclick="fsClose()" aria-label="Quitter le plein écran" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   </div>
   <div class="pj-controls proj-ui">
     <button class="pj-btn" id="fs-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
     <button class="pj-btn" onclick="timerReset()">↺ Reset</button>
   </div>
-  <div class="pj-hint proj-ui">Espace : pause · R : remettre à zéro · T : clair ou sombre · Échap : quitter</div>
 </div>
 
 <!-- MODE PROJECTION (roulette / séquence / temps de parole) -->
@@ -1373,7 +1387,7 @@ const T = {
   // il reste exact quand l'onglet passe en arrière-plan. msLeft = temps restant en pause.
   total: 300, remaining: 300, msLeft: 300000, endAt: 0, running: false, iv: null,
   set(s){ T.total=s; T.remaining=s; T.msLeft=s*1000; T.running=false; clearInterval(T.iv);
-    T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.persist(); WL.sync(); },
+    T.updateDisplay(); T.updateRing(); T.updateColor(); T.updateBtn(); T.clearFlash(); T.persist(); WL.sync(); },
   toggle(){ T.remaining>0 && (T.running ? T.pause() : T.start()); },
   start(){
     if(T.remaining<=0) return;
@@ -1386,7 +1400,7 @@ const T = {
     if(T.running) T.msLeft=Math.max(0,T.endAt-Date.now());
     T.running=false; clearInterval(T.iv); T.updateBtn(); T.setRingClass(''); T.persist(); WL.sync();
   },
-  reset(){ T.pause(); T.remaining=T.total; T.msLeft=T.total*1000; T.updateDisplay(); T.updateRing(); T.updateBtn(); T.clearFlash(); T.setRingClass(''); T.persist(); },
+  reset(){ T.pause(); T.remaining=T.total; T.msLeft=T.total*1000; T.updateDisplay(); T.updateRing(); T.updateColor(); T.updateBtn(); T.clearFlash(); T.setRingClass(''); T.persist(); },
   persist(){
     if(!appReady) return;
     LIVE.set('fk-live-timer',{total:T.total,remaining:T.remaining,msLeft:T.msLeft,running:T.running,
@@ -1407,7 +1421,7 @@ const T = {
     T.updateBtn();
     return false;
   },
-  setRingClass(cls){ ['running','ended'].forEach(c=>{document.getElementById('timer-ring-wrap').classList.toggle(c,c===cls); document.getElementById('fs-ring-wrap').classList.toggle(c,c===cls);}); },
+  setRingClass(cls){ ['running','ended'].forEach(c=>{document.getElementById('timer-ring-wrap').classList.toggle(c,c===cls); document.getElementById('fs-ov').classList.toggle(c,c===cls);}); },
   tick(){
     if(!T.running) return;
     const left=T.endAt-Date.now(), r=Math.max(0,Math.ceil(left/1000));
@@ -1432,19 +1446,23 @@ const T = {
     const str=`${pad(m)}:${pad(s)}`;
     document.getElementById('timer-display').textContent=str;
     document.getElementById('fs-time').textContent=str;
+    document.getElementById('fs-time-fill').textContent=str;
     miniSync();
   },
   updateRing(){
     const prog = T.total>0 ? T.remaining/T.total : 1;
-    const off280 = CIRC_280*(1-prog), off380 = CIRC_380*(1-prog);
-    document.getElementById('ring-prog').setAttribute('stroke-dashoffset', off280);
-    document.getElementById('fs-ring').setAttribute('stroke-dashoffset', off380);
+    document.getElementById('ring-prog').setAttribute('stroke-dashoffset', CIRC_280*(1-prog));
+    document.getElementById('fs-ov').style.setProperty('--fp', ((1-prog)*100).toFixed(2)+'%');
   },
+  // Remplissage plein écran : fond foncé + texte blanc, ou or + texte encre (contraste ≥ 4,5:1)
+  FILLS:[[.5,'#4E6E54','#FFFFFF'],[.25,'#C4943A','#1A1A1A'],[.1,'#A8542A','#FFFFFF'],[-1,'#A23F3B','#FFFFFF']],
   updateColor(){
     const prog = T.total>0 ? T.remaining/T.total : 1;
     const c = prog>0.5?'var(--sage)':prog>0.25?'var(--gold)':prog>0.1?'var(--terra)':'var(--red)';
     document.getElementById('ring-prog').style.stroke = c;
-    document.getElementById('fs-ring').style.stroke = c;
+    const [,bg,ink]=T.FILLS.find(([min])=>prog>min);
+    const ov=document.getElementById('fs-ov');
+    ov.style.setProperty('--fill',bg); ov.style.setProperty('--fill-ink',ink);
   },
   updateBtn(){
     const t = T.running?'⏸ Pause':'▶ Démarrer';
@@ -1458,7 +1476,7 @@ function timerSet(m,btn){ T.set(m*60); document.querySelectorAll('.preset-btn').
 function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-min').value)||0, s=parseInt(document.getElementById('custom-sec').value)||0; if(m||s){ T.set(m*60+s); document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('sel')); if(btn) btn.classList.add('sel'); } }
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
-function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; T.persist(); }
+function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; document.getElementById('fs-label-fill').textContent=v; T.persist(); }
 function fsOpen(){ track('projection_open',{tool:'timer'}); const ov=document.getElementById('fs-ov'); ov.classList.add('open'); animOverlay(ov); pjWake(ov); pjClock(); WL.sync(); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); WL.sync(); }
 
