@@ -407,17 +407,11 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-btn-main:hover{background:var(--terra-d)}
 .pj-hint{position:absolute;left:0;right:0;bottom:clamp(12px,2.2vh,26px);text-align:center;font-size:clamp(11px,.85vw,15px);color:var(--p-muted)}
 /* Typographie commune */
-.pj-split{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:5vw;width:100%;max-width:1680px;margin:0 auto}
 .pj-kicker{font:700 clamp(12px,1.2vw,22px) 'DM Sans',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--p-accent)}
 .pj-title{font:700 clamp(26px,4.4vw,84px)/1.08 'Fraunces',serif;letter-spacing:-.01em;margin-top:.35em;overflow-wrap:anywhere}
 .pj-title:empty{display:none}
 .pj-num{font:700 min(19vw,38vh)/.9 'Fraunces',serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin:.1em 0 0 -.04em;transition:color .4s}
 .pj-next{font-size:clamp(14px,1.45vw,26px);color:var(--p-muted);margin-top:1em;min-height:1.4em}
-.pj-ring{width:min(27vw,50vh);aspect-ratio:1;flex-shrink:0}
-.pj-ring svg{width:100%;height:100%;display:block}
-.pj-ring circle{fill:none;stroke-width:16}
-.pj-ring .pj-ring-bg{stroke:var(--p-line)}
-.pj-ring .pj-ring-fg{stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .6s}
 /* Séquence : frise du déroulé */
 .pj-road{display:flex;gap:clamp(4px,.5vw,10px);width:100%;max-width:1680px;margin:clamp(24px,6vh,64px) auto 0}
 .pj-road div{flex:var(--w) 1 0;min-width:0;position:relative;padding-top:clamp(14px,1.5vw,24px);font-size:clamp(10px,.95vw,17px);color:var(--p-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -428,18 +422,29 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 /* Minuteur plein écran : fond qui avance de gauche à droite (--fp = temps écoulé).
    Couleurs du remplissage et de son texte posées par T.updateColor, contraste ≥ 4,5:1. */
 .fs-tide{padding:0}
-.fs-tide .pj-layer{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,120px) clamp(20px,6vw,112px) clamp(96px,14vh,150px)}
-.fs-tide .pj-fill{background:var(--fill,#4E6E54);color:var(--fill-ink,#FFFFFF);clip-path:inset(0 calc(100% - var(--fp,0%)) 0 0);transition:clip-path 1s linear,background-color .8s,color .8s}
-.fs-tide .pj-fill .pj-kicker,.fs-tide .pj-fill .pj-clock,.fs-tide .pj-fill .pj-hint{color:inherit}
-.fs-tide .pj-fill .pj-brand{opacity:.9}
-.fs-tide .pj-fill .pj-mark{background:currentColor}
-.fs-tide .pj-num{font-size:min(25vw,46vh);margin-top:.06em}
-.fs-tide .pj-title{max-width:22ch}
-.fs-tide .pj-top-r{margin-right:104px}
+.pj-tide .pj-layer{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,120px) clamp(20px,6vw,112px) clamp(96px,14vh,150px)}
+.pj-tide .pj-fill{background:var(--fill,#4E6E54);color:var(--fill-ink,#FFFFFF);clip-path:inset(0 calc(100% - var(--fp,0%)) 0 0);transition:clip-path 1s linear,background-color .8s,color .8s}
+.pj-tide.pj-snap .pj-fill{transition:none}
+.pj-tide .pj-fill .pj-kicker,.pj-tide .pj-fill .pj-clock,.pj-tide .pj-fill .pj-hint,.pj-tide .pj-fill .pj-next{color:inherit}
+.pj-tide .pj-fill .pj-brand{opacity:.9}
+.pj-tide .pj-fill .pj-mark{background:currentColor}
+.pj-tide .pj-num{font-size:min(25vw,46vh);margin-top:.06em}
+.pj-tide .pj-title{max-width:22ch}
+.pj-tide .pj-top-r{margin-right:104px}
+/* Frise sur le calque coloré : mêmes repères, dans la couleur du texte */
+.pj-fill .pj-road div,.pj-fill .pj-road .now{color:inherit}
+.pj-fill .pj-road div::before{background:currentColor;opacity:.3}
+.pj-fill .pj-road .done::before{opacity:.8}
+.pj-fill .pj-road .now::before{opacity:1;background:linear-gradient(90deg,currentColor var(--p),color-mix(in srgb,currentColor 30%,transparent) var(--p))}
+#proj-sequence .pj-num{font-size:min(21vw,34vh)}
+#proj-sequence .pj-road{margin-top:clamp(20px,5vh,56px)}
 .pj-actions{position:absolute;top:clamp(14px,2.4vw,36px);right:clamp(16px,3vw,48px);display:flex;gap:10px;z-index:2}
 /* Boutons pleins : lisibles quelle que soit la couleur qui passe dessous */
-.fs-tide .pj-icon,.fs-tide .pj-btn{background:var(--p-solid);color:var(--p-ink);border-color:var(--p-line);box-shadow:0 6px 20px rgba(0,0,0,.12)}
-.fs-tide .pj-controls{z-index:2}
+.fs-tide .pj-icon,.pj-tide .pj-btn,#proj-ov.seq-mode .pj-icon{background:var(--p-solid);color:var(--p-ink);border-color:var(--p-line);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.pj-tide .pj-controls{z-index:2}
+/* Séquence : la marque et l'heure sont dans les calques, la barre du haut ne garde que les boutons */
+#proj-ov .pj-top{z-index:3}
+#proj-ov.seq-mode>.pj-top .pj-brand,#proj-ov.seq-mode>.pj-top .pj-clock{visibility:hidden}
 #fs-ov.ended .pj-fill .pj-num{animation:fsBlink 1s ease 3}
 @keyframes fsBlink{50%{opacity:.25}}
 /* Roulette */
@@ -470,9 +475,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .proj-pa-card.speaking .proj-pa-key{background:var(--terra);border-color:var(--terra);color:#fff}
 /* Écran étroit ou vertical : tout s'empile et se centre */
 @media(max-aspect-ratio:1/1),(max-width:700px){
-  .pj-split{grid-template-columns:1fr;justify-items:center;text-align:center;gap:4vh}
-  .pj-num{font-size:min(24vw,20vh);margin-left:0}
-  .pj-ring{width:min(48vw,26vh);order:2}
+  .pj-tide .pj-num,#proj-sequence .pj-num{font-size:min(24vw,22vh)}
   .pj-road div{font-size:0}
   .pj-hint{display:none}
 }
@@ -574,7 +577,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 <!-- PLEIN ÉCRAN DU MINUTEUR
      Un fond coloré avance de gauche à droite sur tout l'écran. Deux calques identiques sont superposés :
      le second, coloré, est découpé à la progression, et porte ses propres couleurs de texte (contraste AA). -->
-<div id="fs-ov" class="proj-skin fs-tide" role="dialog" aria-label="Minuteur en plein écran">
+<div id="fs-ov" class="proj-skin fs-tide pj-tide" role="dialog" aria-label="Minuteur en plein écran">
   <div class="pj-layer">
     <div class="pj-top"><div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div><div class="pj-top-r"><span class="pj-clock" data-pj-clock></span></div></div>
     <div class="fs-body">
@@ -619,27 +622,33 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <button class="pj-btn pj-btn-main proj-ui" onclick="rouletteSpin()">🎲 Tourner</button>
     <div class="pj-hint proj-ui">Espace : tourner · T : clair ou sombre · Échap : quitter</div>
   </div>
-  <div id="proj-sequence" class="proj-pane">
-    <div class="pj-split">
-      <div>
+  <div id="proj-sequence" class="proj-pane pj-tide">
+    <div class="pj-layer">
+      <div class="pj-top"><div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div><div class="pj-top-r"><span class="pj-clock" data-pj-clock></span></div></div>
+      <div class="seq-body">
         <div class="pj-kicker" id="proj-s-kicker">Séquence</div>
         <div class="pj-title" id="proj-s-name">—</div>
         <div class="pj-num" id="proj-s-time">00:00</div>
         <div class="pj-next" id="proj-s-next"></div>
       </div>
-      <div class="pj-ring">
-        <svg viewBox="0 0 380 380" aria-hidden="true">
-          <circle class="pj-ring-bg" cx="190" cy="190" r="160"/>
-          <circle class="pj-ring-fg" id="proj-s-ring" cx="190" cy="190" r="160" stroke="#6B8F71" stroke-dasharray="1005.3" stroke-dashoffset="0" transform="rotate(-90 190 190)"/>
-        </svg>
-      </div>
+      <div class="pj-road" id="proj-s-road"></div>
+      <div class="pj-hint proj-ui">Espace : pause · T : clair ou sombre · Échap : quitter</div>
     </div>
-    <div class="pj-road" id="proj-s-road"></div>
+    <div class="pj-layer pj-fill" aria-hidden="true">
+      <div class="pj-top"><div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div><div class="pj-top-r"><span class="pj-clock" data-pj-clock></span></div></div>
+      <div class="seq-body">
+        <div class="pj-kicker" id="proj-s-kicker-fill">Séquence</div>
+        <div class="pj-title" id="proj-s-name-fill">—</div>
+        <div class="pj-num" id="proj-s-time-fill">00:00</div>
+        <div class="pj-next" id="proj-s-next-fill"></div>
+      </div>
+      <div class="pj-road" id="proj-s-road-fill"></div>
+      <div class="pj-hint proj-ui">Espace : pause · T : clair ou sombre · Échap : quitter</div>
+    </div>
     <div class="pj-controls proj-ui">
       <button class="pj-btn" id="proj-s-toggle" onclick="seqToggle()">⏸</button>
       <button class="pj-btn" onclick="seqSkip()">Passer →</button>
     </div>
-    <div class="pj-hint proj-ui">Espace : pause · T : clair ou sombre · Échap : quitter</div>
   </div>
   <div id="proj-parole" class="proj-pane">
     <div class="pj-head"><div class="pj-kicker">Temps de parole</div><div class="pj-total" id="proj-pa-total"></div></div>
@@ -1351,6 +1360,9 @@ const LIVE = {
 let trackReady=false;
 function track(name,params){ if(trackReady&&window.fkTrack) window.fkTrack(name,params); }
 
+// Couleurs du fond qui avance en projection (voir tideSet), utilisées dès le premier rendu du minuteur
+const TIDE_FILLS=[[.5,'#4E6E54','#FFFFFF'],[.25,'#C4943A','#1A1A1A'],[.1,'#A8542A','#FFFFFF'],[-1,'#A23F3B','#FFFFFF']];
+
 // Icônes des poignées de réorganisation (utilisées dès le premier rendu)
 const SVG_UP='<svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5L5 3.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 const SVG_DOWN='<svg viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1381,7 +1393,7 @@ const WL = {
 // ════════════════════════════════════════════════════
 // TIMER
 // ════════════════════════════════════════════════════
-const CIRC_280 = 753.98, CIRC_380 = 1005.3;
+const CIRC_280 = 753.98;
 const T = {
   // Le décompte se cale sur l'heure de fin (endAt), pas sur le nombre de tics :
   // il reste exact quand l'onglet passe en arrière-plan. msLeft = temps restant en pause.
@@ -1452,17 +1464,12 @@ const T = {
   updateRing(){
     const prog = T.total>0 ? T.remaining/T.total : 1;
     document.getElementById('ring-prog').setAttribute('stroke-dashoffset', CIRC_280*(1-prog));
-    document.getElementById('fs-ov').style.setProperty('--fp', ((1-prog)*100).toFixed(2)+'%');
+    tideSet(document.getElementById('fs-ov'),prog);
   },
-  // Remplissage plein écran : fond foncé + texte blanc, ou or + texte encre (contraste ≥ 4,5:1)
-  FILLS:[[.5,'#4E6E54','#FFFFFF'],[.25,'#C4943A','#1A1A1A'],[.1,'#A8542A','#FFFFFF'],[-1,'#A23F3B','#FFFFFF']],
   updateColor(){
     const prog = T.total>0 ? T.remaining/T.total : 1;
-    const c = prog>0.5?'var(--sage)':prog>0.25?'var(--gold)':prog>0.1?'var(--terra)':'var(--red)';
-    document.getElementById('ring-prog').style.stroke = c;
-    const [,bg,ink]=T.FILLS.find(([min])=>prog>min);
-    const ov=document.getElementById('fs-ov');
-    ov.style.setProperty('--fill',bg); ov.style.setProperty('--fill-ink',ink);
+    document.getElementById('ring-prog').style.stroke = progColor(prog);
+    tideSet(document.getElementById('fs-ov'),prog);
   },
   updateBtn(){
     const t = T.running?'⏸ Pause':'▶ Démarrer';
@@ -1482,6 +1489,15 @@ function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); W
 
 // ── Projection : clair / sombre, heure réelle, commandes qui s'effacent ──
 function progColor(p){ return p>0.5?'var(--sage)':p>0.25?'var(--gold)':p>0.1?'var(--terra)':'var(--red)'; }
+// Fond qui avance de gauche à droite (minuteur plein écran, séquence projetée).
+// left = part du temps restant (1 → 0). Couleurs du fond et de son texte : contraste ≥ 4,5:1.
+function tideSet(el,left){
+  const prev=parseFloat(el.style.getPropertyValue('--fp'))||0, next=(1-left)*100;
+  el.classList.toggle('pj-snap',next<prev-1); // retour au début (reset, phase suivante) : sans balayage à l'envers
+  el.style.setProperty('--fp',next.toFixed(2)+'%');
+  const [,bg,ink]=TIDE_FILLS.find(([min])=>left>min);
+  el.style.setProperty('--fill',bg); el.style.setProperty('--fill-ink',ink);
+}
 const PJ_SUN='<svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5V3M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
 const PJ_MOON='<svg viewBox="0 0 16 16" fill="none"><path d="M13.5 9.6A5.6 5.6 0 016.4 2.5a5.6 5.6 0 107.1 7.1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
 function projThemeSync(){
@@ -1571,6 +1587,7 @@ function projOpen(tool){
   document.getElementById('proj-'+tool).classList.add('active');
   const ov=document.getElementById('proj-ov');
   ov.classList.add('open');
+  ov.classList.toggle('seq-mode',tool==='sequence');
   animOverlay(document.getElementById('proj-'+tool));
   pjWake(ov); pjClock();
   if(tool==='sequence') seqUpdateDisplay();
@@ -1983,23 +2000,23 @@ function seqUpdateDisplay(){
   // Miroir projection
   if(projTool==='sequence'){
     const timeStr=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'—';
-    const prog=ph&&SEQ.remaining>0?SEQ.remaining/(ph.duration*60):0;
-    document.getElementById('proj-s-kicker').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'Séquence';
-    document.getElementById('proj-s-name').textContent=ph?ph.name:'—';
-    document.getElementById('proj-s-time').textContent=timeStr;
-    const ring=document.getElementById('proj-s-ring');
-    ring.setAttribute('stroke-dashoffset',CIRC_380*(1-prog));
-    ring.style.stroke=progColor(prog);
+    const prog=ph&&SEQ.remaining>0?SEQ.remaining/(ph.duration*60):1;
     const next=SEQ.phases[SEQ.curIdx+1];
-    document.getElementById('proj-s-next').textContent=next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':'');
+    // Chaque texte existe en double : calque de base et calque coloré
+    const both=(id,v,html)=>[id,id+'-fill'].forEach(i=>document.getElementById(i)[html?'innerHTML':'textContent']=v);
+    both('proj-s-kicker',SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'Séquence');
+    both('proj-s-name',ph?ph.name:'—');
+    both('proj-s-time',timeStr);
+    both('proj-s-next',next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':''));
+    tideSet(document.getElementById('proj-sequence'),prog);
     document.getElementById('proj-s-toggle').textContent=SEQ.running?'⏸ Pause':'▶ Reprendre';
     // Frise du déroulé : chaque phase a une largeur proportionnelle à sa durée
     const live=SEQ.remaining>0;
-    document.getElementById('proj-s-road').innerHTML=SEQ.phases.map((p,i)=>{
+    both('proj-s-road',SEQ.phases.map((p,i)=>{
       const cls=live&&i<SEQ.curIdx?'done':live&&i===SEQ.curIdx?'now':'';
       const pr=cls==='now'?` ;--p:${((1-prog)*100).toFixed(1)}%`:'';
       return `<div class="${cls}" style="--w:${Math.max(1,parseInt(p.duration)||1)}${pr}" title="${escHtml(p.name)} (${p.duration} min)">${escHtml(p.name)}</div>`;
-    }).join('');
+    }).join(''),true);
   }
   miniSync();
 }
