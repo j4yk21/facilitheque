@@ -419,33 +419,41 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-road .done::before{background:var(--sage)}
 .pj-road .now{color:var(--p-ink);font-weight:700}
 .pj-road .now::before{background:linear-gradient(90deg,var(--terra) var(--p),var(--p-line) var(--p))}
-/* Minuteur plein écran : fond qui avance de gauche à droite (--fp = temps écoulé).
-   Couleurs du remplissage et de son texte posées par T.updateColor, contraste ≥ 4,5:1. */
+/* Fond qui avance de gauche à droite (minuteur plein écran, séquence projetée).
+   Un seul calque : le fond et le texte suivent le même dégradé à arrêt net, calé sur l'écran
+   (background-attachment: fixed), donc le front tombe au même pixel partout, sans liseré.
+   --fp (temps écoulé), --fill et --fill-ink sont animés par @property ; couleurs posées par tideSet(). */
+@property --fp{syntax:'<percentage>';inherits:true;initial-value:0%}
+@property --fill{syntax:'<color>';inherits:true;initial-value:#4E6E54}
+@property --fill-ink{syntax:'<color>';inherits:true;initial-value:#FFFFFF}
+.pj-tide{transition:background .35s,color .35s,--fp 1s linear,--fill .8s,--fill-ink .8s}
+.pj-tide.pj-snap{transition:background .35s,color .35s,--fill .8s,--fill-ink .8s}
 .fs-tide{padding:0}
+.pj-tide::before{content:'';position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,var(--fill) var(--fp),transparent var(--fp))}
 .pj-tide .pj-layer{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,120px) clamp(20px,6vw,112px) clamp(96px,14vh,150px)}
-.pj-tide .pj-fill{background:var(--fill,#4E6E54);color:var(--fill-ink,#FFFFFF);clip-path:inset(0 calc(100% - var(--fp,0%)) 0 0);transition:clip-path 1s linear,background-color .8s,color .8s}
-.pj-tide.pj-snap .pj-fill{transition:none}
-.pj-tide .pj-fill .pj-kicker,.pj-tide .pj-fill .pj-clock,.pj-tide .pj-fill .pj-hint,.pj-tide .pj-fill .pj-next{color:inherit}
-.pj-tide .pj-fill .pj-brand{opacity:.9}
-.pj-tide .pj-fill .pj-mark{background:currentColor}
+.pj-tide :is(.pj-brand,.pj-clock,.pj-kicker,.pj-title,.pj-num,.pj-next,.pj-hint,.pj-road div){--tt:var(--p-ink);background:linear-gradient(90deg,var(--fill-ink) var(--fp),var(--tt) var(--fp)) fixed;-webkit-background-clip:text;background-clip:text;color:transparent}
+.pj-tide :is(.pj-brand,.pj-clock,.pj-next,.pj-hint,.pj-road div){--tt:var(--p-muted)}
+.pj-tide .pj-kicker{--tt:var(--p-accent)}
+.pj-tide .pj-road .now{--tt:var(--p-ink)}
+.pj-tide .pj-brand{opacity:1}
+.pj-tide .pj-mark{background:linear-gradient(90deg,var(--fill-ink) var(--fp),var(--terra) var(--fp)) fixed}
+/* Frise : la barre en cours se détache, l'écran entier montrant déjà l'avancée de la phase */
+.pj-tide .pj-road div::before{background:linear-gradient(90deg,color-mix(in srgb,var(--fill-ink) 32%,transparent) var(--fp),var(--p-line) var(--fp)) fixed}
+.pj-tide .pj-road .done::before{background:linear-gradient(90deg,color-mix(in srgb,var(--fill-ink) 75%,transparent) var(--fp),var(--sage) var(--fp)) fixed}
+.pj-tide .pj-road .now::before{background:linear-gradient(90deg,var(--fill-ink) var(--fp),var(--p-accent) var(--fp)) fixed}
 .pj-tide .pj-num{font-size:min(25vw,46vh);margin-top:.06em}
 .pj-tide .pj-title{max-width:22ch}
 .pj-tide .pj-top-r{margin-right:104px}
-/* Frise sur le calque coloré : mêmes repères, dans la couleur du texte */
-.pj-fill .pj-road div,.pj-fill .pj-road .now{color:inherit}
-.pj-fill .pj-road div::before{background:currentColor;opacity:.3}
-.pj-fill .pj-road .done::before{opacity:.8}
-.pj-fill .pj-road .now::before{opacity:1;background:linear-gradient(90deg,currentColor var(--p),color-mix(in srgb,currentColor 30%,transparent) var(--p))}
 #proj-sequence .pj-num{font-size:min(21vw,34vh)}
 #proj-sequence .pj-road{margin-top:clamp(20px,5vh,56px)}
 .pj-actions{position:absolute;top:clamp(14px,2.4vw,36px);right:clamp(16px,3vw,48px);display:flex;gap:10px;z-index:2}
 /* Boutons pleins : lisibles quelle que soit la couleur qui passe dessous */
 .fs-tide .pj-icon,.pj-tide .pj-btn,#proj-ov.seq-mode .pj-icon{background:var(--p-solid);color:var(--p-ink);border-color:var(--p-line);box-shadow:0 6px 20px rgba(0,0,0,.12)}
 .pj-tide .pj-controls{z-index:2}
-/* Séquence : la marque et l'heure sont dans les calques, la barre du haut ne garde que les boutons */
+/* Séquence : la marque et l'heure sont dans le calque, la barre du haut ne garde que les boutons */
 #proj-ov .pj-top{z-index:3}
 #proj-ov.seq-mode>.pj-top .pj-brand,#proj-ov.seq-mode>.pj-top .pj-clock{visibility:hidden}
-#fs-ov.ended .pj-fill .pj-num{animation:fsBlink 1s ease 3}
+#fs-ov.ended .pj-num{animation:fsBlink 1s ease 3}
 @keyframes fsBlink{50%{opacity:.25}}
 /* Roulette */
 .proj-pane{display:none;flex-direction:column;width:100%}
@@ -587,15 +595,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     </div>
     <div class="pj-hint proj-ui">Espace : pause · R : remettre à zéro · T : clair ou sombre · Échap : quitter</div>
   </div>
-  <div class="pj-layer pj-fill" aria-hidden="true">
-    <div class="pj-top"><div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div><div class="pj-top-r"><span class="pj-clock" data-pj-clock></span></div></div>
-    <div class="fs-body">
-      <div class="pj-kicker">Minuteur</div>
-      <div class="pj-title" id="fs-label-fill"></div>
-      <div class="pj-num" id="fs-time-fill">00:00</div>
-    </div>
-    <div class="pj-hint proj-ui">Espace : pause · R : remettre à zéro · T : clair ou sombre · Échap : quitter</div>
-  </div>
   <div class="pj-actions proj-ui">
     <button class="pj-icon" onclick="projThemeToggle()" aria-label="Basculer clair ou sombre" title="Clair ou sombre (T)" data-pj-theme></button>
     <button class="pj-icon" onclick="fsClose()" aria-label="Quitter le plein écran" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
@@ -632,17 +631,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
         <div class="pj-next" id="proj-s-next"></div>
       </div>
       <div class="pj-road" id="proj-s-road"></div>
-      <div class="pj-hint proj-ui">Espace : pause · T : clair ou sombre · Échap : quitter</div>
-    </div>
-    <div class="pj-layer pj-fill" aria-hidden="true">
-      <div class="pj-top"><div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div><div class="pj-top-r"><span class="pj-clock" data-pj-clock></span></div></div>
-      <div class="seq-body">
-        <div class="pj-kicker" id="proj-s-kicker-fill">Séquence</div>
-        <div class="pj-title" id="proj-s-name-fill">—</div>
-        <div class="pj-num" id="proj-s-time-fill">00:00</div>
-        <div class="pj-next" id="proj-s-next-fill"></div>
-      </div>
-      <div class="pj-road" id="proj-s-road-fill"></div>
       <div class="pj-hint proj-ui">Espace : pause · T : clair ou sombre · Échap : quitter</div>
     </div>
     <div class="pj-controls proj-ui">
@@ -1458,7 +1446,6 @@ const T = {
     const str=`${pad(m)}:${pad(s)}`;
     document.getElementById('timer-display').textContent=str;
     document.getElementById('fs-time').textContent=str;
-    document.getElementById('fs-time-fill').textContent=str;
     miniSync();
   },
   updateRing(){
@@ -1483,7 +1470,7 @@ function timerSet(m,btn){ T.set(m*60); document.querySelectorAll('.preset-btn').
 function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-min').value)||0, s=parseInt(document.getElementById('custom-sec').value)||0; if(m||s){ T.set(m*60+s); document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('sel')); if(btn) btn.classList.add('sel'); } }
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
-function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; document.getElementById('fs-label-fill').textContent=v; T.persist(); }
+function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; T.persist(); }
 function fsOpen(){ track('projection_open',{tool:'timer'}); const ov=document.getElementById('fs-ov'); ov.classList.add('open'); animOverlay(ov); pjWake(ov); pjClock(); WL.sync(); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); WL.sync(); }
 
@@ -2002,8 +1989,7 @@ function seqUpdateDisplay(){
     const timeStr=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'—';
     const prog=ph&&SEQ.remaining>0?SEQ.remaining/(ph.duration*60):1;
     const next=SEQ.phases[SEQ.curIdx+1];
-    // Chaque texte existe en double : calque de base et calque coloré
-    const both=(id,v,html)=>[id,id+'-fill'].forEach(i=>document.getElementById(i)[html?'innerHTML':'textContent']=v);
+    const both=(id,v,html)=>{ document.getElementById(id)[html?'innerHTML':'textContent']=v; };
     both('proj-s-kicker',SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'Séquence');
     both('proj-s-name',ph?ph.name:'—');
     both('proj-s-time',timeStr);
