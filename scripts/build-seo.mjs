@@ -360,6 +360,15 @@ for (const l of LIVE) {
     image: `/assets/og/${l.slug}.png`, body, jsonld: [appLd, faqLd, crumbsLd(trail)] }));
 }
 
+// ── Liste des images de partage, rendues ensuite par scripts/build-og.mjs ──
+const og = [
+  { file: 'default', kicker: 'Outils libres pour facilitateurs', title: 'La boîte à outils live des facilitateurs', meta: `Minuteurs, tirage au sort et ${TOOLS.length} fiches méthodes` },
+  ...TOOLS.map(t => ({ file: t.slug, kicker: `Fiche outil · ${t.phaseLabel}`, title: t.name, meta: `${t.dur} · ${t.grp}`, phase: t.phase })),
+  ...LIVE.map(l => ({ file: l.slug, kicker: `${l.short} · gratuit, sans compte`, title: l.h1, meta: 'Fonctionne même hors ligne' })),
+];
+fs.mkdirSync(path.join(ROOT, 'scripts/.og'), { recursive: true });
+fs.writeFileSync(path.join(ROOT, 'scripts/.og/list.json'), JSON.stringify(og, null, 1));
+
 // ── Sitemap ──
 const urls = ['/', ...written];
 fs.writeFileSync(path.join(ROOT, 'sitemap.xml'), `<?xml version="1.0" encoding="UTF-8"?>

@@ -8,3 +8,6 @@ Thumbs.db
 # Editor
 .vscode/
 *.swp
+
+# Images de partage : gabarits temporaires
+scripts/.og/
