@@ -1,7 +1,7 @@
 // Mesure d'audience Google Analytics 4, chargée uniquement après accord (exigence CNIL).
 // Partagé par l'application et les pages web. Sans identifiant valide, rien n'est chargé.
 (function () {
-  var GA_ID = 'G-XXXXXXXXXX'; // ← identifiant de mesure GA4 (Admin › Flux de données)
+  var GA_ID = 'G-0Z679DWG5G'; // ← identifiant de mesure GA4 (Admin › Flux de données)
   var KEY = 'fk-consent';
   var ok = /^G-[A-Z0-9]{6,}$/.test(GA_ID) && GA_ID !== 'G-XXXXXXXXXX';
 
