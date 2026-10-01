@@ -379,45 +379,91 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .home-links a:hover{color:var(--terra)}
 .modal-tip{background:rgba(107,143,113,.08);border-left:3px solid var(--sage);border-radius:0 var(--r12) var(--r12) 0;padding:10px 14px;margin-top:14px;font-size:.82rem;color:var(--sage-d);line-height:1.5}
 
-/* ── FULLSCREEN TIMER ── */
-#fs-ov{position:fixed;inset:0;background:#111;z-index:3000;display:none;flex-direction:column;align-items:center;justify-content:center;gap:32px}
-#fs-ov.open{display:flex}
-#fs-ring-wrap{position:relative;width:380px;height:380px}
-#fs-ring-wrap svg{width:380px;height:380px}
-#fs-face{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center}
-#fs-time{font-family:'Fraunces',serif;font-size:5.5rem;font-weight:700;color:#fff;line-height:1;letter-spacing:-.02em}
-#fs-label{font-size:1rem;color:rgba(255,255,255,.4);margin-top:8px}
-.fs-controls{display:flex;gap:16px}
-.fs-btn{padding:12px 28px;border-radius:40px;font-size:.95rem;font-weight:500;border:1.5px solid rgba(255,255,255,.2);background:rgba(255,255,255,.08);color:#fff;cursor:pointer;transition:all var(--tr)}
-.fs-btn:hover{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.4)}
-.fs-exit{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.08);border:1.5px solid rgba(255,255,255,.15);border-radius:var(--r8);padding:8px 14px;color:rgba(255,255,255,.6);font-size:.8rem;cursor:pointer;transition:all var(--tr)}
-.fs-exit:hover{background:rgba(255,255,255,.15);color:#fff}
-
-/* ── MODE PROJECTION ── */
-#proj-ov{position:fixed;inset:0;background:#141210;z-index:3200;display:none;align-items:center;justify-content:center}
-#proj-ov.open{display:flex}
-.proj-pane{display:none;flex-direction:column;align-items:center;gap:4vh;width:100%;padding:4vh 5vw}
+/* ── PROJECTION (plein écran du minuteur + roulette / séquence / temps de parole) ──
+   Style « feuille de route » : clair par défaut, sombre au choix (bouton ◐ ou touche T).
+   Couleurs fixes : la projection reste claire même si l'app est en mode sombre. */
+.proj-skin{--p-bg:#F6F1E9;--p-ink:#1A1A1A;--p-muted:#7A7068;--p-line:#E4DBCB;--p-card:#FFFFFF;--p-btn:rgba(26,26,26,.05);
+  position:fixed;inset:0;display:none;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,120px) clamp(20px,5vw,96px) clamp(96px,14vh,150px);background:var(--p-bg);color:var(--p-ink);overflow:hidden;transition:background .35s,color .35s}
+[data-proj=dark] .proj-skin{--p-bg:#141210;--p-ink:#F5F0E8;--p-muted:rgba(245,240,232,.55);--p-line:rgba(255,255,255,.12);--p-card:rgba(255,255,255,.05);--p-btn:rgba(255,255,255,.07)}
+.proj-skin.open{display:flex}
+#fs-ov{z-index:3000}
+#proj-ov{z-index:3200}
+/* Barre du haut : marque, heure réelle, clair/sombre, quitter */
+.pj-top{position:absolute;left:clamp(16px,3vw,48px);right:clamp(16px,3vw,48px);top:clamp(14px,2.4vw,36px);display:flex;align-items:center;justify-content:space-between;gap:16px}
+.pj-brand{display:flex;align-items:center;gap:.55em;font:700 clamp(14px,1.25vw,22px) 'Fraunces',serif;opacity:.55}
+.pj-mark{width:1.5em;height:1.5em;border-radius:50% 50% 50% 18%;background:var(--terra)}
+.pj-top-r{display:flex;align-items:center;gap:10px}
+.pj-clock{font:600 clamp(14px,1.35vw,24px) 'DM Sans',sans-serif;font-variant-numeric:tabular-nums;color:var(--p-muted);margin-right:6px}
+.pj-icon{width:42px;height:42px;border-radius:50%;border:1px solid var(--p-line);background:var(--p-btn);color:var(--p-ink);display:grid;place-items:center;padding:0;transition:border-color var(--tr),background var(--tr)}
+.pj-icon svg{width:17px;height:17px}
+.pj-icon:hover{border-color:var(--terra)}
+.pj-icon:focus-visible,.pj-btn:focus-visible{outline:2px solid var(--terra);outline-offset:2px}
+/* Commandes discrètes : elles s'effacent quand la souris ne bouge plus */
+.proj-ui{transition:opacity .45s}
+.proj-skin.idle .proj-ui{opacity:0;pointer-events:none}
+.proj-skin.idle{cursor:none}
+@media(hover:none){.proj-skin.idle .proj-ui{opacity:1;pointer-events:auto}.proj-skin.idle{cursor:auto}}
+.pj-controls{position:absolute;left:0;right:0;bottom:clamp(44px,7vh,84px);display:flex;justify-content:center;gap:12px}
+.pj-btn{padding:.8em 1.9em;border-radius:40px;border:1.5px solid var(--p-line);background:var(--p-btn);color:var(--p-ink);font:600 clamp(14px,1.1vw,19px) 'DM Sans',sans-serif;transition:border-color var(--tr),background var(--tr)}
+.pj-btn:hover{border-color:var(--terra)}
+.pj-btn-main{background:var(--terra);border-color:var(--terra);color:#fff;font-size:clamp(16px,1.4vw,24px)}
+.pj-btn-main:hover{background:var(--terra-d)}
+.pj-hint{position:absolute;left:0;right:0;bottom:clamp(12px,2.2vh,26px);text-align:center;font-size:clamp(11px,.85vw,15px);color:var(--p-muted)}
+/* Typographie commune */
+.pj-split{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:5vw;width:100%;max-width:1680px;margin:0 auto}
+.pj-kicker{font:700 clamp(12px,1.2vw,22px) 'DM Sans',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--terra)}
+.pj-title{font:700 clamp(26px,4.4vw,84px)/1.08 'Fraunces',serif;letter-spacing:-.01em;margin-top:.35em;overflow-wrap:anywhere}
+.pj-title:empty{display:none}
+.pj-num{font:700 min(19vw,38vh)/.9 'Fraunces',serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em;margin:.1em 0 0 -.04em;transition:color .4s}
+.pj-next{font-size:clamp(14px,1.45vw,26px);color:var(--p-muted);margin-top:1em;min-height:1.4em}
+.pj-ring{width:min(27vw,50vh);aspect-ratio:1;flex-shrink:0}
+.pj-ring svg{width:100%;height:100%;display:block}
+.pj-ring circle{fill:none;stroke-width:16}
+.pj-ring .pj-ring-bg{stroke:var(--p-line)}
+.pj-ring .pj-ring-fg{stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke .6s}
+#fs-ov:has(#fs-ring-wrap.ended) .pj-num{color:var(--red)}
+#fs-ring-wrap.ended .pj-ring-fg{stroke:var(--red)!important}
+/* Séquence : frise du déroulé */
+.pj-road{display:flex;gap:clamp(4px,.5vw,10px);width:100%;max-width:1680px;margin:clamp(24px,6vh,64px) auto 0}
+.pj-road div{flex:var(--w) 1 0;min-width:0;position:relative;padding-top:clamp(14px,1.5vw,24px);font-size:clamp(10px,.95vw,17px);color:var(--p-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pj-road div::before{content:'';position:absolute;left:0;right:0;top:0;height:clamp(6px,.65vw,12px);border-radius:10px;background:var(--p-line)}
+.pj-road .done::before{background:var(--sage)}
+.pj-road .now{color:var(--p-ink);font-weight:700}
+.pj-road .now::before{background:linear-gradient(90deg,var(--terra) var(--p),var(--p-line) var(--p))}
+/* Roulette */
+.proj-pane{display:none;flex-direction:column;width:100%}
 .proj-pane.active{display:flex}
-#proj-r-slot{font-family:'Fraunces',serif;font-weight:700;font-size:8vw;color:#F5F0E8;text-align:center;line-height:1.15;min-height:1.3em;transition:color .2s}
-#proj-r-slot.proj-r-idle{color:rgba(245,240,232,.25);font-size:4vw}
+#proj-roulette{align-items:center;text-align:center;gap:clamp(16px,4vh,48px)}
+#proj-r-slot{font:700 min(13vw,30vh)/1.05 'Fraunces',serif;letter-spacing:-.02em;color:var(--p-ink);min-height:1.1em;max-width:100%;overflow-wrap:anywhere}
+#proj-r-slot.proj-r-idle{font-size:min(5vw,9vh);color:var(--p-muted)}
 #proj-r-slot.winner{color:var(--terra);animation:projPop .45s cubic-bezier(.34,1.56,.64,1)}
 @keyframes projPop{0%{transform:scale(.85);opacity:.4}100%{transform:scale(1);opacity:1}}
-.proj-big-btn{font-size:1.4rem;padding:16px 44px}
-#proj-s-name{font-family:'Fraunces',serif;font-weight:700;font-size:4.5vw;color:#F5F0E8;text-align:center}
-#proj-s-time{font-family:'Fraunces',serif;font-weight:700;font-size:16vw;color:var(--terra);font-variant-numeric:tabular-nums;line-height:1}
-.proj-s-bar{width:60vw;height:10px;background:rgba(255,255,255,.1);border-radius:10px;overflow:hidden}
-#proj-s-fill{height:100%;background:var(--terra);border-radius:10px;transition:width 1s linear}
-#proj-s-next{font-size:1.4vw;color:rgba(245,240,232,.45);letter-spacing:.05em;min-height:1.4em}
-#proj-pa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:2vw;width:90vw;max-height:82vh;overflow-y:auto}
-.proj-pa-card{background:rgba(255,255,255,.06);border:2px solid rgba(255,255,255,.1);border-radius:var(--r16);padding:3vh 1.5vw;text-align:center;cursor:pointer;transition:all .2s}
-.proj-pa-card:hover{background:rgba(255,255,255,.1)}
-.proj-pa-card.speaking{border-color:var(--terra);background:rgba(201,107,58,.16)}
-.proj-pa-name{font-family:'Fraunces',serif;font-weight:600;font-size:1.7vw;color:#F5F0E8;margin-bottom:1vh}
-.proj-pa-time{font-family:'Fraunces',serif;font-weight:700;font-size:3.4vw;color:var(--terra);font-variant-numeric:tabular-nums}
-.proj-pa-pct{font-size:1vw;color:rgba(245,240,232,.45);margin-top:.6vh}
-.proj-pa-key{display:inline-grid;place-items:center;min-width:2.2em;height:2.2em;margin-bottom:1vh;border-radius:8px;border:1px solid rgba(245,240,232,.2);border-bottom-width:2px;font:600 max(11px,.9vw)/1 'DM Sans',sans-serif;color:rgba(245,240,232,.5)}
+/* Temps de parole */
+.pj-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;width:100%;max-width:1680px;margin:0 auto clamp(14px,3vh,32px)}
+.pj-total{font:700 clamp(18px,2.2vw,40px) 'Fraunces',serif;font-variant-numeric:tabular-nums}
+.pj-total small{font:600 .5em 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--p-muted);margin-right:.6em}
+#proj-pa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(clamp(180px,21vw,400px),1fr));gap:clamp(10px,1.6vw,28px);width:100%;max-width:1680px;margin:0 auto;max-height:100%;overflow-y:auto}
+.proj-pa-card{position:relative;background:var(--p-card);border:2px solid var(--p-line);border-radius:clamp(12px,1.2vw,22px);padding:clamp(14px,2.4vh,32px) clamp(14px,1.6vw,28px);cursor:pointer;transition:border-color .2s,background .2s,transform .2s;overflow:hidden}
+.proj-pa-card:hover{border-color:var(--terra)}
+.proj-pa-card.speaking{border-color:var(--terra);background:color-mix(in srgb,var(--terra) 10%,var(--p-card))}
+.proj-pa-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.proj-pa-name{font:600 clamp(18px,2vw,40px)/1.15 'Fraunces',serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proj-pa-time{font:700 clamp(34px,4.8vw,104px)/1 'Fraunces',serif;font-variant-numeric:tabular-nums;margin-top:.15em}
+.proj-pa-card.speaking .proj-pa-time{color:var(--terra)}
+.proj-pa-pct{font-size:clamp(12px,1vw,18px);color:var(--p-muted);margin-top:.5em}
+.proj-pa-pct.warn{color:var(--terra);font-weight:700}
+.proj-pa-bar{position:absolute;left:0;bottom:0;height:clamp(4px,.45vw,8px);background:var(--sage);transition:width .5s}
+.proj-pa-bar.warn{background:var(--terra)}
+.proj-pa-key{display:inline-grid;place-items:center;min-width:2em;height:2em;padding:0 .4em;border-radius:8px;border:1px solid var(--p-line);border-bottom-width:2px;font:700 clamp(11px,.9vw,16px)/1 'DM Sans',sans-serif;color:var(--p-muted);flex-shrink:0}
 .proj-pa-card.speaking .proj-pa-key{background:var(--terra);border-color:var(--terra);color:#fff}
-@media(max-width:900px){#proj-r-slot{font-size:13vw}#proj-s-name{font-size:8vw}#proj-s-time{font-size:24vw}#proj-s-next{font-size:3.5vw}.proj-pa-name{font-size:5vw}.proj-pa-time{font-size:9vw}.proj-pa-pct{font-size:3vw}}
+/* Écran étroit ou vertical : tout s'empile et se centre */
+@media(max-aspect-ratio:1/1),(max-width:700px){
+  .pj-split{grid-template-columns:1fr;justify-items:center;text-align:center;gap:4vh}
+  .pj-num{font-size:min(24vw,20vh);margin-left:0}
+  .pj-ring{width:min(48vw,26vh);order:2}
+  .pj-road div{font-size:0}
+  .pj-hint{display:none}
+}
 
 /* ── TOAST (confirmation discrète) ── */
 #toast{position:fixed;left:50%;bottom:26px;z-index:2500;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px);padding:11px 12px 11px 18px;background:#1A1A1A;color:#F5F0E8;border:1px solid rgba(255,255,255,.08);border-radius:40px;box-shadow:0 14px 40px rgba(0,0,0,.28);font-size:.84rem;line-height:1.35;opacity:0;visibility:hidden;transform:translate(-50%,14px);transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1),visibility .25s}
@@ -513,46 +559,78 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 </head>
 <body>
 
-<!-- FULLSCREEN TIMER -->
-<div id="fs-ov">
-  <button class="fs-exit" onclick="fsClose()">✕ Quitter plein écran</button>
-  <div id="fs-ring-wrap">
-    <svg viewBox="0 0 380 380">
-      <circle cx="190" cy="190" r="160" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="10"/>
-      <circle id="fs-ring" cx="190" cy="190" r="160" fill="none" stroke="#6B8F71" stroke-width="10"
-        stroke-linecap="round" stroke-dasharray="1005.3" stroke-dashoffset="0"
-        transform="rotate(-90 190 190)"/>
-    </svg>
-    <div id="fs-face">
-      <div id="fs-time">00:00</div>
-      <div id="fs-label"></div>
+<!-- PLEIN ÉCRAN DU MINUTEUR -->
+<div id="fs-ov" class="proj-skin" role="dialog" aria-label="Minuteur en plein écran">
+  <div class="pj-top">
+    <div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div>
+    <div class="pj-top-r">
+      <span class="pj-clock" data-pj-clock></span>
+      <button class="pj-icon proj-ui" onclick="projThemeToggle()" aria-label="Basculer clair ou sombre" title="Clair ou sombre (T)" data-pj-theme></button>
+      <button class="pj-icon proj-ui" onclick="fsClose()" aria-label="Quitter le plein écran" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
     </div>
   </div>
-  <div class="fs-controls">
-    <button class="fs-btn" id="fs-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
-    <button class="fs-btn" onclick="timerReset()">↺ Reset</button>
+  <div class="pj-split">
+    <div>
+      <div class="pj-kicker">Minuteur</div>
+      <div class="pj-title" id="fs-label"></div>
+      <div class="pj-num" id="fs-time">00:00</div>
+    </div>
+    <div class="pj-ring" id="fs-ring-wrap">
+      <svg viewBox="0 0 380 380" aria-hidden="true">
+        <circle class="pj-ring-bg" cx="190" cy="190" r="160"/>
+        <circle class="pj-ring-fg" id="fs-ring" cx="190" cy="190" r="160" stroke="#6B8F71" stroke-dasharray="1005.3" stroke-dashoffset="0" transform="rotate(-90 190 190)"/>
+      </svg>
+    </div>
   </div>
+  <div class="pj-controls proj-ui">
+    <button class="pj-btn" id="fs-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
+    <button class="pj-btn" onclick="timerReset()">↺ Reset</button>
+  </div>
+  <div class="pj-hint proj-ui">Espace : pause · R : remettre à zéro · T : clair ou sombre · Échap : quitter</div>
 </div>
 
 <!-- MODE PROJECTION (roulette / séquence / temps de parole) -->
-<div id="proj-ov">
-  <button class="fs-exit" onclick="projClose()">✕ Quitter (Échap)</button>
-  <div id="proj-roulette" class="proj-pane">
-    <div id="proj-r-slot" class="proj-r-idle">Prêt à tirer au sort</div>
-    <button class="fs-btn proj-big-btn" onclick="rouletteSpin()">🎲 Tourner !</button>
-  </div>
-  <div id="proj-sequence" class="proj-pane">
-    <div id="proj-s-name">—</div>
-    <div id="proj-s-time">00:00</div>
-    <div class="proj-s-bar"><div id="proj-s-fill"></div></div>
-    <div id="proj-s-next"></div>
-    <div class="fs-controls">
-      <button class="fs-btn" id="proj-s-toggle" onclick="seqToggle()">⏸</button>
-      <button class="fs-btn" onclick="seqSkip()">Passer →</button>
+<div id="proj-ov" class="proj-skin" role="dialog" aria-label="Mode projection">
+  <div class="pj-top">
+    <div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div>
+    <div class="pj-top-r">
+      <span class="pj-clock" data-pj-clock></span>
+      <button class="pj-icon proj-ui" onclick="projThemeToggle()" aria-label="Basculer clair ou sombre" title="Clair ou sombre (T)" data-pj-theme></button>
+      <button class="pj-icon proj-ui" onclick="projClose()" aria-label="Quitter la projection" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
     </div>
   </div>
+  <div id="proj-roulette" class="proj-pane">
+    <div class="pj-kicker">Tirage au sort · <span id="proj-r-count"></span></div>
+    <div id="proj-r-slot" class="proj-r-idle">Prêt à tirer au sort</div>
+    <button class="pj-btn pj-btn-main proj-ui" onclick="rouletteSpin()">🎲 Tourner</button>
+    <div class="pj-hint proj-ui">Espace : tourner · T : clair ou sombre · Échap : quitter</div>
+  </div>
+  <div id="proj-sequence" class="proj-pane">
+    <div class="pj-split">
+      <div>
+        <div class="pj-kicker" id="proj-s-kicker">Séquence</div>
+        <div class="pj-title" id="proj-s-name">—</div>
+        <div class="pj-num" id="proj-s-time">00:00</div>
+        <div class="pj-next" id="proj-s-next"></div>
+      </div>
+      <div class="pj-ring">
+        <svg viewBox="0 0 380 380" aria-hidden="true">
+          <circle class="pj-ring-bg" cx="190" cy="190" r="160"/>
+          <circle class="pj-ring-fg" id="proj-s-ring" cx="190" cy="190" r="160" stroke="#6B8F71" stroke-dasharray="1005.3" stroke-dashoffset="0" transform="rotate(-90 190 190)"/>
+        </svg>
+      </div>
+    </div>
+    <div class="pj-road" id="proj-s-road"></div>
+    <div class="pj-controls proj-ui">
+      <button class="pj-btn" id="proj-s-toggle" onclick="seqToggle()">⏸</button>
+      <button class="pj-btn" onclick="seqSkip()">Passer →</button>
+    </div>
+    <div class="pj-hint proj-ui">Espace : pause · T : clair ou sombre · Échap : quitter</div>
+  </div>
   <div id="proj-parole" class="proj-pane">
+    <div class="pj-head"><div class="pj-kicker">Temps de parole</div><div class="pj-total" id="proj-pa-total"></div></div>
     <div id="proj-pa-grid"></div>
+    <div class="pj-hint proj-ui">1 à 9 : donner la parole · 0 : tout arrêter · T : clair ou sombre · Échap : quitter</div>
   </div>
 </div>
 
@@ -1381,8 +1459,40 @@ function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-m
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
 function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; T.persist(); }
-function fsOpen(){ track('projection_open',{tool:'timer'}); document.getElementById('fs-ov').classList.add('open'); animOverlay(document.getElementById('fs-ov')); WL.sync(); }
+function fsOpen(){ track('projection_open',{tool:'timer'}); const ov=document.getElementById('fs-ov'); ov.classList.add('open'); animOverlay(ov); pjWake(ov); pjClock(); WL.sync(); }
 function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); WL.sync(); }
+
+// ── Projection : clair / sombre, heure réelle, commandes qui s'effacent ──
+function progColor(p){ return p>0.5?'var(--sage)':p>0.25?'var(--gold)':p>0.1?'var(--terra)':'var(--red)'; }
+const PJ_SUN='<svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M8 1.5V3M8 13v1.5M1.5 8H3M13 8h1.5M3.4 3.4l1 1M11.6 11.6l1 1M3.4 12.6l1-1M11.6 4.4l1-1" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>';
+const PJ_MOON='<svg viewBox="0 0 16 16" fill="none"><path d="M13.5 9.6A5.6 5.6 0 016.4 2.5a5.6 5.6 0 107.1 7.1z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+function projThemeSync(){
+  const dark=document.documentElement.dataset.proj==='dark';
+  // L'icône montre le mode vers lequel on bascule
+  document.querySelectorAll('[data-pj-theme]').forEach(b=>{ b.innerHTML=dark?PJ_SUN:PJ_MOON; b.setAttribute('aria-label',dark?'Passer en clair':'Passer en sombre'); });
+}
+function projThemeToggle(){
+  const dark=document.documentElement.dataset.proj!=='dark';
+  document.documentElement.dataset.proj=dark?'dark':'';
+  try{localStorage.setItem('fk-proj-theme',dark?'dark':'');}catch(e){}
+  projThemeSync();
+}
+function pjClock(){
+  const d=new Date(), s=`${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  document.querySelectorAll('[data-pj-clock]').forEach(e=>e.textContent=s);
+}
+setInterval(pjClock,10000);
+// Les commandes disparaissent après 2,5 s sans mouvement de souris, et reviennent au moindre geste
+const pjIdleTO=new WeakMap();
+function pjWake(ov){
+  ov.classList.remove('idle');
+  clearTimeout(pjIdleTO.get(ov));
+  pjIdleTO.set(ov,setTimeout(()=>ov.classList.add('idle'),2500));
+}
+document.querySelectorAll('.proj-skin').forEach(ov=>['pointermove','pointerdown'].forEach(ev=>ov.addEventListener(ev,()=>pjWake(ov))));
+document.addEventListener('keydown',()=>document.querySelectorAll('.proj-skin.open').forEach(pjWake));
+try{ document.documentElement.dataset.proj=localStorage.getItem('fk-proj-theme')||''; }catch(e){}
+projThemeSync();
 
 // ── Mini-timer persistant (sidebar) ──
 let miniWasVisible=false;
@@ -1441,9 +1551,12 @@ function projOpen(tool){
   projTool=tool;
   document.querySelectorAll('.proj-pane').forEach(p=>p.classList.remove('active'));
   document.getElementById('proj-'+tool).classList.add('active');
-  document.getElementById('proj-ov').classList.add('open');
+  const ov=document.getElementById('proj-ov');
+  ov.classList.add('open');
   animOverlay(document.getElementById('proj-'+tool));
+  pjWake(ov); pjClock();
   if(tool==='sequence') seqUpdateDisplay();
+  if(tool==='roulette') rlCountSync();
   if(tool==='parole') PA.renderProj();
   if(tool==='roulette'){
     const s=document.getElementById('proj-r-slot');
@@ -1468,6 +1581,8 @@ document.addEventListener('keydown',e=>{
   if(tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable) return;
   if(e.ctrlKey||e.metaKey||e.altKey) return;
   const fsOpen_ = document.getElementById('fs-ov').classList.contains('open');
+  // T : projection claire ou sombre
+  if((e.key==='t'||e.key==='T')&&(fsOpen_||projTool)){ projThemeToggle(); return; }
   // Temps de parole : 1 à 9 = chrono du participant correspondant, 0 = tout arrêter
   if(/^[0-9]$/.test(e.key) && (projTool==='parole' || (!projTool && !fsOpen_ && currentPanel==='parole'))){
     e.preventDefault();
@@ -1531,6 +1646,7 @@ const RL = {
   renderTags(){
     const el=document.getElementById('roulette-tags');
     document.getElementById('roulette-count').textContent=RL.names.length;
+    rlCountSync();
     el.innerHTML=RL.names.length ? RL.names.map((n,i)=>`<span class="name-tag">${escHtml(n)}<button onclick="RL.removeName(${i})">×</button></span>`).join('') : '<span style="font-size:.78rem;color:var(--gray)">Aucun participant pour l\'instant</span>';
   },
   spin(){
@@ -1563,6 +1679,7 @@ const RL = {
     el.innerHTML=RL.history.slice(0,8).map((n,i)=>`<div class="hist-item"><span class="hist-num">${i+1}</span><span>${escHtml(n)}</span></div>`).join('');
   }
 };
+function rlCountSync(){ const n=RL.names.length; document.getElementById('proj-r-count').textContent=`${n} participant${n>1?'s':''}`; }
 function rouletteAddFromInput(){ const inp=document.getElementById('roulette-inp'); RL.addName(inp.value); inp.value=''; inp.focus(); }
 function rouletteKeydown(e){ if(e.key==='Enter') rouletteAddFromInput(); }
 function rouletteBulkAdd(){ document.getElementById('roulette-bulk').value.split('\n').forEach(n=>RL.addName(n)); document.getElementById('roulette-bulk').value=''; }
@@ -1606,15 +1723,16 @@ const PA = {
   renderProj(){
     if(projTool!=='parole') return;
     const g=document.getElementById('proj-pa-grid');
-    if(!PA.parts.length){ g.innerHTML='<div style="grid-column:1/-1;text-align:center;color:rgba(245,240,232,.4);font-size:clamp(14px,1.4vw,22px)">Ajoute des participants depuis le panneau Temps de parole</div>'; return; }
+    document.getElementById('proj-pa-total').innerHTML=`<small>Total</small>${fmtSec(PA.total())}`;
+    if(!PA.parts.length){ g.innerHTML='<div style="grid-column:1/-1;text-align:center;color:var(--p-muted);font-size:clamp(14px,1.4vw,22px)">Ajoute des participants depuis le panneau Temps de parole</div>'; return; }
     const tot=PA.total()||1;
     g.innerHTML=PA.parts.map((p,i)=>{
-      const pct=Math.round(p.time/tot*100);
+      const pct=Math.round(p.time/tot*100), warn=pct>40&&PA.parts.length>1;
       return `<div class="proj-pa-card${p.active?' speaking':''}" onclick="PA.toggle(${i})">
-        ${i<9?`<kbd class="proj-pa-key">${i+1}</kbd>`:''}
-        <div class="proj-pa-name">${p.active?'🎙 ':''}${escHtml(p.name)}</div>
+        <div class="proj-pa-top"><div class="proj-pa-name">${p.active?'🎙 ':''}${escHtml(p.name)}</div>${i<9?`<kbd class="proj-pa-key">${i+1}</kbd>`:''}</div>
         <div class="proj-pa-time">${fmtSec(p.time)}</div>
-        <div class="proj-pa-pct">${pct}% du total</div>
+        <div class="proj-pa-pct${warn?' warn':''}">${pct}% du temps${warn?' ⚠':''}</div>
+        <div class="proj-pa-bar${warn?' warn':''}" style="width:${pct}%"></div>
       </div>`;
     }).join('');
   },
@@ -1847,12 +1965,23 @@ function seqUpdateDisplay(){
   // Miroir projection
   if(projTool==='sequence'){
     const timeStr=SEQ.remaining>0?`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`:'—';
+    const prog=ph&&SEQ.remaining>0?SEQ.remaining/(ph.duration*60):0;
+    document.getElementById('proj-s-kicker').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'Séquence';
     document.getElementById('proj-s-name').textContent=ph?ph.name:'—';
     document.getElementById('proj-s-time').textContent=timeStr;
-    document.getElementById('proj-s-fill').style.width=ph?(SEQ.remaining/(ph.duration*60)*100)+'%':'0%';
+    const ring=document.getElementById('proj-s-ring');
+    ring.setAttribute('stroke-dashoffset',CIRC_380*(1-prog));
+    ring.style.stroke=progColor(prog);
     const next=SEQ.phases[SEQ.curIdx+1];
     document.getElementById('proj-s-next').textContent=next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':'');
-    document.getElementById('proj-s-toggle').textContent=SEQ.running?'⏸':'▶';
+    document.getElementById('proj-s-toggle').textContent=SEQ.running?'⏸ Pause':'▶ Reprendre';
+    // Frise du déroulé : chaque phase a une largeur proportionnelle à sa durée
+    const live=SEQ.remaining>0;
+    document.getElementById('proj-s-road').innerHTML=SEQ.phases.map((p,i)=>{
+      const cls=live&&i<SEQ.curIdx?'done':live&&i===SEQ.curIdx?'now':'';
+      const pr=cls==='now'?` ;--p:${((1-prog)*100).toFixed(1)}%`:'';
+      return `<div class="${cls}" style="--w:${Math.max(1,parseInt(p.duration)||1)}${pr}" title="${escHtml(p.name)} (${p.duration} min)">${escHtml(p.name)}</div>`;
+    }).join('');
   }
   miniSync();
 }
