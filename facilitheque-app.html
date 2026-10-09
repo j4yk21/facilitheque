@@ -194,7 +194,33 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .home-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
 .home-tool-card{font:inherit;color:inherit;text-align:left;width:100%;background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r16);padding:22px;cursor:pointer;transition:all var(--tr);display:flex;flex-direction:column;gap:12px}
 .home-tool-card:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:transparent}
-.home-tool-icon{width:48px;height:48px;border-radius:var(--r12);display:grid;place-items:center;font-size:22px}
+.home-tool-icon{display:block;width:22px;height:22px;color:var(--terra)}
+.home-tool-icon svg{width:100%;height:100%;display:block}
+/* Tableau de bord : en cours, atelier, minuteur express */
+.home-h2{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;color:var(--ink)}
+.home-sec{margin:0 0 14px}
+.home-note{font-size:.84rem;color:var(--gray);margin:4px 0 16px}
+.home-live{display:flex;align-items:center;gap:16px;flex-wrap:wrap;padding:16px 20px;margin-bottom:20px;background:var(--card);border:1px solid var(--cream-dark);border-left:4px solid var(--terra);border-radius:var(--r16)}
+.home-live[hidden]{display:none}
+.home-live-dot{width:10px;height:10px;border-radius:50%;background:var(--terra);flex-shrink:0;animation:mtPulse 1.2s ease infinite}
+.home-live.paused .home-live-dot{animation:none;background:var(--gold)}
+.home-live-txt{flex:1;min-width:0}
+.home-live-what{font-size:.84rem;color:var(--gray)}
+.home-live-time{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.1}
+.home-live-acts{display:flex;gap:8px;flex-wrap:wrap}
+.home-top{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;margin-bottom:36px}
+.home-plan,.home-quick{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r16);padding:24px;min-width:0}
+.home-plan-name{font-family:'Fraunces',serif;font-size:1.6rem;font-weight:700;line-height:1.15;margin:6px 0 6px;overflow-wrap:anywhere}
+.home-plan-meta{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.82rem;color:var(--gray)}
+.home-frise{display:flex;gap:4px;margin:20px 0 22px}
+.home-frise span{flex:var(--w) 1 0;min-width:0;height:8px;border-radius:6px;background:var(--cream-mid)}
+.home-frise span:nth-child(odd){background:color-mix(in srgb,var(--terra) 55%,var(--cream-mid))}
+.home-plan-acts{display:flex;gap:10px;flex-wrap:wrap}
+.home-presets{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:14px}
+.home-presets button{padding:14px 4px;border-radius:var(--r12);border:1.5px solid var(--cream-mid);background:var(--cream);color:var(--ink);font:600 .95rem 'DM Sans',sans-serif;font-variant-numeric:tabular-nums;transition:all var(--tr)}
+.home-presets button:hover{background:var(--terra);border-color:var(--terra);color:#fff}
+.home-quick-row{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:560px){.home-presets .u{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}.home-quick .home-note::after{content:' Durées en minutes.'}}
 .home-tool-name{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--ink)}
 .home-tool-name,.home-tool-desc{display:block}
 .home-tool-desc{font-size:.78rem;color:var(--gray);line-height:1.5}
@@ -571,6 +597,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
   .timer-wrap{grid-template-columns:minmax(0,1fr)}
   .roulette-layout{grid-template-columns:minmax(0,1fr)}
   .home-grid{grid-template-columns:repeat(2,1fr)}
+  .home-top{grid-template-columns:minmax(0,1fr)}
   .planner-header{grid-template-columns:1fr 1fr}
   .methodes-grid{grid-template-columns:1fr}
   .two-col{grid-template-columns:minmax(0,1fr);gap:20px}
@@ -747,7 +774,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <!-- HOME -->
     <section class="panel active" id="p-home">
       <h1 class="panel-title">Tableau de bord</h1>
-      <p class="panel-sub">Lance un outil rapidement ou reprends là où tu en étais.</p>
+      <p class="panel-sub">Démarre en un clic, ou reprends là où tu en étais.</p>
       <div id="onboard-banner" style="display:none;position:relative;background:linear-gradient(135deg,rgba(201,107,58,.1),rgba(107,143,113,.08));border:1px solid rgba(201,107,58,.25);border-radius:var(--r16);padding:18px 44px 18px 20px;margin-bottom:24px">
         <button class="onboard-x" onclick="onboardDismiss()" title="Fermer" aria-label="Fermer le message de bienvenue" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--gray);font-size:14px;cursor:pointer;padding:4px 8px">✕</button>
         <div style="font-weight:600;margin-bottom:4px">👋 Première fois ici ?</div>
@@ -758,44 +785,64 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <button class="btn btn-ghost btn-sm" onclick="onboardDismiss();goPanel('library')">📚 Parcourir les 48 outils</button>
         </div>
       </div>
+      <div id="home-live" class="home-live" hidden></div>
+      <div class="home-top">
+        <section class="home-plan" id="home-planner-preview" aria-labelledby="home-plan-title"></section>
+        <section class="home-quick" aria-labelledby="home-quick-title">
+          <h2 class="home-h2" id="home-quick-title">Minuteur express</h2>
+          <p class="home-note">Un clic, et le décompte démarre.</p>
+          <div class="home-presets">
+            <button type="button" onclick="quickTimer(2)">2<span class="u"> min</span></button>
+            <button type="button" onclick="quickTimer(5)">5<span class="u"> min</span></button>
+            <button type="button" onclick="quickTimer(10)">10<span class="u"> min</span></button>
+            <button type="button" onclick="quickTimer(15)">15<span class="u"> min</span></button>
+            <button type="button" onclick="quickTimer(20)">20<span class="u"> min</span></button>
+          </div>
+          <div class="home-quick-row">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="goPanel('roulette')">🎲 Tirer au sort</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="goPanel('parole')">💬 Temps de parole</button>
+          </div>
+        </section>
+      </div>
+      <h2 class="home-h2 home-sec">Tous les outils</h2>
       <div class="home-grid">
         <button type="button" class="home-tool-card" onclick="goPanel('timer')">
-          <span class="home-tool-icon" style="background:rgba(107,143,113,.12)">⏱</span>
+          <span class="home-tool-icon" data-icon="timer" aria-hidden="true"></span>
           <span class="home-tool-name">Minuteur</span>
-          <span class="home-tool-desc">Décompte avec anneau de progression, presets, plein écran</span>
+          <span class="home-tool-desc">Décompte coloré, durées prêtes, plein écran</span>
         </button>
         <button type="button" class="home-tool-card" onclick="goPanel('roulette')">
-          <span class="home-tool-icon" style="background:rgba(201,107,58,.12)">🎲</span>
+          <span class="home-tool-icon" data-icon="roulette" aria-hidden="true"></span>
           <span class="home-tool-name">Roulette</span>
           <span class="home-tool-desc">Tire un participant au sort parmi ta liste</span>
         </button>
         <button type="button" class="home-tool-card" onclick="goPanel('parole')">
-          <span class="home-tool-icon" style="background:rgba(91,127,166,.12)">💬</span>
+          <span class="home-tool-icon" data-icon="parole" aria-hidden="true"></span>
           <span class="home-tool-name">Temps de parole</span>
           <span class="home-tool-desc">Chronomètre la parole de chaque participant en live</span>
         </button>
         <button type="button" class="home-tool-card" onclick="goPanel('planner')">
-          <span class="home-tool-icon" style="background:rgba(196,148,58,.12)">📋</span>
+          <span class="home-tool-icon" data-icon="planner" aria-hidden="true"></span>
           <span class="home-tool-name">Planificateur</span>
           <span class="home-tool-desc">Conçois ton déroulé et exporte-le en PDF</span>
         </button>
         <button type="button" class="home-tool-card" onclick="goPanel('chrono')">
-          <span class="home-tool-icon" style="background:rgba(184,84,80,.12)">⏲</span>
+          <span class="home-tool-icon" data-icon="chrono" aria-hidden="true"></span>
           <span class="home-tool-name">Chronomètre</span>
           <span class="home-tool-desc">Mesure une durée libre avec gestion des tours</span>
         </button>
         <button type="button" class="home-tool-card" onclick="goPanel('sequence')">
-          <span class="home-tool-icon" style="background:rgba(107,143,113,.12)">🔄</span>
+          <span class="home-tool-icon" data-icon="sequence" aria-hidden="true"></span>
           <span class="home-tool-name">Séquence</span>
           <span class="home-tool-desc">Enchaîne des phases minutées automatiquement</span>
         </button>
         <button type="button" class="home-tool-card" onclick="goPanel('library')">
-          <span class="home-tool-icon" style="background:rgba(196,148,58,.12)">🛠</span>
+          <span class="home-tool-icon" data-icon="library" aria-hidden="true"></span>
           <span class="home-tool-name">Bibliothèque</span>
           <span class="home-tool-desc">48 fiches outils filtrables, téléchargeables en PDF</span>
         </button>
         <button type="button" class="home-tool-card" onclick="goPanel('parking')">
-          <span class="home-tool-icon" style="background:rgba(107,143,113,.12)">🅿️</span>
+          <span class="home-tool-icon" data-icon="parking" aria-hidden="true"></span>
           <span class="home-tool-name">Parking</span>
           <span class="home-tool-desc">Capture les idées hors-sujet en plein atelier</span>
         </button>
@@ -837,7 +884,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel" id="p-timer">
       <h1 class="panel-title">Minuteur</h1>
       <p class="panel-sub">Décompte visible de loin. Plein écran pour projeter.</p>
-      <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Minuteur de facilitation avec anneau de progression visuel, presets rapides (5, 10, 15, 20 min) et mode plein écran pour projeter le décompte en atelier. Idéal pour cadrer les activités chronométrées et maintenir le rythme du groupe.</p>
       <div class="timer-wrap">
         <div class="timer-center">
           <div style="width:100%;max-width:320px">
@@ -909,7 +955,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel" id="p-chrono">
       <h1 class="panel-title">Chronomètre</h1>
       <p class="panel-sub">Mesure une durée libre. Enregistre des tours.</p>
-      <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Chronomètre de facilitation avec gestion des tours et historique. Mesure la durée réelle de chaque activité pour ajuster ton animation en temps réel. Utile pour les débriefs, les tours de table chronométrés et les activités de co-développement.</p>
       <div class="two-col" style="align-items:start">
         <div class="card" style="text-align:center">
           <div class="chrono-display" id="chrono-display">
@@ -934,7 +979,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel" id="p-roulette">
       <h1 class="panel-title">Roulette</h1>
       <p class="panel-sub">Tire un participant au hasard parmi ta liste.</p>
-      <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Roulette de participants pour facilitation : ajoute les noms du groupe et tire au sort de façon aléatoire et équitable. Outil pour animer les tours de parole, désigner des volontaires ou créer des sous-groupes sans biais.</p>
       <div class="roulette-layout">
         <div>
           <div class="card">
@@ -978,7 +1022,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel" id="p-parole">
       <h1 class="panel-title">Temps de parole</h1>
       <p class="panel-sub">Clique sur un participant ou appuie sur son numéro pour démarrer ou arrêter son chrono. La touche 0 arrête tout.</p>
-      <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Outil de gestion du temps de parole en atelier : chronomètre individuel par participant, visualisation des déséquilibres en temps réel. Favorise une prise de parole équilibrée dans les groupes et aide le facilitateur à réguler sans intervenir verbalement.</p>
       <div class="flex-row" style="margin-bottom:20px;flex-wrap:wrap">
         <input class="input" id="parole-inp" placeholder="Ajouter un participant…" onkeydown="paroleKeydown(event)" style="max-width:280px">
         <button class="btn btn-primary btn-sm" onclick="paroleAdd()">+ Ajouter</button>
@@ -1000,7 +1043,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel" id="p-sequence">
       <h1 class="panel-title">Séquence de timers</h1>
       <p class="panel-sub">Enchaîne des phases minutées. L'alerte passe automatiquement à la suivante.</p>
-      <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Séquenceur d'atelier : programme plusieurs phases minutées qui s'enchaînent automatiquement. Idéal pour les ateliers structurés (World Café, design sprint, hackathon) où chaque activité a une durée définie. Passe à la phase suivante avec alerte sonore.</p>
       <div style="margin-bottom:28px">
         <div class="text-xs text-gray fw6" style="letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px">⚡ Démarrage rapide</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -1044,7 +1086,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel" id="p-planner">
       <h1 class="panel-title">Planificateur d'atelier</h1>
       <p class="panel-sub">Construis ton déroulé. Sauvegardé automatiquement.</p>
-      <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Planificateur de déroulé d'atelier : crée ton agenda de facilitation phase par phase avec durées, objectifs et matériel. Sauvegarde automatique locale, export PDF prêt à imprimer ou partager avec ton client. Conçu pour les facilitateurs professionnels.</p>
       <div class="plan-switch">
         <div class="plan-select-wrap">
           <select id="plan-select" onchange="plannerSwitch(this.value)" aria-label="Choisir le plan affiché"></select>
@@ -1105,7 +1146,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
         <div>
           <h1 class="panel-title">Parking</h1>
           <p class="panel-sub">Capture les idées hors-sujet pendant l'atelier. On y revient après.</p>
-          <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Parking à idées pour facilitation : capture en temps réel les sujets hors-ordre-du-jour sans interrompre le fil de l'atelier. Permet de valoriser chaque contribution tout en maintenant le focus du groupe. Exportable en fin de session.</p>
         </div>
         <div style="display:flex;gap:8px">
           <button class="btn btn-secondary btn-sm" onclick="parkingPrint()">⬇ Exporter en PDF</button>
@@ -1552,8 +1592,10 @@ function miniSync(){
   const el=document.getElementById('sb-mini-timer');
   if(!el) return;
   const wasVisible=miniWasVisible;
-  const seqLive = SEQ.running && SEQ.remaining>0 && currentPanel!=='sequence';
-  const tEngaged = (T.running || T.remaining<T.total) && currentPanel!=='timer';
+  // Sur le tableau de bord, le bandeau « En cours » prend le relais
+  const onHome = currentPanel==='home';
+  const seqLive = SEQ.running && SEQ.remaining>0 && currentPanel!=='sequence' && !onHome;
+  const tEngaged = (T.running || T.remaining<T.total) && currentPanel!=='timer' && !onHome;
   if(seqLive){
     const ph=SEQ.phases[SEQ.curIdx];
     el.querySelector('#mt-time').textContent=`${pad(Math.floor(SEQ.remaining/60))}:${pad(SEQ.remaining%60)}`;
@@ -1569,6 +1611,7 @@ function miniSync(){
   } else {
     el.className='';
   }
+  homeLiveSync();
   miniWasVisible=el.classList.contains('visible');
   if(miniWasVisible&&!wasVisible) animIn(el,{x:-14});
 }
@@ -1771,7 +1814,7 @@ const PA = {
     if(PA.activeIdx===null) return;
     const p=PA.parts[PA.activeIdx], t=Math.floor((Date.now()-PA.t0)/1000);
     if(t===p.time) return;
-    p.time=t; PA.updateCard(PA.activeIdx); PA.updateTotals(); PA.renderProj(); PA.save();
+    p.time=t; PA.updateCard(PA.activeIdx); PA.updateTotals(); PA.renderProj(); PA.save(); homeLiveSync();
   },
   renderProj(){
     if(projTool!=='parole') return;
@@ -2307,12 +2350,56 @@ function plannerRender(){
 // ════════════════════════════════════════════════════
 function homeRefresh(){
   PL.load();
-  const wrap=document.getElementById('home-planner-preview');
-  if(PL.data.name||PL.data.phases.length){
-    const tot=PL.data.phases.reduce((s,p)=>s+(parseInt(p.duration)||0),0);
-    const h=Math.floor(tot/60),m=tot%60;
-    wrap.innerHTML=`<div class="card" style="margin-top:0;border-left:3px solid var(--terra)"><div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px"><div><div class="text-xs text-gray fw6" style="letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px">Atelier en cours</div><div style="font-family:'Fraunces',serif;font-size:1.1rem;font-weight:600">${escHtml(PL.data.name)||'Plan sans titre'}</div></div><button class="btn btn-primary btn-sm" onclick="goPanel('planner')">Ouvrir →</button></div><div style="display:flex;gap:20px;font-size:.8rem;color:var(--gray)"><span>📋 ${PL.data.phases.length} phase${PL.data.phases.length>1?'s':''}</span><span>⏱ ${h?h+'h ':''} ${m}min au total</span>${PL.data.date?`<span>📅 ${PL.data.date}</span>`:''}</div></div>`;
-  } else { wrap.innerHTML=''; }
+  const wrap=document.getElementById('home-planner-preview'), d=PL.data;
+  const n=PL.store.plans.length;
+  if(d.name||d.phases.length){
+    const tot=d.phases.reduce((s,p)=>s+(parseInt(p.duration)||0),0);
+    const h=Math.floor(tot/60),m=tot%60, dur=tot?(h?`${h} h ${pad(m)}`:`${m} min`):'durée à définir';
+    const date=d.date?new Date(d.date+'T12:00').toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}):'';
+    const meta=[date,`${d.phases.length} phase${d.phases.length>1?'s':''}`,dur,n>1?`${n} plans enregistrés`:''].filter(Boolean);
+    wrap.innerHTML=`<h2 class="home-h2" id="home-plan-title">Ton atelier</h2>
+      <div class="home-plan-name">${escHtml(PL.label(d))}</div>
+      <div class="home-plan-meta">${meta.map(x=>`<span>${escHtml(x)}</span>`).join('')}</div>
+      ${d.phases.length?`<div class="home-frise" aria-hidden="true">${d.phases.map(p=>`<span style="--w:${Math.max(1,parseInt(p.duration)||1)}" title="${escHtml(p.name||p.tool||'Phase')} (${parseInt(p.duration)||0} min)"></span>`).join('')}</div>`:'<div style="height:20px"></div>'}
+      <div class="home-plan-acts">
+        <button type="button" class="btn btn-primary" onclick="plannerRender();plannerToSequence()"${tot?'':' disabled'}>▶ Lancer en séquence</button>
+        <button type="button" class="btn btn-secondary" onclick="goPanel('planner')">Ouvrir le plan</button>
+      </div>`;
+  } else {
+    wrap.innerHTML=`<h2 class="home-h2" id="home-plan-title">Ton prochain atelier</h2>
+      <p class="home-note">Construis ton déroulé phase par phase, puis lance-le en séquence minutée le jour J.</p>
+      <div class="home-plan-acts">
+        <button type="button" class="btn btn-primary" onclick="goPanel('planner')">Préparer un atelier</button>
+        <button type="button" class="btn btn-secondary" onclick="goPanel('library')">Choisir parmi les 48 fiches</button>
+      </div>`;
+  }
+  homeLiveSync();
+}
+// Minuteur express : la durée choisie démarre tout de suite
+function quickTimer(m){
+  goPanel('timer');
+  timerSet(m,[...document.querySelectorAll('.preset-btn')].find(b=>parseInt(b.textContent)===m));
+  T.start();
+}
+// « En cours » : ce qui tourne (ou est en pause) en ce moment, avec un accès direct
+function homeLiveSync(){
+  const el=document.getElementById('home-live'); if(!el) return;
+  if(currentPanel!=='home'){ return; }
+  let what='', left=0, go='', proj='', paused=false;
+  if(SEQ.remaining>0){ const ph=SEQ.phases[SEQ.curIdx]; what=`Séquence · ${ph?ph.name:''}`; left=SEQ.remaining; go='sequence'; proj="projOpen('sequence')"; paused=!SEQ.running; }
+  else if(T.running||(T.remaining>0&&T.remaining<T.total)){ const l=document.getElementById('timer-label-inp').value; what='Minuteur'+(l?` · ${l}`:''); left=T.remaining; go='timer'; proj='fsOpen()'; paused=!T.running; }
+  else if(PA.activeIdx!==null){ const p=PA.parts[PA.activeIdx]; what=`Temps de parole · ${p.name}`; left=p.time; go='parole'; proj="projOpen('parole')"; }
+  if(!what){ el.hidden=true; el.dataset.key=''; return; }
+  const time=`${pad(Math.floor(left/60))}:${pad(left%60)}`;
+  const key=what+go+paused;
+  el.hidden=false; el.classList.toggle('paused',paused);
+  if(el.dataset.key!==key){
+    el.dataset.key=key;
+    el.innerHTML=`<span class="home-live-dot" aria-hidden="true"></span>
+      <div class="home-live-txt"><div class="home-live-what">${escHtml(what)}${paused?' (en pause)':''}</div><div class="home-live-time" id="home-live-time"></div></div>
+      <div class="home-live-acts"><button type="button" class="btn btn-primary btn-sm" onclick="goPanel('${go}')">Reprendre</button><button type="button" class="btn btn-secondary btn-sm" onclick="${proj}">⛶ Projeter</button></div>`;
+  }
+  document.getElementById('home-live-time').textContent=time;
 }
 
 // ════════════════════════════════════════════════════
@@ -2774,6 +2861,7 @@ const paLive = PA.load();
 PARK.load();
 appReady = true;
 // Reprise de ce qui tournait avant le rechargement
+document.querySelectorAll('.home-tool-icon[data-icon]').forEach(i=>{ const svg=document.querySelector(`.nav-item[data-panel="${i.dataset.icon}"] svg`); if(svg) i.innerHTML=svg.outerHTML; });
 sortable(document.getElementById('planner-phases'),'.planner-phase-row',(a,b)=>PL.moveTo(a,b));
 sortable(document.getElementById('seq-phases-list'),'.seq-phase-row',(a,b)=>SEQ.moveTo(a,b));
 const tLive = T.restore(), sLive = SEQ.restore();
