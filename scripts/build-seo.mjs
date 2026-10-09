@@ -178,7 +178,7 @@ function page({ path: p, title, description, h = '', body, jsonld = [], current,
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/assets/site.css">
 <script defer src="/assets/analytics.js"></script>
 <script>try{document.documentElement.dataset.theme=localStorage.getItem('fk-theme')||'';document.documentElement.dataset.palette=localStorage.getItem('fk-palette')||''}catch(e){}</script>
