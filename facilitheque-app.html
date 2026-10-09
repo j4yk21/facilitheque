@@ -102,6 +102,22 @@ button{cursor:pointer;font-family:'DM Sans',sans-serif}
 button:active{transform:translateY(1px) scale(.97)}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
 input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
+/* Focus : un anneau discret au clavier seulement, le même partout ; les champs le montrent par leur bordure */
+:root{--focus-outline:color-mix(in srgb,var(--terra) 75%,transparent);--focus-outline-offset:2px}
+:focus-visible{outline:2px solid var(--focus-outline);outline-offset:var(--focus-outline-offset)}
+:focus:not(:focus-visible){outline:none}
+.input:focus-visible,.seq-dur-inp:focus-visible,.lib-search input:focus-visible,.lib-field input:focus-visible,.plan-select-wrap select:focus-visible{outline:none}
+.seq-name-inp:focus{box-shadow:inset 0 -1.5px 0 var(--terra)}
+/* Les chiffres qui changent gardent leur largeur : rien ne saute */
+.timer-time,.chrono-display,.lap-time,.seq-display,.parole-time-disp,.planner-total-num,.pj-num,.pj-clock{font-variant-numeric:tabular-nums}
+/* Écran tactile : cibles d'au moins 44 px */
+@media(pointer:coarse){
+  .btn,.preset-btn,.pill,.lib-seg button,.pj-btn,.nav-item,.lib-reset{min-height:44px}
+  .btn-icon,.pj-icon,.modal-close,.btn-sm{min-width:44px;min-height:44px}
+  .move-btn,.name-tag button,.parking-note-del,.parole-rm,.pal-dot{position:relative}
+  .name-tag button::after,.parking-note-del::after,.parole-rm::after,.pal-dot::after,.onboard-x::after{content:'';position:absolute;inset:-12px}
+  .move-btn::after{content:'';position:absolute;inset:-6px -10px}
+}
 
 /* ── APP SHELL ── */
 #app{display:flex;height:100vh;overflow:hidden}
@@ -176,10 +192,11 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 
 /* ── HOME PANEL ── */
 .home-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
-.home-tool-card{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r16);padding:22px;cursor:pointer;transition:all var(--tr);display:flex;flex-direction:column;gap:12px}
+.home-tool-card{font:inherit;color:inherit;text-align:left;width:100%;background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r16);padding:22px;cursor:pointer;transition:all var(--tr);display:flex;flex-direction:column;gap:12px}
 .home-tool-card:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:transparent}
 .home-tool-icon{width:48px;height:48px;border-radius:var(--r12);display:grid;place-items:center;font-size:22px}
 .home-tool-name{font-family:'Fraunces',serif;font-size:1rem;font-weight:600;color:var(--ink)}
+.home-tool-name,.home-tool-desc{display:block}
 .home-tool-desc{font-size:.78rem;color:var(--gray);line-height:1.5}
 
 /* ── TIMER PANEL ── */
@@ -233,6 +250,12 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .parole-bar-wrap{height:4px;background:var(--cream-dark);border-radius:2px;margin-top:10px;overflow:hidden}
 .parole-bar{height:100%;background:var(--sage);border-radius:2px;transition:width .5s}
 .parole-bar.warn{background:var(--terra)}
+.parole-card-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.parole-rm{background:none;border:none;color:var(--gray);font-size:11px;padding:2px 4px;border-radius:4px;transition:color .2s}
+.parole-rm:hover{color:var(--red)}
+.parole-main{all:unset;display:block;width:100%;cursor:pointer;text-align:center;box-sizing:border-box}
+.parole-main:focus-visible{outline:2px solid var(--focus-outline);outline-offset:6px;border-radius:8px}
+.parole-mic,.parole-name,.parole-time-disp,.parole-pct,.parole-bar-wrap{display:block}
 .parole-mic{font-size:1.2rem;margin-bottom:4px}
 .parole-pct{font-size:.7rem;color:var(--gray);margin-top:4px}
 .parole-key{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:6px;background:var(--cream);border:1px solid var(--cream-mid);border-bottom-width:2px;font:600 .7rem/1 'DM Sans',sans-serif;color:var(--gray);transition:all var(--tr)}
@@ -281,7 +304,6 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .move-btn svg{width:10px;height:10px}
 .move-btn:hover:not(:disabled){color:var(--ink);background:var(--cream-dark)}
 .move-btn:disabled{opacity:.22;cursor:default}
-.move-btn:focus-visible,.phase-drag:focus-visible{outline:2px solid var(--terra);outline-offset:1px}
 .dragging{position:relative;z-index:5;border-color:var(--terra)!important;box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 3px rgba(201,107,58,.14)!important;transition:none!important}
 .dragging .phase-drag{color:var(--terra);cursor:grabbing}
 body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
@@ -307,6 +329,11 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .ph-production{background:rgba(201,107,58,.12);color:var(--terra)}
 .ph-cloture{background:rgba(196,148,58,.12);color:var(--gold)}
 .ph-apres{background:rgba(184,84,80,.12);color:var(--red)}
+.lib-card-link{all:unset;cursor:pointer}
+.lib-card-link::after{content:'';position:absolute;inset:0;border-radius:inherit}
+.lib-card:has(.lib-card-link:focus-visible){outline:2px solid var(--focus-outline);outline-offset:2px}
+.lib-card-link:focus-visible{outline:none}
+.lib-card-footer{position:relative;z-index:1}
 .lib-card-name{font-family:'Fraunces',serif;font-size:1.15rem;font-weight:600;color:var(--ink);margin-bottom:8px}
 .lib-card-meta{display:flex;gap:14px;margin-bottom:10px}
 .lib-meta-item{display:flex;align-items:center;gap:4px;font-size:.75rem;color:var(--gray)}
@@ -338,8 +365,9 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .lib-empty p{font-size:.9rem;line-height:1.6;margin-bottom:16px}
 
 /* ── MODAL ── */
-.modal-ov{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility .25s}
-.modal-ov.open{opacity:1;visibility:visible}
+.modal-ov{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
+/* Visible tout de suite à l'ouverture (le focus peut y entrer), masquée après le fondu à la fermeture */
+.modal-ov.open{opacity:1;visibility:visible;transition:opacity .25s,visibility 0s}
 .modal-box{background:var(--card);border-radius:var(--r24);max-width:1080px;width:100%;max-height:96vh;overflow:hidden;box-shadow:var(--sh2);display:flex;flex-direction:column;transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
 .modal-ov.open .modal-box{transform:translateY(0) scale(1)}
 .modal-hdr{padding:18px 28px 14px;border-bottom:1px solid var(--cream-dark);background:var(--card);z-index:1;display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-shrink:0}
@@ -394,7 +422,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-icon{width:42px;height:42px;border-radius:50%;border:1px solid var(--p-line);background:var(--p-btn);color:var(--p-ink);display:grid;place-items:center;padding:0;transition:border-color var(--tr),background var(--tr)}
 .pj-icon svg{width:17px;height:17px}
 .pj-icon:hover{border-color:var(--terra)}
-.pj-icon:focus-visible,.pj-btn:focus-visible{outline:2px solid var(--terra);outline-offset:2px}
 /* Commandes discrètes : elles s'effacent quand la souris ne bouge plus */
 .proj-ui{transition:opacity .45s}
 .proj-skin.idle .proj-ui{opacity:0;pointer-events:none}
@@ -468,11 +495,12 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-total{font:700 clamp(18px,2.2vw,40px) 'Fraunces',serif;font-variant-numeric:tabular-nums}
 .pj-total small{font:600 .5em 'DM Sans',sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--p-muted);margin-right:.6em}
 #proj-pa-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(clamp(180px,21vw,400px),1fr));gap:clamp(10px,1.6vw,28px);width:100%;max-width:1680px;margin:0 auto;max-height:100%;overflow-y:auto}
-.proj-pa-card{position:relative;background:var(--p-card);border:2px solid var(--p-line);border-radius:clamp(12px,1.2vw,22px);padding:clamp(14px,2.4vh,32px) clamp(14px,1.6vw,28px);cursor:pointer;transition:border-color .2s,background .2s,transform .2s;overflow:hidden}
+.proj-pa-card{font:inherit;color:inherit;text-align:left;width:100%;display:block;position:relative;background:var(--p-card);border:2px solid var(--p-line);border-radius:clamp(12px,1.2vw,22px);padding:clamp(14px,2.4vh,32px) clamp(14px,1.6vw,28px);cursor:pointer;transition:border-color .2s,background .2s,transform .2s;overflow:hidden}
 .proj-pa-card:hover{border-color:var(--terra)}
 .proj-pa-card.speaking{border-color:var(--terra);background:color-mix(in srgb,var(--terra) 10%,var(--p-card))}
 .proj-pa-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
 .proj-pa-name{font:600 clamp(18px,2vw,40px)/1.15 'Fraunces',serif;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.proj-pa-name,.proj-pa-time,.proj-pa-pct{display:block}
 .proj-pa-time{font:700 clamp(34px,4.8vw,104px)/1 'Fraunces',serif;font-variant-numeric:tabular-nums;margin-top:.15em}
 .proj-pa-card.speaking .proj-pa-time{color:var(--terra)}
 .proj-pa-pct{font-size:clamp(12px,1vw,18px);color:var(--p-muted);margin-top:.5em}
@@ -540,8 +568,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
   .nav-item{justify-content:center;padding:10px}
   .nav-item svg{width:18px;height:18px}
   .panel{padding:20px}
-  .timer-wrap{grid-template-columns:1fr}
-  .roulette-layout{grid-template-columns:1fr}
+  .timer-wrap{grid-template-columns:minmax(0,1fr)}
+  .roulette-layout{grid-template-columns:minmax(0,1fr)}
   .home-grid{grid-template-columns:repeat(2,1fr)}
   .planner-header{grid-template-columns:1fr 1fr}
   .methodes-grid{grid-template-columns:1fr}
@@ -601,7 +629,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
   </div>
   <div class="pj-controls proj-ui">
     <button class="pj-btn" id="fs-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
-    <button class="pj-btn" onclick="timerReset()">↺ Reset</button>
+    <button class="pj-btn" onclick="timerReset()">↺ Remettre à zéro</button>
   </div>
 </div>
 
@@ -702,10 +730,10 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <div class="sb-footer">
       <div style="font-size:.6rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(245,240,232,.35);text-align:center;margin-bottom:7px">Couleurs</div>
       <div style="display:flex;gap:9px;justify-content:center;margin-bottom:10px">
-        <button class="pal-dot" data-pal="" onclick="setPalette('')" title="Terracotta (classique)" style="--pd:#C96B3A;--pb:#F5F0E8"></button>
-        <button class="pal-dot" data-pal="rose" onclick="setPalette('rose')" title="Rose poudré" style="--pd:#C05F6C;--pb:#FAEFEC"></button>
-        <button class="pal-dot" data-pal="miel" onclick="setPalette('miel')" title="Miel doré" style="--pd:#B98A2A;--pb:#FBF3DD"></button>
-        <button class="pal-dot" data-pal="sauge" onclick="setPalette('sauge')" title="Vert sauge" style="--pd:#6E8558;--pb:#F1F3E7"></button>
+        <button class="pal-dot" data-pal="" onclick="setPalette('')" title="Terracotta (classique)" aria-label="Couleurs : Terracotta (classique)" style="--pd:#C96B3A;--pb:#F5F0E8"></button>
+        <button class="pal-dot" data-pal="rose" onclick="setPalette('rose')" title="Rose poudré" aria-label="Couleurs : Rose poudré" style="--pd:#C05F6C;--pb:#FAEFEC"></button>
+        <button class="pal-dot" data-pal="miel" onclick="setPalette('miel')" title="Miel doré" aria-label="Couleurs : Miel doré" style="--pd:#B98A2A;--pb:#FBF3DD"></button>
+        <button class="pal-dot" data-pal="sauge" onclick="setPalette('sauge')" title="Vert sauge" aria-label="Couleurs : Vert sauge" style="--pd:#6E8558;--pb:#F1F3E7"></button>
       </div>
       <button id="theme-toggle" onclick="themeToggle()" title="Basculer clair / sombre" style="width:100%;margin-bottom:10px;padding:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r8);color:rgba(245,240,232,.7);font-size:.75rem;cursor:pointer;transition:background .2s">🌙 Mode sombre</button>
       <p>Facilithèque · Open source<br>Fait pour les facilitateurs</p>
@@ -721,7 +749,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       <h1 class="panel-title">Tableau de bord</h1>
       <p class="panel-sub">Lance un outil rapidement ou reprends là où tu en étais.</p>
       <div id="onboard-banner" style="display:none;position:relative;background:linear-gradient(135deg,rgba(201,107,58,.1),rgba(107,143,113,.08));border:1px solid rgba(201,107,58,.25);border-radius:var(--r16);padding:18px 44px 18px 20px;margin-bottom:24px">
-        <button onclick="onboardDismiss()" title="Fermer" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--gray);font-size:14px;cursor:pointer;padding:4px 8px">✕</button>
+        <button class="onboard-x" onclick="onboardDismiss()" title="Fermer" aria-label="Fermer le message de bienvenue" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--gray);font-size:14px;cursor:pointer;padding:4px 8px">✕</button>
         <div style="font-weight:600;margin-bottom:4px">👋 Première fois ici ?</div>
         <p style="font-size:.85rem;color:var(--ink-s);margin-bottom:12px;line-height:1.5">Facilithèque rassemble tous les outils pour animer tes ateliers : timers, tirage au sort, temps de parole, et 48 fiches méthodes. Tout est gratuit, sans compte, et fonctionne même hors ligne.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -731,46 +759,46 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
         </div>
       </div>
       <div class="home-grid">
-        <div class="home-tool-card" onclick="goPanel('timer')">
-          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">⏱</div>
-          <div class="home-tool-name">Minuteur</div>
-          <div class="home-tool-desc">Décompte avec anneau de progression, presets, plein écran</div>
-        </div>
-        <div class="home-tool-card" onclick="goPanel('roulette')">
-          <div class="home-tool-icon" style="background:rgba(201,107,58,.12)">🎲</div>
-          <div class="home-tool-name">Roulette</div>
-          <div class="home-tool-desc">Tire un participant au sort parmi ta liste</div>
-        </div>
-        <div class="home-tool-card" onclick="goPanel('parole')">
-          <div class="home-tool-icon" style="background:rgba(91,127,166,.12)">💬</div>
-          <div class="home-tool-name">Temps de parole</div>
-          <div class="home-tool-desc">Chronomètre la parole de chaque participant en live</div>
-        </div>
-        <div class="home-tool-card" onclick="goPanel('planner')">
-          <div class="home-tool-icon" style="background:rgba(196,148,58,.12)">📋</div>
-          <div class="home-tool-name">Planificateur</div>
-          <div class="home-tool-desc">Conçois ton déroulé et exporte-le en PDF</div>
-        </div>
-        <div class="home-tool-card" onclick="goPanel('chrono')">
-          <div class="home-tool-icon" style="background:rgba(184,84,80,.12)">⏲</div>
-          <div class="home-tool-name">Chronomètre</div>
-          <div class="home-tool-desc">Mesure une durée libre avec gestion des tours</div>
-        </div>
-        <div class="home-tool-card" onclick="goPanel('sequence')">
-          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">🔄</div>
-          <div class="home-tool-name">Séquence</div>
-          <div class="home-tool-desc">Enchaîne des phases minutées automatiquement</div>
-        </div>
-        <div class="home-tool-card" onclick="goPanel('library')">
-          <div class="home-tool-icon" style="background:rgba(196,148,58,.12)">🛠</div>
-          <div class="home-tool-name">Bibliothèque</div>
-          <div class="home-tool-desc">48 fiches outils filtrables, téléchargeables en PDF</div>
-        </div>
-        <div class="home-tool-card" onclick="goPanel('parking')">
-          <div class="home-tool-icon" style="background:rgba(107,143,113,.12)">🅿️</div>
-          <div class="home-tool-name">Parking</div>
-          <div class="home-tool-desc">Capture les idées hors-sujet en plein atelier</div>
-        </div>
+        <button type="button" class="home-tool-card" onclick="goPanel('timer')">
+          <span class="home-tool-icon" style="background:rgba(107,143,113,.12)">⏱</span>
+          <span class="home-tool-name">Minuteur</span>
+          <span class="home-tool-desc">Décompte avec anneau de progression, presets, plein écran</span>
+        </button>
+        <button type="button" class="home-tool-card" onclick="goPanel('roulette')">
+          <span class="home-tool-icon" style="background:rgba(201,107,58,.12)">🎲</span>
+          <span class="home-tool-name">Roulette</span>
+          <span class="home-tool-desc">Tire un participant au sort parmi ta liste</span>
+        </button>
+        <button type="button" class="home-tool-card" onclick="goPanel('parole')">
+          <span class="home-tool-icon" style="background:rgba(91,127,166,.12)">💬</span>
+          <span class="home-tool-name">Temps de parole</span>
+          <span class="home-tool-desc">Chronomètre la parole de chaque participant en live</span>
+        </button>
+        <button type="button" class="home-tool-card" onclick="goPanel('planner')">
+          <span class="home-tool-icon" style="background:rgba(196,148,58,.12)">📋</span>
+          <span class="home-tool-name">Planificateur</span>
+          <span class="home-tool-desc">Conçois ton déroulé et exporte-le en PDF</span>
+        </button>
+        <button type="button" class="home-tool-card" onclick="goPanel('chrono')">
+          <span class="home-tool-icon" style="background:rgba(184,84,80,.12)">⏲</span>
+          <span class="home-tool-name">Chronomètre</span>
+          <span class="home-tool-desc">Mesure une durée libre avec gestion des tours</span>
+        </button>
+        <button type="button" class="home-tool-card" onclick="goPanel('sequence')">
+          <span class="home-tool-icon" style="background:rgba(107,143,113,.12)">🔄</span>
+          <span class="home-tool-name">Séquence</span>
+          <span class="home-tool-desc">Enchaîne des phases minutées automatiquement</span>
+        </button>
+        <button type="button" class="home-tool-card" onclick="goPanel('library')">
+          <span class="home-tool-icon" style="background:rgba(196,148,58,.12)">🛠</span>
+          <span class="home-tool-name">Bibliothèque</span>
+          <span class="home-tool-desc">48 fiches outils filtrables, téléchargeables en PDF</span>
+        </button>
+        <button type="button" class="home-tool-card" onclick="goPanel('parking')">
+          <span class="home-tool-icon" style="background:rgba(107,143,113,.12)">🅿️</span>
+          <span class="home-tool-name">Parking</span>
+          <span class="home-tool-desc">Capture les idées hors-sujet en plein atelier</span>
+        </button>
       </div>
       <div id="home-planner-preview"></div>
       <nav class="home-links" aria-label="Fiches outils en pages web">
@@ -840,7 +868,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           </div>
           <div class="timer-controls">
             <button class="btn btn-primary" id="timer-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
-            <button class="btn btn-secondary" onclick="timerReset()">↺ Reset</button>
+            <button class="btn btn-secondary" onclick="timerReset()">↺ Remettre à zéro</button>
             <button class="btn btn-ghost" onclick="fsOpen()" title="Plein écran">
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2h4M2 2v4M13 2h-4M13 2v4M2 13h4M2 13v-4M13 13h-4M13 13v-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
               Plein écran
@@ -854,7 +882,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
               <input class="input" id="custom-min" type="number" min="0" max="99" placeholder="min" style="width:70px;text-align:center">
               <span class="text-gray">:</span>
               <input class="input" id="custom-sec" type="number" min="0" max="59" placeholder="sec" style="width:70px;text-align:center">
-              <button class="btn btn-primary btn-sm" onclick="timerSetCustom()">OK</button>
+              <button class="btn btn-primary btn-sm" onclick="timerSetCustom()">Appliquer</button>
             </div>
           </div>
           <div class="card">
@@ -867,10 +895,10 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <div class="card" id="timer-color-guide">
             <div class="fw6 text-sm" style="margin-bottom:12px">Code couleur</div>
             <div style="display:flex;flex-direction:column;gap:8px;font-size:.8rem">
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--sage);display:inline-block"></span> Vert — plus de 50%</div>
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--gold);display:inline-block"></span> Or — 25 à 50%</div>
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--terra);display:inline-block"></span> Terracotta — 10 à 25%</div>
-              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--red);display:inline-block"></span> Rouge — moins de 10%</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--sage);display:inline-block"></span> Vert : plus de 50 %</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--gold);display:inline-block"></span> Or : 25 à 50 %</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--terra);display:inline-block"></span> Terracotta : 10 à 25 %</div>
+              <div class="flex-row"><span style="width:12px;height:12px;border-radius:50%;background:var(--red);display:inline-block"></span> Rouge : moins de 10 %</div>
             </div>
           </div>
         </div>
@@ -890,7 +918,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
             <button class="btn btn-primary" id="chrono-toggle-btn" onclick="chronoToggle()">▶ Démarrer</button>
             <button class="btn btn-secondary" onclick="chronoLap()" id="chrono-lap-btn" disabled>Tour</button>
-            <button class="btn btn-ghost" onclick="chronoReset()">↺ Reset</button>
+            <button class="btn btn-ghost" onclick="chronoReset()">↺ Remettre à zéro</button>
           </div>
         </div>
         <div class="card">
@@ -928,7 +956,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
                 <input type="checkbox" id="roulette-remove" style="accent-color:var(--terra);width:14px;height:14px">
                 Retirer après le tirage
               </label>
-              <button class="btn btn-ghost btn-sm" onclick="rouletteClear()">Vider</button>
+              <button class="btn btn-ghost btn-sm" onclick="rouletteClear()">Vider la liste</button>
             </div>
           </div>
           <div class="card mt16" id="roulette-hist-card" style="display:none">
@@ -955,7 +983,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
         <input class="input" id="parole-inp" placeholder="Ajouter un participant…" onkeydown="paroleKeydown(event)" style="max-width:280px">
         <button class="btn btn-primary btn-sm" onclick="paroleAdd()">+ Ajouter</button>
         <button class="btn btn-ghost btn-sm" onclick="paroleReset()">↺ Remettre à zéro</button>
-        <button class="btn btn-secondary btn-sm" onclick="parolePrint()">⬇ Exporter</button>
+        <button class="btn btn-secondary btn-sm" onclick="parolePrint()">⬇ Exporter en PDF</button>
         <button class="btn btn-ghost btn-sm" onclick="projOpen('parole')">⛶ Projection</button>
       </div>
       <div class="parole-grid" id="parole-grid"></div>
@@ -995,7 +1023,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           </div>
           <div class="flex-between mt16">
             <button class="btn btn-primary" id="seq-start-btn" onclick="seqStart()">▶ Lancer la séquence</button>
-            <button class="btn btn-ghost btn-sm" onclick="seqReset()">↺ Reset</button>
+            <button class="btn btn-ghost btn-sm" onclick="seqReset()">↺ Remettre à zéro</button>
           </div>
         </div>
         <div class="card" style="text-align:center;padding:32px 28px">
@@ -1080,8 +1108,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <p class="panel-sub" style="font-size:.8rem;margin-top:-8px">Parking à idées pour facilitation : capture en temps réel les sujets hors-ordre-du-jour sans interrompre le fil de l'atelier. Permet de valoriser chaque contribution tout en maintenant le focus du groupe. Exportable en fin de session.</p>
         </div>
         <div style="display:flex;gap:8px">
-          <button class="btn btn-secondary btn-sm" onclick="parkingPrint()">⬇ Exporter</button>
-          <button class="btn btn-ghost btn-sm" onclick="parkingClear()">🗑 Vider</button>
+          <button class="btn btn-secondary btn-sm" onclick="parkingPrint()">⬇ Exporter en PDF</button>
+          <button class="btn btn-ghost btn-sm" onclick="parkingClear()">🗑 Vider le parking</button>
         </div>
       </div>
       <input class="input" id="parking-title" placeholder="Titre de la séance ou de l'atelier…" oninput="PARK.saveTitle()" style="width:100%;margin-bottom:10px">
@@ -1122,75 +1150,75 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       <div class="lib-filters" id="lib-need-filters"></div>
       <div class="lib-count" aria-live="polite"><span id="lib-count"></span><button class="lib-reset" id="lib-reset" onclick="libReset()">Réinitialiser les filtres</button></div>
       <div class="lib-grid" id="lib-grid">
-        <article class="lib-card" data-phase="production" onclick="toolOpen(1)">
+        <article class="lib-card" data-phase="production">
           <div class="tool-phase-badge ph-production">Production</div>
-          <h2 class="lib-card-name">World Café</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(1)">World Café</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">90–120 min</span><span class="lib-meta-item">8 à 50 pers.</span></div>
           <p class="lib-card-desc">Des tables rondes en rotation pour explorer un sujet sous différents angles. La pollinisation croisée des idées entre tables crée une intelligence collective qui dépasse la somme des individus.</p>
         </article>
-        <article class="lib-card" data-phase="ouverture" onclick="toolOpen(2)">
+        <article class="lib-card" data-phase="ouverture">
           <div class="tool-phase-badge ph-ouverture">Ouverture</div>
-          <h2 class="lib-card-name">1-2-4-All</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(2)">1-2-4-All</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">12–15 min</span><span class="lib-meta-item">4 à 100+ pers.</span></div>
           <p class="lib-card-desc">Chacun réfléchit seul, puis en binôme, en quatuor, puis partage en grand groupe. Structure libératrice qui garantit que chaque voix compte, même dans un grand groupe.</p>
         </article>
-        <article class="lib-card" data-phase="cloture" onclick="toolOpen(3)">
+        <article class="lib-card" data-phase="cloture">
           <div class="tool-phase-badge ph-cloture">Clôture</div>
-          <h2 class="lib-card-name">Dot Voting</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(3)">Dot Voting</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">10–20 min</span><span class="lib-meta-item">3 à 30 pers.</span></div>
           <p class="lib-card-desc">Chaque participant dispose d'un nombre limité de gommettes à attribuer librement aux idées affichées. Le résultat est immédiatement visible et légitime.</p>
         </article>
-        <article class="lib-card" data-phase="production" onclick="toolOpen(4)">
+        <article class="lib-card" data-phase="production">
           <div class="tool-phase-badge ph-production">Production</div>
-          <h2 class="lib-card-name">Fishbowl</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(4)">Fishbowl</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">45–75 min</span><span class="lib-meta-item">8 à 40 pers.</span></div>
           <p class="lib-card-desc">Un cercle intérieur débat en direct pendant que le reste du groupe observe. Favorise l'écoute profonde et permet de traiter des tensions sans que la salle entière s'embrase.</p>
         </article>
-        <article class="lib-card" data-phase="cloture" onclick="toolOpen(5)">
+        <article class="lib-card" data-phase="cloture">
           <div class="tool-phase-badge ph-cloture">Clôture</div>
-          <h2 class="lib-card-name">Speedboat</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(5)">Speedboat</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">30–45 min</span><span class="lib-meta-item">4 à 20 pers.</span></div>
           <p class="lib-card-desc">Une métaphore visuelle pour identifier ce qui propulse le groupe (moteurs) et ce qui le freine (ancres). Idéal pour les rétrospectives d'équipe.</p>
         </article>
-        <article class="lib-card" data-phase="ouverture" onclick="toolOpen(6)">
+        <article class="lib-card" data-phase="ouverture">
           <div class="tool-phase-badge ph-ouverture">Ouverture</div>
-          <h2 class="lib-card-name">Check-in Météo</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(6)">Check-in Météo</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">5–15 min</span><span class="lib-meta-item">4 à 20 pers.</span></div>
           <p class="lib-card-desc">Chaque participant décrit son état du moment à travers une météo. Un rituel d'ouverture simple qui crée immédiatement de la présence et de la connexion.</p>
         </article>
-        <article class="lib-card" data-phase="production" onclick="toolOpen(7)">
+        <article class="lib-card" data-phase="production">
           <div class="tool-phase-badge ph-production">Production</div>
-          <h2 class="lib-card-name">Six Chapeaux de Bono</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(7)">Six Chapeaux de Bono</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">60–90 min</span><span class="lib-meta-item">4 à 15 pers.</span></div>
           <p class="lib-card-desc">Six chapeaux de couleur représentent six modes de pensée. Le groupe explore une décision sous chaque chapeau simultanément, évitant les débats d'ego.</p>
         </article>
-        <article class="lib-card" data-phase="apres" onclick="toolOpen(8)">
+        <article class="lib-card" data-phase="apres">
           <div class="tool-phase-badge ph-apres">Après l'atelier</div>
-          <h2 class="lib-card-name">ROTI</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(8)">ROTI</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">5–10 min</span><span class="lib-meta-item">4 à 100+ pers.</span></div>
           <p class="lib-card-desc">Return On Time Invested — chaque participant note l'atelier de 1 à 5 selon ce que la session lui a apporté par rapport au temps investi.</p>
         </article>
-        <article class="lib-card" data-phase="avant" onclick="toolOpen(9)">
+        <article class="lib-card" data-phase="avant">
           <div class="tool-phase-badge ph-avant">Avant l'atelier</div>
-          <h2 class="lib-card-name">Carte d'Empathie</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(9)">Carte d'Empathie</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">45–60 min</span><span class="lib-meta-item">2 à 12 pers.</span></div>
           <p class="lib-card-desc">Un canevas visuel pour se mettre dans la peau d'un utilisateur : ce qu'il voit, entend, pense, ressent, dit et fait. Essentiel pour cadrer un atelier centré sur l'humain.</p>
         </article>
-        <article class="lib-card" data-phase="cloture" onclick="toolOpen(10)">
+        <article class="lib-card" data-phase="cloture">
           <div class="tool-phase-badge ph-cloture">Clôture</div>
-          <h2 class="lib-card-name">Hot Air Balloon</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(10)">Hot Air Balloon</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">30–45 min</span><span class="lib-meta-item">4 à 20 pers.</span></div>
           <p class="lib-card-desc">Une montgolfière symbolise l'ambition du groupe. Les sacs de sable (obstacles), le vent (tendances) et les trous dans la nacelle (risques) permettent d'explorer la trajectoire collectivement.</p>
         </article>
-        <article class="lib-card" data-phase="production" onclick="toolOpen(11)">
+        <article class="lib-card" data-phase="production">
           <div class="tool-phase-badge ph-production">Production</div>
-          <h2 class="lib-card-name">Troika Consulting</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(11)">Troika Consulting</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">30–45 min</span><span class="lib-meta-item">3 à 30 pers.</span></div>
           <p class="lib-card-desc">En groupes de 3, une personne expose un défi pendant que les deux autres débattent dans son dos. Puissant et libérateur pour le co-développement professionnel.</p>
         </article>
-        <article class="lib-card" data-phase="cloture" onclick="toolOpen(12)">
+        <article class="lib-card" data-phase="cloture">
           <div class="tool-phase-badge ph-cloture">Clôture</div>
-          <h2 class="lib-card-name">Plan d'Action POST</h2>
+          <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(12)">Plan d'Action POST</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">20–30 min</span><span class="lib-meta-item">4 à 25 pers.</span></div>
           <p class="lib-card-desc">Un cadre de clôture rigoureux : POST = Priorité, Owner (responsable), Steps (étapes), Timeline. Garantit que rien ne disparaît dans les boîtes mail après l'atelier.</p>
         </article>
@@ -1205,13 +1233,13 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 
 <!-- TOOL MODAL -->
 <div class="modal-ov" id="tool-modal" onclick="toolModalClose(event)">
-  <div class="modal-box">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal-hdr">
       <div>
         <div id="modal-phase-badge" style="margin-bottom:6px"></div>
         <h2 class="modal-title" id="modal-title"></h2>
       </div>
-      <button class="modal-close" onclick="toolModalCloseBtn()">
+      <button class="modal-close" onclick="toolModalCloseBtn()" aria-label="Fermer la fiche">
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M1 1l10 10M11 1L1 11" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
     </div>
@@ -1225,7 +1253,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <div class="modal-tip" id="modal-tip"></div>
           <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
             <button class="btn btn-primary" onclick="toolPDF()">⬇ Fiche PDF</button>
-            <button class="btn btn-secondary" onclick="toolAddToPlan()">＋ Ajouter au plan</button>
+            <button class="btn btn-secondary" id="modal-add-plan" onclick="toolAddToPlan()">＋ Ajouter au plan</button>
             <button class="btn btn-ghost" onclick="toolModalCloseBtn()">Fermer</button>
           </div>
           <a id="modal-permalink" class="modal-permalink" href="/outils/">Page web de la fiche, à partager ↗</a>
@@ -1261,6 +1289,7 @@ function goPanel(id, mode) {
     const cur = location.hash, want = PANEL_SLUGS[id] ? '#'+PANEL_SLUGS[id] : '';
     if (cur !== want) history[mode==='replace'?'replaceState':'pushState'](null,'',panelUrl(id));
   }
+  const samePanel = currentPanel === id;
   currentPanel = id;
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
@@ -1270,7 +1299,8 @@ function goPanel(id, mode) {
   if (btn) btn.classList.add('active');
   document.getElementById('main').scrollTop = 0;
   if (id === 'home') homeRefresh();
-  if (id === 'library') libRender();
+  // Déjà sur la bibliothèque (retour depuis une fiche) : on garde les cartes, et donc le focus
+  if (id === 'library' && !(samePanel && document.querySelector('#lib-grid .lib-card-link'))) libRender();
   if (id === 'planner') plannerRender();
   if (id === 'sequence') { seqRender(); seqUpdateDisplay(); }
   miniSync();
@@ -1471,8 +1501,8 @@ function timerSetCustom(btn){ const m=parseInt(document.getElementById('custom-m
 function timerToggle(){ T.toggle(); }
 function timerReset(){ T.reset(); }
 function timerLabelUpdate(){ const v=document.getElementById('timer-label-inp').value; document.getElementById('timer-label-disp').textContent=v; document.getElementById('fs-label').textContent=v; T.persist(); }
-function fsOpen(){ track('projection_open',{tool:'timer'}); const ov=document.getElementById('fs-ov'); ov.classList.add('open'); animOverlay(ov); pjWake(ov); pjClock(); WL.sync(); }
-function fsClose(){ document.getElementById('fs-ov').classList.remove('open'); WL.sync(); }
+function fsOpen(){ track('projection_open',{tool:'timer'}); const ov=document.getElementById('fs-ov'); ov.classList.add('open'); animOverlay(ov); pjWake(ov); pjClock(); trapOpen(ov,document.getElementById('fs-toggle-btn')); WL.sync(); }
+function fsClose(){ const ov=document.getElementById('fs-ov'); ov.classList.remove('open'); trapClose(ov); WL.sync(); }
 
 // ── Projection : clair / sombre, heure réelle, commandes qui s'effacent ──
 function progColor(p){ return p>0.5?'var(--sage)':p>0.25?'var(--gold)':p>0.1?'var(--terra)':'var(--red)'; }
@@ -1558,7 +1588,7 @@ function setPalette(p){
 }
 function paletteBtnSync(){
   const cur=document.documentElement.dataset.palette||'';
-  document.querySelectorAll('.pal-dot').forEach(d=>d.classList.toggle('active',(d.dataset.pal||'')===cur));
+  document.querySelectorAll('.pal-dot').forEach(d=>{ const on=(d.dataset.pal||'')===cur; d.classList.toggle('active',on); d.setAttribute('aria-pressed',on); });
 }
 function themeBtnSync(){
   const b=document.getElementById('theme-toggle');
@@ -1577,6 +1607,7 @@ function projOpen(tool){
   ov.classList.toggle('seq-mode',tool==='sequence');
   animOverlay(document.getElementById('proj-'+tool));
   pjWake(ov); pjClock();
+  trapOpen(ov,ov.querySelector('.proj-pane.active .pj-btn, .proj-pane.active button')||ov.querySelector('.pj-icon'));
   if(tool==='sequence') seqUpdateDisplay();
   if(tool==='roulette') rlCountSync();
   if(tool==='parole') PA.renderProj();
@@ -1588,7 +1619,7 @@ function projOpen(tool){
   }
   WL.sync();
 }
-function projClose(){ projTool=null; document.getElementById('proj-ov').classList.remove('open'); WL.sync(); }
+function projClose(){ projTool=null; const ov=document.getElementById('proj-ov'); ov.classList.remove('open'); trapClose(ov); WL.sync(); }
 function projRSlot(txt,cls){
   if(projTool!=='roulette') return;
   const s=document.getElementById('proj-r-slot');
@@ -1669,7 +1700,7 @@ const RL = {
     const el=document.getElementById('roulette-tags');
     document.getElementById('roulette-count').textContent=RL.names.length;
     rlCountSync();
-    el.innerHTML=RL.names.length ? RL.names.map((n,i)=>`<span class="name-tag">${escHtml(n)}<button onclick="RL.removeName(${i})">×</button></span>`).join('') : '<span style="font-size:.78rem;color:var(--gray)">Aucun participant pour l\'instant</span>';
+    el.innerHTML=RL.names.length ? RL.names.map((n,i)=>`<span class="name-tag">${escHtml(n)}<button onclick="RL.removeName(${i})" aria-label="Retirer ${escHtml(n)}" title="Retirer">×</button></span>`).join('') : '<span style="font-size:.78rem;color:var(--gray)">Aucun participant pour l\'instant</span>';
   },
   spin(){
     if(RL.names.length===0) return;
@@ -1750,12 +1781,12 @@ const PA = {
     const tot=PA.total()||1;
     g.innerHTML=PA.parts.map((p,i)=>{
       const pct=Math.round(p.time/tot*100), warn=pct>40&&PA.parts.length>1;
-      return `<div class="proj-pa-card${p.active?' speaking':''}" onclick="PA.toggle(${i})">
-        <div class="proj-pa-top"><div class="proj-pa-name">${p.active?'🎙 ':''}${escHtml(p.name)}</div>${i<9?`<kbd class="proj-pa-key">${i+1}</kbd>`:''}</div>
-        <div class="proj-pa-time">${fmtSec(p.time)}</div>
-        <div class="proj-pa-pct${warn?' warn':''}">${pct}% du temps${warn?' ⚠':''}</div>
-        <div class="proj-pa-bar${warn?' warn':''}" style="width:${pct}%"></div>
-      </div>`;
+      return `<button type="button" class="proj-pa-card${p.active?' speaking':''}" onclick="PA.toggle(${i})" aria-pressed="${p.active}">
+        <span class="proj-pa-top"><span class="proj-pa-name">${p.active?'🎙 ':''}${escHtml(p.name)}</span>${i<9?`<kbd class="proj-pa-key">${i+1}</kbd>`:''}</span>
+        <span class="proj-pa-time">${fmtSec(p.time)}</span>
+        <span class="proj-pa-pct${warn?' warn':''}">${pct}% du temps${warn?' ⚠':''}</span>
+        <span class="proj-pa-bar${warn?' warn':''}" style="width:${pct}%"></span>
+      </button>`;
     }).join('');
   },
   stop(i){ PA.sync(); PA.parts[i].active=false; clearInterval(PA.iv); PA.activeIdx=null; PA.render(); PA.save(); },
@@ -1771,13 +1802,15 @@ const PA = {
     grid.innerHTML=PA.parts.map((p,i)=>{
       const pct=Math.round(p.time/tot*100);
       const warn=pct>40&&PA.parts.length>1;
-      return `<div class="parole-card${p.active?' active-spk':''}" onclick="PA.toggle(${i})">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">${i<9?`<kbd class="parole-key" title="Touche ${i+1}">${i+1}</kbd>`:'<span></span>'}<button onclick="event.stopPropagation();PA.remove(${i})" style="background:none;border:none;color:var(--gray);cursor:pointer;font-size:11px;padding:2px 4px;border-radius:4px;transition:color .2s" title="Retirer ce participant" aria-label="Retirer ${escHtml(p.name)}" onmouseenter="this.style.color='var(--red)'" onmouseleave="this.style.color='var(--gray)'">✕</button></div>
-        <div class="parole-mic">${p.active?'🎙':'🎤'}</div>
-        <div class="parole-name">${escHtml(p.name)}</div>
-        <div class="parole-time-disp">${fmtSec(p.time)}</div>
-        <div class="parole-pct${warn?' warn':''}">${pct}% du total${warn?' ⚠':''}</div>
-        <div class="parole-bar-wrap"><div class="parole-bar${warn?' warn':''}" style="width:${pct}%"></div></div>
+      return `<div class="parole-card${p.active?' active-spk':''}">
+        <div class="parole-card-top">${i<9?`<kbd class="parole-key" title="Touche ${i+1}">${i+1}</kbd>`:'<span></span>'}<button type="button" class="parole-rm" onclick="PA.remove(${i})" title="Retirer ce participant" aria-label="Retirer ${escHtml(p.name)}">✕</button></div>
+        <button type="button" class="parole-main" onclick="PA.toggle(${i})" aria-pressed="${p.active}">
+        <span class="parole-mic" aria-hidden="true">${p.active?'🎙':'🎤'}</span>
+        <span class="parole-name">${escHtml(p.name)}</span>
+        <span class="parole-time-disp">${fmtSec(p.time)}</span>
+        <span class="parole-pct${warn?' warn':''}">${pct}% du total${warn?' ⚠':''}</span>
+        <span class="parole-bar-wrap"><span class="parole-bar${warn?' warn':''}" style="width:${pct}%"></span></span>
+        </button>
       </div>`;
     }).join('');
     PA.updateTotals();
@@ -1974,7 +2007,7 @@ function seqRender(){
       <div class="seq-num">${i<SEQ.curIdx?'✓':i+1}</div>
       <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" placeholder="Nom de la phase">
       <span class="seq-dur"><input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.edit(${i},'duration',this.value)" title="Durée en minutes" aria-label="Durée en minutes"> min</span>
-      <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})">
+      <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})" aria-label="Supprimer la phase ${escHtml(p.name)}" title="Supprimer la phase">
         <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       </button>
     </div>`).join('');
@@ -2162,7 +2195,7 @@ const PL = {
     let endY=doc.lastAutoTable.finalY;
     if(tot){
       doc.setFontSize(8.5); doc.setFont('helvetica','bold'); doc.setTextColor(201,107,58);
-      doc.text(`${fmtOff(tot)}  —  fin de l'atelier`,M+3,endY+6);
+      doc.text(`${fmtOff(tot)}  ·  fin de l'atelier`,M+3,endY+6);
       endY+=8;
     }
     // Notes
@@ -2233,7 +2266,7 @@ function planDecode(str){
 }
 function plannerShare(){
   PL.save();
-  if(!PL.data.name && !PL.data.phases.length){ alert('Ton plan est vide — ajoute au moins un nom ou une phase avant de le partager.'); return; }
+  if(!PL.data.name && !PL.data.phases.length){ toast('Ton plan est vide. Ajoute un nom ou une phase avant de le partager.'); return; }
   const {name,date,fac,loc,notes,phases}=PL.data;
   const url=`${location.origin}${location.pathname}#plan=${planEncode({name,date,fac,loc,notes,phases:phases.map(({name,duration,tool,desc})=>({name,duration,tool,desc}))})}`;
   track('plan_share',{phases:PL.data.phases.length});
@@ -2396,19 +2429,19 @@ function libRender(animate){
     return;
   }
   grid.innerHTML=filtered.map(t=>`
-    <div class="lib-card" data-phase="${t.phase}" onclick="toolOpen(${t.id})">
+    <article class="lib-card" data-phase="${t.phase}">
       <div class="tool-phase-badge ph-${t.phase}">${t.phaseLabel}</div>
-      <div class="lib-card-name">${t.name}</div>
+      <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(${t.id})">${escHtml(t.name)}</button></h2>
       <div class="lib-card-meta">
         <span class="lib-meta-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M6 3.5V6l1.5 1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>${t.dur}</span>
         <span class="lib-meta-item"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="4.5" cy="3.5" r="1.8" stroke="currentColor" stroke-width="1.2"/><path d="M1.5 9.5c0-2 1.5-3 3-3s3 1 3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><circle cx="9" cy="4" r="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M11 9.5c0-1.5-1-2.5-2-2.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>${t.grp}</span>
       </div>
       <p class="lib-card-desc">${t.desc.substring(0,120)}…</p>
       <div class="lib-card-footer">
-        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();toolOpen(${t.id})">Voir la fiche</button>
-        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})">⬇ PDF</button>
+        <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();toolOpen(${t.id})" tabindex="-1" aria-hidden="true">Voir la fiche</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})" aria-label="Télécharger la fiche ${escHtml(t.name)} en PDF">⬇ PDF</button>
       </div>
-    </div>`).join('');
+    </article>`).join('');
   if(animate!==false) animGrid(grid,'.lib-card');
 }
 function libSetPhase(v){ libPhase=v; libRender(); }
@@ -2440,6 +2473,8 @@ function toolOpen(id){
     <div><div class="mprev-label">Tags</div><div class="mprev-tags" style="margin-top:4px">${t.tags.map(tag=>`<span class="mprev-tag">${tag}</span>`).join('')}</div></div>`;
   document.getElementById('tool-modal').classList.add('open');
   document.body.style.overflow='hidden';
+  const addBtn=document.getElementById('modal-add-plan'); clearTimeout(addBtn._to); addBtn.textContent='＋ Ajouter au plan';
+  trapOpen(document.querySelector('#tool-modal .modal-box'),document.querySelector('#tool-modal .modal-close'));
   if(MOTION()){
     gsap.fromTo('#modal-steps li',{x:-10,opacity:0},{x:0,opacity:1,duration:.3,stagger:.045,ease:'power2.out',clearProps:'transform,opacity',delay:.1});
     gsap.fromTo('#modal-preview > *',{y:8,opacity:0},{y:0,opacity:1,duration:.3,stagger:.05,ease:'power2.out',clearProps:'transform,opacity',delay:.15});
@@ -2455,6 +2490,7 @@ function toolModalClose(e){ if(e.target===document.getElementById('tool-modal'))
 function toolModalHide(){
   document.getElementById('tool-modal').classList.remove('open');
   document.body.style.overflow='';
+  trapClose(document.querySelector('#tool-modal .modal-box'));
 }
 function toolModalCloseBtn(){
   if(!document.getElementById('tool-modal').classList.contains('open')) return;
@@ -2471,6 +2507,7 @@ function toolAddToPlan(){
   PL.data.phases.push({id:Date.now(),name:t.name,duration:t.minDur,tool:t.name,desc:''});
   PL.persist();
   track('add_to_plan',{tool:t.slug});
+  const btn=document.getElementById('modal-add-plan'); btn.textContent='✓ Ajouté au plan'; clearTimeout(btn._to); btn._to=setTimeout(()=>btn.textContent='＋ Ajouter au plan',2600);
   const plan=PL.data.name?` « ${PL.data.name} »`:'';
   toast(`${t.name} ajouté au plan${plan} (${t.minDur} min).`,'Voir le plan',()=>{
     modalPushed=false; toolModalHide(); goPanel('planner','replace');
@@ -2550,7 +2587,7 @@ const PARK = {
     empty.style.display='none';
     board.innerHTML=PARK.items.map(item=>`
       <div class="parking-note pk-${item.cat}">
-        <button class="parking-note-del" onclick="PARK.remove(${item.id})" title="Supprimer">✕</button>
+        <button class="parking-note-del" onclick="PARK.remove(${item.id})" title="Supprimer" aria-label="Supprimer la note">✕</button>
         <div class="parking-note-cat">${PARK.catLabels[item.cat]||item.cat}</div>
         <div class="parking-note-text">${escHtml(item.text)}</div>
         <div class="parking-note-ts">${item.ts}</div>
@@ -2642,6 +2679,28 @@ function sortable(container,rowSel,onDrop){
   });
 }
 
+// ── Focus dans les surcouches : il entre, reste à l'intérieur (Tab), et revient au bouton d'origine ──
+const FOCUSABLE='button:not([disabled]),[href],input:not([disabled]),select,textarea,[tabindex]:not([tabindex="-1"])';
+function trapKey(e){
+  if(e.key!=='Tab') return;
+  const items=[...this.querySelectorAll(FOCUSABLE)].filter(el=>el.getClientRects().length&&!el.closest('[aria-hidden="true"]'));
+  if(!items.length) return;
+  const first=items[0], last=items[items.length-1];
+  if(e.shiftKey&&document.activeElement===first){ e.preventDefault(); last.focus(); }
+  else if(!e.shiftKey&&document.activeElement===last){ e.preventDefault(); first.focus(); }
+}
+function trapOpen(root,target){
+  if(!root._trap){ root._ret=document.activeElement; root.addEventListener('keydown',trapKey); root._trap=true; }
+  // Une image plus tard : la surcouche vient de passer de « hidden » à « visible » et n'est pas encore focalisable
+  setTimeout(()=>(target||root.querySelector(FOCUSABLE))?.focus({preventScroll:true}),40);
+}
+function trapClose(root){
+  if(!root._trap) return;
+  root.removeEventListener('keydown',trapKey); root._trap=false;
+  const r=root._ret; root._ret=null;
+  if(r&&document.contains(r)&&r.getClientRects().length) r.focus({preventScroll:true});
+}
+
 // Confirmation discrète en bas d'écran, avec action facultative
 let toastTO=null;
 function toast(msg, actLabel, act){
@@ -2680,7 +2739,7 @@ function pdfFooter(doc){
     const pH=doc.internal.pageSize.height;
     doc.setDrawColor(224,216,200); doc.setLineWidth(0.3); doc.line(M,pH-15,W-M,pH-15);
     doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(160,150,140);
-    doc.text('Facilithèque — outils libres pour facilitateurs · facilitheque.vercel.app',M,pH-9.5);
+    doc.text('Facilithèque · outils libres pour facilitateurs · facilitheque.vercel.app',M,pH-9.5);
     doc.text(`${n} / ${pages}`,W-M,pH-9.5,{align:'right'});
   }
 }
