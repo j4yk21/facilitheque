@@ -1,5 +1,5 @@
 // Facilithèque — service worker : stale-while-revalidate
-const CACHE = 'facilitheque-v17';
+const CACHE = 'facilitheque-v18';
 const ASSETS = ['/', '/facilitheque-app.html', '/favicon.svg', '/manifest.json'];
 
 self.addEventListener('install', e => {
