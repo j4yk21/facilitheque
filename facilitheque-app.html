@@ -523,7 +523,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .pj-tide .pj-road .now::before{background:linear-gradient(90deg,var(--fill-ink) var(--fp),var(--p-accent) var(--fp)) fixed}
 .pj-tide .pj-num{font-size:min(25vw,46vh);margin-top:.06em}
 .pj-tide .pj-title{max-width:22ch}
-.pj-tide .pj-top-r{margin-right:104px}
+.pj-tide .pj-top-r{margin-right:160px}
 #proj-sequence .pj-num{font-size:min(21vw,34vh)}
 #proj-sequence .pj-road{margin-top:clamp(20px,5vh,56px)}
 .pj-actions{position:absolute;top:clamp(14px,2.4vw,36px);right:clamp(16px,3vw,48px);height:44px;display:flex;align-items:center;gap:10px;z-index:4}
@@ -534,6 +534,23 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 #proj-ov>.pj-top{z-index:5}
 .pj-layer .pj-top{pointer-events:none}
 #proj-ov.seq-mode>.pj-top .pj-brand,#proj-ov.seq-mode>.pj-top .pj-clock{visibility:hidden}
+/* Télécommande */
+#rc-dlg{position:absolute;inset:0;z-index:10;display:grid;place-items:center;padding:16px;background:color-mix(in srgb,var(--p-bg) 70%,transparent);backdrop-filter:blur(6px)}
+#rc-dlg[hidden]{display:none}
+.rc-card{width:min(420px,100%);max-height:100%;overflow:auto;background:var(--p-solid);color:var(--p-ink);border:1px solid var(--p-line);border-radius:26px;padding:24px;box-shadow:0 24px 60px rgba(0,0,0,.25);text-align:center}
+.rc-head{display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left}
+.rc-head h2{font-size:1.3rem;font-weight:500}
+.rc-sub{font-size:.9rem;color:var(--p-muted);text-align:left;margin:8px 0 18px;line-height:1.5}
+.rc-qr{width:min(240px,70vw);aspect-ratio:1;margin:0 auto;background:#fff;border-radius:14px;padding:10px;display:grid;place-items:center}
+.rc-qr svg{width:100%;height:100%;display:block}
+.rc-code{margin-top:14px;font-size:.95rem;color:var(--p-muted)}
+.rc-code strong{font:500 1.25rem var(--font-display);letter-spacing:.12em;color:var(--p-ink)}
+.rc-status{margin-top:8px;font-size:.88rem;color:var(--p-muted);min-height:1.4em}
+.rc-status.on{color:var(--p-ink)}
+.rc-status.on::before{content:'';display:inline-block;width:8px;height:8px;border-radius:50%;background:#2E9E5B;margin-right:8px;vertical-align:1px}
+.rc-acts{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:18px}
+.rc-acts .pj-btn{min-height:44px;font-size:.9rem;padding:0 1.1em}
+.pj-icon.rc-live{border-color:#2E9E5B;color:#2E9E5B}
 #fs-ov.ended .pj-num{animation:fsBlink 1s ease 3}
 @keyframes fsBlink{50%{opacity:.25}}
 /* Roulette */
@@ -713,6 +730,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <div class="pj-hint proj-ui">Espace : pause · R : remettre à zéro · T : clair ou sombre · Échap : quitter</div>
   </div>
   <div class="pj-actions proj-ui">
+    <button class="pj-icon" onclick="RC.open()" aria-label="Télécommande : piloter depuis un téléphone" title="Télécommande"><svg class="ic" aria-hidden="true"><use href="#i-smartphone"/></svg></button>
     <button class="pj-icon" onclick="projThemeToggle()" aria-label="Basculer clair ou sombre" title="Clair ou sombre (T)" data-pj-theme></button>
     <button class="pj-icon" onclick="fsClose()" aria-label="Quitter le plein écran" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   </div>
@@ -728,6 +746,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <div class="pj-brand"><span class="pj-mark"></span>Facilithèque</div>
     <div class="pj-top-r">
       <span class="pj-clock" data-pj-clock></span>
+      <button class="pj-icon proj-ui" onclick="RC.open()" aria-label="Télécommande : piloter depuis un téléphone" title="Télécommande"><svg class="ic" aria-hidden="true"><use href="#i-smartphone"/></svg></button>
       <button class="pj-icon proj-ui" onclick="projThemeToggle()" aria-label="Basculer clair ou sombre" title="Clair ou sombre (T)" data-pj-theme></button>
       <button class="pj-icon proj-ui" onclick="projClose()" aria-label="Quitter la projection" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
     </div>
@@ -759,6 +778,18 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <div class="pj-head"><div class="pj-kicker">Temps de parole</div><div class="pj-total" id="proj-pa-total"></div></div>
     <div id="proj-pa-grid"></div>
     <div class="pj-hint proj-ui">1 à 9 : donner la parole · 0 : tout arrêter · T : clair ou sombre · Échap : quitter</div>
+  </div>
+</div>
+
+<!-- TÉLÉCOMMANDE : QR code à scanner ; la fenêtre se place dans la projection ouverte -->
+<div id="rc-dlg" role="dialog" aria-modal="true" aria-labelledby="rc-title" hidden>
+  <div class="rc-card">
+    <div class="rc-head"><h2 id="rc-title">Piloter depuis un téléphone</h2><button type="button" class="pj-icon" onclick="RC.close()" aria-label="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+    <p class="rc-sub">Scanne le code avec l'appareil photo du téléphone. Tu pourras lancer, mettre en pause, passer une phase ou tirer au sort sans toucher l'ordinateur.</p>
+    <div class="rc-qr" id="rc-qr" aria-hidden="true"></div>
+    <div class="rc-code">Code : <strong id="rc-code">…</strong></div>
+    <div class="rc-status" id="rc-status" role="status">Préparation de la connexion…</div>
+    <div class="rc-acts"><button type="button" class="pj-btn" id="rc-copy" onclick="RC.copy()"><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg> Copier le lien</button><button type="button" class="pj-btn" onclick="RC.stop()">Arrêter</button></div>
   </div>
 </div>
 
@@ -1738,6 +1769,114 @@ function projRSlot(txt,cls){
   const s=document.getElementById('proj-r-slot');
   s.textContent=txt; s.className=cls||'';
 }
+
+// ── Télécommande : un téléphone pilote la projection ──
+// Liaison directe entre les deux appareils (WebRTC). Le service PeerJS ne sert qu'à les mettre en relation ;
+// les bibliothèques ne sont chargées qu'à la première ouverture.
+const RC={
+  peer:null, conns:[], code:'', iv:null,
+  lib(src){ return new Promise((ok,ko)=>{ if(document.querySelector(`script[src="${src}"]`)) return ok(); const s=document.createElement('script'); s.src=src; s.onload=ok; s.onerror=ko; document.head.appendChild(s); }); },
+  newCode(){ const A='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; const r=crypto.getRandomValues(new Uint8Array(6)); return [...r].map(x=>A[x%A.length]).join(''); },
+  url(){ return location.origin+'/telecommande/#'+RC.code; },
+  status(txt,on){ const el=document.getElementById('rc-status'); el.textContent=txt; el.classList.toggle('on',!!on); },
+  host(){ return document.getElementById('fs-ov').classList.contains('open')?document.getElementById('fs-ov'):document.getElementById('proj-ov'); },
+  async open(){
+    const dlg=document.getElementById('rc-dlg'), ov=RC.host();
+    ov.appendChild(dlg); dlg.hidden=false;
+    setTimeout(()=>dlg.querySelector('.pj-icon').focus({preventScroll:true}),40);
+    if(RC.peer&&!RC.peer.destroyed){ RC.ui(); return; }
+    track('remote_open');
+    RC.status('Préparation de la connexion…');
+    try{
+      await Promise.all([RC.lib('https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js'),RC.lib('https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js')]);
+    }catch(e){ RC.status('Connexion impossible : vérifie ta connexion internet.'); return; }
+    RC.start();
+  },
+  start(){
+    RC.code=RC.newCode();
+    const peer=RC.peer=new Peer('fk-'+RC.code);
+    peer.on('open',()=>{
+      const q=qrcode(0,'M'); q.addData(RC.url()); q.make();
+      document.getElementById('rc-qr').innerHTML=q.createSvgTag({cellSize:6,margin:0,scalable:true});
+      document.getElementById('rc-code').textContent=RC.code;
+      RC.ui();
+    });
+    peer.on('connection',c=>{
+      c.on('open',()=>{ RC.conns.push(c); RC.ui(); RC.send(); if(!RC.iv) RC.iv=setInterval(RC.send,500); });
+      c.on('data',d=>RC.act(d));
+      c.on('close',()=>{ RC.conns=RC.conns.filter(x=>x!==c); RC.ui(); });
+    });
+    peer.on('disconnected',()=>{ if(!peer.destroyed) peer.reconnect(); });
+    peer.on('error',e=>{
+      if(e.type==='unavailable-id'){ peer.destroy(); RC.start(); return; }
+      if(e.type==='network'||e.type==='server-error'||e.type==='socket-error') RC.status('Service de connexion injoignable. Réessaie dans un instant.');
+    });
+  },
+  ui(){
+    const n=RC.conns.length;
+    if(RC.peer&&RC.peer.open) RC.status(n?`${n} téléphone${n>1?'s':''} connecté${n>1?'s':''}`:'En attente du téléphone…',n>0);
+    document.querySelectorAll('[onclick="RC.open()"]').forEach(b=>b.classList.toggle('rc-live',n>0));
+  },
+  close(){ const dlg=document.getElementById('rc-dlg'); dlg.hidden=true; RC.host().querySelector('[onclick="RC.open()"]')?.focus({preventScroll:true}); },
+  stop(){
+    RC.conns.forEach(c=>c.close()); RC.conns=[]; clearInterval(RC.iv); RC.iv=null;
+    if(RC.peer) RC.peer.destroy(); RC.peer=null;
+    document.getElementById('rc-qr').innerHTML=''; document.getElementById('rc-code').textContent='…';
+    RC.ui(); RC.close();
+  },
+  copy(){
+    const b=document.getElementById('rc-copy'), done=()=>{ b.innerHTML=ic('check')+' Lien copié'; setTimeout(()=>b.innerHTML=ic('link')+' Copier le lien',2000); };
+    navigator.clipboard?navigator.clipboard.writeText(RC.url()).then(done,()=>{}):done();
+  },
+  // Outil piloté : celui qui est projeté, sinon l'écran ouvert, sinon le minuteur
+  tool(){
+    if(document.getElementById('fs-ov').classList.contains('open')) return 'timer';
+    if(projTool) return projTool;
+    return ['timer','sequence','roulette','parole'].includes(currentPanel)?currentPanel:'timer';
+  },
+  state(){
+    const tool=RC.tool(), st={tool,projecting:!!(projTool||document.getElementById('fs-ov').classList.contains('open')),dark:document.documentElement.dataset.proj==='dark'};
+    if(tool==='timer'){ Object.assign(st,{label:document.getElementById('timer-label-inp').value,rem:T.remaining,total:T.total,running:T.running}); }
+    else if(tool==='sequence'){
+      const i=SEQ.curIdx, ph=SEQ.phases[i], nx=SEQ.phases[i+1];
+      const started=SEQ.running||SEQ.remaining>0;
+      Object.assign(st,{label:ph?ph.name:'',rem:started?SEQ.remaining:(ph?ph.duration*60:0),running:SEQ.running,idx:i,count:SEQ.phases.length,next:nx?nx.name:''});
+    }
+    else if(tool==='roulette'){ Object.assign(st,{count:RL.names.length,last:RL.history[0]||''}); }
+    else if(tool==='parole'){ Object.assign(st,{parts:PA.parts.map(p=>({name:p.name,time:p.time,active:!!p.active})),total:PA.total()}); }
+    return st;
+  },
+  send(){
+    if(!RC.conns.length){ clearInterval(RC.iv); RC.iv=null; return; }
+    const st=RC.state(); RC.conns.forEach(c=>{ try{ c.send(st); }catch(e){} });
+  },
+  act(d){
+    if(!d||typeof d.a!=='string') return;
+    const tool=RC.tool();
+    switch(d.a){
+      case 'toggle':
+        if(tool==='sequence') seqToggle();
+        else if(tool==='timer') T.toggle();
+        break;
+      case 'reset': if(tool==='timer') T.reset(); else if(tool==='sequence') SEQ.reset(); break;
+      case 'skip': if(tool==='sequence') SEQ.skip(); break;
+      case 'spin': RL.spin(); break;
+      case 'speak': { const i=parseInt(d.i); if(PA.parts[i]) PA.toggle(i); break; }
+      case 'silence': if(PA.activeIdx!==null) PA.stop(PA.activeIdx); break;
+      case 'theme': projThemeToggle(); break;
+      case 'project': {
+        const t=d.tool; if(!['timer','sequence','roulette','parole'].includes(t)) break;
+        const dlg=document.getElementById('rc-dlg'); dlg.hidden=true; document.body.appendChild(dlg);
+        if(t==='timer'){ projClose(); goPanel('timer'); fsOpen(); }
+        else { fsClose(); goPanel(t); projOpen(t); }
+        break;
+      }
+    }
+    RC.send();
+  }
+};
+// Échap ferme d'abord la fenêtre du QR code, pas la projection
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!document.getElementById('rc-dlg').hidden){ e.stopImmediatePropagation(); RC.close(); } },true);
 
 // ── Raccourcis clavier ──
 // Espace = start/pause · R = reset · F = plein écran · L = tour (chrono)

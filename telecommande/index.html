@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Télécommande | Facilithèque</title>
+<meta name="description" content="Pilote la projection Facilithèque depuis ton téléphone : lancer, mettre en pause, passer une phase, tirer au sort.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#13233A">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--night:#13233A;--bg:#0D1625;--surface:#142033;--surface-2:#1B2840;--line:#23324C;--ink:#EEF2F7;--muted:#93A0B4;--accent:#D9472A;--accent-ink:#F09A86;--ok:#2E9E5B;--font-display:'Geist',system-ui,sans-serif;--r:18px;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--ink);font:400 16px/1.4 'DM Sans',system-ui,sans-serif;-webkit-tap-highlight-color:transparent}
+body{display:flex;flex-direction:column;min-height:100dvh;padding:max(16px,env(safe-area-inset-top)) 16px max(16px,env(safe-area-inset-bottom))}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+:focus-visible{outline:2px solid var(--accent-ink);outline-offset:2px}
+.ic{width:1.2em;height:1.2em;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:10px;font:500 1.05rem var(--font-display)}
+.mark{width:26px;height:26px;border-radius:50% 50% 50% 10px;background:var(--accent)}
+.dot{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted)}
+.dot::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.dot.on::before{background:var(--ok)}
+.icon-btn{width:44px;height:44px;display:grid;place-items:center;border-radius:50%;border:1px solid var(--line);background:var(--surface)}
+main{flex:1;display:flex;flex-direction:column;gap:20px;padding:24px 0 16px}
+.what{font-size:.95rem;color:var(--muted)}
+.title{font:500 1.6rem/1.15 var(--font-display);letter-spacing:-.02em;overflow-wrap:anywhere;margin-top:4px}
+.time{font:500 clamp(64px,24vw,120px)/1 var(--font-display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:8px}
+.time.low{color:var(--accent-ink)}
+.next{font-size:.95rem;color:var(--muted);margin-top:6px;min-height:1.3em}
+.bar{height:6px;border-radius:6px;background:var(--surface-2);overflow:hidden;margin-top:14px}
+.bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .5s linear}
+.acts{display:grid;gap:10px;margin-top:auto}
+.btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 18px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-weight:500;font-size:1rem}
+.btn:active{transform:scale(.98);background:var(--surface-2)}
+.btn.main{min-height:84px;font-size:1.2rem;background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.main:active{opacity:.85}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.people{display:grid;gap:8px}
+.person{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-align:left}
+.person .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.person .t{font-variant-numeric:tabular-nums;color:var(--muted)}
+.person[aria-pressed=true]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 16%,var(--surface))}
+.person[aria-pressed=true] .t{color:var(--ink)}
+.seg{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;padding:3px;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+.seg button{min-height:44px;border:1px solid transparent;border-radius:14px;background:none;color:var(--muted);font-size:.85rem;font-weight:500}
+.seg button[aria-pressed=true]{color:var(--ink);background:var(--surface-2);border-color:var(--line)}
+.seg-label{font-size:.85rem;color:var(--muted);margin-bottom:8px}
+.join{margin:auto 0;display:grid;gap:14px;text-align:center}
+.join h1{font:500 1.6rem var(--font-display)}
+.join p{color:var(--muted);font-size:.95rem}
+.join input{min-height:56px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);color:var(--ink);font:500 1.4rem var(--font-display);letter-spacing:.2em;text-align:center;text-transform:uppercase}
+.join input:focus{outline:none;border-color:var(--ink)}
+.empty{color:var(--muted);text-align:center;padding:16px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3"/></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1"/><rect x="6" y="4" width="4" height="16" rx="1"/></symbol>
+<symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></symbol>
+<symbol id="i-skip-forward" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4"/><line x1="19" x2="19" y1="5" y2="19"/></symbol>
+<symbol id="i-dices" viewBox="0 0 24 24"><rect width="12" height="12" x="2" y="10" rx="2" ry="2"/><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6"/><path d="M6 18h.01"/><path d="M10 14h.01"/><path d="M15 6h.01"/><path d="M18 9h.01"/></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></symbol>
+<symbol id="i-square" viewBox="0 0 24 24"><rect width="18" height="18" x="3" y="3" rx="2"/></symbol>
+<symbol id="i-sun-moon" viewBox="0 0 24 24"><path d="M12 8a2.83 2.83 0 0 0 4 4 4 4 0 1 1-4-4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.9 4.9 1.4 1.4"/><path d="m17.7 17.7 1.4 1.4"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.3 17.7-1.4 1.4"/><path d="m19.1 4.9-1.4 1.4"/></symbol>
+</svg>
+
+<header class="top">
+  <div class="brand"><span class="mark"></span>Télécommande</div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <span class="dot" id="dot" role="status">Hors ligne</span>
+    <button class="icon-btn" id="theme" type="button" aria-label="Projection claire ou sombre" hidden><svg class="ic" aria-hidden="true"><use href="#i-sun-moon"/></svg></button>
+  </div>
+</header>
+
+<!-- Saisie du code quand la page est ouverte sans lien -->
+<section class="join" id="join" hidden>
+  <h1>Relier ce téléphone</h1>
+  <p>Sur l'ordinateur, ouvre une projection et touche l'icône du téléphone. Scanne le QR code ou saisis le code affiché.</p>
+  <input id="code-inp" inputmode="text" autocomplete="off" autocapitalize="characters" maxlength="6" aria-label="Code à 6 caractères" placeholder="CODE">
+  <button class="btn main" id="join-btn" type="button">Se connecter</button>
+</section>
+
+<main id="ctl" hidden>
+  <div>
+    <div class="what" id="what"></div>
+    <div class="title" id="title"></div>
+    <div class="time" id="time" hidden></div>
+    <div class="next" id="next"></div>
+    <div class="bar" id="bar" hidden><span id="bar-fill"></span></div>
+  </div>
+
+  <div class="people" id="people" hidden></div>
+
+  <div class="acts" id="acts"></div>
+
+  <div>
+    <div class="seg-label">Afficher à l'écran</div>
+    <div class="seg" id="tools" role="group" aria-label="Outil projeté">
+      <button type="button" data-t="timer">Minuteur</button>
+      <button type="button" data-t="sequence">Séquence</button>
+      <button type="button" data-t="roulette">Tirage</button>
+      <button type="button" data-t="parole">Parole</button>
+    </div>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.5.4/peerjs.min.js"></script>
+<script>
+const $=id=>document.getElementById(id);
+const ic=n=>`<svg class="ic" aria-hidden="true"><use href="#i-${n}"/></svg>`;
+const pad=n=>String(n).padStart(2,'0');
+const fmt=s=>{ s=Math.max(0,s|0); const h=Math.floor(s/3600), m=Math.floor(s%3600/60); return (h?h+':'+pad(m):pad(m))+':'+pad(s%60); };
+let peer=null, conn=null, code='', st=null, lastKey='';
+
+function setDot(txt,on){ const d=$('dot'); d.textContent=txt; d.classList.toggle('on',!!on); }
+function send(a,extra){ if(conn&&conn.open){ conn.send(Object.assign({a},extra||{})); if(navigator.vibrate) navigator.vibrate(12); } }
+
+function connect(c){
+  code=c.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,6);
+  if(code.length!==6){ $('join').hidden=false; return; }
+  history.replaceState(null,'','#'+code);
+  $('join').hidden=true; setDot('Connexion…');
+  if(!peer||peer.destroyed){ peer=new Peer(); peer.on('error',e=>{ if(e.type==='peer-unavailable'){ setDot('Code introuvable'); $('join').hidden=false; $('ctl').hidden=true; } else setDot('Connexion perdue'); }); }
+  const go=()=>{
+    if(conn){ const old=conn; conn=null; try{ old.close(); }catch(e){} }
+    conn=peer.connect('fk-'+code,{reliable:true,serialization:'json'});
+    conn.on('open',()=>{ setDot('Connecté',true); $('ctl').hidden=false; $('theme').hidden=false; wake(); });
+    conn.on('data',d=>{ st=d; render(); });
+    const me=conn; conn.on('close',()=>{ if(conn!==me) return; setDot('Déconnecté'); setTimeout(()=>{ if(conn===me) connect(code); },2000); });
+  };
+  peer.open?go():peer.once('open',go);
+}
+
+// Garde l'écran du téléphone allumé pendant l'atelier
+let lock=null;
+async function wake(){ try{ if('wakeLock' in navigator&&!lock){ lock=await navigator.wakeLock.request('screen'); lock.addEventListener('release',()=>lock=null); } }catch(e){} }
+document.addEventListener('visibilitychange',()=>{ if(document.visibilityState==='visible'){ wake(); if(code&&(!conn||!conn.open)) connect(code); } });
+
+const NAMES={timer:'Minuteur',sequence:'Séquence',roulette:'Tirage au sort',parole:'Temps de parole'};
+function render(){
+  if(!st) return;
+  const t=st.tool;
+  document.querySelectorAll('#tools button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.t===t&&st.projecting)));
+  $('what').textContent=NAMES[t]+(st.projecting?' · à l\'écran':'');
+  const timeEl=$('time'), bar=$('bar');
+  timeEl.hidden=!(t==='timer'||t==='sequence'); bar.hidden=t!=='timer';
+  $('people').hidden=t!=='parole';
+  let title='', next='';
+  if(t==='timer'){
+    title=st.label||''; timeEl.textContent=fmt(st.rem);
+    timeEl.classList.toggle('low',st.total>0&&st.rem/st.total<=.1);
+    $('bar-fill').style.width=(st.total?(1-st.rem/st.total)*100:0)+'%';
+  } else if(t==='sequence'){
+    title=st.count?st.label:'Aucune phase'; timeEl.textContent=fmt(st.rem);
+    next=st.count?`Phase ${st.idx+1} sur ${st.count}`+(st.next?` · ensuite : ${st.next}`:''):'Prépare la séquence sur l\'ordinateur';
+    timeEl.classList.remove('low');
+  } else if(t==='roulette'){
+    title=st.last?st.last:'Prêt à tirer au sort';
+    next=`${st.count} participant${st.count>1?'s':''}`;
+  } else if(t==='parole'){
+    title='Total '+fmt(st.total);
+    const ppl=$('people');
+    ppl.innerHTML=st.parts.length?st.parts.map((p,i)=>`<button type="button" class="person" aria-pressed="${p.active}" data-i="${i}"><span class="n">${p.active?ic('mic')+' ':''}${esc(p.name)}</span><span class="t">${fmt(p.time)}</span></button>`).join(''):'<div class="empty">Ajoute des participants sur l\'ordinateur</div>';
+  }
+  $('title').textContent=title; $('next').textContent=next;
+  // Boutons : reconstruits seulement quand l'outil ou l'état change, pour ne pas perdre le doigt en plein appui
+  const key=t+'|'+st.running+'|'+(st.rem>0);
+  if(key===lastKey) return; lastKey=key;
+  const acts=$('acts');
+  if(t==='timer') acts.innerHTML=`<button class="btn main" data-a="toggle">${st.running?ic('pause')+' Pause':ic('play')+' Démarrer'}</button><button class="btn" data-a="reset">${ic('rotate-ccw')} Remettre à zéro</button>`;
+  else if(t==='sequence') acts.innerHTML=`<button class="btn main" data-a="toggle">${st.running?ic('pause')+' Pause':ic('play')+(st.rem>0&&st.idx>0?' Reprendre':' Lancer')}</button><div class="row"><button class="btn" data-a="skip">${ic('skip-forward')} Passer</button><button class="btn" data-a="reset">${ic('rotate-ccw')} Recommencer</button></div>`;
+  else if(t==='roulette') acts.innerHTML=`<button class="btn main" data-a="spin">${ic('dices')} Tirer au sort</button>`;
+  else acts.innerHTML=`<button class="btn" data-a="silence">${ic('square')} Arrêter la parole</button>`;
+}
+function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+
+$('acts').addEventListener('click',e=>{ const b=e.target.closest('[data-a]'); if(b) send(b.dataset.a); });
+$('people').addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(b) send('speak',{i:+b.dataset.i}); });
+$('tools').addEventListener('click',e=>{ const b=e.target.closest('[data-t]'); if(b) send('project',{tool:b.dataset.t}); });
+$('theme').addEventListener('click',()=>send('theme'));
+$('join-btn').addEventListener('click',()=>connect($('code-inp').value));
+$('code-inp').addEventListener('keydown',e=>{ if(e.key==='Enter') connect($('code-inp').value); });
+
+const h=location.hash.slice(1);
+if(h) connect(h); else $('join').hidden=false;
+</script>
+</body>
+</html>
