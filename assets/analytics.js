@@ -27,14 +27,14 @@
   }
 
   function banner() {
-    var css = '#fk-consent{position:fixed;right:16px;bottom:16px;z-index:2600;max-width:380px;padding:20px 20px 16px;background:#1A1A1A;color:#F5F0E8;border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.35);font:14px/1.5 "DM Sans",system-ui,sans-serif}' +
+    var css = '#fk-consent{position:fixed;right:16px;bottom:16px;z-index:2600;max-width:380px;padding:20px 20px 16px;background:#13233A;color:#EEF2F7;border:1px solid rgba(255,255,255,.08);border-radius:18px;box-shadow:0 18px 50px rgba(0,0,0,.35);font:14px/1.5 "DM Sans",system-ui,sans-serif}' +
       '#fk-consent strong{display:block;font-family:Geist,system-ui,sans-serif;font-weight:500;letter-spacing:-.01em;font-size:17px;margin-bottom:6px}' +
-      '#fk-consent p{color:rgba(245,240,232,.72);margin:0 0 14px}' +
-      '#fk-consent a{color:#F5F0E8}' +
+      '#fk-consent p{color:rgba(238,242,247,.72);margin:0 0 14px}' +
+      '#fk-consent a{color:#EEF2F7}' +
       '#fk-consent .fk-c-row{display:flex;gap:8px}' +
-      '#fk-consent button{flex:1;padding:10px 14px;border-radius:40px;font:600 14px "DM Sans",system-ui,sans-serif;cursor:pointer;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#F5F0E8}' +
-      '#fk-consent button.fk-c-yes{background:#C96B3A;border-color:#C96B3A;color:#fff}' +
-      '#fk-consent button:focus-visible{outline:2px solid #F5F0E8;outline-offset:2px}' +
+      '#fk-consent button{flex:1;padding:10px 14px;border-radius:40px;font:600 14px "DM Sans",system-ui,sans-serif;cursor:pointer;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#EEF2F7}' +
+      '#fk-consent button.fk-c-yes{background:#D9472A;border-color:#D9472A;color:#fff}' +
+      '#fk-consent button:focus-visible{outline:2px solid #EEF2F7;outline-offset:2px}' +
       '@media(max-width:440px){#fk-consent{left:8px;right:8px;bottom:8px;max-width:none}}';
     var st = document.createElement('style'); st.textContent = css; document.head.appendChild(st);
     var el = document.createElement('div');

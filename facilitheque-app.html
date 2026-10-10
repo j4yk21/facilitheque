@@ -13,7 +13,7 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="shortcut icon" href="/favicon.svg">
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1A1A1A">
+<meta name="theme-color" content="#13233A">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Facilithèque">
@@ -77,28 +77,29 @@
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/assets/analytics.js"></script>
 <style>
-:root{--cream:#F5F0E8;--cream-dark:#EBE4D6;--cream-mid:#E0D8C8;--terra:#C96B3A;--terra-d:#A8542A;--sage:#6B8F71;--sage-d:#4E6E54;--ink:#1A1A1A;--ink-s:#3D3730;--gray:#8A8078;--gold:#C4943A;--blue:#5B7FA6;--red:#B85450;--r8:8px;--r12:12px;--r16:16px;--r24:24px;--sh:0 4px 20px rgba(0,0,0,.09);--sh2:0 12px 40px rgba(0,0,0,.13);--card:#fff;--card-line:var(--cream-dark);--tr:.22s cubic-bezier(.4,0,.2,1)}
+:root{--night:#13233A;--cream:#EEF1F6;--cream-dark:#DFE5EE;--cream-mid:#C9D2DF;--terra:#D9472A;--terra-d:#B8381C;--sage:#2C6E8F;--sage-d:#1F5470;--ink:#0F1A2A;--ink-s:#2B3A50;--gray:#5E6B7E;--gold:#D49A2A;--blue:#3E6FB0;--red:#C2413B;--r8:8px;--r12:12px;--r16:16px;--r24:24px;--sh:0 4px 20px rgba(0,0,0,.09);--sh2:0 12px 40px rgba(0,0,0,.13);--card:#fff;--card-line:var(--cream-dark);--terra-ink:var(--terra-d);--tr:.22s cubic-bezier(.4,0,.2,1)}
 
 /* ── PALETTES CHALEUREUSES ── */
-[data-palette=rose]{--cream:#FAEFEC;--cream-dark:#F2DDD5;--cream-mid:#E7C9BD;--terra:#C05F6C;--terra-d:#9E4753;--gold:#D6975F;--sage:#8E9B7A;--sage-d:#6C7A59;--ink:#2B1E20;--ink-s:#4E3A3D;--gray:#94807E}
-[data-palette=miel]{--cream:#FBF3DD;--cream-dark:#F3E5BF;--cream-mid:#E8D49D;--terra:#B98A2A;--terra-d:#966D1D;--gold:#CE6A42;--sage:#7E8F62;--sage-d:#5F6E48;--ink:#27200F;--ink-s:#473E26;--gray:#8F846B}
-[data-palette=sauge]{--cream:#F1F3E7;--cream-dark:#E2E6CF;--cream-mid:#CFD6B3;--terra:#6E8558;--terra-d:#556B42;--gold:#C4943A;--sage:#B57B4E;--sage-d:#8F5C36;--ink:#20241A;--ink-s:#3D4433;--gray:#83887A}
+[data-palette=terre]{--night:#1A1A1A;--cream:#F5F0E8;--cream-dark:#EBE4D6;--cream-mid:#E0D8C8;--terra:#C96B3A;--terra-d:#A8542A;--sage:#6B8F71;--sage-d:#4E6E54;--ink:#1A1A1A;--ink-s:#3D3730;--gray:#7A7068;--gold:#C4943A;--blue:#5B7FA6;--red:#B85450}
+[data-palette=rose]{--night:#1F1719;--cream:#FAEFEC;--cream-dark:#F2DDD5;--cream-mid:#E7C9BD;--terra:#C05F6C;--terra-d:#9E4753;--gold:#D6975F;--sage:#8E9B7A;--sage-d:#6C7A59;--ink:#2B1E20;--ink-s:#4E3A3D;--gray:#94807E}
+[data-palette=miel]{--night:#1E1A12;--cream:#FBF3DD;--cream-dark:#F3E5BF;--cream-mid:#E8D49D;--terra:#B98A2A;--terra-d:#966D1D;--gold:#CE6A42;--sage:#7E8F62;--sage-d:#5F6E48;--ink:#27200F;--ink-s:#473E26;--gray:#8F846B}
+[data-palette=sauge]{--night:#181C14;--cream:#F1F3E7;--cream-dark:#E2E6CF;--cream-mid:#CFD6B3;--terra:#6E8558;--terra-d:#556B42;--gold:#C4943A;--sage:#B57B4E;--sage-d:#8F5C36;--ink:#20241A;--ink-s:#3D4433;--gray:#83887A}
 
 /* Sélecteur de palette (sidebar) */
 .pal-dot{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.18);cursor:pointer;background:linear-gradient(135deg,var(--pb) 50%,var(--pd) 50%);transition:all .2s;padding:0;flex-shrink:0}
 .pal-dot:hover{transform:scale(1.18)}
-.pal-dot.active{border-color:#F5F0E8;box-shadow:0 0 0 2px rgba(245,240,232,.3)}
+.pal-dot.active{border-color:#EEF2F7;box-shadow:0 0 0 2px rgba(238,242,247,.3)}
 
 /* ── DARK MODE ── */
-[data-theme=dark]{--cream:#191613;--cream-dark:#2B2620;--cream-mid:#3B342C;--ink:#F0EAE0;--ink-s:#D5CCC0;--gray:#9C9188;--card:#221E19;--card-line:#332D26;--sh:0 4px 20px rgba(0,0,0,.45);--sh2:0 12px 40px rgba(0,0,0,.55)}
+[data-theme=dark]{--cream:#0D1625;--cream-dark:#1B2840;--cream-mid:#2A3A55;--ink:#EEF2F7;--ink-s:#C9D2DF;--gray:#93A0B4;--card:#142033;--card-line:#23324C;--terra-ink:color-mix(in srgb,var(--terra) 55%,#fff);--sh:0 4px 20px rgba(0,0,0,.45);--sh2:0 12px 40px rgba(0,0,0,.55)}
 [data-theme=dark] .lib-card,[data-theme=dark] .card,[data-theme=dark] .modal-box{border-color:var(--card-line)}
 
 /* ── JETONS SÉMANTIQUES (vocabulaire Arc, branchés sur la palette : clair, sombre et palettes suivent) ── */
 :root{--font-display:'Geist',system-ui,sans-serif;--background:var(--cream);--surface:var(--card);--surface-muted:var(--cream-dark);--foreground:var(--ink);--text-secondary:var(--ink-s);--text-muted:var(--gray);--border:var(--card-line);--border-strong:var(--cream-mid);--accent:var(--terra);--danger:var(--red);--radius-control:18px;--control-height-sm:36px;--control-height-md:44px;--control-height-lg:50px;--dur-fast:.15s;--ease-std:cubic-bezier(.2,0,0,1);--shadow-resting:0 1px 2px rgba(0,0,0,.06),0 1px 1px rgba(0,0,0,.04)}
-[data-theme=dark]{--surface-muted:#2A251F;--border-strong:#4A4238;--shadow-resting:0 1px 2px rgba(0,0,0,.4)}
+[data-theme=dark]{--surface-muted:#1B2840;--border-strong:#34466A;--shadow-resting:0 1px 2px rgba(0,0,0,.4)}
 
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:#1A1A1A;color:var(--ink)}
+html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--night);color:var(--ink)}
 h1,h2,h3,h4{font-family:var(--font-display);font-weight:500;letter-spacing:-.02em;line-height:1.2}
 a{color:inherit;text-decoration:none}
 button{cursor:pointer;font-family:'DM Sans',sans-serif}
@@ -126,36 +127,36 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 #app{display:flex;height:100vh;overflow:hidden}
 
 /* ── SIDEBAR ── */
-#sidebar{width:220px;min-width:220px;background:#1A1A1A;display:flex;flex-direction:column;overflow:hidden;border-right:1px solid rgba(255,255,255,.06)}
+#sidebar{width:220px;min-width:220px;background:var(--night);display:flex;flex-direction:column;overflow:hidden;border-right:1px solid rgba(255,255,255,.06)}
 .sb-logo{padding:20px 16px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid rgba(255,255,255,.07)}
 .sb-logo-mark{width:32px;height:32px;background:var(--terra);border-radius:50% 50% 50% 10px;display:grid;place-items:center;flex-shrink:0}
 .sb-logo-mark svg{width:16px;height:16px}
-.sb-logo-text{font-family:var(--font-display);font-size:1.2rem;font-weight:500;color:#F5F0E8}
+.sb-logo-text{font-family:var(--font-display);font-size:1.2rem;font-weight:500;color:#EEF2F7}
 .sb-nav{flex:1;overflow-y:auto;padding:12px 8px;display:flex;flex-direction:column;gap:2px}
 .sb-nav::-webkit-scrollbar{width:3px}
 .sb-nav::-webkit-scrollbar-thumb{background:rgba(255,255,255,.1);border-radius:3px}
-.nav-label{font-size:.78rem;font-weight:500;color:rgba(245,240,232,.45);padding:12px 10px 6px}
-.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r8);color:rgba(245,240,232,.55);font-size:.85rem;font-weight:500;transition:all var(--tr);cursor:pointer;border:none;background:none;width:100%;text-align:left}
-.nav-item:hover{color:#F5F0E8;background:rgba(255,255,255,.07)}
-.nav-item.active{color:var(--terra);background:rgba(201,107,58,.14)}
+.nav-label{font-size:.78rem;font-weight:500;color:rgba(238,242,247,.45);padding:12px 10px 6px}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--r8);color:rgba(238,242,247,.55);font-size:.85rem;font-weight:500;transition:all var(--tr);cursor:pointer;border:none;background:none;width:100%;text-align:left}
+.nav-item:hover{color:#EEF2F7;background:rgba(255,255,255,.07)}
+.nav-item.active{color:color-mix(in srgb,var(--terra) 55%,#fff);background:color-mix(in srgb,var(--terra) 14%,transparent)}
 .nav-item svg{width:16px;height:16px;flex-shrink:0;opacity:.8}
 .nav-item.active svg{opacity:1}
 .sb-footer{padding:14px 16px;border-top:1px solid rgba(255,255,255,.07)}
-.sb-footer p{font-size:.7rem;color:rgba(245,240,232,.2);line-height:1.5}
+.sb-footer p{font-size:.7rem;color:rgba(238,242,247,.2);line-height:1.5}
 .sb-legal{margin-top:6px}
-.sb-legal a,.sb-legal button{color:rgba(245,240,232,.4);font-size:.7rem;background:none;border:none;padding:0;text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(245,240,232,.2)}
-.sb-legal a:hover,.sb-legal button:hover{color:#F5F0E8}
+.sb-legal a,.sb-legal button{color:rgba(238,242,247,.4);font-size:.7rem;background:none;border:none;padding:0;text-decoration:underline;text-underline-offset:2px;text-decoration-color:rgba(238,242,247,.2)}
+.sb-legal a:hover,.sb-legal button:hover{color:#EEF2F7}
 
 /* ── MINI-TIMER PERSISTANT ── */
-#sb-mini-timer{display:none;margin:8px;padding:10px 12px;background:rgba(201,107,58,.16);border:1px solid rgba(201,107,58,.35);border-radius:var(--r12);cursor:pointer;transition:all var(--tr);align-items:center;gap:10px;width:calc(100% - 16px);text-align:left}
+#sb-mini-timer{display:none;margin:8px;padding:10px 12px;background:color-mix(in srgb,var(--terra) 16%,transparent);border:1px solid color-mix(in srgb,var(--terra) 35%,transparent);border-radius:var(--r12);cursor:pointer;transition:all var(--tr);align-items:center;gap:10px;width:calc(100% - 16px);text-align:left}
 #sb-mini-timer.visible{display:flex}
-#sb-mini-timer:hover{background:rgba(201,107,58,.28)}
+#sb-mini-timer:hover{background:color-mix(in srgb,var(--terra) 28%,transparent)}
 #sb-mini-timer .mt-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0;animation:mtPulse 1.2s ease infinite}
 #sb-mini-timer.paused .mt-dot{animation:none;background:var(--gold)}
 #sb-mini-timer.ended .mt-dot{animation:mtPulse .5s ease infinite;background:var(--red)}
 @keyframes mtPulse{0%,100%{opacity:1}50%{opacity:.3}}
-#sb-mini-timer .mt-time{font-family:var(--font-display);font-size:1.05rem;font-weight:500;color:#F5F0E8;font-variant-numeric:tabular-nums}
-#sb-mini-timer .mt-label{font-size:.78rem;color:rgba(245,240,232,.5)}
+#sb-mini-timer .mt-time{font-family:var(--font-display);font-size:1.05rem;font-weight:500;color:#EEF2F7;font-variant-numeric:tabular-nums}
+#sb-mini-timer .mt-label{font-size:.78rem;color:rgba(238,242,247,.5)}
 @media(max-width:900px){#sb-mini-timer .mt-label{display:none}#sb-mini-timer{padding:8px;justify-content:center}}
 
 /* ── MAIN ── */
@@ -171,6 +172,10 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 /* ── CARDS ── */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r16);padding:24px}
 .card-sm{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r12);padding:18px}
+
+/* Icônes Lucide, comme dans Arc : trait 1,75, taille du texte */
+.ic{width:1.15em;height:1.15em;flex:none;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.2em}
+.es-icon .ic{width:40px;height:40px;stroke-width:1.5;color:var(--gray)}
 
 /* ── COMPOSANTS (repris d'Arc : button, input, segmented-control, chip-group) ──
    Surfaces neutres ; l'accent terracotta marque ce qui est actif, choisi ou en cours. */
@@ -223,7 +228,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .home-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:32px}
 .home-tool-card{font:inherit;color:inherit;text-align:left;width:100%;background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r16);padding:22px;cursor:pointer;transition:all var(--tr);display:flex;flex-direction:column;gap:12px}
 @media(hover:hover) and (pointer:fine){.home-tool-card:hover{border-color:var(--border-strong);background:color-mix(in srgb,var(--card) 70%,var(--cream))}}
-.home-tool-icon{display:block;width:22px;height:22px;color:var(--terra)}
+.home-tool-icon{display:block;width:22px;height:22px;color:var(--terra-ink)}
 .home-tool-icon svg{width:100%;height:100%;display:block}
 /* Tableau de bord : en cours, atelier, minuteur express */
 .home-h2{font-family:var(--font-display);font-size:1.15rem;font-weight:500;color:var(--ink)}
@@ -282,7 +287,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .roulette-layout{display:grid;grid-template-columns:1fr 1fr;gap:28px;align-items:start}
 .roulette-stage{background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r24);padding:32px;display:flex;flex-direction:column;align-items:center;gap:20px;min-height:360px;justify-content:center}
 .roulette-slot{font-family:var(--font-display);font-size:2.8rem;font-weight:500;color:var(--ink);text-align:center;min-height:80px;display:flex;align-items:center;justify-content:center;line-height:1.2;transition:color .1s;word-break:break-word;max-width:100%}
-.roulette-slot.winner{color:var(--terra);animation:winPop .4s cubic-bezier(.34,1.56,.64,1)}
+.roulette-slot.winner{color:var(--terra-ink);animation:winPop .4s cubic-bezier(.34,1.56,.64,1)}
 @keyframes winPop{0%{transform:scale(.7)}100%{transform:scale(1)}}
 .roulette-idle{font-size:1rem;color:var(--gray);text-align:center}
 .name-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
@@ -297,7 +302,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .parole-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:14px;margin-bottom:24px}
 .parole-card{background:var(--card);border:2px solid var(--cream-mid);border-radius:var(--r16);padding:20px;text-align:center;cursor:pointer;transition:all var(--tr);user-select:none}
 .parole-card:hover{border-color:var(--terra);transform:translateY(-2px)}
-.parole-card.active-spk{border-color:var(--terra);background:rgba(201,107,58,.05);box-shadow:0 0 0 4px rgba(201,107,58,.12)}
+.parole-card.active-spk{border-color:var(--terra);background:color-mix(in srgb,var(--terra) 5%,transparent);box-shadow:0 0 0 4px color-mix(in srgb,var(--terra) 12%,transparent)}
 .parole-name{font-family:var(--font-display);font-size:1rem;font-weight:500;color:var(--ink);margin-bottom:8px}
 .parole-time-disp{font-family:var(--font-display);font-size:1.6rem;font-weight:500;color:var(--ink);line-height:1}
 .parole-bar-wrap{height:4px;background:var(--cream-dark);border-radius:2px;margin-top:10px;overflow:hidden}
@@ -313,12 +318,12 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .parole-pct{font-size:.7rem;color:var(--gray);margin-top:4px}
 .parole-key{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:6px;background:var(--cream);border:1px solid var(--cream-mid);border-bottom-width:2px;font:600 .7rem/1 'DM Sans',sans-serif;color:var(--gray);transition:all var(--tr)}
 .active-spk .parole-key{background:var(--terra);border-color:var(--terra-d);color:#fff}
-.parole-pct.warn{color:var(--terra);font-weight:600}
+.parole-pct.warn{color:var(--terra-ink);font-weight:600}
 .parole-totals{display:flex;gap:20px;padding:16px;background:var(--cream-dark);border-radius:var(--r12);font-size:.85rem}
 
 /* ── SEQUENCE ── */
 .seq-phase-row{display:flex;align-items:center;gap:12px;padding:10px 18px 10px 10px;background:var(--card);border:1px solid var(--cream-dark);border-radius:var(--r12);margin-bottom:10px;transition:all var(--tr)}
-.seq-phase-row.seq-active{border-color:var(--terra);background:rgba(201,107,58,.04);box-shadow:0 0 0 3px rgba(201,107,58,.1)}
+.seq-phase-row.seq-active{border-color:var(--terra);background:color-mix(in srgb,var(--terra) 4%,transparent);box-shadow:0 0 0 3px color-mix(in srgb,var(--terra) 10%,transparent)}
 .seq-phase-row.seq-done{opacity:.45}
 .seq-num{width:28px;height:28px;background:var(--cream-dark);border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--gray);flex-shrink:0}
 .seq-active .seq-num{background:var(--terra);color:#fff}
@@ -338,7 +343,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .plan-select-wrap{position:relative;flex:0 1 400px;min-width:0}
 .plan-select-wrap select{appearance:none;-webkit-appearance:none;width:100%;height:44px;padding:0 42px 0 18px;border:1.5px solid var(--cream-mid);border-radius:40px;background:var(--card);font-family:var(--font-display);font-size:1rem;font-weight:500;color:var(--ink);cursor:pointer;text-overflow:ellipsis;outline:none;transition:border-color var(--tr),box-shadow var(--tr)}
 .plan-select-wrap select:hover{border-color:var(--gray)}
-.plan-select-wrap select:focus-visible{border-color:var(--terra);box-shadow:0 0 0 4px rgba(201,107,58,.1)}
+.plan-select-wrap select:focus-visible{border-color:var(--terra);box-shadow:0 0 0 4px color-mix(in srgb,var(--terra) 10%,transparent)}
 .plan-select-wrap select option{font-family:'DM Sans',sans-serif;font-weight:400;background:var(--card);color:var(--ink)}
 .plan-select-wrap svg{position:absolute;right:16px;top:50%;width:12px;height:12px;transform:translateY(-50%);color:var(--gray);pointer-events:none}
 .plan-count{margin-left:auto;font-size:.75rem;color:var(--gray)}
@@ -347,7 +352,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .planner-phase-row .phase-move{grid-area:move}.pp-main{grid-area:main;min-width:0}.pp-dur{grid-area:dur}.pp-tool{grid-area:tool;min-width:0}.pp-del{grid-area:del}
 .planner-phase-row:hover{box-shadow:var(--sh)}
 .phase-drag{color:var(--gray);cursor:grab;display:flex;align-items:center;justify-content:center;padding:3px 4px;border-radius:6px;touch-action:none;transition:color var(--tr),background var(--tr)}
-.phase-drag:hover{color:var(--terra);background:rgba(201,107,58,.08)}
+.phase-drag:hover{color:var(--terra-ink);background:color-mix(in srgb,var(--terra) 8%,transparent)}
 .phase-drag svg{width:14px;height:14px}
 .pp-del{padding-top:22px}
 
@@ -357,12 +362,12 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .move-btn svg{width:10px;height:10px}
 .move-btn:hover:not(:disabled){color:var(--ink);background:var(--cream-dark)}
 .move-btn:disabled{opacity:.22;cursor:default}
-.dragging{position:relative;z-index:5;border-color:var(--terra)!important;box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 3px rgba(201,107,58,.14)!important;transition:none!important}
-.dragging .phase-drag{color:var(--terra);cursor:grabbing}
+.dragging{position:relative;z-index:5;border-color:var(--terra)!important;box-shadow:0 18px 40px rgba(0,0,0,.16),0 0 0 3px color-mix(in srgb,var(--terra) 14%,transparent)!important;transition:none!important}
+.dragging .phase-drag{color:var(--terra-ink);cursor:grabbing}
 body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
-.planner-total{display:flex;align-items:center;gap:16px;padding:16px 20px;background:#1A1A1A;border-radius:var(--r12);color:var(--cream);margin-top:16px}
-.planner-total-num{font-family:var(--font-display);font-size:1.8rem;font-weight:500;color:var(--terra)}
-.planner-total-label{font-size:.8rem;color:rgba(245,240,232,.5)}
+.planner-total{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--night);border-radius:var(--r12);color:var(--cream);margin-top:16px}
+.planner-total-num{font-family:var(--font-display);font-size:1.8rem;font-weight:500;color:var(--terra-ink)}
+.planner-total-label{font-size:.8rem;color:rgba(238,242,247,.5)}
 .planner-actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
 
 /* ── LIBRARY ── */
@@ -379,7 +384,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .tool-phase-badge{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:.68rem;font-weight:600;letter-spacing:.04em;margin-bottom:10px}
 .ph-avant{background:rgba(91,127,166,.12);color:var(--blue)}
 .ph-ouverture{background:rgba(107,143,113,.12);color:var(--sage-d)}
-.ph-production{background:rgba(201,107,58,.12);color:var(--terra)}
+.ph-production{background:color-mix(in srgb,var(--terra) 12%,transparent);color:var(--terra-ink)}
 .ph-cloture{background:rgba(196,148,58,.12);color:var(--gold)}
 .ph-apres{background:rgba(184,84,80,.12);color:var(--red)}
 .lib-card-link{all:unset;cursor:pointer}
@@ -395,7 +400,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .lib-card.hidden{display:none}
 .lib-toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:16px}
 .lib-search{flex:1 1 280px;display:flex;align-items:center;gap:10px;height:44px;padding:0 18px;background:var(--card);border:1.5px solid var(--cream-mid);border-radius:40px;color:var(--gray);transition:border-color var(--tr),box-shadow var(--tr)}
-.lib-search:focus-within,.lib-field:focus-within{border-color:var(--terra);box-shadow:0 0 0 4px rgba(201,107,58,.1)}
+.lib-search:focus-within,.lib-field:focus-within{border-color:var(--terra);box-shadow:0 0 0 4px color-mix(in srgb,var(--terra) 10%,transparent)}
 .lib-search svg{width:16px;height:16px;flex-shrink:0}
 .lib-search input{flex:1;min-width:0;border:none;background:none;outline:none;font-size:.9rem}
 .lib-search input::placeholder,.lib-field input::placeholder{color:var(--gray)}
@@ -407,7 +412,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .lib-seg-label{font-size:.8125rem;color:var(--text-muted);padding:0 6px 0 9px;white-space:nowrap}
 .lib-count{display:flex;align-items:center;gap:14px;min-height:28px;margin:-6px 0 16px;font-size:.8rem;color:var(--gray)}
 .lib-count strong{font-family:var(--font-display);font-size:1rem;color:var(--ink)}
-.lib-reset{background:none;border:none;padding:4px 0;font-size:.8rem;font-weight:600;color:var(--terra);text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(201,107,58,.35)}
+.lib-reset{background:none;border:none;padding:4px 0;font-size:.8rem;font-weight:600;color:var(--terra-ink);text-decoration:underline;text-underline-offset:3px;text-decoration-color:color-mix(in srgb,var(--terra) 35%,transparent)}
 .lib-reset:hover{text-decoration-color:var(--terra)}
 .lib-reset[hidden]{display:none}
 .lib-empty{grid-column:1/-1;text-align:center;padding:56px 20px;border:1.5px dashed var(--cream-mid);border-radius:var(--r16);color:var(--gray)}
@@ -415,7 +420,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .lib-empty p{font-size:.9rem;line-height:1.6;margin-bottom:16px}
 
 /* ── MODAL ── */
-.modal-ov{position:fixed;inset:0;background:rgba(26,26,26,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
+.modal-ov{position:fixed;inset:0;background:rgba(13,22,37,.6);backdrop-filter:blur(4px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;visibility:hidden;transition:opacity .25s,visibility 0s .25s}
 /* Visible tout de suite à l'ouverture (le focus peut y entrer), masquée après le fondu à la fermeture */
 .modal-ov.open{opacity:1;visibility:visible;transition:opacity .25s,visibility 0s}
 .modal-box{background:var(--card);border-radius:var(--r24);max-width:1080px;width:100%;max-height:96vh;overflow:hidden;box-shadow:var(--sh2);display:flex;flex-direction:column;transform:translateY(16px) scale(.97);transition:transform .3s cubic-bezier(.34,1.56,.64,1)}
@@ -431,7 +436,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .modal-body{padding:16px 28px 24px}
 .modal-meta-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:22px}
 .modal-meta-card{background:var(--cream);border-radius:var(--r12);padding:14px;text-align:center}
-.modal-meta-card .n{font-family:var(--font-display);font-size:1.3rem;font-weight:500;color:var(--terra)}
+.modal-meta-card .n{font-family:var(--font-display);font-size:1.3rem;font-weight:500;color:var(--terra-ink)}
 .modal-meta-card .l{font-size:.72rem;color:var(--gray);margin-top:2px}
 .modal-sec{font-size:.78rem;font-weight:500;color:var(--gray);margin-bottom:8px;margin-top:14px}
 .modal-steps{list-style:none;display:flex;flex-direction:column;gap:7px}
@@ -446,20 +451,20 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .mprev-tags{display:flex;flex-wrap:wrap;gap:5px}
 .mprev-tag{display:inline-block;padding:3px 9px;background:var(--card);border:1px solid var(--cream-dark);color:var(--ink-s);border-radius:20px;font-size:.7rem}
 .modal-permalink{display:inline-block;margin-top:16px;font-size:.8rem;font-weight:500;color:var(--gray);text-decoration:underline;text-underline-offset:3px;text-decoration-color:var(--cream-mid)}
-.modal-permalink:hover{color:var(--terra);text-decoration-color:var(--terra)}
+.modal-permalink:hover{color:var(--terra-ink);text-decoration-color:var(--terra)}
 .home-links{margin-top:32px;padding-top:24px;border-top:1px solid var(--cream-dark);display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:20px}
 .home-links h2{font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;color:var(--gray);margin-bottom:8px}
 .home-links ul{list-style:none;display:flex;flex-direction:column;gap:5px}
 .home-links a{font-size:.85rem;color:var(--ink-s);text-decoration:none}
-.home-links a:hover{color:var(--terra)}
+.home-links a:hover{color:var(--terra-ink)}
 .modal-tip{background:rgba(107,143,113,.08);border-left:3px solid var(--sage);border-radius:0 var(--r12) var(--r12) 0;padding:10px 14px;margin-top:14px;font-size:.82rem;color:var(--sage-d);line-height:1.5}
 
 /* ── PROJECTION (plein écran du minuteur + roulette / séquence / temps de parole) ──
    Style « feuille de route » : clair par défaut, sombre au choix (bouton ◐ ou touche T).
    Couleurs fixes : la projection reste claire même si l'app est en mode sombre. */
-.proj-skin{--p-bg:#F6F1E9;--p-ink:#1A1A1A;--p-muted:#6B625B;--p-accent:#A8542A;--p-line:#E4DBCB;--p-card:#FFFFFF;--p-solid:#FFFFFF;--p-btn:rgba(26,26,26,.05);
+.proj-skin{--p-bg:#EEF1F6;--p-ink:#0F1A2A;--p-muted:#56637A;--p-accent:#B8381C;--p-line:#D3DBE6;--p-card:#FFFFFF;--p-solid:#FFFFFF;--p-btn:rgba(26,26,26,.05);
   position:fixed;inset:0;display:none;flex-direction:column;justify-content:center;padding:clamp(72px,9vh,120px) clamp(20px,5vw,96px) clamp(96px,14vh,150px);background:var(--p-bg);color:var(--p-ink);overflow:hidden;transition:background .35s,color .35s}
-[data-proj=dark] .proj-skin{--p-bg:#141210;--p-ink:#F5F0E8;--p-muted:#A39B92;--p-accent:#D9875A;--p-line:rgba(255,255,255,.12);--p-card:rgba(255,255,255,.05);--p-solid:#26221E;--p-btn:rgba(255,255,255,.07)}
+[data-proj=dark] .proj-skin{--p-bg:#0B1422;--p-ink:#EEF2F7;--p-muted:#9AA7BA;--p-accent:#FF7A5C;--p-line:rgba(255,255,255,.12);--p-card:rgba(255,255,255,.05);--p-solid:#26221E;--p-btn:rgba(255,255,255,.07)}
 .proj-skin.open{display:flex}
 #fs-ov{z-index:3000}
 #proj-ov{z-index:3200}
@@ -537,7 +542,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 #proj-roulette{align-items:center;text-align:center;gap:clamp(16px,4vh,48px)}
 #proj-r-slot{font:500 min(13vw,30vh)/1.05 var(--font-display);letter-spacing:-.02em;color:var(--p-ink);min-height:1.1em;max-width:100%;overflow-wrap:anywhere}
 #proj-r-slot.proj-r-idle{font-size:min(5vw,9vh);color:var(--p-muted)}
-#proj-r-slot.winner{color:var(--terra);animation:projPop .45s cubic-bezier(.34,1.56,.64,1)}
+#proj-r-slot.winner{color:var(--terra-ink);animation:projPop .45s cubic-bezier(.34,1.56,.64,1)}
 @keyframes projPop{0%{transform:scale(.85);opacity:.4}100%{transform:scale(1);opacity:1}}
 /* Temps de parole */
 .pj-head{display:flex;align-items:baseline;justify-content:space-between;gap:20px;width:100%;max-width:1680px;margin:0 auto clamp(14px,3vh,32px)}
@@ -551,9 +556,9 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 .proj-pa-name{font:500 clamp(18px,2vw,40px)/1.15 var(--font-display);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .proj-pa-name,.proj-pa-time,.proj-pa-pct{display:block}
 .proj-pa-time{font:500 clamp(34px,4.8vw,104px)/1 var(--font-display);font-variant-numeric:tabular-nums;margin-top:.15em}
-.proj-pa-card.speaking .proj-pa-time{color:var(--terra)}
+.proj-pa-card.speaking .proj-pa-time{color:var(--terra-ink)}
 .proj-pa-pct{font-size:clamp(12px,1vw,18px);color:var(--p-muted);margin-top:.5em}
-.proj-pa-pct.warn{color:var(--terra);font-weight:700}
+.proj-pa-pct.warn{color:var(--terra-ink);font-weight:700}
 .proj-pa-bar{position:absolute;left:0;bottom:0;height:clamp(4px,.45vw,8px);background:var(--sage);transition:width .5s}
 .proj-pa-bar.warn{background:var(--terra)}
 .proj-pa-key{display:inline-grid;place-items:center;min-width:2em;height:2em;padding:0 .4em;border-radius:8px;border:1px solid var(--p-line);border-bottom-width:2px;font:700 clamp(11px,.9vw,16px)/1 'DM Sans',sans-serif;color:var(--p-muted);flex-shrink:0}
@@ -566,11 +571,11 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 }
 
 /* ── TOAST (confirmation discrète) ── */
-#toast{position:fixed;left:50%;bottom:26px;z-index:2500;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px);padding:11px 12px 11px 18px;background:#1A1A1A;color:#F5F0E8;border:1px solid rgba(255,255,255,.08);border-radius:40px;box-shadow:0 14px 40px rgba(0,0,0,.28);font-size:.84rem;line-height:1.35;opacity:0;visibility:hidden;transform:translate(-50%,14px);transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1),visibility .25s}
+#toast{position:fixed;left:50%;bottom:26px;z-index:2500;display:flex;align-items:center;gap:12px;max-width:calc(100vw - 32px);padding:11px 12px 11px 18px;background:var(--night);color:#EEF2F7;border:1px solid rgba(255,255,255,.08);border-radius:40px;box-shadow:0 14px 40px rgba(0,0,0,.28);font-size:.84rem;line-height:1.35;opacity:0;visibility:hidden;transform:translate(-50%,14px);transition:opacity .25s,transform .35s cubic-bezier(.34,1.56,.64,1),visibility .25s}
 #toast.show{opacity:1;visibility:visible;transform:translate(-50%,0)}
-#toast .toast-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0;box-shadow:0 0 0 4px rgba(201,107,58,.22)}
+#toast .toast-dot{width:8px;height:8px;border-radius:50%;background:var(--terra);flex-shrink:0;box-shadow:0 0 0 4px color-mix(in srgb,var(--terra) 22%,transparent)}
 #toast .toast-msg{min-width:0}
-#toast .toast-act{background:none;border:none;color:var(--terra);font-weight:600;font-size:.8rem;padding:6px 10px;border-radius:20px;white-space:nowrap;transition:background var(--tr)}
+#toast .toast-act{background:none;border:none;color:var(--terra-ink);font-weight:600;font-size:.8rem;padding:6px 10px;border-radius:20px;white-space:nowrap;transition:background var(--tr)}
 #toast .toast-act:hover{background:rgba(255,255,255,.08)}
 #toast .toast-act:empty{display:none}
 
@@ -653,6 +658,46 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 </style>
 </head>
 <body>
+<!-- Icônes Lucide (celles d'Arc), licence ISC -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+<symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></symbol>
+<symbol id="i-book-open" viewBox="0 0 24 24"><path d="M12 7v14" /><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z" /></symbol>
+<symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5" /></symbol>
+<symbol id="i-circle-check-big" viewBox="0 0 24 24"><path d="M21.801 10A10 10 0 1 1 17 3.335" /><path d="m9 11 3 3L22 4" /></symbol>
+<symbol id="i-circle-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><path d="M12 17h.01" /></symbol>
+<symbol id="i-circle-parking" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" /><path d="M9 17V7h4a3 3 0 0 1 0 6H9" /></symbol>
+<symbol id="i-clipboard-list" viewBox="0 0 24 24"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></symbol>
+<symbol id="i-compass" viewBox="0 0 24 24"><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /><circle cx="12" cy="12" r="10" /></symbol>
+<symbol id="i-dices" viewBox="0 0 24 24"><rect width="12" height="12" x="2" y="10" rx="2" ry="2" /><path d="m17.92 14 3.5-3.5a2.24 2.24 0 0 0 0-3l-5-4.92a2.24 2.24 0 0 0-3 0L10 6" /><path d="M6 18h.01" /><path d="M10 14h.01" /><path d="M15 6h.01" /><path d="M18 9h.01" /></symbol>
+<symbol id="i-door-open" viewBox="0 0 24 24"><path d="M13 4h3a2 2 0 0 1 2 2v14" /><path d="M2 20h3" /><path d="M13 20h9" /><path d="M10 12v.01" /><path d="M13 4.562v16.157a1 1 0 0 1-1.242.97L5 20V5.562a2 2 0 0 1 1.515-1.94l4-1A2 2 0 0 1 13 4.561Z" /></symbol>
+<symbol id="i-download" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line x1="12" x2="12" y1="15" y2="3" /></symbol>
+<symbol id="i-external-link" viewBox="0 0 24 24"><path d="M15 3h6v6" /><path d="M10 14 21 3" /><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" /></symbol>
+<symbol id="i-flag" viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" /><line x1="4" x2="4" y1="22" y2="15" /></symbol>
+<symbol id="i-hand" viewBox="0 0 24 24"><path d="M18 11V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2" /><path d="M14 10V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v2" /><path d="M10 10.5V6a2 2 0 0 0-2-2a2 2 0 0 0-2 2v8" /><path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15" /></symbol>
+<symbol id="i-lightbulb" viewBox="0 0 24 24"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5" /><path d="M9 18h6" /><path d="M10 22h4" /></symbol>
+<symbol id="i-link" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" /><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" /></symbol>
+<symbol id="i-message-circle" viewBox="0 0 24 24"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z" /></symbol>
+<symbol id="i-messages-square" viewBox="0 0 24 24"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z" /><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1" /></symbol>
+<symbol id="i-mic" viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z" /><path d="M19 10v2a7 7 0 0 1-14 0v-2" /><line x1="12" x2="12" y1="19" y2="22" /></symbol>
+<symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
+<symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1" /><rect x="6" y="4" width="4" height="16" rx="1" /></symbol>
+<symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14" /><path d="M12 5v14" /></symbol>
+<symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3" /></symbol>
+<symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4" /><path d="M3 11v-1a4 4 0 0 1 4-4h14" /><path d="m7 22-4-4 4-4" /><path d="M21 13v1a4 4 0 0 1-4 4H3" /></symbol>
+<symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></symbol>
+<symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8" /><path d="m21 21-4.3-4.3" /></symbol>
+<symbol id="i-skip-forward" viewBox="0 0 24 24"><polygon points="5 4 15 12 5 20 5 4" /><line x1="19" x2="19" y1="5" y2="19" /></symbol>
+<symbol id="i-smartphone" viewBox="0 0 24 24"><rect width="14" height="20" x="5" y="2" rx="2" ry="2" /><path d="M12 18h.01" /></symbol>
+<symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4" /><path d="M12 2v2" /><path d="M12 20v2" /><path d="m4.93 4.93 1.41 1.41" /><path d="m17.66 17.66 1.41 1.41" /><path d="M2 12h2" /><path d="M20 12h2" /><path d="m6.34 17.66-1.41 1.41" /><path d="m19.07 4.93-1.41 1.41" /></symbol>
+<symbol id="i-timer" viewBox="0 0 24 24"><line x1="10" x2="14" y1="2" y2="2" /><line x1="12" x2="15" y1="14" y2="11" /><circle cx="12" cy="14" r="8" /></symbol>
+<symbol id="i-trash-2" viewBox="0 0 24 24"><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /><line x1="10" x2="10" y1="11" y2="17" /><line x1="14" x2="14" y1="11" y2="17" /></symbol>
+<symbol id="i-triangle-alert" viewBox="0 0 24 24"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3" /><path d="M12 9v4" /><path d="M12 17h.01" /></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+<symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="M12 20h.01" /><path d="M8.5 16.429a5 5 0 0 1 7 0" /><path d="M5 12.859a10 10 0 0 1 5.17-2.69" /><path d="M19 12.859a10 10 0 0 0-2.007-1.523" /><path d="M2 8.82a15 15 0 0 1 4.177-2.643" /><path d="M22 8.82a15 15 0 0 0-11.288-3.764" /><path d="m2 2 20 20" /></symbol>
+<symbol id="i-wifi" viewBox="0 0 24 24"><path d="M12 20h.01" /><path d="M2 8.82a15 15 0 0 1 20 0" /><path d="M5 12.859a10 10 0 0 1 14 0" /><path d="M8.5 16.429a5 5 0 0 1 7 0" /></symbol>
+<symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z" /></symbol>
+</svg>
 
 <!-- PLEIN ÉCRAN DU MINUTEUR
      Un fond coloré avance de gauche à droite sur tout l'écran. Deux calques identiques sont superposés :
@@ -672,8 +717,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <button class="pj-icon" onclick="fsClose()" aria-label="Quitter le plein écran" title="Quitter (Échap)"><svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></button>
   </div>
   <div class="pj-controls proj-ui">
-    <button class="pj-btn" id="fs-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
-    <button class="pj-btn" onclick="timerReset()">↺ Remettre à zéro</button>
+    <button class="pj-btn" id="fs-toggle-btn" onclick="timerToggle()"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Démarrer</button>
+    <button class="pj-btn" onclick="timerReset()"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg> Remettre à zéro</button>
   </div>
 </div>
 
@@ -690,7 +735,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
   <div id="proj-roulette" class="proj-pane">
     <div class="pj-kicker">Tirage au sort · <span id="proj-r-count"></span></div>
     <div id="proj-r-slot" class="proj-r-idle">Prêt à tirer au sort</div>
-    <button class="pj-btn pj-btn-main proj-ui" onclick="rouletteSpin()">🎲 Tourner</button>
+    <button class="pj-btn pj-btn-main proj-ui" onclick="rouletteSpin()"><svg class="ic" aria-hidden="true"><use href="#i-dices"/></svg> Tourner</button>
     <div class="pj-hint proj-ui">Espace : tourner · T : clair ou sombre · Échap : quitter</div>
   </div>
   <div id="proj-sequence" class="proj-pane pj-tide">
@@ -706,8 +751,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       <div class="pj-hint proj-ui">Espace : pause · T : clair ou sombre · Échap : quitter</div>
     </div>
     <div class="pj-controls proj-ui">
-      <button class="pj-btn" id="proj-s-toggle" onclick="seqToggle()">⏸</button>
-      <button class="pj-btn" onclick="seqSkip()">Passer →</button>
+      <button class="pj-btn" id="proj-s-toggle" onclick="seqToggle()"><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg> Pause</button>
+      <button class="pj-btn" onclick="seqSkip()">Passer <svg class="ic" aria-hidden="true"><use href="#i-skip-forward"/></svg></button>
     </div>
   </div>
   <div id="proj-parole" class="proj-pane">
@@ -772,14 +817,15 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       <span><span class="mt-time" id="mt-time">00:00</span><br><span class="mt-label" id="mt-label">Minuteur</span></span>
     </button>
     <div class="sb-footer">
-      <div style="font-size:.78rem;font-weight:500;color:rgba(245,240,232,.35);text-align:center;margin-bottom:7px">Couleurs</div>
+      <div style="font-size:.78rem;font-weight:500;color:rgba(238,242,247,.35);text-align:center;margin-bottom:7px">Couleurs</div>
       <div style="display:flex;gap:9px;justify-content:center;margin-bottom:10px">
-        <button class="pal-dot" data-pal="" onclick="setPalette('')" title="Terracotta (classique)" aria-label="Couleurs : Terracotta (classique)" style="--pd:#C96B3A;--pb:#F5F0E8"></button>
+        <button class="pal-dot" data-pal="" onclick="setPalette('')" title="Bleu nuit et corail" aria-label="Couleurs : Bleu nuit et corail" style="--pd:#D9472A;--pb:#13233A"></button>
+        <button class="pal-dot" data-pal="terre" onclick="setPalette('terre')" title="Terracotta" aria-label="Couleurs : Terracotta" style="--pd:#C96B3A;--pb:#F5F0E8"></button>
         <button class="pal-dot" data-pal="rose" onclick="setPalette('rose')" title="Rose poudré" aria-label="Couleurs : Rose poudré" style="--pd:#C05F6C;--pb:#FAEFEC"></button>
         <button class="pal-dot" data-pal="miel" onclick="setPalette('miel')" title="Miel doré" aria-label="Couleurs : Miel doré" style="--pd:#B98A2A;--pb:#FBF3DD"></button>
         <button class="pal-dot" data-pal="sauge" onclick="setPalette('sauge')" title="Vert sauge" aria-label="Couleurs : Vert sauge" style="--pd:#6E8558;--pb:#F1F3E7"></button>
       </div>
-      <button id="theme-toggle" onclick="themeToggle()" title="Basculer clair / sombre" style="width:100%;margin-bottom:10px;padding:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r8);color:rgba(245,240,232,.7);font-size:.75rem;cursor:pointer;transition:background .2s">🌙 Mode sombre</button>
+      <button id="theme-toggle" onclick="themeToggle()" title="Basculer clair / sombre" style="width:100%;margin-bottom:10px;padding:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:var(--r8);color:rgba(238,242,247,.7);font-size:.75rem;cursor:pointer;transition:background .2s"><svg class="ic" aria-hidden="true"><use href="#i-moon"/></svg> Mode sombre</button>
       <p>Facilithèque · Open source<br>Fait pour les facilitateurs</p>
       <p class="sb-legal"><a href="/confidentialite/">Confidentialité</a> · <button type="button" onclick="window.fkConsentReset&&fkConsentReset()">Cookies</button></p>
     </div>
@@ -792,14 +838,14 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <section class="panel active" id="p-home">
       <h1 class="panel-title">Tableau de bord</h1>
       <p class="panel-sub">Démarre en un clic, ou reprends là où tu en étais.</p>
-      <div id="onboard-banner" style="display:none;position:relative;background:linear-gradient(135deg,rgba(201,107,58,.1),rgba(107,143,113,.08));border:1px solid rgba(201,107,58,.25);border-radius:var(--r16);padding:18px 44px 18px 20px;margin-bottom:24px">
-        <button class="onboard-x" onclick="onboardDismiss()" title="Fermer" aria-label="Fermer le message de bienvenue" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--gray);font-size:14px;cursor:pointer;padding:4px 8px">✕</button>
-        <div style="font-weight:600;margin-bottom:4px">👋 Première fois ici ?</div>
+      <div id="onboard-banner" style="display:none;position:relative;background:linear-gradient(135deg,color-mix(in srgb,var(--terra) 10%,transparent),rgba(107,143,113,.08));border:1px solid color-mix(in srgb,var(--terra) 25%,transparent);border-radius:var(--r16);padding:18px 44px 18px 20px;margin-bottom:24px">
+        <button class="onboard-x" onclick="onboardDismiss()" title="Fermer" aria-label="Fermer le message de bienvenue" style="position:absolute;top:10px;right:10px;background:none;border:none;color:var(--gray);font-size:14px;cursor:pointer;padding:4px 8px"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button>
+        <div style="font-weight:600;margin-bottom:4px">Première fois ici ?</div>
         <p style="font-size:.85rem;color:var(--ink-s);margin-bottom:12px;line-height:1.5">Facilithèque rassemble tous les outils pour animer tes ateliers : timers, tirage au sort, temps de parole, et 48 fiches méthodes. Tout est gratuit, sans compte, et fonctionne même hors ligne.</p>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn btn-primary btn-sm" onclick="onboardDismiss();goPanel('timer')">⏱ Lancer un minuteur</button>
-          <button class="btn btn-secondary btn-sm" onclick="onboardDismiss();goPanel('sequence')">⚡ Essayer une séquence type</button>
-          <button class="btn btn-ghost btn-sm" onclick="onboardDismiss();goPanel('library')">📚 Parcourir les 48 outils</button>
+          <button class="btn btn-primary btn-sm" onclick="onboardDismiss();goPanel('timer')"><svg class="ic" aria-hidden="true"><use href="#i-timer"/></svg> Lancer un minuteur</button>
+          <button class="btn btn-secondary btn-sm" onclick="onboardDismiss();goPanel('sequence')"><svg class="ic" aria-hidden="true"><use href="#i-zap"/></svg> Essayer une séquence type</button>
+          <button class="btn btn-ghost btn-sm" onclick="onboardDismiss();goPanel('library')"><svg class="ic" aria-hidden="true"><use href="#i-book-open"/></svg> Parcourir les 48 outils</button>
         </div>
       </div>
       <div id="home-live" class="home-live" hidden></div>
@@ -816,8 +862,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
             <button type="button" onclick="quickTimer(20)">20<span class="u"> min</span></button>
           </div>
           <div class="home-quick-row">
-            <button type="button" class="btn btn-secondary btn-sm" onclick="goPanel('roulette')">🎲 Tirer au sort</button>
-            <button type="button" class="btn btn-secondary btn-sm" onclick="goPanel('parole')">💬 Temps de parole</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="goPanel('roulette')"><svg class="ic" aria-hidden="true"><use href="#i-dices"/></svg> Tirer au sort</button>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="goPanel('parole')"><svg class="ic" aria-hidden="true"><use href="#i-message-circle"/></svg> Temps de parole</button>
           </div>
         </section>
       </div>
@@ -885,7 +931,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <li><a href="/outils/1-2-4-all/">1-2-4-All</a></li>
           <li><a href="/outils/dot-voting/">Dot Voting</a></li>
           <li><a href="/outils/six-chapeaux-de-bono/">Six Chapeaux de Bono</a></li>
-          <li><a href="/outils/">Les 48 fiches →</a></li>
+          <li><a href="/outils/">Les 48 fiches</a></li>
         </ul></div>
         <div><h2>Les outils en détail</h2><ul>
           <li><a href="/minuteur-atelier/">Minuteur d'atelier</a></li>
@@ -930,8 +976,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
             </div>
           </div>
           <div class="timer-controls">
-            <button class="btn btn-primary" id="timer-toggle-btn" onclick="timerToggle()">▶ Démarrer</button>
-            <button class="btn btn-secondary" onclick="timerReset()">↺ Remettre à zéro</button>
+            <button class="btn btn-primary" id="timer-toggle-btn" onclick="timerToggle()"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Démarrer</button>
+            <button class="btn btn-secondary" onclick="timerReset()"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg> Remettre à zéro</button>
             <button class="btn btn-ghost" onclick="fsOpen()" title="Plein écran">
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M2 2h4M2 2v4M13 2h-4M13 2v4M2 13h4M2 13v-4M13 13h-4M13 13v-4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
               Plein écran
@@ -978,9 +1024,9 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
             <span id="chrono-main">00:00</span><span class="chrono-cs">.<span id="chrono-cs">00</span></span>
           </div>
           <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
-            <button class="btn btn-primary" id="chrono-toggle-btn" onclick="chronoToggle()">▶ Démarrer</button>
+            <button class="btn btn-primary" id="chrono-toggle-btn" onclick="chronoToggle()"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Démarrer</button>
             <button class="btn btn-secondary" onclick="chronoLap()" id="chrono-lap-btn" disabled>Tour</button>
-            <button class="btn btn-ghost" onclick="chronoReset()">↺ Remettre à zéro</button>
+            <button class="btn btn-ghost" onclick="chronoReset()"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg> Remettre à zéro</button>
           </div>
         </div>
         <div class="card">
@@ -1002,7 +1048,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
             <label class="label">Ajouter un participant</label>
             <div class="flex-row mt8">
               <input class="input" id="roulette-inp" placeholder="Prénom ou nom…" onkeydown="rouletteKeydown(event)">
-              <button class="btn btn-primary btn-sm" onclick="rouletteAddFromInput()">+ Ajouter</button>
+              <button class="btn btn-primary btn-sm" onclick="rouletteAddFromInput()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter</button>
             </div>
             <div style="margin-top:10px">
               <label class="label">Ou coller une liste (une par ligne)</label>
@@ -1028,7 +1074,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
         <div>
           <div class="roulette-stage">
             <div id="roulette-slot" class="roulette-idle">Entre des noms<br>et lance la roulette !</div>
-            <button class="btn btn-primary" id="roulette-spin-btn" onclick="rouletteSpin()" style="font-size:1.1rem;padding:14px 36px">🎲 Tourner !</button>
+            <button class="btn btn-primary" id="roulette-spin-btn" onclick="rouletteSpin()" style="font-size:1.1rem;padding:14px 36px"><svg class="ic" aria-hidden="true"><use href="#i-dices"/></svg> Tourner !</button>
             <button class="btn btn-ghost btn-sm" onclick="projOpen('roulette')" style="margin-top:10px">⛶ Mode projection</button>
           </div>
         </div>
@@ -1041,9 +1087,9 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       <p class="panel-sub">Clique sur un participant ou appuie sur son numéro pour démarrer ou arrêter son chrono. La touche 0 arrête tout.</p>
       <div class="flex-row" style="margin-bottom:20px;flex-wrap:wrap">
         <input class="input" id="parole-inp" placeholder="Ajouter un participant…" onkeydown="paroleKeydown(event)" style="max-width:280px">
-        <button class="btn btn-primary btn-sm" onclick="paroleAdd()">+ Ajouter</button>
-        <button class="btn btn-ghost btn-sm" onclick="paroleReset()">↺ Remettre à zéro</button>
-        <button class="btn btn-secondary btn-sm" onclick="parolePrint()">⬇ Exporter en PDF</button>
+        <button class="btn btn-primary btn-sm" onclick="paroleAdd()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter</button>
+        <button class="btn btn-ghost btn-sm" onclick="paroleReset()"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg> Remettre à zéro</button>
+        <button class="btn btn-secondary btn-sm" onclick="parolePrint()"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Exporter en PDF</button>
         <button class="btn btn-ghost btn-sm" onclick="projOpen('parole')">⛶ Projection</button>
       </div>
       <div class="parole-grid" id="parole-grid"></div>
@@ -1051,7 +1097,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
         <div class="parole-totals" id="parole-totals"></div>
       </div>
       <div id="parole-empty" class="empty-state">
-        <div class="es-icon">💬</div>
+        <div class="es-icon"><svg class="ic" aria-hidden="true"><use href="#i-message-circle"/></svg></div>
         <p>Ajoute les participants pour commencer le suivi</p>
       </div>
     </section>
@@ -1061,7 +1107,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       <h1 class="panel-title">Séquence de timers</h1>
       <p class="panel-sub">Enchaîne des phases minutées. L'alerte passe automatiquement à la suivante.</p>
       <div style="margin-bottom:28px">
-        <div class="text-xs text-gray fw6" style="margin-bottom:10px">⚡ Démarrage rapide</div>
+        <div class="text-xs text-gray fw6" style="margin-bottom:10px">Démarrage rapide</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="pill" onclick="seqLoadTemplate('retro')">Rétrospective · 60 min</button>
           <button class="pill" onclick="seqLoadTemplate('brainstorm')">Brainstorming · 45 min</button>
@@ -1073,7 +1119,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
         <div>
           <div class="flex-between" style="margin-bottom:16px">
             <span class="fw6 text-sm">Phases de la séquence</span>
-            <button class="btn btn-primary btn-sm" onclick="seqAddPhase()">+ Ajouter une phase</button>
+            <button class="btn btn-primary btn-sm" onclick="seqAddPhase()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter une phase</button>
           </div>
           <div id="seq-phases-list"></div>
           <div id="seq-total-row" style="display:none;margin-top:16px;padding:12px 16px;background:var(--cream-dark);border-radius:var(--r12);align-items:center;justify-content:space-between">
@@ -1081,8 +1127,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
             <span id="seq-total-dur" class="fw6" style="font-family:var(--font-display);color:var(--ink)">—</span>
           </div>
           <div class="flex-between mt16">
-            <button class="btn btn-primary" id="seq-start-btn" onclick="seqStart()">▶ Lancer la séquence</button>
-            <button class="btn btn-ghost btn-sm" onclick="seqReset()">↺ Remettre à zéro</button>
+            <button class="btn btn-primary" id="seq-start-btn" onclick="seqStart()"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Lancer la séquence</button>
+            <button class="btn btn-ghost btn-sm" onclick="seqReset()"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg> Remettre à zéro</button>
           </div>
         </div>
         <div class="card" style="text-align:center;padding:32px 28px">
@@ -1091,8 +1137,8 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <div class="seq-progress-bar"><div class="seq-progress-fill" id="seq-prog-fill" style="width:0%"></div></div>
           <div class="text-xs text-gray" id="seq-progress-label">—</div>
           <div style="margin-top:26px;display:flex;gap:12px;justify-content:center">
-            <button class="btn btn-primary btn-sm" id="seq-toggle-btn" onclick="seqToggle()">▶</button>
-            <button class="btn btn-ghost btn-sm" onclick="seqSkip()">Passer →</button>
+            <button class="btn btn-primary btn-sm" id="seq-toggle-btn" onclick="seqToggle()" aria-label="Lancer"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg></button>
+            <button class="btn btn-ghost btn-sm" onclick="seqSkip()">Passer <svg class="ic" aria-hidden="true"><use href="#i-skip-forward"/></svg></button>
             <button class="btn btn-ghost btn-sm" onclick="projOpen('sequence')" title="Mode projection">⛶</button>
           </div>
         </div>
@@ -1108,16 +1154,16 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <select id="plan-select" onchange="plannerSwitch(this.value)" aria-label="Choisir le plan affiché"></select>
           <svg viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
-        <button class="btn btn-ghost btn-sm" onclick="plannerNew()">＋ Nouveau plan</button>
+        <button class="btn btn-ghost btn-sm" onclick="plannerNew()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Nouveau plan</button>
         <button class="btn btn-ghost btn-sm" onclick="plannerDuplicate()">⧉ Dupliquer</button>
         <span class="plan-count" id="plan-count"></span>
       </div>
       <div class="planner-actions">
-        <button class="btn btn-primary" onclick="plannerToSequence()" title="Transformer ce déroulé en séquence minutée">▶ &nbsp;Lancer en séquence</button>
-        <button class="btn btn-secondary" onclick="plannerExportPDF()">⬇ &nbsp;Exporter en PDF</button>
-        <button class="btn btn-secondary" id="plan-share-btn" onclick="plannerShare()">🔗 &nbsp;Partager le lien</button>
+        <button class="btn btn-primary" onclick="plannerToSequence()" title="Transformer ce déroulé en séquence minutée"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Lancer en séquence</button>
+        <button class="btn btn-secondary" onclick="plannerExportPDF()"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Exporter en PDF</button>
+        <button class="btn btn-secondary" id="plan-share-btn" onclick="plannerShare()"><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg> Partager le lien</button>
         <span style="flex:1"></span>
-        <button class="btn btn-ghost btn-sm" onclick="plannerClear()" title="Supprimer définitivement ce plan">🗑 &nbsp;Supprimer ce plan</button>
+        <button class="btn btn-ghost btn-sm" onclick="plannerClear()" title="Supprimer définitivement ce plan"><svg class="ic" aria-hidden="true"><use href="#i-trash-2"/></svg> Supprimer ce plan</button>
       </div>
       <div class="planner-header">
         <div>
@@ -1139,7 +1185,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       </div>
       <div class="flex-between" style="margin-bottom:12px">
         <span class="fw6 text-sm">Phases & activités</span>
-        <button class="btn btn-primary btn-sm" onclick="plannerAddPhase()">+ Ajouter une phase</button>
+        <button class="btn btn-primary btn-sm" onclick="plannerAddPhase()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter une phase</button>
       </div>
       <div id="planner-phases"></div>
       <datalist id="tools-datalist"></datalist>
@@ -1149,7 +1195,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <div class="planner-total-num" id="plan-total-time">0 min</div>
         </div>
         <div style="flex:1"></div>
-        <div style="color:rgba(245,240,232,.4);font-size:.8rem" id="plan-phase-count">0 phase</div>
+        <div style="color:rgba(238,242,247,.4);font-size:.8rem" id="plan-phase-count">0 phase</div>
       </div>
       <div class="mt24">
         <label class="label">Notes générales</label>
@@ -1165,24 +1211,24 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <p class="panel-sub">Capture les idées hors-sujet pendant l'atelier. On y revient après.</p>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <button class="btn btn-secondary btn-sm" onclick="parkingPrint()">⬇ Exporter en PDF</button>
-          <button class="btn btn-ghost btn-sm" onclick="parkingClear()">🗑 Vider le parking</button>
+          <button class="btn btn-secondary btn-sm" onclick="parkingPrint()"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Exporter en PDF</button>
+          <button class="btn btn-ghost btn-sm" onclick="parkingClear()"><svg class="ic" aria-hidden="true"><use href="#i-trash-2"/></svg> Vider le parking</button>
         </div>
       </div>
       <input class="input" id="parking-title" placeholder="Titre de la séance ou de l'atelier…" oninput="PARK.saveTitle()" style="width:100%;margin-bottom:10px">
       <div style="display:flex;gap:10px;margin-bottom:20px">
         <input class="input" id="parking-inp" placeholder="Une idée, un sujet à traiter plus tard…" onkeydown="parkingKeydown(event)" style="flex:1">
         <select class="input" id="parking-cat" style="width:150px">
-          <option value="idee">💡 Idée</option>
-          <option value="question">❓ Question</option>
-          <option value="action">✅ Action</option>
-          <option value="blocage">⚡ Blocage</option>
+          <option value="idee">Idée</option>
+          <option value="question">Question</option>
+          <option value="action">Action</option>
+          <option value="blocage">Blocage</option>
         </select>
-        <button class="btn btn-primary" onclick="parkingAdd()">+ Ajouter</button>
+        <button class="btn btn-primary" onclick="parkingAdd()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter</button>
       </div>
       <div id="parking-board" class="parking-board"></div>
       <div id="parking-empty" class="empty-state">
-        <div class="es-icon">🅿️</div>
+        <div class="es-icon"><svg class="ic" aria-hidden="true"><use href="#i-circle-parking"/></svg></div>
         <p>Le parking est vide.<br>Capture ici tout ce qui émerge mais sort du sujet principal.</p>
       </div>
     </section>
@@ -1253,7 +1299,7 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <div class="tool-phase-badge ph-apres">Après l'atelier</div>
           <h2 class="lib-card-name"><button type="button" class="lib-card-link" onclick="toolOpen(8)">ROTI</button></h2>
           <div class="lib-card-meta"><span class="lib-meta-item">5–10 min</span><span class="lib-meta-item">4 à 100+ pers.</span></div>
-          <p class="lib-card-desc">Return On Time Invested — chaque participant note l'atelier de 1 à 5 selon ce que la session lui a apporté par rapport au temps investi.</p>
+          <p class="lib-card-desc">Return On Time Invested : chaque participant note l'atelier de 1 à 5 selon ce que la session lui a apporté par rapport au temps investi.</p>
         </article>
         <article class="lib-card" data-phase="avant">
           <div class="tool-phase-badge ph-avant">Avant l'atelier</div>
@@ -1309,11 +1355,11 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           <ul class="modal-steps" id="modal-steps"></ul>
           <div class="modal-tip" id="modal-tip"></div>
           <div style="margin-top:24px;display:flex;gap:10px;flex-wrap:wrap">
-            <button class="btn btn-primary" onclick="toolPDF()">⬇ Fiche PDF</button>
-            <button class="btn btn-secondary" id="modal-add-plan" onclick="toolAddToPlan()">＋ Ajouter au plan</button>
+            <button class="btn btn-primary" onclick="toolPDF()"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Fiche PDF</button>
+            <button class="btn btn-secondary" id="modal-add-plan" onclick="toolAddToPlan()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter au plan</button>
             <button class="btn btn-ghost" onclick="toolModalCloseBtn()">Fermer</button>
           </div>
-          <a id="modal-permalink" class="modal-permalink" href="/outils/">Page web de la fiche, à partager ↗</a>
+          <a id="modal-permalink" class="modal-permalink" href="/outils/">Page web de la fiche, à partager <svg class="ic" aria-hidden="true"><use href="#i-external-link"/></svg></a>
         </div>
       </div>
       <div class="modal-preview" id="modal-preview"></div>
@@ -1436,7 +1482,7 @@ let trackReady=false;
 function track(name,params){ if(trackReady&&window.fkTrack) window.fkTrack(name,params); }
 
 // Couleurs du fond qui avance en projection (voir tideSet), utilisées dès le premier rendu du minuteur
-const TIDE_FILLS=[[.5,'#4E6E54','#FFFFFF'],[.25,'#C4943A','#1A1A1A'],[.1,'#A8542A','#FFFFFF'],[-1,'#A23F3B','#FFFFFF']];
+const TIDE_FILLS=[[.5,'#1F5470','#FFFFFF'],[.25,'#D49A2A','#0F1A2A'],[.1,'#B8381C','#FFFFFF'],[-1,'#9E2F2A','#FFFFFF']];
 
 // Icônes des poignées de réorganisation (utilisées dès le premier rendu)
 const SVG_UP='<svg viewBox="0 0 10 10" fill="none"><path d="M2 6.5L5 3.5l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -1546,9 +1592,9 @@ const T = {
     tideSet(document.getElementById('fs-ov'),prog);
   },
   updateBtn(){
-    const t = T.running?'⏸ Pause':'▶ Démarrer';
-    document.getElementById('timer-toggle-btn').textContent=t;
-    document.getElementById('fs-toggle-btn').textContent=t;
+    const t = T.running?ic('pause')+' Pause':ic('play')+' Démarrer';
+    document.getElementById('timer-toggle-btn').innerHTML=t;
+    document.getElementById('fs-toggle-btn').innerHTML=t;
     miniSync();
   }
 };
@@ -1565,6 +1611,8 @@ function fsClose(){ const ov=document.getElementById('fs-ov'); ov.classList.remo
 function progColor(p){ return p>0.5?'var(--sage)':p>0.25?'var(--gold)':p>0.1?'var(--terra)':'var(--red)'; }
 // Fond qui avance de gauche à droite (minuteur plein écran, séquence projetée).
 // left = part du temps restant (1 → 0). Couleurs du fond et de son texte : contraste ≥ 4,5:1.
+function ic(n){ return `<svg class="ic" aria-hidden="true"><use href="#i-${n}"/></svg>`; }
+const PHASE_ICONS={avant:'compass',ouverture:'door-open',production:'lightbulb',cloture:'flag',apres:'messages-square'};
 function tideSet(el,left){
   const prev=parseFloat(el.style.getPropertyValue('--fp'))||0, next=(1-left)*100;
   el.classList.toggle('pj-snap',next<prev-1); // retour au début (reset, phase suivante) : sans balayage à l'envers
@@ -1657,7 +1705,7 @@ function paletteBtnSync(){
 }
 function themeBtnSync(){
   const b=document.getElementById('theme-toggle');
-  if(b) b.textContent=document.documentElement.dataset.theme==='dark'?'☀️ Mode clair':'🌙 Mode sombre';
+  if(b) b.innerHTML=document.documentElement.dataset.theme==='dark'?ic('sun')+' Mode clair':ic('moon')+' Mode sombre';
 }
 
 // ── Mode projection ──
@@ -1736,9 +1784,9 @@ document.addEventListener('keydown',e=>{
 const CH = {
   ms:0, running:false, iv:null, lapStart:0, laps:[],
   toggle(){ CH.running ? CH.stop() : CH.start(); },
-  start(){ CH.running=true; const start=Date.now()-CH.ms; CH.iv=setInterval(()=>{ CH.ms=Date.now()-start; CH.render(); },31); document.getElementById('chrono-toggle-btn').textContent='⏸ Pause'; document.getElementById('chrono-lap-btn').disabled=false; },
-  stop(){ CH.running=false; clearInterval(CH.iv); document.getElementById('chrono-toggle-btn').textContent='▶ Reprendre'; },
-  reset(){ CH.stop(); CH.ms=0; CH.laps=[]; CH.lapStart=0; CH.render(); CH.renderLaps(); document.getElementById('chrono-toggle-btn').textContent='▶ Démarrer'; document.getElementById('chrono-lap-btn').disabled=true; },
+  start(){ CH.running=true; const start=Date.now()-CH.ms; CH.iv=setInterval(()=>{ CH.ms=Date.now()-start; CH.render(); },31); document.getElementById('chrono-toggle-btn').innerHTML=ic('pause')+' Pause'; document.getElementById('chrono-lap-btn').disabled=false; },
+  stop(){ CH.running=false; clearInterval(CH.iv); document.getElementById('chrono-toggle-btn').innerHTML=ic('play')+' Reprendre'; },
+  reset(){ CH.stop(); CH.ms=0; CH.laps=[]; CH.lapStart=0; CH.render(); CH.renderLaps(); document.getElementById('chrono-toggle-btn').innerHTML=ic('play')+' Démarrer'; document.getElementById('chrono-lap-btn').disabled=true; },
   lap(){ if(!CH.running) return; const lapMs=CH.ms-CH.lapStart; CH.laps.push({total:CH.ms,lap:lapMs}); CH.lapStart=CH.ms; CH.renderLaps(); },
   render(){ const t=CH.ms; const m=Math.floor(t/60000), s=Math.floor((t%60000)/1000), cs=Math.floor((t%1000)/10); document.getElementById('chrono-main').textContent=`${pad(m)}:${pad(s)}`; document.getElementById('chrono-cs').textContent=pad(cs); },
   renderLaps(){ const el=document.getElementById('laps-list'); if(!CH.laps.length){el.innerHTML='<li style="text-align:center;padding:20px;color:var(--gray);font-size:.85rem">Les tours apparaîtront ici</li>';return;} el.innerHTML=CH.laps.map((l,i)=>`<li class="lap-item"><span class="lap-num">Tour ${i+1}</span><span class="lap-time">${fmtMs(l.lap)}</span><span class="lap-delta">${fmtMs(l.total)}</span></li>`).reverse().join(''); }
@@ -1847,9 +1895,9 @@ const PA = {
     g.innerHTML=PA.parts.map((p,i)=>{
       const pct=Math.round(p.time/tot*100), warn=pct>40&&PA.parts.length>1;
       return `<button type="button" class="proj-pa-card${p.active?' speaking':''}" onclick="PA.toggle(${i})" aria-pressed="${p.active}">
-        <span class="proj-pa-top"><span class="proj-pa-name">${p.active?'🎙 ':''}${escHtml(p.name)}</span>${i<9?`<kbd class="proj-pa-key">${i+1}</kbd>`:''}</span>
+        <span class="proj-pa-top"><span class="proj-pa-name">${p.active?ic('mic')+' ':''}${escHtml(p.name)}</span>${i<9?`<kbd class="proj-pa-key">${i+1}</kbd>`:''}</span>
         <span class="proj-pa-time">${fmtSec(p.time)}</span>
-        <span class="proj-pa-pct${warn?' warn':''}">${pct}% du temps${warn?' ⚠':''}</span>
+        <span class="proj-pa-pct${warn?' warn':''}">${pct}% du temps${warn?' '+ic('triangle-alert'):''}</span>
         <span class="proj-pa-bar${warn?' warn':''}" style="width:${pct}%"></span>
       </button>`;
     }).join('');
@@ -1868,12 +1916,12 @@ const PA = {
       const pct=Math.round(p.time/tot*100);
       const warn=pct>40&&PA.parts.length>1;
       return `<div class="parole-card${p.active?' active-spk':''}">
-        <div class="parole-card-top">${i<9?`<kbd class="parole-key" title="Touche ${i+1}">${i+1}</kbd>`:'<span></span>'}<button type="button" class="parole-rm" onclick="PA.remove(${i})" title="Retirer ce participant" aria-label="Retirer ${escHtml(p.name)}">✕</button></div>
+        <div class="parole-card-top">${i<9?`<kbd class="parole-key" title="Touche ${i+1}">${i+1}</kbd>`:'<span></span>'}<button type="button" class="parole-rm" onclick="PA.remove(${i})" title="Retirer ce participant" aria-label="Retirer ${escHtml(p.name)}">${ic('x')}</button></div>
         <button type="button" class="parole-main" onclick="PA.toggle(${i})" aria-pressed="${p.active}">
-        <span class="parole-mic" aria-hidden="true">${p.active?'🎙':'🎤'}</span>
+        <span class="parole-mic" aria-hidden="true">${ic('mic')}</span>
         <span class="parole-name">${escHtml(p.name)}</span>
         <span class="parole-time-disp">${fmtSec(p.time)}</span>
-        <span class="parole-pct${warn?' warn':''}">${pct}% du total${warn?' ⚠':''}</span>
+        <span class="parole-pct${warn?' warn':''}">${pct}% du total${warn?' '+ic('triangle-alert'):''}</span>
         <span class="parole-bar-wrap"><span class="parole-bar${warn?' warn':''}" style="width:${pct}%"></span></span>
         </button>
       </div>`;
@@ -1892,7 +1940,7 @@ const PA = {
     cards[i].querySelector('.parole-bar').style.width=pct+'%';
     cards[i].querySelector('.parole-bar').className='parole-bar'+(warn?' warn':'');
     const pctEl=cards[i].querySelector('.parole-pct');
-    pctEl.textContent=pct+'% du total'+(warn?' ⚠':'');
+    pctEl.innerHTML=pct+'% du total'+(warn?' '+ic('triangle-alert'):'');
     pctEl.classList.toggle('warn',warn);
   },
   updateTotals(){
@@ -1919,10 +1967,10 @@ function parolePrint(){
     head:[['Participant','Temps','%']],
     body:rows,
     theme:'plain',
-    headStyles:{fillColor:[201,107,58],textColor:[255,255,255],fontSize:9,fontStyle:'bold',cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
+    headStyles:{fillColor:[196,61,34],textColor:[255,255,255],fontSize:9,fontStyle:'bold',cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
     bodyStyles:{fontSize:10,textColor:[42,38,34],cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
     alternateRowStyles:{fillColor:[248,244,237]},
-    columnStyles:{1:{halign:'center',cellWidth:30,fontStyle:'bold',textColor:[201,107,58]},2:{halign:'center',cellWidth:20,textColor:[130,120,112]}},
+    columnStyles:{1:{halign:'center',cellWidth:30,fontStyle:'bold',textColor:[196,61,34]},2:{halign:'center',cellWidth:20,textColor:[130,120,112]}},
     margin:{left:M,right:M,top:20}
   });
   pdfFooter(doc);
@@ -1970,7 +2018,7 @@ const SEQ = {
     const ms=s.msLeft!=null?s.msLeft:(parseInt(s.remaining)||0)*1000;
     if(!(ms>0)) return false;
     SEQ.curIdx=s.curIdx; SEQ.msLeft=ms; SEQ.remaining=Math.ceil(ms/1000); SEQ.running=false;
-    document.getElementById('seq-toggle-btn').textContent='▶';
+    seqBtnSync(false);
     seqRender(); seqUpdateDisplay();
     return false;
   },
@@ -2010,7 +2058,7 @@ const SEQ = {
     seqUpdateDisplay(); seqRender();
     animPulse(document.getElementById('seq-current-name'));
     if(projTool==='sequence') animPulse(document.getElementById('proj-s-name'));
-    document.getElementById('seq-toggle-btn').textContent='⏸';
+    seqBtnSync(true);
     SEQ.persist(); WL.sync();
   },
   tick(){
@@ -2024,16 +2072,16 @@ const SEQ = {
     if(!SEQ.running&&SEQ.remaining>0){
       SEQ.endAt=Date.now()+(SEQ.msLeft>0?SEQ.msLeft:SEQ.remaining*1000);
       SEQ.running=true; clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,250);
-      document.getElementById('seq-toggle-btn').textContent='⏸';
+      seqBtnSync(true);
     } else {
       if(SEQ.running) SEQ.msLeft=Math.max(0,SEQ.endAt-Date.now());
-      SEQ.running=false; clearInterval(SEQ.iv); document.getElementById('seq-toggle-btn').textContent='▶';
+      SEQ.running=false; clearInterval(SEQ.iv); seqBtnSync(false);
     }
     SEQ.persist(); WL.sync(); seqUpdateDisplay();
   },
   skip(){ clearInterval(SEQ.iv); beep(SND_PHASE); SEQ.loadPhase(SEQ.curIdx+1); },
-  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; SEQ.msLeft=0; seqRender(); seqUpdateDisplay(); document.getElementById('seq-toggle-btn').textContent='▶'; SEQ.persist(); WL.sync(); },
-  end(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.remaining=0; SEQ.msLeft=0; SEQ.persist(); WL.sync(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='✓ Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
+  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; SEQ.msLeft=0; seqRender(); seqUpdateDisplay(); seqBtnSync(false); SEQ.persist(); WL.sync(); },
+  end(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.remaining=0; SEQ.msLeft=0; SEQ.persist(); WL.sync(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
 };
 const SEQ_TEMPLATES = {
   retro: {name:'Rétrospective agile', phases:[['Accueil & météo',5],['Ce qui a bien marché',10],['Ce qui a coincé',10],['Analyse & échanges',15],['Actions à prendre',15],['Clôture & ROTI',5]]},
@@ -2050,6 +2098,7 @@ function seqLoadTemplate(key){
 }
 function seqStart(){ SEQ.start(); }
 // Rien en cours ni en pause : le bouton ▶ lance la séquence (comme la barre Espace)
+function seqBtnSync(on){ const b=document.getElementById('seq-toggle-btn'); b.innerHTML=ic(on?'pause':'play'); b.setAttribute('aria-label',on?'Pause':'Lancer'); }
 function seqToggle(){ if(!SEQ.running&&SEQ.remaining<=0) SEQ.start(); else SEQ.toggle(); }
 function seqSkip(){ SEQ.skip(); }
 function seqReset(){ SEQ.reset(); }
@@ -2059,7 +2108,7 @@ function seqRender(){
   const totalRow=document.getElementById('seq-total-row');
   const totalDur=document.getElementById('seq-total-dur');
   if(!SEQ.phases.length){
-    el.innerHTML=`<div class="empty-state"><div class="es-icon">🔄</div><p>Ajoute des phases pour construire ta séquence</p></div>`;
+    el.innerHTML=`<div class="empty-state"><div class="es-icon">${ic('repeat')}</div><p>Ajoute des phases pour construire ta séquence</p></div>`;
     totalRow.style.display='none'; return;
   }
   const totalMin=SEQ.phases.reduce((s,p)=>s+(parseInt(p.duration)||0),0);
@@ -2069,7 +2118,7 @@ function seqRender(){
   el.innerHTML=SEQ.phases.map((p,i)=>`
     <div class="seq-phase-row${i===SEQ.curIdx&&SEQ.running?' seq-active':i<SEQ.curIdx?' seq-done':''}">
       ${moveHandle(p.id,i,SEQ.phases.length,'SEQ.move')}
-      <div class="seq-num">${i<SEQ.curIdx?'✓':i+1}</div>
+      <div class="seq-num">${i<SEQ.curIdx?ic('check'):i+1}</div>
       <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" placeholder="Nom de la phase">
       <span class="seq-dur"><input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.edit(${i},'duration',this.value)" title="Durée en minutes" aria-label="Durée en minutes"> min</span>
       <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})" aria-label="Supprimer la phase ${escHtml(p.name)}" title="Supprimer la phase">
@@ -2096,7 +2145,7 @@ function seqUpdateDisplay(){
     both('proj-s-time',timeStr);
     both('proj-s-next',next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':''));
     tideSet(document.getElementById('proj-sequence'),prog);
-    document.getElementById('proj-s-toggle').textContent=SEQ.running?'⏸ Pause':SEQ.remaining>0?'▶ Reprendre':'▶ Lancer';
+    document.getElementById('proj-s-toggle').innerHTML=SEQ.running?ic('pause')+' Pause':SEQ.remaining>0?ic('play')+' Reprendre':ic('play')+' Lancer';
     // Frise du déroulé : chaque phase a une largeur proportionnelle à sa durée
     const live=SEQ.remaining>0;
     both('proj-s-road',SEQ.phases.map((p,i)=>{
@@ -2188,7 +2237,7 @@ const PL = {
   },
   renderPhases(){
     const el=document.getElementById('planner-phases');
-    if(!PL.data.phases.length){ el.innerHTML=`<div class="empty-state" style="padding:32px"><div class="es-icon">📋</div><p>Clique sur "+ Ajouter une phase" pour commencer ton déroulé</p></div>`; PL.updateTotal(); return; }
+    if(!PL.data.phases.length){ el.innerHTML=`<div class="empty-state" style="padding:32px"><div class="es-icon">${ic('clipboard-list')}</div><p>Clique sur "+ Ajouter une phase" pour commencer ton déroulé</p></div>`; PL.updateTotal(); return; }
     const n=PL.data.phases.length;
     el.innerHTML=PL.data.phases.map((p,i)=>`
       <div class="planner-phase-row">
@@ -2206,7 +2255,7 @@ const PL = {
           <input class="input" list="tools-datalist" placeholder="World Café, 1-2-4-All…" value="${escHtml(p.tool)}" oninput="PL.phaseChange(${p.id},'tool',this.value)" style="font-size:.82rem">
         </div>
         <div class="pp-del">
-          <button class="btn btn-danger btn-sm" onclick="PL.removePhase(${p.id})" aria-label="Supprimer la phase" title="Supprimer la phase">✕</button>
+          <button class="btn btn-danger btn-sm" onclick="PL.removePhase(${p.id})" aria-label="Supprimer la phase" title="Supprimer la phase">${ic('x')}</button>
         </div>
       </div>`).join('');
     PL.updateTotal();
@@ -2240,11 +2289,11 @@ const PL = {
       head:[['Horaire','Phase / Activité','Durée','Outil']],
       body:rows,
       theme:'plain',
-      headStyles:{fillColor:[201,107,58],textColor:[255,255,255],fontSize:8.5,fontStyle:'bold',cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
+      headStyles:{fillColor:[196,61,34],textColor:[255,255,255],fontSize:8.5,fontStyle:'bold',cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
       bodyStyles:{fontSize:9.5,textColor:[42,38,34],valign:'top',cellPadding:{top:4,bottom:4,left:3,right:3}},
       alternateRowStyles:{fillColor:[248,244,237]},
       columnStyles:{
-        0:{cellWidth:20,halign:'center',fontStyle:'bold',textColor:[201,107,58]},
+        0:{cellWidth:20,halign:'center',fontStyle:'bold',textColor:[196,61,34]},
         2:{cellWidth:20,halign:'center',textColor:[130,120,112]},
         3:{cellWidth:38,textColor:[130,120,112]}
       },
@@ -2259,7 +2308,7 @@ const PL = {
     // Ligne d'arrivée (fin d'atelier)
     let endY=doc.lastAutoTable.finalY;
     if(tot){
-      doc.setFontSize(8.5); doc.setFont('helvetica','bold'); doc.setTextColor(201,107,58);
+      doc.setFontSize(8.5); doc.setFont('helvetica','bold'); doc.setTextColor(196,61,34);
       doc.text(`${fmtOff(tot)}  ·  fin de l'atelier`,M+3,endY+6);
       endY+=8;
     }
@@ -2269,8 +2318,8 @@ const PL = {
       const noteLines=doc.splitTextToSize(d.notes,W-M*2-14);
       const nH=noteLines.length*4.6+15;
       if(nY+nH>270){ doc.addPage(); nY=25; }
-      doc.setFillColor(245,240,232); doc.roundedRect(M,nY,W-M*2,nH,2.5,2.5,'F');
-      doc.setFillColor(201,107,58); doc.rect(M,nY,1.4,nH,'F');
+      doc.setFillColor(238,241,246); doc.roundedRect(M,nY,W-M*2,nH,2.5,2.5,'F');
+      doc.setFillColor(196,61,34); doc.rect(M,nY,1.4,nH,'F');
       doc.setFontSize(7.5); doc.setFont('helvetica','bold'); doc.setTextColor(160,150,140);
       doc.text('NOTES GÉNÉRALES',M+7,nY+7,{charSpace:.5});
       doc.setFontSize(9); doc.setFont('helvetica','normal'); doc.setTextColor(61,55,48);
@@ -2336,7 +2385,7 @@ function plannerShare(){
   const url=`${location.origin}${location.pathname}#plan=${planEncode({name,date,fac,loc,notes,phases:phases.map(({name,duration,tool,desc})=>({name,duration,tool,desc}))})}`;
   track('plan_share',{phases:PL.data.phases.length});
   const btn=document.getElementById('plan-share-btn');
-  const done=()=>{ btn.textContent='✓ Lien copié !'; setTimeout(()=>btn.textContent='🔗 Partager le lien',2200); };
+  const done=()=>{ btn.innerHTML=ic('check')+' Lien copié'; setTimeout(()=>btn.innerHTML=ic('link')+' Partager le lien',2200); };
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(url).then(done).catch(()=>{ prompt('Copie ce lien :',url); });
   } else { prompt('Copie ce lien :',url); }
@@ -2384,7 +2433,7 @@ function homeRefresh(){
       <div class="home-plan-meta">${meta.map(x=>`<span>${escHtml(x)}</span>`).join('')}</div>
       ${d.phases.length?`<div class="home-frise" aria-hidden="true">${d.phases.map(p=>`<span style="--w:${Math.max(1,parseInt(p.duration)||1)}" title="${escHtml(p.name||p.tool||'Phase')} (${parseInt(p.duration)||0} min)"></span>`).join('')}</div>`:'<div style="height:20px"></div>'}
       <div class="home-plan-acts">
-        <button type="button" class="btn btn-primary" onclick="plannerRender();plannerToSequence()"${tot?'':' disabled'}>▶ Lancer en séquence</button>
+        <button type="button" class="btn btn-primary" onclick="plannerRender();plannerToSequence()"${tot?'':' disabled'}>${ic('play')} Lancer en séquence</button>
         <button type="button" class="btn btn-secondary" onclick="goPanel('planner')">Ouvrir le plan</button>
       </div>`;
   } else {
@@ -2428,54 +2477,54 @@ function homeLiveSync(){
 // LIBRARY DATA & RENDERING
 // ════════════════════════════════════════════════════
 const TOOLS = [
-  {id:1,name:"World Café",icon:"☕",phase:"production",phaseLabel:"Production",dur:"90–120 min",grp:"8 à 50 pers.",needs:["lien","idees"],tags:["dialogue","intelligence collective"],desc:"Des tables rondes en rotation pour explorer un sujet sous différents angles. La pollinisation croisée des idées entre tables crée une intelligence collective qui dépasse la somme des individus.",steps:["Définir 3 à 5 questions directrices liées au sujet central.","Répartir les participants en tables de 4 à 6 avec un hôte fixe.","Lancer des rounds de 20 à 30 min — chaque groupe repart des notes de la nappe.","Inviter chaque hôte à partager les grandes convergences.","Synthétiser en plénière les thèmes transversaux."],tip:"Ne forcez pas la synthèse — laissez les participants se reconnaître dans les convergences. La richesse est dans la diversité des parcours, pas dans l'accord forcé."},
+  {id:1,name:"World Café",icon:"☕",phase:"production",phaseLabel:"Production",dur:"90–120 min",grp:"8 à 50 pers.",needs:["lien","idees"],tags:["dialogue","intelligence collective"],desc:"Des tables rondes en rotation pour explorer un sujet sous différents angles. La pollinisation croisée des idées entre tables crée une intelligence collective qui dépasse la somme des individus.",steps:["Définir 3 à 5 questions directrices liées au sujet central.","Répartir les participants en tables de 4 à 6 avec un hôte fixe.","Lancer des rounds de 20 à 30 min : chaque groupe repart des notes de la nappe.","Inviter chaque hôte à partager les grandes convergences.","Synthétiser en plénière les thèmes transversaux."],tip:"Ne forcez pas la synthèse : laissez les participants se reconnaître dans les convergences. La richesse est dans la diversité des parcours, pas dans l'accord forcé."},
   {id:2,name:"1-2-4-All",icon:"🔁",phase:"ouverture",phaseLabel:"Ouverture",dur:"12–15 min",grp:"4 à 100+ pers.",needs:["idees","lien"],tags:["inclusion","libérateur"],desc:"Chacun réfléchit seul, puis en binôme, en quatuor, puis partage en grand groupe. Structure libératrice qui garantit que chaque voix compte, même dans un grand groupe.",steps:["Poser une question claire et ouverte (1 min de réflexion silencieuse).","Partage en binôme : chacun partage sa réflexion (2 min).","Groupes de 4 : synthétiser les idées clés (4 min).","Chaque groupe partage une idée forte en plénière."],tip:"Cette structure brise l'accaparement de la parole dès le départ. Utilisez-la en début d'atelier pour égaliser les niveaux d'expression."},
-  {id:3,name:"Dot Voting",icon:"·",phase:"cloture",phaseLabel:"Clôture",dur:"10–20 min",grp:"3 à 30 pers.",needs:["decision"],tags:["priorisation","rapide"],desc:"Chaque participant dispose d'un nombre limité de gommettes à attribuer librement aux idées affichées. Le résultat est immédiatement visible et légitime.",steps:["Afficher toutes les options sur un mur.","Distribuer 3 à 5 gommettes par personne.","Voter en silence et simultanément.","Identifier les 3 à 5 priorités émergentes.","Ouvrir une courte discussion si des surprises émergent."],tip:"Autorisez les gens à mettre plusieurs gommettes sur un même item. Et ne laissez pas le score brut décider seul — c'est une aide à la discussion, pas un verdict."},
+  {id:3,name:"Dot Voting",icon:"·",phase:"cloture",phaseLabel:"Clôture",dur:"10–20 min",grp:"3 à 30 pers.",needs:["decision"],tags:["priorisation","rapide"],desc:"Chaque participant dispose d'un nombre limité de gommettes à attribuer librement aux idées affichées. Le résultat est immédiatement visible et légitime.",steps:["Afficher toutes les options sur un mur.","Distribuer 3 à 5 gommettes par personne.","Voter en silence et simultanément.","Identifier les 3 à 5 priorités émergentes.","Ouvrir une courte discussion si des surprises émergent."],tip:"Autorisez les gens à mettre plusieurs gommettes sur un même item. Et ne laissez pas le score brut décider seul : c'est une aide à la discussion, pas un verdict."},
   {id:4,name:"Fishbowl",icon:"🐠",phase:"production",phaseLabel:"Production",dur:"45–75 min",grp:"8 à 40 pers.",needs:["conflits","lien"],tags:["dialogue","tensions","observation"],desc:"Un cercle intérieur débat en direct pendant que le reste du groupe observe. Favorise l'écoute profonde et permet de traiter des tensions sans que la salle entière s'embrase.",steps:["Installer 4–6 chaises au centre, reste du groupe en cercle extérieur.","Définir le sujet et les règles du jeu.","Le cercle intérieur débat librement 20–30 min.","Une chaise vide : n'importe qui peut s'asseoir pour contribuer.","Débriefer avec tout le groupe sur ce qui a été observé."],tip:"Le Fishbowl est particulièrement puissant pour révéler des non-dits. La position d'observateur crée une distance utile."},
   {id:5,name:"Speedboat",icon:"🚤",phase:"cloture",phaseLabel:"Clôture",dur:"30–45 min",grp:"4 à 20 pers.",needs:["idees","decision"],tags:["rétrospective","ancres"],desc:"Une métaphore visuelle pour identifier ce qui propulse le groupe (moteurs) et ce qui le freine (ancres). Idéal pour les rétrospectives d'équipe.",steps:["Dessiner un bateau rapide avec voiles et ancres.","Post-its verts = vents favorables (accélérateurs).","Post-its rouges = ancres (obstacles, freins).","Voter sur les ancres prioritaires.","Définir 2–3 actions pour lever les ancres les plus lourdes."],tip:"Ne laissez pas les ancres s'étirer en plainte collective. Orientez rapidement vers 'qu'est-ce qu'on fait maintenant ?' dès que l'image est claire."},
   {id:6,name:"Check-in Météo",icon:"☁️",phase:"ouverture",phaseLabel:"Ouverture",dur:"5–15 min",grp:"4 à 20 pers.",needs:["lien","energie"],tags:["inclusion","présence"],desc:"Chaque participant décrit son état du moment à travers une météo. Un rituel d'ouverture simple qui crée immédiatement de la présence et de la connexion.",steps:["Présenter la métaphore météo avec exemples.","Chacun dit son prénom, sa météo et une phrase courte.","Le facilitateur note les états pour adapter son animation.","Remercier le groupe sans chercher à 'corriger' les météos difficiles."],tip:"Modélisez une météo honnête vous-même. La vulnérabilité du facilitateur ouvre la permission pour les autres d'être vrais."},
-  {id:7,name:"Six Chapeaux de Bono",icon:"🎩",phase:"production",phaseLabel:"Production",dur:"60–90 min",grp:"4 à 15 pers.",needs:["decision","idees"],tags:["décision","angles","pensée critique"],desc:"Six chapeaux de couleur représentent six modes de pensée. Le groupe explore une décision sous chaque chapeau simultanément, évitant les débats d'ego.",steps:["Présenter les 6 chapeaux : Blanc (faits), Rouge (émotions), Noir (risques), Jaune (optimisme), Vert (créativité), Bleu (processus).","Présenter la décision à explorer.","Passer sous chaque chapeau 5–10 min — tous portent le même à la fois.","Compiler les perspectives par chapeau.","Synthétiser en chapeau Bleu."],tip:"Résistez à la tentation de sauter le chapeau Rouge. Les émotions et l'intuition sont souvent les signaux les plus précieux et les plus ignorés."},
-  {id:8,name:"ROTI",icon:"⭐",phase:"apres",phaseLabel:"Après l'atelier",dur:"5–10 min",grp:"4 à 100+ pers.",needs:["energie"],tags:["évaluation","retour"],desc:"Return On Time Invested — chaque participant note l'atelier de 1 à 5 selon ce que la session lui a apporté par rapport au temps investi.",steps:["Présenter l'échelle 1 à 5 avec significations.","Voter (main levée, gommette ou digital).","Pour les 1 et 2, inviter une courte explication.","Remercier les retours honnêtes.","S'engager à en tenir compte."],tip:"Ne défendez jamais votre note. Le ROTI est un cadeau d'information, pas un jugement personnel. Un 2 expliqué vaut dix 5 silencieux."},
-  {id:9,name:"Carte d'Empathie",icon:"🗺️",phase:"avant",phaseLabel:"Avant l'atelier",dur:"45–60 min",grp:"2 à 12 pers.",needs:["idees"],tags:["design","persona","besoins"],desc:"Un canevas visuel pour se mettre dans la peau d'un utilisateur : ce qu'il voit, entend, pense, ressent, dit et fait. Essentiel pour cadrer un atelier centré sur l'humain.",steps:["Choisir le persona à explorer.","Compléter les 6 zones : Voit / Entend / Pense & Ressent / Dit & Fait / Douleurs / Gains.","Travailler en sous-groupes puis consolider.","Identifier les contradictions dit/fait.","Utiliser pour cadrer les questions clés de l'atelier."],tip:"La zone 'Pense & Ressent' est souvent laissée vide. Invitez à explorer les peurs non dites — c'est là que se trouvent les vraies tensions créatives."},
+  {id:7,name:"Six Chapeaux de Bono",icon:"🎩",phase:"production",phaseLabel:"Production",dur:"60–90 min",grp:"4 à 15 pers.",needs:["decision","idees"],tags:["décision","angles","pensée critique"],desc:"Six chapeaux de couleur représentent six modes de pensée. Le groupe explore une décision sous chaque chapeau simultanément, évitant les débats d'ego.",steps:["Présenter les 6 chapeaux : Blanc (faits), Rouge (émotions), Noir (risques), Jaune (optimisme), Vert (créativité), Bleu (processus).","Présenter la décision à explorer.","Passer sous chaque chapeau 5–10 min, tous portent le même à la fois.","Compiler les perspectives par chapeau.","Synthétiser en chapeau Bleu."],tip:"Résistez à la tentation de sauter le chapeau Rouge. Les émotions et l'intuition sont souvent les signaux les plus précieux et les plus ignorés."},
+  {id:8,name:"ROTI",icon:"⭐",phase:"apres",phaseLabel:"Après l'atelier",dur:"5–10 min",grp:"4 à 100+ pers.",needs:["energie"],tags:["évaluation","retour"],desc:"Return On Time Invested : chaque participant note l'atelier de 1 à 5 selon ce que la session lui a apporté par rapport au temps investi.",steps:["Présenter l'échelle 1 à 5 avec significations.","Voter (main levée, gommette ou digital).","Pour les 1 et 2, inviter une courte explication.","Remercier les retours honnêtes.","S'engager à en tenir compte."],tip:"Ne défendez jamais votre note. Le ROTI est un cadeau d'information, pas un jugement personnel. Un 2 expliqué vaut dix 5 silencieux."},
+  {id:9,name:"Carte d'Empathie",icon:"🗺️",phase:"avant",phaseLabel:"Avant l'atelier",dur:"45–60 min",grp:"2 à 12 pers.",needs:["idees"],tags:["design","persona","besoins"],desc:"Un canevas visuel pour se mettre dans la peau d'un utilisateur : ce qu'il voit, entend, pense, ressent, dit et fait. Essentiel pour cadrer un atelier centré sur l'humain.",steps:["Choisir le persona à explorer.","Compléter les 6 zones : Voit / Entend / Pense & Ressent / Dit & Fait / Douleurs / Gains.","Travailler en sous-groupes puis consolider.","Identifier les contradictions dit/fait.","Utiliser pour cadrer les questions clés de l'atelier."],tip:"La zone 'Pense & Ressent' est souvent laissée vide. Invitez à explorer les peurs non dites : c'est là que se trouvent les vraies tensions créatives."},
   {id:10,name:"Hot Air Balloon",icon:"🎈",phase:"cloture",phaseLabel:"Clôture",dur:"30–45 min",grp:"4 à 20 pers.",needs:["decision","energie"],tags:["vision","obstacles","prospective"],desc:"Une montgolfière symbolise l'ambition du groupe. Les sacs de sable (obstacles), le vent (tendances), les trous dans la nacelle (risques) permettent d'explorer la trajectoire collectivement.",steps:["Dessiner une montgolfière avec nacelle, sacs de sable, vent et nuages.","Identifier la destination (vision à 12/24 mois).","Sacs = freins actuels. Vent = tendances porteuses.","Trous = risques internes à surveiller.","Prioriser actions pour alléger les sacs et colmater les brèches."],tip:"Cette métaphore fonctionne avec des équipes managériales qui résistent aux formats trop classiques. Le dessin libère une parole souvent plus authentique."},
-  {id:11,name:"Troika Consulting",icon:"🔺",phase:"production",phaseLabel:"Production",dur:"30–45 min",grp:"3 à 30 pers.",needs:["idees","lien"],tags:["co-développement","conseil","pairs"],desc:"En groupes de 3, une personne expose un défi pendant que les deux autres débattent dans son dos. Puissant et libérateur pour le co-développement professionnel.",steps:["Former des trios. Personne A expose son défi (2 min).","A tourne le dos. B et C débattent librement (8 min).","A revient et partage ce qui l'a touché (sans se justifier).","Rotation : B puis C partagent leur propre défi.","Débrief en plénière."],tip:"La posture 'dos tourné' libère le conseilleur et la personne conseillée. Préparez le groupe à l'inconfort initial — après 2 min, tout le monde est dedans."},
+  {id:11,name:"Troika Consulting",icon:"🔺",phase:"production",phaseLabel:"Production",dur:"30–45 min",grp:"3 à 30 pers.",needs:["idees","lien"],tags:["co-développement","conseil","pairs"],desc:"En groupes de 3, une personne expose un défi pendant que les deux autres débattent dans son dos. Puissant et libérateur pour le co-développement professionnel.",steps:["Former des trios. Personne A expose son défi (2 min).","A tourne le dos. B et C débattent librement (8 min).","A revient et partage ce qui l'a touché (sans se justifier).","Rotation : B puis C partagent leur propre défi.","Débrief en plénière."],tip:"La posture 'dos tourné' libère le conseilleur et la personne conseillée. Préparez le groupe à l'inconfort initial : après 2 min, tout le monde est dedans."},
   {id:12,name:"Plan d'Action POST",icon:"📋",phase:"cloture",phaseLabel:"Clôture",dur:"20–30 min",grp:"4 à 25 pers.",needs:["decision"],tags:["engagement","suivi","plan"],desc:"Un cadre de clôture rigoureux : POST = Priorité, Owner (responsable), Steps (étapes), Timeline. Garantit que rien ne disparaît dans les boîtes mail après l'atelier.",steps:["Lister les décisions et intentions de l'atelier.","Pour chacune : identifier le responsable, la prochaine étape, la date.","Vérifier oralement que chaque responsable est d'accord.","Envoyer le compte-rendu POST dans les 24h.","Planifier un suivi à J+15 ou J+30."],tip:"Résistez à la tentation d'assigner plusieurs responsables. 'Tout le monde responsable' = personne ne l'est. Un seul nom par action."},
   {id:13,name:"Canvas des 7P",icon:"📐",phase:"avant",phaseLabel:"Avant l'atelier",dur:"30–60 min",grp:"1 à 6 pers.",needs:["idees","decision"],tags:["préparation","cadrage","design"],desc:"Un canevas de préparation en 7 questions : Purpose, Product, Participants, Probable issues, Process, Practical concerns, People. Le standard de fait pour cadrer un atelier avant de choisir le moindre outil.",steps:["Clarifier le Purpose : pourquoi cet atelier doit-il exister ?","Définir le Product : qu'est-ce qui sort concrètement de la session ?","Lister les Participants et ce dont chacun a besoin pour contribuer.","Anticiper les Probable issues (tensions, absents, sujets sensibles).","Dérouler le Process, les Practical concerns (salle, matériel) et les People (rôles)."],tip:"Si vous ne pouvez pas énoncer le Purpose en une phrase, l'atelier n'est pas prêt. Refusez de designer le déroulé tant que le commanditaire n'a pas tranché."},
-  {id:14,name:"Cartographie des parties prenantes",icon:"🕸️",phase:"avant",phaseLabel:"Avant l'atelier",dur:"45–60 min",grp:"2 à 10 pers.",needs:["decision","conflits"],tags:["influence","pouvoir","analyse"],desc:"Positionner chaque acteur sur deux axes — influence et intérêt — pour comprendre qui doit être dans la salle, qui doit être informé, et où les résistances vont émerger.",steps:["Lister tous les acteurs touchés par le sujet de l'atelier.","Les positionner sur la matrice influence × intérêt.","Identifier les alliés, les sceptiques et les bloqueurs potentiels.","Décider qui inviter, qui consulter en amont, qui informer après.","Ajuster le design de l'atelier en fonction des équilibres de pouvoir."],tip:"Un bloqueur influent absent de la salle sabotera l'atelier de l'extérieur. Mieux vaut l'inviter et lui donner un rôle actif que de l'éviter."},
-  {id:15,name:"Sondage préalable",icon:"📮",phase:"avant",phaseLabel:"Avant l'atelier",dur:"15–30 min",grp:"5 à 100+ pers.",needs:["idees"],tags:["préparation","données","écoute"],desc:"Trois à cinq questions envoyées aux participants avant la session. Permet d'arriver avec la matière brute du groupe, d'ajuster le déroulé et de montrer dès le départ que chaque voix compte.",steps:["Rédiger 3 à 5 questions ouvertes courtes liées à l'objectif.","Envoyer une semaine avant, relancer à J-2.","Synthétiser les réponses en thèmes (anonymisés).","Ouvrir l'atelier en restituant ce qui a été entendu.","Utiliser les verbatims comme matière première des exercices."],tip:"Restituez toujours ce que le sondage a produit — un questionnaire sans restitution détruit la confiance pour la fois suivante."},
-  {id:16,name:"Interviews préalables",icon:"🎧",phase:"avant",phaseLabel:"Avant l'atelier",dur:"20–30 min / pers.",grp:"3 à 8 pers.",needs:["lien","conflits"],tags:["écoute","confiance","diagnostic"],desc:"Des entretiens individuels de 20 minutes avec les participants clés avant un atelier sensible. On y entend ce qui ne se dira jamais en plénière — et on construit la confiance avant d'entrer dans la salle.",steps:["Sélectionner 3 à 8 participants aux points de vue contrastés.","Poser des questions ouvertes : enjeux, craintes, attentes, historique.","Écouter sans défendre le projet ni promettre de résultat.","Repérer les thèmes récurrents et les sujets tabous.","Adapter le design et nommer (anonymement) les tensions dans l'ouverture."],tip:"La question la plus productive : « Qu'est-ce qui ferait que cet atelier soit une perte de temps pour vous ? » Les réponses dessinent la carte des risques."},
+  {id:14,name:"Cartographie des parties prenantes",icon:"🕸️",phase:"avant",phaseLabel:"Avant l'atelier",dur:"45–60 min",grp:"2 à 10 pers.",needs:["decision","conflits"],tags:["influence","pouvoir","analyse"],desc:"Positionner chaque acteur sur deux axes (influence et intérêt) pour comprendre qui doit être dans la salle, qui doit être informé, et où les résistances vont émerger.",steps:["Lister tous les acteurs touchés par le sujet de l'atelier.","Les positionner sur la matrice influence × intérêt.","Identifier les alliés, les sceptiques et les bloqueurs potentiels.","Décider qui inviter, qui consulter en amont, qui informer après.","Ajuster le design de l'atelier en fonction des équilibres de pouvoir."],tip:"Un bloqueur influent absent de la salle sabotera l'atelier de l'extérieur. Mieux vaut l'inviter et lui donner un rôle actif que de l'éviter."},
+  {id:15,name:"Sondage préalable",icon:"📮",phase:"avant",phaseLabel:"Avant l'atelier",dur:"15–30 min",grp:"5 à 100+ pers.",needs:["idees"],tags:["préparation","données","écoute"],desc:"Trois à cinq questions envoyées aux participants avant la session. Permet d'arriver avec la matière brute du groupe, d'ajuster le déroulé et de montrer dès le départ que chaque voix compte.",steps:["Rédiger 3 à 5 questions ouvertes courtes liées à l'objectif.","Envoyer une semaine avant, relancer à J-2.","Synthétiser les réponses en thèmes (anonymisés).","Ouvrir l'atelier en restituant ce qui a été entendu.","Utiliser les verbatims comme matière première des exercices."],tip:"Restituez toujours ce que le sondage a produit : un questionnaire sans restitution détruit la confiance pour la fois suivante."},
+  {id:16,name:"Interviews préalables",icon:"🎧",phase:"avant",phaseLabel:"Avant l'atelier",dur:"20–30 min / pers.",grp:"3 à 8 pers.",needs:["lien","conflits"],tags:["écoute","confiance","diagnostic"],desc:"Des entretiens individuels de 20 minutes avec les participants clés avant un atelier sensible. On y entend ce qui ne se dira jamais en plénière, et on construit la confiance avant d'entrer dans la salle.",steps:["Sélectionner 3 à 8 participants aux points de vue contrastés.","Poser des questions ouvertes : enjeux, craintes, attentes, historique.","Écouter sans défendre le projet ni promettre de résultat.","Repérer les thèmes récurrents et les sujets tabous.","Adapter le design et nommer (anonymement) les tensions dans l'ouverture."],tip:"La question la plus productive : « Qu'est-ce qui ferait que cet atelier soit une perte de temps pour vous ? » Les réponses dessinent la carte des risques."},
   {id:17,name:"Photolangage",icon:"🖼️",phase:"ouverture",phaseLabel:"Ouverture",dur:"20–30 min",grp:"4 à 25 pers.",needs:["lien","energie"],tags:["images","émotions","projection"],desc:"Chacun choisit une image parmi un large éventail pour exprimer son rapport au sujet. L'image médiatise la parole : on dit à travers elle ce qu'on n'aurait pas dit frontalement.",steps:["Étaler 40 à 80 images variées sur une table ou au sol.","Poser une consigne : « Choisis l'image qui évoque ta relation au projet. »","Laisser 3 minutes de déambulation silencieuse.","Chacun montre son image et explique son choix (1 min).","Relever les résonances entre les choix du groupe."],tip:"Interdisez de commenter ou d'interpréter l'image d'un autre. C'est la condition pour que les plus réservés osent une vraie parole."},
-  {id:18,name:"Impromptu Networking",icon:"🤝",phase:"ouverture",phaseLabel:"Ouverture",dur:"12–20 min",grp:"6 à 200 pers.",needs:["lien","energie"],tags:["libérateur","connexion","mouvement"],desc:"Trois rounds de conversations en binômes de 4 minutes autour d'une même question. Tout le monde a parlé à trois personnes en un quart d'heure — l'énergie de la salle change physiquement.",steps:["Poser une question engageante : « Qu'attends-tu de cette journée, et qu'as-tu à offrir ? »","Former des binômes debout, 4 minutes de conversation.","Changer de partenaire, même question, 2 rounds de plus.","Optionnel : récolter en plénière une phrase entendue marquante."],tip:"La question doit inclure « ce que tu peux apporter », pas seulement « ce que tu attends ». C'est ce qui transforme le tour de table passif en réseau actif."},
+  {id:18,name:"Impromptu Networking",icon:"🤝",phase:"ouverture",phaseLabel:"Ouverture",dur:"12–20 min",grp:"6 à 200 pers.",needs:["lien","energie"],tags:["libérateur","connexion","mouvement"],desc:"Trois rounds de conversations en binômes de 4 minutes autour d'une même question. Tout le monde a parlé à trois personnes en un quart d'heure : l'énergie de la salle change physiquement.",steps:["Poser une question engageante : « Qu'attends-tu de cette journée, et qu'as-tu à offrir ? »","Former des binômes debout, 4 minutes de conversation.","Changer de partenaire, même question, 2 rounds de plus.","Optionnel : récolter en plénière une phrase entendue marquante."],tip:"La question doit inclure « ce que tu peux apporter », pas seulement « ce que tu attends ». C'est ce qui transforme le tour de table passif en réseau actif."},
   {id:19,name:"Deux vérités, un mensonge",icon:"🎭",phase:"ouverture",phaseLabel:"Ouverture",dur:"15–25 min",grp:"4 à 15 pers.",needs:["lien","energie"],tags:["jeu","légèreté","découverte"],desc:"Chacun énonce trois affirmations sur lui-même dont une fausse ; le groupe devine laquelle. Un classique indémodable qui fait rire et révèle des facettes inattendues des collègues.",steps:["Chacun prépare deux vérités surprenantes et un mensonge plausible (2 min).","Une personne énonce ses trois affirmations.","Le groupe débat et vote pour le mensonge présumé.","Révélation, puis on passe à la personne suivante.","Conclure sur ce qu'on a appris d'inattendu."],tip:"Le jeu ne marche que si les vérités sont plus étonnantes que le mensonge. Donnez un exemple personnel bien calibré pour montrer le niveau."},
   {id:20,name:"Portrait chinois",icon:"🪞",phase:"ouverture",phaseLabel:"Ouverture",dur:"15–20 min",grp:"4 à 20 pers.",needs:["lien"],tags:["métaphore","imaginaire","présentation"],desc:"« Si ce projet était un animal… un plat… une météo ? » Les métaphores court-circuitent le discours corporate et font émerger les représentations réelles que chacun porte sur le sujet.",steps:["Choisir 2 ou 3 amorces adaptées au sujet (animal, objet, saison, film…).","Chacun complète ses métaphores par écrit (3 min).","Tour de partage : chacun lit et explique brièvement.","Noter les convergences et les contrastes de représentations.","Faire le lien avec l'objectif de l'atelier."],tip:"Les écarts sont plus intéressants que les ressemblances : si le projet est « un guépard » pour l'un et « un paquebot » pour l'autre, l'atelier vient de trouver son vrai sujet."},
   {id:21,name:"Mad Tea",icon:"🍵",phase:"ouverture",phaseLabel:"Ouverture",dur:"15–20 min",grp:"10 à 100 pers.",needs:["energie","idees"],tags:["libérateur","rythme","spontanéité"],desc:"Deux cercles concentriques face à face. Une amorce de phrase, 1 minute pour y répondre chacun son tour, puis le cercle tourne. Rapide, physique, impossible de rester spectateur.",steps:["Former deux cercles concentriques, chacun face à un partenaire.","Lancer une amorce : « Ce qui me motive vraiment dans ce projet, c'est… »","Chacun complète la phrase à son partenaire (1 min chacun).","Le cercle extérieur tourne d'une place, nouvelle amorce.","Enchaîner 5 à 8 amorces, du léger vers le plus engageant."],tip:"Préparez vos amorces à l'avance et calibrez la progression : commencer trop profond fait fuir, rester trop léger ennuie."},
   {id:22,name:"Cercle d'inclusion",icon:"⭕",phase:"ouverture",phaseLabel:"Ouverture",dur:"10–20 min",grp:"4 à 20 pers.",needs:["lien"],tags:["rituel","présence","sécurité"],desc:"Un tour de cercle structuré où chacun répond à la même question d'ouverture, sans commentaire ni interruption. Le rituel fondateur des groupes qui travaillent en intelligence collective.",steps:["Disposer le groupe en cercle, sans table si possible.","Poser une question d'inclusion : « Qu'est-ce qui doit être dit pour que tu sois pleinement là ? »","Chacun parle à son tour, les autres écoutent sans réagir.","Possibilité de passer son tour (et d'y revenir).","Le facilitateur clôt le cercle en nommant ce qui s'est déposé."],tip:"Le silence après une prise de parole est une marque de respect, pas un malaise. Annoncez-le explicitement, sinon quelqu'un « sauvera » chaque silence."},
-  {id:23,name:"Human Bingo",icon:"🎟️",phase:"ouverture",phaseLabel:"Ouverture",dur:"15–25 min",grp:"10 à 60 pers.",needs:["lien","energie"],tags:["jeu","grand groupe","mouvement"],desc:"Une grille de cases à faire signer : « a vécu à l'étranger », « déteste le café »… Les participants circulent pour trouver qui correspond. Idéal pour casser la glace dans un groupe qui ne se connaît pas.",steps:["Préparer une grille 4×4 de caractéristiques variées et inclusives.","Distribuer une grille par personne.","Circuler : chaque case doit être signée par une personne différente.","Premier bingo (ligne complète) gagne — laisser jouer 10-15 min.","Débriefer les découvertes surprenantes en plénière."],tip:"Mélangez cases professionnelles et personnelles légères, et testez chaque case : une seule question maladroite peut mettre quelqu'un en difficulté."},
+  {id:23,name:"Human Bingo",icon:"🎟️",phase:"ouverture",phaseLabel:"Ouverture",dur:"15–25 min",grp:"10 à 60 pers.",needs:["lien","energie"],tags:["jeu","grand groupe","mouvement"],desc:"Une grille de cases à faire signer : « a vécu à l'étranger », « déteste le café »… Les participants circulent pour trouver qui correspond. Idéal pour casser la glace dans un groupe qui ne se connaît pas.",steps:["Préparer une grille 4×4 de caractéristiques variées et inclusives.","Distribuer une grille par personne.","Circuler : chaque case doit être signée par une personne différente.","Premier bingo (ligne complète) gagne. Laisser jouer 10-15 min.","Débriefer les découvertes surprenantes en plénière."],tip:"Mélangez cases professionnelles et personnelles légères, et testez chaque case : une seule question maladroite peut mettre quelqu'un en difficulté."},
   {id:24,name:"Brainwriting 6-3-5",icon:"✍️",phase:"production",phaseLabel:"Production",dur:"30–40 min",grp:"6 pers. / table",needs:["idees"],tags:["silence","écrit","volume"],desc:"Six personnes écrivent trois idées en cinq minutes, puis passent leur feuille au voisin qui enrichit. En six rounds : 108 idées sans qu'une seule voix ait dominé la table.",steps:["Formuler la question créative en haut de chaque feuille.","Chacun écrit 3 idées en 5 minutes, en silence.","Passer la feuille au voisin de gauche.","Enrichir ou rebondir sur les idées reçues, 3 nouvelles idées.","Après 6 rounds, regrouper et sélectionner les pistes fortes."],tip:"La règle d'or : on peut s'inspirer des idées reçues mais jamais les juger. Le silence total est ce qui protège les idées non conformistes."},
-  {id:25,name:"Crazy 8s",icon:"🎨",phase:"production",phaseLabel:"Production",dur:"15–20 min",grp:"3 à 12 pers.",needs:["idees"],tags:["sketch","design sprint","rapidité"],desc:"Plier une feuille en huit cases, huit croquis en huit minutes. La contrainte de temps désactive le perfectionnisme et force le cerveau à dépasser les trois premières idées évidentes.",steps:["Chacun plie une feuille A4 en 8 cases.","Rappeler le défi à résoudre.","8 minutes chrono : un croquis d'idée par case, une minute par case.","Chacun présente ses 2 cases préférées (1 min).","Dot voting sur l'ensemble des croquis affichés."],tip:"Annoncez que les dessins moches sont obligatoires. Les cases 6, 7 et 8 — celles qui font mal — contiennent presque toujours les idées les plus originales."},
-  {id:26,name:"Brainstorming inversé",icon:"🙃",phase:"production",phaseLabel:"Production",dur:"30–45 min",grp:"4 à 20 pers.",needs:["idees","energie"],tags:["détour","humour","déblocage"],desc:"Au lieu de chercher comment réussir, le groupe liste comment échouer à coup sûr — puis inverse chaque proposition. Le détour par l'absurde libère une créativité que la question directe bloquait.",steps:["Inverser la question : « Comment garantir que ce projet échoue ? »","Brainstorm jubilatoire sur les meilleures façons de tout rater (10 min).","Regrouper les sabotages par famille.","Inverser chaque sabotage en action préventive ou piste positive.","Prioriser les inversions les plus actionnables."],tip:"Le groupe rit, et c'est le but : l'humour désactive l'autocensure. Notez tout — les sabotages les plus cyniques décrivent souvent la réalité actuelle."},
+  {id:25,name:"Crazy 8s",icon:"🎨",phase:"production",phaseLabel:"Production",dur:"15–20 min",grp:"3 à 12 pers.",needs:["idees"],tags:["sketch","design sprint","rapidité"],desc:"Plier une feuille en huit cases, huit croquis en huit minutes. La contrainte de temps désactive le perfectionnisme et force le cerveau à dépasser les trois premières idées évidentes.",steps:["Chacun plie une feuille A4 en 8 cases.","Rappeler le défi à résoudre.","8 minutes chrono : un croquis d'idée par case, une minute par case.","Chacun présente ses 2 cases préférées (1 min).","Dot voting sur l'ensemble des croquis affichés."],tip:"Annoncez que les dessins moches sont obligatoires. Les cases 6, 7 et 8 (celles qui font mal) contiennent presque toujours les idées les plus originales."},
+  {id:26,name:"Brainstorming inversé",icon:"🙃",phase:"production",phaseLabel:"Production",dur:"30–45 min",grp:"4 à 20 pers.",needs:["idees","energie"],tags:["détour","humour","déblocage"],desc:"Au lieu de chercher comment réussir, le groupe liste comment échouer à coup sûr, puis inverse chaque proposition. Le détour par l'absurde libère une créativité que la question directe bloquait.",steps:["Inverser la question : « Comment garantir que ce projet échoue ? »","Brainstorm jubilatoire sur les meilleures façons de tout rater (10 min).","Regrouper les sabotages par famille.","Inverser chaque sabotage en action préventive ou piste positive.","Prioriser les inversions les plus actionnables."],tip:"Le groupe rit, et c'est le but : l'humour désactive l'autocensure. Notez tout : les sabotages les plus cyniques décrivent souvent la réalité actuelle."},
   {id:27,name:"SCAMPER",icon:"🔀",phase:"production",phaseLabel:"Production",dur:"45–60 min",grp:"3 à 15 pers.",needs:["idees"],tags:["structuré","innovation","checklist"],desc:"Sept opérations créatives appliquées systématiquement à un produit ou process existant : Substituer, Combiner, Adapter, Modifier, Produire d'autres usages, Éliminer, Réorganiser.",steps:["Décrire précisément l'existant à faire évoluer.","Dérouler chaque lettre : que peut-on Substituer ? Combiner ? Adapter ?…","Passer 5-7 minutes par opération, noter toutes les pistes.","Repérer les idées les plus prometteuses par lettre.","Approfondir 2 ou 3 pistes en mini-concepts."],tip:"La lettre É (Éliminer) est la plus puissante et la plus négligée : « que se passe-t-il si on supprime carrément cette étape ? » ouvre souvent la meilleure piste."},
   {id:28,name:"Forum Ouvert",icon:"🏕️",phase:"production",phaseLabel:"Production",dur:"½ à 2 jours",grp:"15 à 500 pers.",needs:["idees","lien"],tags:["auto-organisation","grand groupe","émergence"],desc:"Pas d'ordre du jour préétabli : les participants proposent leurs sujets, ouvrent des sessions et circulent librement (loi des deux pieds). L'auto-organisation à grande échelle.",steps:["Ouvrir en cercle et présenter le thème et les 4 principes.","Place de marché : qui veut porte un sujet l'affiche sur la grille horaire.","Sessions parallèles auto-organisées, notes de récolte par session.","La loi des deux pieds : chacun bouge là où il apprend ou contribue.","Clôture en cercle et synthèse des récoltes."],tip:"Résistez à l'envie de « compléter » la place de marché avec vos propres sujets. Un trou dans la grille est un signal, pas un problème à corriger."},
-  {id:29,name:"Pro Action Café",icon:"🫖",phase:"production",phaseLabel:"Production",dur:"90–120 min",grp:"12 à 40 pers.",needs:["idees","lien"],tags:["projets","entraide","maturation"],desc:"Un croisement entre World Café et co-développement : des porteurs de projets réels s'installent à des tables et le groupe circule pour faire mûrir chaque projet en trois rounds de questions.",steps:["Identifier 3 à 8 porteurs d'un projet ou d'une question réelle.","Round 1 : quelle est la quête derrière ce projet ?","Round 2 : qu'est-ce qui manque ? Les visiteurs challengent et enrichissent.","Round 3 : quels prochains pas ? Le porteur synthétise.","Plénière : chaque porteur partage son avancée et son engagement."],tip:"Briefez les porteurs : ils récoltent, ils ne défendent pas. Un porteur qui argumente contre chaque suggestion repart avec son projet intact — et c'est un échec."},
+  {id:29,name:"Pro Action Café",icon:"🫖",phase:"production",phaseLabel:"Production",dur:"90–120 min",grp:"12 à 40 pers.",needs:["idees","lien"],tags:["projets","entraide","maturation"],desc:"Un croisement entre World Café et co-développement : des porteurs de projets réels s'installent à des tables et le groupe circule pour faire mûrir chaque projet en trois rounds de questions.",steps:["Identifier 3 à 8 porteurs d'un projet ou d'une question réelle.","Round 1 : quelle est la quête derrière ce projet ?","Round 2 : qu'est-ce qui manque ? Les visiteurs challengent et enrichissent.","Round 3 : quels prochains pas ? Le porteur synthétise.","Plénière : chaque porteur partage son avancée et son engagement."],tip:"Briefez les porteurs : ils récoltent, ils ne défendent pas. Un porteur qui argumente contre chaque suggestion repart avec son projet intact, et c'est un échec."},
   {id:30,name:"Wise Crowds",icon:"🦉",phase:"production",phaseLabel:"Production",dur:"60–90 min",grp:"4 à 100 pers.",needs:["idees","lien"],tags:["consultation","sagesse collective","entraide"],desc:"Une personne expose une difficulté et devient « cliente » du groupe qui la questionne puis formule conseils et recommandations. Version scalable de la consultation entre pairs.",steps:["Le client expose sa demande (2 min) puis répond aux questions de clarification (3 min).","Le client se retourne, dos au groupe.","Le groupe génère conseils, idées, recommandations (15 min).","Le client revient et partage ce qu'il retient (2 min).","Rotation vers le client suivant."],tip:"Chronométrez strictement les questions de clarification : les groupes adorent les prolonger pour retarder le moment inconfortable de conseiller."},
-  {id:31,name:"TRIZ",icon:"💣",phase:"production",phaseLabel:"Production",dur:"35–45 min",grp:"4 à 50 pers.",needs:["conflits","idees"],tags:["libérateur","vérités","nettoyage"],desc:"Inviter le groupe à concevoir le système parfait pour obtenir le pire résultat possible — puis reconnaître ce que l'organisation fait déjà qui y ressemble. Brutal, drôle et incroyablement révélateur.",steps:["Question 1 : « Comment obtenir à coup sûr le pire résultat imaginable ? » Liste débridée.","Question 2 : « Qu'est-ce qu'on fait déjà qui ressemble à cette liste ? » Honnêteté.","Question 3 : « Qu'allons-nous arrêter de faire ? » Décisions concrètes.","Chaque arrêt est formulé en engagement précis.","Récolter les engagements et prévoir un suivi."],tip:"TRIZ ne fonctionne que si le facilitateur protège la deuxième étape : c'est là que le rire se transforme en aveu. Ne la sautez jamais pour « gagner du temps »."},
+  {id:31,name:"TRIZ",icon:"💣",phase:"production",phaseLabel:"Production",dur:"35–45 min",grp:"4 à 50 pers.",needs:["conflits","idees"],tags:["libérateur","vérités","nettoyage"],desc:"Inviter le groupe à concevoir le système parfait pour obtenir le pire résultat possible, puis reconnaître ce que l'organisation fait déjà qui y ressemble. Brutal, drôle et incroyablement révélateur.",steps:["Question 1 : « Comment obtenir à coup sûr le pire résultat imaginable ? » Liste débridée.","Question 2 : « Qu'est-ce qu'on fait déjà qui ressemble à cette liste ? » Honnêteté.","Question 3 : « Qu'allons-nous arrêter de faire ? » Décisions concrètes.","Chaque arrêt est formulé en engagement précis.","Récolter les engagements et prévoir un suivi."],tip:"TRIZ ne fonctionne que si le facilitateur protège la deuxième étape : c'est là que le rire se transforme en aveu. Ne la sautez jamais pour « gagner du temps »."},
   {id:32,name:"15% Solutions",icon:"🌱",phase:"production",phaseLabel:"Production",dur:"20–30 min",grp:"2 à 50 pers.",needs:["idees","energie"],tags:["pouvoir d'agir","petits pas","autonomie"],desc:"Plutôt que d'attendre le grand plan, chacun identifie son 15 % : ce qu'il peut faire dès maintenant, sans budget ni permission supplémentaire. L'antidote au sentiment d'impuissance.",steps:["Poser la question : « Où as-tu 15 % de latitude pour agir sur ce sujet ? »","Réflexion individuelle et liste personnelle (5 min).","En trio : chacun présente ses 15 %, les autres questionnent et enrichissent.","Affiner : chaque 15 % devient une première action datée.","Partage volontaire en plénière."],tip:"Bloquez fermement les « oui mais la direction devrait… ». Le 15 % commence à l'intérieur du périmètre de la personne, c'est toute la puissance de l'exercice."},
   {id:33,name:"What? So What? Now What?",icon:"🪜",phase:"production",phaseLabel:"Production",dur:"30–45 min",grp:"4 à 100 pers.",needs:["idees","decision"],tags:["débrief","analyse","progression"],desc:"Trois étages de questionnement pour débriefer un événement ou des données : les faits (What), le sens (So What), l'action (Now What). Évite de sauter aux conclusions avant d'avoir regardé la réalité.",steps:["What : quels faits, qu'avons-nous observé ? (sans interprétation)","Partager en petits groupes puis récolter.","So What : qu'est-ce que cela signifie ? Quelles hypothèses ?","Now What : qu'est-ce que cela implique comme actions ?","Consolider les actions et responsables."],tip:"Le facilitateur doit policer l'étage 1 : les groupes glissent immédiatement vers l'interprétation. « C'est un fait ou une lecture ? » est votre phrase de la journée."},
   {id:34,name:"Diagramme d'affinités",icon:"🗂️",phase:"production",phaseLabel:"Production",dur:"30–60 min",grp:"3 à 20 pers.",needs:["idees","decision"],tags:["tri","synthèse","post-its"],desc:"Regrouper en silence des dizaines de post-its en familles naturelles, puis nommer chaque famille. La méthode de référence pour faire émerger la structure cachée d'un brainstorming.",steps:["Afficher tous les post-its issus de la génération d'idées.","Regroupement en silence : chacun déplace les post-its qui vont ensemble.","Autoriser les déplacements contradictoires jusqu'à stabilisation.","Nommer chaque groupe par un titre qui fait sens.","Prioriser les familles pour la suite du travail."],tip:"Le silence pendant le tri est non négociable : dès qu'on parle, le plus senior de la salle décide des catégories. Les mains parlent, pas les statuts."},
   {id:35,name:"Storyboarding",icon:"🎬",phase:"production",phaseLabel:"Production",dur:"45–90 min",grp:"3 à 12 pers.",needs:["idees"],tags:["narratif","prototype","expérience"],desc:"Dessiner l'expérience cible en six à huit cases, comme une bande dessinée : qui fait quoi, à quel moment, avec quelle émotion. Rend concret ce que les slides abstraits n'arrivent pas à dire.",steps:["Définir le personnage et le point de départ du scénario.","Découper le parcours en 6 à 8 moments clés.","Dessiner chaque case : action, contexte, émotion du personnage.","Présenter le storyboard comme on raconte une histoire.","Identifier les cases fragiles à prototyper en priorité."],tip:"Imposez un personnage nommé et incarné (« Fatima, 52 ans, pressée ») plutôt que « l'utilisateur ». L'empathie naît du prénom."},
   {id:36,name:"Gallery Walk",icon:"🚶",phase:"production",phaseLabel:"Production",dur:"20–40 min",grp:"8 à 60 pers.",needs:["idees","energie"],tags:["restitution","feedback","mouvement"],desc:"Les productions des sous-groupes sont affichées comme dans une galerie ; les participants déambulent, lisent et annotent. Remplace les restitutions plénières interminables par du feedback dense.",steps:["Afficher les productions des sous-groupes sur les murs.","Distribuer des post-its de deux couleurs : questions et suggestions.","Déambulation libre : lire, coller ses réactions (15 min).","Chaque groupe revient à son affiche et lit les retours.","Chaque groupe partage en une phrase ce qu'il modifie grâce aux retours."],tip:"Une contrainte magique : chaque participant doit obligatoirement poser au moins un post-it sur l'affiche qu'il connaît le moins. Sinon chacun ne visite que ses copains."},
-  {id:37,name:"Matrice Impact / Effort",icon:"⚖️",phase:"production",phaseLabel:"Production",dur:"20–40 min",grp:"3 à 20 pers.",needs:["decision"],tags:["priorisation","matrice","pragmatisme"],desc:"Positionner chaque idée sur deux axes — impact attendu et effort requis. Les quick wins sautent aux yeux, les gouffres à énergie aussi. Le tri collectif le plus rapide qui existe.",steps:["Tracer la matrice : impact (vertical) × effort (horizontal).","Positionner chaque idée par discussion rapide (2 min max par idée).","Identifier les quick wins (fort impact, faible effort).","Débattre uniquement des cas frontière.","Décider : quoi lancer, quoi planifier, quoi abandonner."],tip:"L'estimation d'effort est presque toujours optimiste quand celui qui estime n'est pas celui qui fera. Demandez : « qui le fait, et il en dit quoi ? »"},
+  {id:37,name:"Matrice Impact / Effort",icon:"⚖️",phase:"production",phaseLabel:"Production",dur:"20–40 min",grp:"3 à 20 pers.",needs:["decision"],tags:["priorisation","matrice","pragmatisme"],desc:"Positionner chaque idée sur deux axes : impact attendu et effort requis. Les quick wins sautent aux yeux, les gouffres à énergie aussi. Le tri collectif le plus rapide qui existe.",steps:["Tracer la matrice : impact (vertical) × effort (horizontal).","Positionner chaque idée par discussion rapide (2 min max par idée).","Identifier les quick wins (fort impact, faible effort).","Débattre uniquement des cas frontière.","Décider : quoi lancer, quoi planifier, quoi abandonner."],tip:"L'estimation d'effort est presque toujours optimiste quand celui qui estime n'est pas celui qui fera. Demandez : « qui le fait, et il en dit quoi ? »"},
   {id:38,name:"Gradient d'accord",icon:"🌈",phase:"cloture",phaseLabel:"Clôture",dur:"15–30 min",grp:"4 à 30 pers.",needs:["decision","conflits"],tags:["nuance","consensus","engagement"],desc:"Remplacer le vote binaire par une échelle à 8 niveaux, de « soutien enthousiaste » à « veto ». Révèle les nuances qu'un pour/contre écrase et localise précisément où le travail reste à faire.",steps:["Afficher l'échelle du gradient (enthousiasme → veto).","Énoncer la proposition de décision, précise et écrite.","Chacun se positionne simultanément (main levée ou gommette).","Écouter en priorité les positions 6-7 : « que faudrait-il pour monter d'un cran ? »","Amender la proposition et re-tester jusqu'à un accord viable."],tip:"L'objectif n'est pas que tout le monde soit à 1, mais que personne ne soit au-delà de 6. Un accord tiède mais honnête vaut mieux qu'un consensus de façade."},
   {id:39,name:"Décision par consentement",icon:"🤲",phase:"production",phaseLabel:"Production",dur:"30–60 min",grp:"4 à 15 pers.",needs:["decision","conflits"],tags:["sociocratie","objections","gouvernance"],desc:"Une décision passe non quand tout le monde dit oui, mais quand plus personne n'a d'objection raisonnable. Le processus sociocratique qui débloque les groupes paralysés par la recherche du consensus parfait.",steps:["Présentation de la proposition par son porteur.","Tour de questions de clarification (comprendre, pas débattre).","Tour de réactions : chacun exprime son ressenti.","Tour d'objections : « est-ce que cette proposition met en danger l'équipe ou la mission ? »","Traiter chaque objection en amendement, puis célébrer la décision."],tip:"Une objection doit être argumentée par un risque, pas une préférence. « Je n'aime pas » n'est pas une objection ; « ça nous fait perdre le client X » en est une."},
   {id:40,name:"Fist to Five",icon:"✋",phase:"cloture",phaseLabel:"Clôture",dur:"5–15 min",grp:"3 à 50 pers.",needs:["decision"],tags:["rapide","température","engagement"],desc:"Vote à main levée nuancé : de 0 doigt (blocage total) à 5 (engagement complet). En dix secondes, la température exacte du groupe sur une décision est visible par tous.",steps:["Énoncer clairement la proposition.","Compte à rebours : tout le monde vote en même temps.","Inviter les 0, 1 et 2 doigts à exprimer leur réserve.","Ajuster la proposition si nécessaire, revoter.","Acter la décision quand tout le monde est à 3 ou plus."],tip:"Le vote simultané est crucial : si les mains se lèvent en cascade, les derniers votent en fonction des premiers. Comptez « 3, 2, 1, votez ! »."},
   {id:41,name:"25/10 Crowd Sourcing",icon:"🔟",phase:"cloture",phaseLabel:"Clôture",dur:"25–35 min",grp:"10 à 100 pers.",needs:["decision","energie"],tags:["grand groupe","priorisation","énergie"],desc:"Chacun écrit son idée audacieuse sur une carte ; les cartes circulent et sont notées cinq fois de suite par des mains anonymes. Les 10 meilleures idées d'un groupe de 100 émergent en 30 minutes.",steps:["Chacun écrit une idée audacieuse et sa première action sur une carte.","Les cartes circulent de main en main pendant que le groupe marche.","Stop : chacun note la carte qu'il tient de 1 à 5, puis on recommence.","Après 5 rounds, chaque carte porte un score sur 25.","Compte à rebours depuis 25 : les meilleures cartes sont lues à voix haute."],tip:"Le brassage physique des cartes est la garantie d'anonymat qui rend les scores honnêtes. Faites vraiment marcher les gens, pas juste passer les cartes."},
   {id:42,name:"Buy a Feature",icon:"💰",phase:"production",phaseLabel:"Production",dur:"30–45 min",grp:"4 à 20 pers.",needs:["decision"],tags:["budget","arbitrage","jeu sérieux"],desc:"Chaque option est mise en vente à un prix reflétant son coût réel ; les participants reçoivent un budget limité, insuffisant pour tout acheter. Les arbitrages deviennent concrets et les coalitions se forment.",steps:["Pricer chaque option proportionnellement à son coût réel.","Distribuer un budget couvrant environ 60 % du total.","Certaines options coûtent plus qu'un budget individuel : négociation obligatoire.","Achats, alliances et débats (20 min).","Analyser ce qui a été financé, ignoré, et pourquoi."],tip:"Fixez au moins une option à un prix qu'aucun participant ne peut payer seul : c'est elle qui force les vraies conversations de coalition."},
-  {id:43,name:"Start / Stop / Continue",icon:"🚦",phase:"cloture",phaseLabel:"Clôture",dur:"20–40 min",grp:"3 à 20 pers.",needs:["decision","idees"],tags:["rétrospective","simple","action"],desc:"Trois colonnes, trois questions : que devons-nous commencer, arrêter, continuer ? La rétrospective la plus simple du monde — et souvent la plus efficace pour passer du constat à l'action.",steps:["Tracer trois colonnes : Start, Stop, Continue.","Génération silencieuse sur post-its (5 min).","Coller, regrouper et lire chaque colonne.","Voter sur les items prioritaires de chaque colonne.","Transformer les votes en engagements datés et nommés."],tip:"La colonne Stop est celle qui change la vie des équipes — et celle qu'on remplit le moins. Provoquez-la : « qu'est-ce qu'on fait par pure habitude ? »"},
+  {id:43,name:"Start / Stop / Continue",icon:"🚦",phase:"cloture",phaseLabel:"Clôture",dur:"20–40 min",grp:"3 à 20 pers.",needs:["decision","idees"],tags:["rétrospective","simple","action"],desc:"Trois colonnes, trois questions : que devons-nous commencer, arrêter, continuer ? La rétrospective la plus simple du monde, et souvent la plus efficace pour passer du constat à l'action.",steps:["Tracer trois colonnes : Start, Stop, Continue.","Génération silencieuse sur post-its (5 min).","Coller, regrouper et lire chaque colonne.","Voter sur les items prioritaires de chaque colonne.","Transformer les votes en engagements datés et nommés."],tip:"La colonne Stop est celle qui change la vie des équipes, et celle qu'on remplit le moins. Provoquez-la : « qu'est-ce qu'on fait par pure habitude ? »"},
   {id:44,name:"Rétrospective 4L",icon:"🧾",phase:"cloture",phaseLabel:"Clôture",dur:"30–45 min",grp:"3 à 15 pers.",needs:["idees","lien"],tags:["rétrospective","apprentissage","émotions"],desc:"Quatre quadrants pour relire une période : Liked (aimé), Learned (appris), Lacked (manqué), Longed for (espéré). Plus émotionnelle qu'une rétro classique, elle fait de la place au ressenti et au désir.",steps:["Présenter les 4 quadrants et leur nuance.","Remplissage individuel silencieux (7 min).","Partage en binômes puis affichage collectif.","Explorer les patterns, surtout dans Lacked et Longed for.","En tirer 2-3 changements concrets pour le cycle suivant."],tip:"Longed for est le quadrant magique : il autorise à exprimer un désir sans le formuler en reproche. C'est souvent là que se cache la prochaine grande amélioration."},
-  {id:45,name:"Lettre à soi-même",icon:"💌",phase:"cloture",phaseLabel:"Clôture",dur:"15–25 min",grp:"1 à 100 pers.",needs:["energie"],tags:["engagement","mémoire","individuel"],desc:"En fin de formation ou d'atelier, chacun s'écrit une lettre : ce que je retiens, ce que je m'engage à faire. Le facilitateur la poste (ou la programme) six semaines plus tard. L'effet madeleine garantit le rappel.",steps:["Distribuer papier et enveloppe (ou outil d'email programmé).","Consigne : « Écris à celui/celle que tu seras dans 6 semaines. »","Écriture individuelle et silencieuse (10 min).","Cacheter, écrire son adresse — personne d'autre ne lira.","Envoyer les lettres à J+40 environ."],tip:"La lettre papier bat l'email : recevoir une enveloppe manuscrite de soi-même six semaines plus tard crée un choc émotionnel qu'aucune notification ne produit."},
-  {id:46,name:"Douche d'appréciation",icon:"🚿",phase:"cloture",phaseLabel:"Clôture",dur:"15–30 min",grp:"4 à 15 pers.",needs:["lien","energie"],tags:["reconnaissance","cohésion","émotions"],desc:"Chaque personne reçoit à tour de rôle une pluie d'appréciations sincères et spécifiques du reste du groupe. Inconfortable trente secondes, inoubliable des années. À réserver aux groupes qui ont vraiment vécu quelque chose ensemble.",steps:["Une personne se place au centre (ou reste simplement à sa place).","Chaque membre du groupe lui adresse une appréciation précise et sincère.","La personne écoute et ne répond que « merci ».","Rotation jusqu'à ce que tout le monde soit passé.","Clore par un moment de silence ou un geste collectif."],tip:"Exigez du spécifique : « j'ai aimé quand tu as reformulé le conflit de mardi » nourrit ; « t'es super » glisse. Et interdisez l'humour — c'est l'esquive classique de l'émotion."},
+  {id:45,name:"Lettre à soi-même",icon:"💌",phase:"cloture",phaseLabel:"Clôture",dur:"15–25 min",grp:"1 à 100 pers.",needs:["energie"],tags:["engagement","mémoire","individuel"],desc:"En fin de formation ou d'atelier, chacun s'écrit une lettre : ce que je retiens, ce que je m'engage à faire. Le facilitateur la poste (ou la programme) six semaines plus tard. L'effet madeleine garantit le rappel.",steps:["Distribuer papier et enveloppe (ou outil d'email programmé).","Consigne : « Écris à celui/celle que tu seras dans 6 semaines. »","Écriture individuelle et silencieuse (10 min).","Cacheter, écrire son adresse : personne d'autre ne lira.","Envoyer les lettres à J+40 environ."],tip:"La lettre papier bat l'email : recevoir une enveloppe manuscrite de soi-même six semaines plus tard crée un choc émotionnel qu'aucune notification ne produit."},
+  {id:46,name:"Douche d'appréciation",icon:"🚿",phase:"cloture",phaseLabel:"Clôture",dur:"15–30 min",grp:"4 à 15 pers.",needs:["lien","energie"],tags:["reconnaissance","cohésion","émotions"],desc:"Chaque personne reçoit à tour de rôle une pluie d'appréciations sincères et spécifiques du reste du groupe. Inconfortable trente secondes, inoubliable des années. À réserver aux groupes qui ont vraiment vécu quelque chose ensemble.",steps:["Une personne se place au centre (ou reste simplement à sa place).","Chaque membre du groupe lui adresse une appréciation précise et sincère.","La personne écoute et ne répond que « merci ».","Rotation jusqu'à ce que tout le monde soit passé.","Clore par un moment de silence ou un geste collectif."],tip:"Exigez du spécifique : « j'ai aimé quand tu as reformulé le conflit de mardi » nourrit ; « t'es super » glisse. Et interdisez l'humour : c'est l'esquive classique de l'émotion."},
   {id:47,name:"After Action Review",icon:"🔍",phase:"apres",phaseLabel:"Après l'atelier",dur:"30–60 min",grp:"3 à 15 pers.",needs:["idees","decision"],tags:["débrief","apprentissage","armée US"],desc:"Quatre questions héritées de l'armée américaine : que devait-il se passer ? Que s'est-il passé ? Pourquoi cet écart ? Qu'apprenons-nous ? La structure de débrief la plus robuste pour apprendre d'un projet ou d'un événement.",steps:["Rappeler l'intention initiale : que devait-il se passer ?","Établir les faits : que s'est-il réellement passé ?","Analyser les écarts, sans chercher de coupable.","Formuler les enseignements : que ferons-nous différemment ?","Documenter et partager les leçons au-delà du groupe."],tip:"La règle « pas de galon dans la salle » est fondatrice : pendant l'AAR, le stagiaire peut contredire le directeur. Sans cette sécurité, vous récolterez le récit officiel, pas la réalité."},
-  {id:48,name:"Plus / Delta",icon:"➕",phase:"apres",phaseLabel:"Après l'atelier",dur:"10–15 min",grp:"3 à 50 pers.",needs:["idees"],tags:["feedback","rapide","amélioration"],desc:"Deux colonnes en fin de session : Plus (ce qui a bien fonctionné) et Delta (ce qu'on changerait — pas ce qui était nul). Le feedback constructif le plus rapide à mettre en place, y compris en visio.",steps:["Tracer deux colonnes : + et Δ.","Chacun contribue aux deux colonnes (post-its ou tour rapide).","Lire les Plus pour ancrer ce qui doit être reproduit.","Reformuler chaque Delta en suggestion actionnable.","S'engager publiquement sur 1 ou 2 Deltas pour la prochaine fois."],tip:"Le Δ n'est pas un « moins » : exiger la formulation « la prochaine fois, faire X » transforme la critique en cadeau. Le facilitateur montre l'exemple en accueillant chaque Delta avec un merci."}
+  {id:48,name:"Plus / Delta",icon:"➕",phase:"apres",phaseLabel:"Après l'atelier",dur:"10–15 min",grp:"3 à 50 pers.",needs:["idees"],tags:["feedback","rapide","amélioration"],desc:"Deux colonnes en fin de session : Plus (ce qui a bien fonctionné) et Delta (ce qu'on changerait, pas ce qui était nul). Le feedback constructif le plus rapide à mettre en place, y compris en visio.",steps:["Tracer deux colonnes : + et Δ.","Chacun contribue aux deux colonnes (post-its ou tour rapide).","Lire les Plus pour ancrer ce qui doit être reproduit.","Reformuler chaque Delta en suggestion actionnable.","S'engager publiquement sur 1 ou 2 Deltas pour la prochaine fois."],tip:"Le Δ n'est pas un « moins » : exiger la formulation « la prochaine fois, faire X » transforme la critique en cadeau. Le facilitateur montre l'exemple en accueillant chaque Delta avec un merci."}
 ];
 
 function slugify(s){ return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,''); }
@@ -2534,7 +2583,7 @@ function libRender(animate){
   document.getElementById('lib-count').innerHTML=`<strong>${filtered.length}</strong> outil${filtered.length>1?'s':''}${active?' sur '+TOOLS.length:''}`;
   document.getElementById('lib-reset').hidden=!active;
   if(!filtered.length){
-    grid.innerHTML=`<div class="lib-empty"><div class="es-icon">🔍</div><p>Aucun outil ne correspond à ces critères.<br>Élargis la durée, le nombre de participants ou la recherche.</p><button class="btn btn-secondary btn-sm" onclick="libReset()">Réinitialiser les filtres</button></div>`;
+    grid.innerHTML=`<div class="lib-empty"><div class="es-icon">${ic('search')}</div><p>Aucun outil ne correspond à ces critères.<br>Élargis la durée, le nombre de participants ou la recherche.</p><button class="btn btn-secondary btn-sm" onclick="libReset()">Réinitialiser les filtres</button></div>`;
     return;
   }
   grid.innerHTML=filtered.map(t=>`
@@ -2548,7 +2597,7 @@ function libRender(animate){
       <p class="lib-card-desc">${t.desc.substring(0,120)}…</p>
       <div class="lib-card-footer">
         <button class="btn btn-secondary btn-sm" onclick="event.stopPropagation();toolOpen(${t.id})" tabindex="-1" aria-hidden="true">Voir la fiche</button>
-        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})" aria-label="Télécharger la fiche ${escHtml(t.name)} en PDF">⬇ PDF</button>
+        <button class="btn btn-ghost btn-sm" onclick="event.stopPropagation();toolPDFById(${t.id})" aria-label="Télécharger la fiche ${escHtml(t.name)} en PDF">${ic('download')} PDF</button>
       </div>
     </article>`).join('');
   if(animate!==false) animGrid(grid,'.lib-card');
@@ -2572,17 +2621,17 @@ function toolOpen(id){
   document.getElementById('modal-permalink').href='/outils/'+t.slug+'/';
   document.getElementById('modal-desc').textContent=t.desc;
   document.getElementById('modal-steps').innerHTML=t.steps.map((s,i)=>`<li><span class="step-n">${i+1}</span><span>${s}</span></li>`).join('');
-  document.getElementById('modal-tip').innerHTML=`💡 <strong>Conseil du praticien</strong><br>${t.tip}`;
+  document.getElementById('modal-tip').innerHTML=`${ic('lightbulb')} <strong>Conseil du praticien</strong><br>${t.tip}`;
   document.getElementById('modal-preview').innerHTML=`
-    <div class="mprev-icon">${t.icon||'🔧'}</div>
+    <div class="mprev-icon">${ic(PHASE_ICONS[t.phase]||'lightbulb')}</div>
     <div><div class="mprev-label">Phase</div><span class="tool-phase-badge ph-${t.phase}" style="margin-bottom:0">${t.phaseLabel}</span></div>
     <div><div class="mprev-label">Durée estimée</div><div class="mprev-val">${t.dur}</div></div>
     <div><div class="mprev-label">Taille du groupe</div><div class="mprev-val">${t.grp}</div></div>
-    <div><div class="mprev-label">Besoins couverts</div><div style="display:flex;flex-direction:column;gap:5px;margin-top:4px">${t.needs.map(n=>`<span style="display:inline-block;padding:3px 10px;background:rgba(201,107,58,.1);color:var(--terra);border-radius:20px;font-size:.75rem;font-weight:600">${NEED_LABELS[n]||n}</span>`).join('')}</div></div>
+    <div><div class="mprev-label">Besoins couverts</div><div style="display:flex;flex-direction:column;gap:5px;margin-top:4px">${t.needs.map(n=>`<span style="display:inline-block;padding:3px 10px;background:color-mix(in srgb,var(--terra) 10%,transparent);color:var(--terra-ink);border-radius:20px;font-size:.75rem;font-weight:600">${NEED_LABELS[n]||n}</span>`).join('')}</div></div>
     <div><div class="mprev-label">Tags</div><div class="mprev-tags" style="margin-top:4px">${t.tags.map(tag=>`<span class="mprev-tag">${tag}</span>`).join('')}</div></div>`;
   document.getElementById('tool-modal').classList.add('open');
   document.body.style.overflow='hidden';
-  const addBtn=document.getElementById('modal-add-plan'); clearTimeout(addBtn._to); addBtn.textContent='＋ Ajouter au plan';
+  const addBtn=document.getElementById('modal-add-plan'); clearTimeout(addBtn._to); addBtn.innerHTML=ic('plus')+' Ajouter au plan';
   trapOpen(document.querySelector('#tool-modal .modal-box'),document.querySelector('#tool-modal .modal-close'));
   if(MOTION()){
     gsap.fromTo('#modal-steps li',{x:-10,opacity:0},{x:0,opacity:1,duration:.3,stagger:.045,ease:'power2.out',clearProps:'transform,opacity',delay:.1});
@@ -2616,7 +2665,7 @@ function toolAddToPlan(){
   PL.data.phases.push({id:Date.now(),name:t.name,duration:t.minDur,tool:t.name,desc:''});
   PL.persist();
   track('add_to_plan',{tool:t.slug});
-  const btn=document.getElementById('modal-add-plan'); btn.textContent='✓ Ajouté au plan'; clearTimeout(btn._to); btn._to=setTimeout(()=>btn.textContent='＋ Ajouter au plan',2600);
+  const btn=document.getElementById('modal-add-plan'); btn.innerHTML=ic('check')+' Ajouté au plan'; clearTimeout(btn._to); btn._to=setTimeout(()=>btn.innerHTML=ic('plus')+' Ajouter au plan',2600);
   const plan=PL.data.name?` « ${PL.data.name} »`:'';
   toast(`${t.name} ajouté au plan${plan} (${t.minDur} min).`,'Voir le plan',()=>{
     modalPushed=false; toolModalHide(); goPanel('planner','replace');
@@ -2635,7 +2684,7 @@ function toolPDFById(id){
   let y=pdfMetaChips(doc,[{l:'Durée',v:t.dur},{l:'Groupe',v:t.grp},{l:'Besoin',v:needs}],42)+10;
   // Section : description
   const secTitle=(label)=>{
-    doc.setFillColor(201,107,58); doc.rect(M,y-2.6,3.2,3.2,'F');
+    doc.setFillColor(196,61,34); doc.rect(M,y-2.6,3.2,3.2,'F');
     doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(120,110,102);
     doc.text(label.toUpperCase(),M+6,y,{charSpace:.6});
     y+=7;
@@ -2649,7 +2698,7 @@ function toolPDFById(id){
   t.steps.forEach((step,i)=>{
     const sl=doc.splitTextToSize(step,W-M*2-12);
     y=guard(y,sl.length*5+6);
-    doc.setFillColor(201,107,58); doc.circle(M+3.2,y+.8,3.4,'F');
+    doc.setFillColor(196,61,34); doc.circle(M+3.2,y+.8,3.4,'F');
     doc.setFontSize(7.5); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
     doc.text(String(i+1),M+3.2,y+2,{align:'center'});
     doc.setFontSize(9.6); doc.setFont('helvetica','normal'); doc.setTextColor(61,55,48);
@@ -2679,7 +2728,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape') toolModalCloseBtn(
 // ════════════════════════════════════════════════════
 const PARK = {
   items:[],
-  catLabels:{idee:'💡 Idée',question:'❓ Question',action:'✅ Action',blocage:'⚡ Blocage'},
+  catLabels:{idee:'Idée',question:'Question',action:'Action',blocage:'Blocage'},
   save(){ try{localStorage.setItem('fk-park',JSON.stringify(PARK.items));}catch(e){} },
   saveTitle(){ try{localStorage.setItem('fk-park-title',document.getElementById('parking-title').value);}catch(e){} },
   load(){
@@ -2696,7 +2745,7 @@ const PARK = {
     empty.style.display='none';
     board.innerHTML=PARK.items.map(item=>`
       <div class="parking-note pk-${item.cat}">
-        <button class="parking-note-del" onclick="PARK.remove(${item.id})" title="Supprimer" aria-label="Supprimer la note">✕</button>
+        <button class="parking-note-del" onclick="PARK.remove(${item.id})" title="Supprimer" aria-label="Supprimer la note">${ic('x')}</button>
         <div class="parking-note-cat">${PARK.catLabels[item.cat]||item.cat}</div>
         <div class="parking-note-text">${escHtml(item.text)}</div>
         <div class="parking-note-ts">${item.ts}</div>
@@ -2720,7 +2769,7 @@ const PARK = {
       head:[['Catégorie','Contenu','Heure']],
       body:rows,
       theme:'plain',
-      headStyles:{fillColor:[201,107,58],textColor:[255,255,255],fontSize:9,fontStyle:'bold',cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
+      headStyles:{fillColor:[196,61,34],textColor:[255,255,255],fontSize:9,fontStyle:'bold',cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
       bodyStyles:{fontSize:10,textColor:[42,38,34],valign:'top',cellPadding:{top:3.5,bottom:3.5,left:3,right:3}},
       alternateRowStyles:{fillColor:[248,244,237]},
       columnStyles:{0:{cellWidth:38},2:{cellWidth:22,halign:'center',textColor:[130,120,112]}},
@@ -2825,18 +2874,18 @@ function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&l
 // Bandeau éditorial pleine largeur (encre + filet terracotta)
 function pdfHeader(doc, label, title, subtitle){
   const W=210, M=20;
-  doc.setFillColor(26,26,26); doc.rect(0,0,W,34,'F');
-  doc.setFillColor(201,107,58); doc.rect(0,34,W,1.6,'F');
-  doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(201,107,58);
+  doc.setFillColor(19,35,58); doc.rect(0,0,W,34,'F');
+  doc.setFillColor(196,61,34); doc.rect(0,34,W,1.6,'F');
+  doc.setFontSize(8); doc.setFont('helvetica','bold'); doc.setTextColor(196,61,34);
   doc.text(label.toUpperCase(),M,13,{charSpace:.8});
-  doc.setFontSize(19); doc.setFont('helvetica','bold'); doc.setTextColor(245,240,232);
+  doc.setFontSize(19); doc.setFont('helvetica','bold'); doc.setTextColor(238,242,247);
   const tl=doc.splitTextToSize(String(title),W-M*2-32);
   doc.text(tl[0]+(tl.length>1?'…':''),M,23);
   if(subtitle){
     doc.setFontSize(8.5); doc.setFont('helvetica','normal'); doc.setTextColor(170,160,150);
     doc.text(String(subtitle),M,29.5);
   }
-  doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(201,107,58);
+  doc.setFontSize(10); doc.setFont('helvetica','bold'); doc.setTextColor(196,61,34);
   doc.text('Facilithèque',W-M,13,{align:'right'});
 }
 // Pied de page sur toutes les pages, avec numérotation
@@ -2846,7 +2895,7 @@ function pdfFooter(doc){
   for(let n=1;n<=pages;n++){
     doc.setPage(n);
     const pH=doc.internal.pageSize.height;
-    doc.setDrawColor(224,216,200); doc.setLineWidth(0.3); doc.line(M,pH-15,W-M,pH-15);
+    doc.setDrawColor(201,210,223); doc.setLineWidth(0.3); doc.line(M,pH-15,W-M,pH-15);
     doc.setFontSize(7.5); doc.setFont('helvetica','normal'); doc.setTextColor(160,150,140);
     doc.text('Facilithèque · outils libres pour facilitateurs · facilitheque.vercel.app',M,pH-9.5);
     doc.text(`${n} / ${pages}`,W-M,pH-9.5,{align:'right'});
@@ -2862,11 +2911,11 @@ function pdfMetaChips(doc, items, y){
     doc.setFontSize(9.5);
     const vw=doc.getTextWidth(String(item.v));
     const cw=Math.max(lw,vw)+12;
-    doc.setFillColor(245,240,232); doc.setDrawColor(224,216,200); doc.setLineWidth(0.25);
+    doc.setFillColor(238,241,246); doc.setDrawColor(201,210,223); doc.setLineWidth(0.25);
     doc.roundedRect(x,y,cw,15,2.5,2.5,'FD');
     doc.setFontSize(6.8); doc.setFont('helvetica','bold'); doc.setTextColor(160,150,140);
     doc.text(item.l.toUpperCase(),x+cw/2,y+5.5,{align:'center'});
-    doc.setFontSize(9.5); doc.setFont('helvetica','bold'); doc.setTextColor(201,107,58);
+    doc.setFontSize(9.5); doc.setFont('helvetica','bold'); doc.setTextColor(196,61,34);
     doc.text(String(item.v),x+cw/2,y+11.5,{align:'center'});
     x+=cw+5;
   });

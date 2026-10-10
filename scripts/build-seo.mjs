@@ -165,7 +165,7 @@ function page({ path: p, title, description, h = '', body, jsonld = [], current,
 <link rel="canonical" href="${SITE}${p}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
 <link rel="manifest" href="/manifest.json">
-<meta name="theme-color" content="#1A1A1A">
+<meta name="theme-color" content="#13233A">
 <meta property="og:type" content="article">
 <meta property="og:url" content="${SITE}${p}">
 <meta property="og:title" content="${esc(title)}">
