@@ -39,6 +39,7 @@ main{flex:1;display:flex;flex-direction:column;gap:20px;padding:24px 0 16px}
 .btn.main{min-height:84px;font-size:1.2rem;background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .btn.main:active{opacity:.85}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .people{display:grid;gap:8px}
 .person{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px;padding:0 16px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);text-align:left}
 .person .n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
@@ -158,7 +159,7 @@ function render(){
     $('bar-fill').style.width=(st.total?(1-st.rem/st.total)*100:0)+'%';
   } else if(t==='sequence'){
     title=st.count?st.label:'Aucune phase'; timeEl.textContent=fmt(st.rem);
-    next=st.count?`Phase ${st.idx+1} sur ${st.count}`+(st.next?` · ensuite : ${st.next}`:''):'Prépare la séquence sur l\'ordinateur';
+    next=st.count?`Phase ${st.idx+1} sur ${st.count}`+(st.next?` · ensuite : ${st.next}`:'')+(st.end?` · fin prévue ${st.end}`+(st.late>0?` (+${st.late} min)`:''):''):'Prépare la séquence sur l\'ordinateur';
     timeEl.classList.remove('low');
   } else if(t==='roulette'){
     title=st.last?st.last:'Prêt à tirer au sort';
@@ -174,13 +175,13 @@ function render(){
   if(key===lastKey) return; lastKey=key;
   const acts=$('acts');
   if(t==='timer') acts.innerHTML=`<button class="btn main" data-a="toggle">${st.running?ic('pause')+' Pause':ic('play')+' Démarrer'}</button><button class="btn" data-a="reset">${ic('rotate-ccw')} Remettre à zéro</button>`;
-  else if(t==='sequence') acts.innerHTML=`<button class="btn main" data-a="toggle">${st.running?ic('pause')+' Pause':ic('play')+(st.rem>0&&st.idx>0?' Reprendre':' Lancer')}</button><div class="row"><button class="btn" data-a="skip">${ic('skip-forward')} Passer</button><button class="btn" data-a="reset">${ic('rotate-ccw')} Recommencer</button></div>`;
+  else if(t==='sequence') acts.innerHTML=`<button class="btn main" data-a="toggle">${st.running?ic('pause')+' Pause':ic('play')+(st.rem>0&&st.idx>0?' Reprendre':' Lancer')}</button><div class="row"><button class="btn" data-a="skip">${ic('skip-forward')} Passer</button><button class="btn" data-a="reset">${ic('rotate-ccw')} Recommencer</button></div><div class="row3"><button class="btn" data-a="adjust" data-n="-1">−1 min</button><button class="btn" data-a="adjust" data-n="1">+1 min</button><button class="btn" data-a="adjust" data-n="5">+5 min</button></div>`;
   else if(t==='roulette') acts.innerHTML=`<button class="btn main" data-a="spin">${ic('dices')} Tirer au sort</button>`;
   else acts.innerHTML=`<button class="btn" data-a="silence">${ic('square')} Arrêter la parole</button>`;
 }
 function esc(s){ return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 
-$('acts').addEventListener('click',e=>{ const b=e.target.closest('[data-a]'); if(b) send(b.dataset.a); });
+$('acts').addEventListener('click',e=>{ const b=e.target.closest('[data-a]'); if(b) send(b.dataset.a,b.dataset.n?{n:+b.dataset.n}:null); });
 $('people').addEventListener('click',e=>{ const b=e.target.closest('[data-i]'); if(b) send('speak',{i:+b.dataset.i}); });
 $('tools').addEventListener('click',e=>{ const b=e.target.closest('[data-t]'); if(b) send('project',{tool:b.dataset.t}); });
 $('theme').addEventListener('click',()=>send('theme'));

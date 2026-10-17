@@ -333,7 +333,7 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .seq-num{width:28px;height:28px;background:var(--cream-dark);border-radius:50%;display:grid;place-items:center;font-size:.75rem;font-weight:700;color:var(--gray);flex-shrink:0}
 .seq-active .seq-num{background:var(--terra);color:#fff}
 .seq-done .seq-num{background:var(--sage);color:#fff}
-.seq-name-inp{flex:1;width:0;min-width:0;border:none;background:transparent;font-size:.9rem;font-weight:500;color:var(--ink);outline:none}
+.seq-name-inp{flex:1;width:0;min-width:0;min-height:36px;border:none;background:transparent;font-size:.9rem;font-weight:500;color:var(--ink);outline:none}
 .seq-dur{display:inline-flex;align-items:center;gap:8px;flex-shrink:0;font-size:.85rem;color:var(--ink-s)}
 .seq-dur-inp{width:70px;border:1.5px solid var(--cream-mid);border-radius:var(--r8);padding:6px 10px;font-size:.85rem;text-align:center;color:var(--ink);outline:none;transition:border-color var(--tr)}
 .seq-dur-inp:focus{border-color:var(--terra)}
@@ -341,6 +341,44 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .seq-phase-name{text-align:center;font-size:.95rem;color:var(--gray);margin-bottom:8px}
 .seq-progress-bar{height:6px;background:var(--cream-dark);border-radius:3px;overflow:hidden;margin:18px 0 12px}
 .seq-progress-fill{height:100%;background:var(--terra);border-radius:3px;transition:width .5s}
+/* Séquence : horaires, saisie express, durées en un tap, ajustements en direct */
+.seq-clock{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin-bottom:18px}
+.seq-time-f{display:flex;flex-direction:column;gap:6px;font-size:.8125rem;color:var(--ink-s);font-weight:500}
+.seq-time-f .input{width:120px;font-variant-numeric:tabular-nums}
+.seq-budget{flex:1 1 220px;min-height:44px;display:flex;align-items:center;padding:0 14px;border-radius:14px;background:var(--surface-muted);font-size:.875rem;color:var(--ink-s)}
+.seq-budget:empty{display:none}
+.seq-budget.ok{background:color-mix(in srgb,var(--sage) 14%,var(--card));color:color-mix(in srgb,var(--sage) 55%,var(--ink))}
+.seq-budget.late{background:color-mix(in srgb,var(--terra) 12%,var(--card));color:color-mix(in srgb,var(--terra) 60%,var(--ink));font-weight:500}
+.seq-phase-row{flex-wrap:wrap}
+.seq-at{font-variant-numeric:tabular-nums;font-size:.8125rem;color:var(--gray);min-width:3.2em}
+.seq-dur-btn{min-height:36px;min-width:72px;padding:0 12px;border:1px solid var(--border-strong);border-radius:12px;background:var(--surface);color:var(--foreground);font:500 .875rem 'DM Sans',sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
+.seq-dur-btn[aria-expanded=true]{border-color:var(--foreground)}
+@media(hover:hover) and (pointer:fine){.seq-dur-btn:hover{border-color:var(--foreground)}}
+.seq-dur-tray{flex:1 1 100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:8px 0 2px 44px}
+.seq-dur-tray button{min-width:44px;min-height:36px;border:1px solid var(--border);border-radius:10px;background:var(--surface);color:var(--text-secondary);font:500 .875rem 'DM Sans',sans-serif}
+.seq-dur-tray button.sel{background:var(--foreground);border-color:var(--foreground);color:var(--background)}
+.seq-dur-tray label{display:inline-flex;align-items:center;gap:6px;font-size:.8125rem;color:var(--gray);margin-left:6px}
+.seq-dur-tray input{width:64px;min-height:36px;border:1px solid var(--border-strong);border-radius:10px;padding:0 8px;background:var(--surface);text-align:center;font-size:.875rem}
+.seq-add{display:flex;gap:8px;margin-top:6px}
+.seq-add .input{flex:1;min-width:0}
+.seq-blocks{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
+.seq-empty{padding:28px 16px}
+.seq-adjust{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.seq-catch{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:14px;padding:12px;border-radius:14px;background:color-mix(in srgb,var(--terra) 10%,var(--card));color:color-mix(in srgb,var(--terra) 60%,var(--ink));font-size:.875rem;font-weight:500}
+.seq-catch[hidden]{display:none}
+.seq-insert{margin-top:16px;text-align:left;border-top:1px solid var(--card-line);padding-top:14px}
+.seq-insert summary{cursor:pointer;display:inline-flex;align-items:center;gap:6px;font-size:.875rem;font-weight:500;color:var(--ink-s);min-height:36px;list-style:none}
+.seq-insert summary::-webkit-details-marker{display:none}
+.seq-insert .input{margin-top:10px}
+.seq-insert-acts{display:flex;gap:8px;margin-top:10px;justify-content:flex-end}
+.seq-report{margin-top:18px;text-align:left;border-top:1px solid var(--card-line);padding-top:14px;font-size:.85rem}
+.seq-report[hidden]{display:none}
+.seq-report-h{font-weight:600;margin-bottom:10px;color:var(--ink)}
+.seq-report table{width:100%;border-collapse:collapse;margin-bottom:12px;font-variant-numeric:tabular-nums}
+.seq-report th{text-align:left;font-weight:500;color:var(--gray);font-size:.78rem;padding:4px 6px 6px 0}
+.seq-report td{padding:6px 6px 6px 0;border-top:1px solid var(--card-line);color:var(--ink-s)}
+.seq-report td.over{color:color-mix(in srgb,var(--terra) 60%,var(--ink));font-weight:600}
+@media(max-width:560px){.seq-dur-tray{padding-left:0}.seq-time-f .input{width:108px}}
 
 /* ── PLANNER ── */
 .planner-actions{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:20px 0 28px;padding:14px 16px;background:var(--cream-dark);border-radius:var(--r12)}
@@ -661,13 +699,14 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
   .timer-ring-wrap,.timer-ring-wrap svg{width:min(280px,100%);height:auto;aspect-ratio:1}
   .chrono-display{font-size:3.2rem}
   /* Séquence : nom sur toute la largeur, durée dessous */
-  .seq-phase-row{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-areas:"mv num name del" "mv num dur del";column-gap:8px;row-gap:2px;padding:8px 10px 8px 6px}
+  .seq-phase-row{display:grid;grid-template-columns:auto auto auto minmax(0,1fr) auto;grid-template-areas:"mv num name name del" "mv num dur at del" "tray tray tray tray tray";column-gap:8px;row-gap:4px;padding:8px 10px 8px 6px}
   .seq-phase-row .phase-move{grid-area:mv}
   .seq-num{grid-area:num}
   .seq-name-inp{grid-area:name;width:auto}
-  .seq-dur{grid-area:dur;font-size:.78rem;color:var(--gray)}
+  .seq-phase-row .seq-at{grid-area:at;align-self:center}
+  .seq-phase-row .seq-dur-btn{grid-area:dur;justify-self:start}
   .seq-phase-row .btn-icon{grid-area:del}
-  .seq-dur-inp{width:54px;padding:4px}
+  .seq-dur-tray{grid-area:tray}
   .seq-display{font-size:3rem}
   .lib-seg{flex:1 1 100%}
   .lib-seg button{flex:1;padding:0 6px}
@@ -1153,16 +1192,29 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
       </div>
       <div class="two-col" style="align-items:start">
         <div>
-          <div class="flex-between" style="margin-bottom:16px">
-            <span class="fw6 text-sm">Phases de la séquence</span>
-            <button class="btn btn-primary btn-sm" onclick="seqAddPhase()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter une phase</button>
+          <div class="seq-clock">
+            <label class="seq-time-f"><span>Début</span><input type="time" class="input" id="seq-start-at" onchange="SEQ.setMeta('start',this.value)"></label>
+            <label class="seq-time-f"><span>Fin visée</span><input type="time" class="input" id="seq-end-at" onchange="SEQ.setMeta('end',this.value)"></label>
+            <div class="seq-budget" id="seq-budget" role="status"></div>
+          </div>
+          <div class="flex-between" style="margin-bottom:10px">
+            <span class="fw6 text-sm">Phases <span class="text-gray" id="seq-total-dur"></span></span>
+            <button class="btn btn-ghost btn-sm" id="seq-clear-btn" onclick="seqClear()"><svg class="ic" aria-hidden="true"><use href="#i-trash-2"/></svg> Tout effacer</button>
           </div>
           <div id="seq-phases-list"></div>
-          <div id="seq-total-row" style="display:none;margin-top:16px;padding:12px 16px;background:var(--cream-dark);border-radius:var(--r12);align-items:center;justify-content:space-between">
-            <span class="text-xs text-gray fw6">DURÉE TOTALE</span>
-            <span id="seq-total-dur" class="fw6" style="font-family:var(--font-display);color:var(--ink)">—</span>
+          <div class="seq-add">
+            <input class="input" id="seq-add-inp" list="seq-sugg" autocomplete="off" placeholder="Ex. Météo 10 (ou colle une liste)" onkeydown="seqAddKey(event)" onpaste="seqAddPaste(event)" aria-label="Ajouter une phase : nom puis durée en minutes">
+            <button class="btn btn-primary" onclick="seqAddFromInput()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Ajouter</button>
           </div>
-          <div class="flex-between mt16">
+          <datalist id="seq-sugg"></datalist>
+          <div class="seq-blocks" role="group" aria-label="Blocs rapides">
+            <button class="pill" onclick="seqAddText('Accueil 5')">Accueil · 5</button>
+            <button class="pill" onclick="seqAddText('Tour de table 10')">Tour de table · 10</button>
+            <button class="pill" onclick="seqAddText('Pause 10')">Pause · 10</button>
+            <button class="pill" onclick="seqAddText('Pause déjeuner 60')">Déjeuner · 60</button>
+            <button class="pill" onclick="seqAddText('Clôture 5')">Clôture · 5</button>
+          </div>
+          <div class="flex-between mt16" style="flex-wrap:wrap;gap:8px">
             <button class="btn btn-primary" id="seq-start-btn" onclick="seqStart()"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Lancer la séquence</button>
             <button class="btn btn-ghost btn-sm" onclick="seqReset()"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg> Remettre à zéro</button>
           </div>
@@ -1177,6 +1229,18 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
             <button class="btn btn-ghost btn-sm" onclick="seqSkip()">Passer <svg class="ic" aria-hidden="true"><use href="#i-skip-forward"/></svg></button>
             <button class="btn btn-ghost btn-sm" onclick="projOpen('sequence')" title="Mode projection">⛶</button>
           </div>
+          <div class="seq-adjust" role="group" aria-label="Ajuster la phase en cours">
+            <button class="btn btn-secondary btn-sm" onclick="SEQ.adjust(-1)" aria-label="Retirer une minute à la phase en cours">−1 min</button>
+            <button class="btn btn-secondary btn-sm" onclick="SEQ.adjust(1)" aria-label="Ajouter une minute à la phase en cours">+1 min</button>
+            <button class="btn btn-secondary btn-sm" onclick="SEQ.adjust(5)" aria-label="Ajouter cinq minutes à la phase en cours">+5 min</button>
+          </div>
+          <div class="seq-catch" id="seq-catch" hidden></div>
+          <details class="seq-insert" id="seq-insert">
+            <summary><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Insérer une phase imprévue</summary>
+            <input class="input" id="seq-ins-inp" list="seq-sugg" autocomplete="off" placeholder="Ex. Pause 10" aria-label="Phase imprévue : nom puis durée" onkeydown="if(event.key==='Enter'){event.preventDefault();seqInsert('next')}">
+            <div class="seq-insert-acts"><button class="btn btn-secondary btn-sm" onclick="seqInsert('next')">Après celle-ci</button><button class="btn btn-primary btn-sm" onclick="seqInsert('now')">Maintenant</button></div>
+          </details>
+          <div class="seq-report" id="seq-report" hidden></div>
         </div>
       </div>
     </section>
@@ -1845,7 +1909,8 @@ const RC={
     else if(tool==='sequence'){
       const i=SEQ.curIdx, ph=SEQ.phases[i], nx=SEQ.phases[i+1];
       const started=SEQ.running||SEQ.remaining>0;
-      Object.assign(st,{label:ph?ph.name:'',rem:started?SEQ.remaining:(ph?ph.duration*60:0),running:SEQ.running,idx:i,count:SEQ.phases.length,next:nx?nx.name:''});
+      const pe=SEQ.projectedEnd(), tg=SEQ.target();
+      Object.assign(st,{label:ph?ph.name:'',rem:started?SEQ.remaining:(ph?ph.duration*60:0),running:SEQ.running,idx:i,count:SEQ.phases.length,next:nx?nx.name:'',end:pe?fmtHM(pe):'',late:pe&&tg?Math.round((pe-tg)/60000):0});
     }
     else if(tool==='roulette'){ Object.assign(st,{count:RL.names.length,last:RL.history[0]||''}); }
     else if(tool==='parole'){ Object.assign(st,{parts:PA.parts.map(p=>({name:p.name,time:p.time,active:!!p.active})),total:PA.total()}); }
@@ -1865,6 +1930,7 @@ const RC={
         break;
       case 'reset': if(tool==='timer') T.reset(); else if(tool==='sequence') SEQ.reset(); break;
       case 'skip': if(tool==='sequence') SEQ.skip(); break;
+      case 'adjust': { const n=parseInt(d.n); if(tool==='sequence'&&[-1,1,5].includes(n)) SEQ.adjust(n); break; }
       case 'spin': RL.spin(); break;
       case 'speak': { const i=parseInt(d.i); if(PA.parts[i]) PA.toggle(i); break; }
       case 'silence': if(PA.activeIdx!==null) PA.stop(PA.activeIdx); break;
@@ -2127,17 +2193,19 @@ function fmtSec(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
 // ════════════════════════════════════════════════════
 const SEQ = {
   phases:[], curIdx:0, remaining:0, msLeft:0, endAt:0, running:false, iv:null,
+  meta:{start:'',end:''}, plan:null, log:[], trayId:null, endedAt:null,
   save(){ try{localStorage.setItem('fk-seq',JSON.stringify(SEQ.phases.map(p=>({id:p.id,name:p.name,duration:p.duration}))));}catch(e){} },
   load(){
     try{
       const s=JSON.parse(localStorage.getItem('fk-seq')||'null');
       if(Array.isArray(s)) SEQ.phases=s.map((p,i)=>({id:p.id||Date.now()+i,name:String(p.name||''),duration:Math.max(1,parseInt(p.duration)||1)}));
     }catch(e){}
+    try{ const m=JSON.parse(localStorage.getItem('fk-seq-meta')||'null'); if(m) SEQ.meta={start:String(m.start||''),end:String(m.end||'')}; }catch(e){}
   },
   persist(){
     if(!appReady) return;
     LIVE.set('fk-live-seq',SEQ.remaining>0?{curIdx:SEQ.curIdx,remaining:SEQ.remaining,running:SEQ.running,
-      endAt:SEQ.running?SEQ.endAt:null,msLeft:SEQ.running?null:SEQ.msLeft}:null);
+      endAt:SEQ.running?SEQ.endAt:null,msLeft:SEQ.running?null:SEQ.msLeft,plan:SEQ.plan,log:SEQ.log}:null);
   },
   // Avance jusqu'à la phase en cours à l'instant présent (fin de phase, onglet endormi, rechargement).
   // Chaque phase démarre à l'heure exacte où la précédente s'est terminée. false = séquence finie.
@@ -2155,6 +2223,7 @@ const SEQ = {
   restore(){
     const s=LIVE.get('fk-live-seq');
     if(!s||!SEQ.phases.length||!(s.curIdx<SEQ.phases.length)) return false;
+    SEQ.plan=s.plan||null; SEQ.log=Array.isArray(s.log)?s.log:[];
     if(s.running&&s.endAt){
       if(SEQ.catchUp(s.curIdx,s.endAt)) return true;
       LIVE.set('fk-live-seq',null); return false;
@@ -2166,7 +2235,54 @@ const SEQ = {
     seqRender(); seqUpdateDisplay();
     return false;
   },
-  addPhase(){ SEQ.phases.push({id:Date.now(),name:'Phase '+(SEQ.phases.length+1),duration:10}); SEQ.save(); seqRender(); },
+  addPhase(){ SEQ.addPhases([{name:'Phase '+(SEQ.phases.length+1),duration:10}]); },
+  // Ajoute des phases à la fin (ou à la position at) ; renvoie les phases créées
+  addPhases(list,at){
+    const base=Date.now(), made=list.map((p,i)=>({id:base+i,name:p.name,duration:Math.max(1,Math.min(999,p.duration|0))}));
+    const pos=at==null?SEQ.phases.length:at;
+    SEQ.phases.splice(pos,0,...made);
+    if(SEQ.remaining>0&&pos<=SEQ.curIdx) SEQ.curIdx+=made.length;
+    SEQ.save(); SEQ.persist(); seqRender(); seqUpdateDisplay();
+    return made;
+  },
+  setMeta(k,v){ SEQ.meta[k]=v||''; try{localStorage.setItem('fk-seq-meta',JSON.stringify(SEQ.meta));}catch(e){} seqRender(); },
+  // Ajuste la phase en cours (ou la première avant le lancement) de n minutes
+  adjust(n){
+    const i=SEQ.remaining>0?SEQ.curIdx:0, ph=SEQ.phases[i]; if(!ph) return;
+    if(SEQ.remaining<=0){ ph.duration=Math.max(1,ph.duration+n); SEQ.save(); seqRender(); seqUpdateDisplay(); return; }
+    const d=n*60000;
+    if(SEQ.running){
+      if(SEQ.endAt+d<=Date.now()+1000){ SEQ.skip(); return; }
+      SEQ.endAt+=d; SEQ.remaining=Math.max(0,Math.ceil((SEQ.endAt-Date.now())/1000));
+    } else {
+      if(SEQ.msLeft+d<=1000) return;
+      SEQ.msLeft+=d; SEQ.remaining=Math.ceil(SEQ.msLeft/1000);
+    }
+    ph.duration=Math.max(1,ph.duration+n);
+    SEQ.save(); SEQ.persist(); seqRender(); seqUpdateDisplay();
+  },
+  // Fin prévue (ms) d'après l'état présent ; null si rien ne permet de la situer
+  projectedEnd(){
+    const rest=from=>SEQ.phases.slice(from).reduce((t,p)=>t+p.duration*60000,0);
+    if(SEQ.remaining>0) return (SEQ.running?SEQ.endAt:Date.now()+SEQ.msLeft)+rest(SEQ.curIdx+1);
+    const st=seqToday(SEQ.meta.start); return st?st+rest(0):null;
+  },
+  target(){ return seqToday(SEQ.meta.end)||(SEQ.remaining>0&&SEQ.plan?SEQ.plan.plannedEnd:null); },
+  // Raccourcit les phases qui suivent pour finir à l'heure visée (annulable)
+  catchUpLate(){
+    const end=SEQ.projectedEnd(), tgt=SEQ.target(); if(!end||!tgt) return;
+    const late=Math.round((end-tgt)/60000); if(late<1) return;
+    const from=SEQ.remaining>0?SEQ.curIdx+1:0, rest=SEQ.phases.slice(from);
+    const total=rest.reduce((t,p)=>t+p.duration,0); if(!rest.length||total<=rest.length) return;
+    const before=SEQ.phases.map(p=>[p.id,p.duration]), goal=Math.max(rest.length,total-late);
+    let acc=0;
+    rest.forEach((p,k)=>{ const left=rest.length-k-1; const v=k===rest.length-1?goal-acc:Math.round(p.duration*goal/total); p.duration=Math.max(1,Math.min(v,goal-acc-left)); acc+=p.duration; });
+    SEQ.save(); SEQ.persist(); seqRender(); seqUpdateDisplay();
+    const saved=total-rest.reduce((t,p)=>t+p.duration,0);
+    toast(saved>=late?`Phases suivantes raccourcies de ${saved} min`:`${saved} min regagnées, il manque encore ${late-saved} min`,'Annuler',()=>{
+      const m=new Map(before); SEQ.phases.forEach(p=>{ if(m.has(p.id)) p.duration=m.get(p.id); }); SEQ.save(); SEQ.persist(); seqRender(); seqUpdateDisplay();
+    });
+  },
   removePhase(id){ SEQ.phases=SEQ.phases.filter(p=>p.id!==id); SEQ.save(); seqRender(); },
   edit(i,field,val){
     if(!SEQ.phases[i]) return;
@@ -2189,6 +2305,9 @@ const SEQ = {
   start(){
     if(!SEQ.phases.length) return;
     track('sequence_start',{phases:SEQ.phases.length});
+    const now=Date.now();
+    SEQ.plan={startedAt:now,plannedEnd:now+SEQ.phases.reduce((t,p)=>t+p.duration*60000,0),planned:SEQ.phases.map(p=>({id:p.id,duration:p.duration}))};
+    SEQ.log=[]; SEQ.endedAt=null; seqReport(false);
     SEQ.loadPhase(0);
   },
   loadPhase(i,startAt){
@@ -2197,6 +2316,9 @@ const SEQ = {
   },
   runPhase(i,endAt){
     SEQ.curIdx=i; SEQ.endAt=endAt; SEQ.running=true; SEQ.msLeft=0;
+    // Journal du réel : chaque phase commence quand la précédente s'arrête
+    const t0=Math.min(Date.now(),endAt-SEQ.phases[i].duration*60000);
+    if(!SEQ.log.length||SEQ.log[SEQ.log.length-1].id!==SEQ.phases[i].id) SEQ.log.push({id:SEQ.phases[i].id,name:SEQ.phases[i].name,start:t0});
     SEQ.remaining=Math.max(0,Math.ceil((endAt-Date.now())/1000));
     clearInterval(SEQ.iv); SEQ.iv=setInterval(SEQ.tick,250);
     seqUpdateDisplay(); seqRender();
@@ -2208,7 +2330,7 @@ const SEQ = {
   tick(){
     if(!SEQ.running) return;
     const left=SEQ.endAt-Date.now();
-    if(left>0){ const r=Math.ceil(left/1000); if(r!==SEQ.remaining){ SEQ.remaining=r; seqUpdateDisplay(); } return; }
+    if(left>0){ const r=Math.ceil(left/1000); if(r!==SEQ.remaining){ SEQ.remaining=r; seqUpdateDisplay(); if(r%15===0) seqBudget(); } return; }
     clearInterval(SEQ.iv); beep(SND_PHASE);
     if(!SEQ.catchUp(SEQ.curIdx,SEQ.endAt)) SEQ.end();
   },
@@ -2224,8 +2346,8 @@ const SEQ = {
     SEQ.persist(); WL.sync(); seqUpdateDisplay();
   },
   skip(){ clearInterval(SEQ.iv); beep(SND_PHASE); SEQ.loadPhase(SEQ.curIdx+1); },
-  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; SEQ.msLeft=0; seqRender(); seqUpdateDisplay(); seqBtnSync(false); SEQ.persist(); WL.sync(); },
-  end(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.remaining=0; SEQ.msLeft=0; SEQ.persist(); WL.sync(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='Séquence terminée'; document.getElementById('seq-display').textContent='—'; }
+  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; SEQ.msLeft=0; SEQ.plan=null; SEQ.log=[]; SEQ.endedAt=null; seqReport(false); seqRender(); seqUpdateDisplay(); seqBtnSync(false); SEQ.persist(); WL.sync(); },
+  end(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.remaining=0; SEQ.msLeft=0; SEQ.persist(); WL.sync(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='Séquence terminée'; document.getElementById('seq-display').textContent='—'; SEQ.endedAt=Date.now(); seqReport(true); seqRender(); }
 };
 const SEQ_TEMPLATES = {
   retro: {name:'Rétrospective agile', phases:[['Accueil & météo',5],['Ce qui a bien marché',10],['Ce qui a coincé',10],['Analyse & échanges',15],['Actions à prendre',15],['Clôture & ROTI',5]]},
@@ -2249,27 +2371,144 @@ function seqReset(){ SEQ.reset(); }
 function seqAddPhase(){ SEQ.addPhase(); }
 function seqRender(){
   const el=document.getElementById('seq-phases-list');
-  const totalRow=document.getElementById('seq-total-row');
-  const totalDur=document.getElementById('seq-total-dur');
+  const totalMin=SEQ.phases.reduce((t,p)=>t+(parseInt(p.duration)||0),0);
+  document.getElementById('seq-total-dur').textContent=SEQ.phases.length?'· '+fmtMin(totalMin):'';
+  document.getElementById('seq-clear-btn').hidden=!SEQ.phases.length;
+  const si=document.getElementById('seq-start-at'), ei=document.getElementById('seq-end-at');
+  if(document.activeElement!==si) si.value=SEQ.meta.start;
+  if(document.activeElement!==ei) ei.value=SEQ.meta.end;
+  seqBudget();
   if(!SEQ.phases.length){
-    el.innerHTML=`<div class="empty-state"><div class="es-icon">${ic('repeat')}</div><p>Ajoute des phases pour construire ta séquence</p></div>`;
-    totalRow.style.display='none'; return;
+    el.innerHTML=`<div class="empty-state seq-empty"><div class="es-icon">${ic('repeat')}</div><p>Tape une phase ci-dessous (« Accueil 5 ») ou choisis un démarrage rapide.</p></div>`;
+    return;
   }
-  const totalMin=SEQ.phases.reduce((s,p)=>s+(parseInt(p.duration)||0),0);
-  const h=Math.floor(totalMin/60),m=totalMin%60;
-  totalDur.textContent=h?`${h}h ${m}min`:`${totalMin} min`;
-  totalRow.style.display='flex';
-  el.innerHTML=SEQ.phases.map((p,i)=>`
-    <div class="seq-phase-row${i===SEQ.curIdx&&SEQ.running?' seq-active':i<SEQ.curIdx?' seq-done':''}">
+  const at=seqStartTimes(), live=SEQ.remaining>0, doneIds=new Set(SEQ.endedAt?SEQ.log.map(l=>l.id):[]);
+  el.innerHTML=SEQ.phases.map((p,i)=>{
+    const st=live&&i===SEQ.curIdx?'active':(live&&i<SEQ.curIdx)||doneIds.has(p.id)?'done':'';
+    const open=SEQ.trayId===p.id;
+    return `<div class="seq-phase-row${st?' seq-'+st:''}" data-id="${p.id}">
       ${moveHandle(p.id,i,SEQ.phases.length,'SEQ.move')}
-      <div class="seq-num">${i<SEQ.curIdx?ic('check'):i+1}</div>
-      <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" placeholder="Nom de la phase">
-      <span class="seq-dur"><input class="seq-dur-inp" type="number" min="1" max="999" value="${p.duration}" onchange="SEQ.edit(${i},'duration',this.value)" title="Durée en minutes" aria-label="Durée en minutes"> min</span>
-      <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})" aria-label="Supprimer la phase ${escHtml(p.name)}" title="Supprimer la phase">
-        <svg viewBox="0 0 12 12" fill="none"><path d="M2 2l8 8M10 2L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      </button>
-    </div>`).join('');
+      <div class="seq-num">${st==='done'?ic('check'):i+1}</div>
+      ${at[i]?`<span class="seq-at" title="Horaire de début">${fmtHM(at[i])}</span>`:''}
+      <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" onkeydown="if(event.key==='Enter'){this.blur();document.getElementById('seq-add-inp').focus()}" placeholder="Nom de la phase" aria-label="Nom de la phase ${i+1}">
+      <button type="button" class="seq-dur-btn" onclick="seqTray(${p.id})" aria-expanded="${open}" aria-label="Durée : ${p.duration} minutes. Modifier">${p.duration} min</button>
+      <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})" aria-label="Supprimer la phase ${escHtml(p.name)}" title="Supprimer la phase">${ic('x')}</button>
+      ${open?`<div class="seq-dur-tray" role="group" aria-label="Choisir une durée">${[5,10,15,20,30,45,60].map(m=>`<button type="button" class="${m===p.duration?'sel':''}" aria-pressed="${m===p.duration}" onclick="seqDurSet(${p.id},${m})">${m}</button>`).join('')}<label>Autre <input type="number" min="1" max="999" value="${p.duration}" onkeydown="if(event.key==='Enter')seqDurSet(${p.id},this.value)" onchange="seqDurSet(${p.id},this.value)"> min</label></div>`:''}
+    </div>`;}).join('');
 }
+// Horaire de début de chaque phase (ms) : réel pour ce qui est passé, projeté pour la suite
+function seqStartTimes(){
+  const out=[], P=SEQ.phases;
+  if(SEQ.remaining>0){
+    const logged=new Map(SEQ.log.map(l=>[l.id,l.start]));
+    P.forEach((p,i)=>{ if(i<=SEQ.curIdx) out[i]=logged.get(p.id)||null; });
+    let t=SEQ.running?SEQ.endAt:Date.now()+SEQ.msLeft;
+    for(let i=SEQ.curIdx+1;i<P.length;i++){ out[i]=t; t+=P[i].duration*60000; }
+    return out;
+  }
+  let t=seqToday(SEQ.meta.start); if(!t) return out;
+  P.forEach((p,i)=>{ out[i]=t; t+=p.duration*60000; });
+  return out;
+}
+function seqBudget(){
+  const b=document.getElementById('seq-budget'), c=document.getElementById('seq-catch'); if(!b) return;
+  const end=SEQ.projectedEnd(), tgt=SEQ.target();
+  let txt='', cls='', late=0;
+  if(!SEQ.phases.length) txt='';
+  else if(!end) txt='Indique une heure de début pour voir l\'horaire de chaque phase.';
+  else {
+    txt='Fin prévue à '+fmtHM(end);
+    if(tgt){ late=Math.round((end-tgt)/60000); txt+=late>0?` · ${fmtMin(late)} de trop`:late<0?` · ${fmtMin(-late)} de marge`:' · pile à l\'heure'; cls=late>0?'late':'ok'; }
+  }
+  b.textContent=txt; b.className='seq-budget'+(cls?' '+cls:'');
+  // Rattrapage proposé dès qu'on dépasse l'heure visée et qu'il reste des phases à raccourcir
+  const from=SEQ.remaining>0?SEQ.curIdx+1:0, can=late>0&&SEQ.phases.slice(from).some(p=>p.duration>1);
+  if(c){ c.hidden=!can; if(can) c.innerHTML=`<span>${fmtMin(late)} de retard</span><button class="btn btn-secondary btn-sm" onclick="SEQ.catchUpLate()">Raccourcir la suite pour finir à ${fmtHM(tgt)}</button>`; }
+}
+function seqToday(hm){ if(!/^\d{1,2}:\d{2}$/.test(hm||'')) return null; const [h,m]=hm.split(':').map(Number), d=new Date(); d.setHours(h,m,0,0); return d.getTime(); }
+function fmtHM(ms){ const d=new Date(ms); return pad(d.getHours())+':'+pad(d.getMinutes()); }
+function fmtMin(m){ m=Math.round(m); const h=Math.floor(m/60), r=m%60; return h?(h+' h'+(r?' '+pad(r):'')):m+' min'; }
+function seqTray(id){
+  SEQ.trayId=SEQ.trayId===id?null:id; seqRender();
+  const row=document.querySelector(`.seq-phase-row[data-id="${id}"]`);
+  (row&&(SEQ.trayId?row.querySelector('.seq-dur-tray .sel')||row.querySelector('.seq-dur-tray button'):row.querySelector('.seq-dur-btn')))?.focus();
+}
+function seqDurSet(id,v){
+  const i=SEQ.phases.findIndex(p=>p.id===id); if(i<0) return;
+  SEQ.trayId=null; SEQ.edit(i,'duration',v); seqUpdateDisplay();
+  document.querySelector(`.seq-phase-row[data-id="${id}"] .seq-dur-btn`)?.focus();
+}
+// ── Saisie express : « Météo 10 », « 1h30 Atelier », « 10 min Pause », listes collées ──
+function seqParse(txt){
+  const out=[], H=/(\d+)\s*h\s*(\d{1,2})?/i;
+  String(txt||'').split(/\r?\n|;/).forEach(line=>{
+    const parts=line.split(',');
+    (parts.filter(p=>/\d/.test(p)).length>=2?parts:[line]).forEach(raw=>{
+      let t=raw.replace(/^\s*(?:[-•*·–]|\d+[.)])\s+/,'').trim(); if(!t) return;
+      let dur=null, m;
+      if((m=t.match(/^\(?\s*(\d+\s*h\s*\d{0,2}|\d+\s*(?:min|mn|m|'))\s*\)?\s*[-–:]?\s*(.+)$/i))&&/[a-zà-ÿ]/i.test(m[2])){ dur=m[1]; t=m[2]; }
+      else if((m=t.match(/^(.*?)[\s:–\-(]+(\d+\s*h\s*\d{0,2}|\d+)\s*(?:min|mn|m|')?\s*\)?$/i))&&m[1].trim()){ dur=m[2]; t=m[1]; }
+      if(dur!=null){ const h=String(dur).match(H); dur=h?parseInt(h[1])*60+(parseInt(h[2])||0):parseInt(dur); }
+      t=t.replace(/[\s:–\-(]+$/,'').trim(); if(!t) return;
+      const tool=seqFindTool(t);
+      if(tool){ t=tool.name; if(dur==null) dur=parseInt(tool.dur)||10; }
+      out.push({name:t,duration:dur||10});
+    });
+  });
+  return out;
+}
+function seqNorm(x){ return String(x).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]+/g,' ').trim(); }
+function seqFindTool(name){ const n=seqNorm(name); return n.length>2?TOOLS.find(t=>seqNorm(t.name)===n):null; }
+function seqAddText(txt,at){
+  const list=seqParse(txt); if(!list.length) return [];
+  const made=SEQ.addPhases(list,at);
+  document.querySelector(`.seq-phase-row[data-id="${made[made.length-1].id}"]`)?.scrollIntoView({block:'nearest'});
+  return made;
+}
+function seqAddFromInput(){
+  const inp=document.getElementById('seq-add-inp'); if(!inp.value.trim()){ inp.focus(); return; }
+  seqAddText(inp.value); inp.value=''; inp.focus();
+}
+function seqAddKey(e){ if(e.key==='Enter'){ e.preventDefault(); seqAddFromInput(); } }
+function seqAddPaste(e){
+  const txt=(e.clipboardData||window.clipboardData).getData('text'); if(!/[\n;]/.test(txt.trim())) return;
+  e.preventDefault(); const made=seqAddText(txt); if(!made.length) return;
+  const ids=made.map(p=>p.id);
+  toast(`${made.length} phase${made.length>1?'s':''} ajoutée${made.length>1?'s':''}`,'Annuler',()=>{ SEQ.phases=SEQ.phases.filter(p=>!ids.includes(p.id)); SEQ.save(); seqRender(); seqUpdateDisplay(); });
+}
+function seqClear(){
+  if(!SEQ.phases.length) return;
+  const before=SEQ.phases.slice(); SEQ.reset(); SEQ.phases=[]; SEQ.save(); seqRender(); seqUpdateDisplay();
+  document.getElementById('seq-add-inp').focus();
+  toast('Séquence effacée','Annuler',()=>{ SEQ.phases=before; SEQ.save(); seqRender(); seqUpdateDisplay(); });
+}
+// Phase imprévue : juste après la phase en cours, ou tout de suite
+function seqInsert(when){
+  const inp=document.getElementById('seq-ins-inp'); const list=seqParse(inp.value.trim()||'Imprévu 5'); if(!list.length) return;
+  const started=SEQ.remaining>0, at=started?SEQ.curIdx+1:0;
+  SEQ.addPhases(list,at);
+  inp.value=''; document.getElementById('seq-insert').open=false;
+  if(when==='now'&&started){ clearInterval(SEQ.iv); beep(SND_PHASE); SEQ.loadPhase(at); }
+  toast(when==='now'&&started?`« ${list[0].name} » commence maintenant`:started?`« ${list[0].name} » ajoutée après la phase en cours`:`« ${list[0].name} » ajoutée en tête`);
+}
+function seqSuggest(){
+  const extra=['Accueil','Tour de table','Météo','Pause','Pause déjeuner','Icebreaker','Cadre et objectifs','Restitution','Clôture'];
+  document.getElementById('seq-sugg').innerHTML=extra.map(n=>`<option value="${n}">`).join('')+TOOLS.map(t=>`<option value="${escHtml(t.name)}" label="${escHtml(t.dur)}">`).join('');
+}
+// Bilan prévu / réel en fin de séquence
+function seqReport(show){
+  const el=document.getElementById('seq-report'); if(!el) return;
+  if(!show||!SEQ.plan||!SEQ.log.length){ el.hidden=true; el.innerHTML=''; return; }
+  const endT=SEQ.endedAt||Date.now(), planned=new Map(SEQ.plan.planned.map(p=>[p.id,p.duration]));
+  const rows=SEQ.log.map((l,k)=>({name:l.name,planned:planned.has(l.id)?planned.get(l.id):null,real:Math.max(0,Math.round(((SEQ.log[k+1]?SEQ.log[k+1].start:endT)-l.start)/60000))}));
+  const diff=Math.round((endT-SEQ.plan.plannedEnd)/60000);
+  SEQ.reportText=`Séquence du ${new Date(SEQ.plan.startedAt).toLocaleDateString('fr-FR')} : ${fmtHM(SEQ.plan.startedAt)} à ${fmtHM(endT)} (fin prévue ${fmtHM(SEQ.plan.plannedEnd)})\n`+rows.map(r=>`- ${r.name} : ${r.real} min${r.planned!=null?' (prévu '+r.planned+')':' (imprévu)'}`).join('\n');
+  el.innerHTML=`<div class="seq-report-h">Bilan : fin à ${fmtHM(endT)}, ${diff>0?fmtMin(diff)+' de retard':diff<0?fmtMin(-diff)+' d\'avance':'pile à l\'heure'}</div>
+    <table><thead><tr><th scope="col">Phase</th><th scope="col">Prévu</th><th scope="col">Réel</th></tr></thead><tbody>${rows.map(r=>`<tr><td>${escHtml(r.name)}</td><td>${r.planned!=null?r.planned+' min':'imprévu'}</td><td class="${r.planned!=null&&r.real>r.planned?'over':''}">${r.real} min</td></tr>`).join('')}</tbody></table>
+    <button class="btn btn-secondary btn-sm" onclick="seqCopyReport(this)">${ic('link')} Copier le bilan</button>`;
+  el.hidden=false;
+}
+function seqCopyReport(b){ const done=()=>{ b.innerHTML=ic('check')+' Copié'; setTimeout(()=>b.innerHTML=ic('link')+' Copier le bilan',2000); }; navigator.clipboard?navigator.clipboard.writeText(SEQ.reportText||'').then(done,()=>{}):done(); }
 function seqUpdateDisplay(){
   const ph=SEQ.phases[SEQ.curIdx];
   document.getElementById('seq-current-name').textContent=ph?ph.name:'—';
@@ -2287,7 +2526,8 @@ function seqUpdateDisplay(){
     both('proj-s-kicker',SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'Séquence');
     both('proj-s-name',ph?ph.name:'—');
     both('proj-s-time',timeStr);
-    both('proj-s-next',next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':''));
+    const pe=SEQ.remaining>0?SEQ.projectedEnd():null;
+    both('proj-s-next',(next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':''))+(pe?` · fin prévue ${fmtHM(pe)}`:''));
     tideSet(document.getElementById('proj-sequence'),prog);
     document.getElementById('proj-s-toggle').innerHTML=SEQ.running?ic('pause')+' Pause':SEQ.remaining>0?ic('play')+' Reprendre':ic('play')+' Lancer';
     // Frise du déroulé : chaque phase a une largeur proportionnelle à sa durée
@@ -3079,6 +3319,7 @@ appReady = true;
 document.querySelectorAll('.home-tool-icon[data-icon]').forEach(i=>{ const svg=document.querySelector(`.nav-item[data-panel="${i.dataset.icon}"] svg`); if(svg) i.innerHTML=svg.outerHTML; });
 sortable(document.getElementById('planner-phases'),'.planner-phase-row',(a,b)=>PL.moveTo(a,b));
 sortable(document.getElementById('seq-phases-list'),'.seq-phase-row',(a,b)=>SEQ.moveTo(a,b));
+seqSuggest();
 const tLive = T.restore(), sLive = SEQ.restore();
 trackReady = true;
 miniSync();
