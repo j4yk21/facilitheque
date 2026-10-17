@@ -36,9 +36,15 @@ img,svg{display:block;max-width:100%}
 @media(max-width:520px){.top-nav{display:none}.brand{font-size:1.08rem}}
 
 /* ── Boutons ── */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 22px;border-radius:40px;font-weight:600;font-size:.92rem;text-decoration:none;border:1.5px solid transparent;transition:transform var(--tr),background var(--tr),border-color var(--tr),box-shadow var(--tr);white-space:nowrap}
-.btn-primary{background:var(--terra-d);color:#fff;box-shadow:0 6px 20px color-mix(in srgb,var(--terra) 28%,transparent)}
-.btn-primary:hover{background:color-mix(in srgb,var(--terra-d) 85%,#000);transform:translateY(-1px)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:12px 22px;border-radius:18px;font-weight:500;font-size:.92rem;text-decoration:none;border:1.5px solid transparent;transition:transform var(--tr),background var(--tr),border-color var(--tr),box-shadow var(--tr);white-space:nowrap}
+.btn-primary{background:var(--ink);color:var(--cream);border-color:var(--ink)}
+.site-top .btn-primary,.side-card .btn-primary,.band .btn-primary{background:#EEF2F7;color:var(--night);border-color:#EEF2F7}
+@media(hover:hover) and (pointer:fine){.btn-primary:hover{opacity:.91}}
+/* Pression : léger retrait, relâche sur le ressort (button d'Arc) */
+.btn,.chip{transition:background-color .16s cubic-bezier(.22,1,.36,1),border-color .16s cubic-bezier(.22,1,.36,1),color .16s cubic-bezier(.22,1,.36,1),opacity .16s cubic-bezier(.22,1,.36,1),transform .58s var(--ease-spring,cubic-bezier(.22,1,.36,1))}
+.btn:active,.chip:active{transform:scale(.97);transition-duration:.12s}
+@supports (transition-timing-function:linear(0,1)){:root{--ease-spring:linear(0,0.032,0.106,0.193,0.289,0.393,0.484,0.568,0.65,0.715,0.771,0.821,0.86,0.892,0.92,0.94,0.956,0.97,0.979,0.986,0.992,0.996,0.998,1,1.001,1.002,1.002,1.002,1.002,1.002,1.002,1.002,1.001,1.001,1.001,1.001,1)}}
+@media(prefers-reduced-motion:reduce){.btn,.chip{transition:none}.btn:active,.chip:active{transform:none}}
 .btn-ghost{border-color:var(--cream-mid);color:var(--ink-s);background:var(--card)}
 .btn-ghost:hover{border-color:var(--ink-s)}
 .site-top .btn{padding:9px 18px;font-size:.84rem}
@@ -52,14 +58,14 @@ img,svg{display:block;max-width:100%}
 /* ── Héros ── */
 .hero{padding:30px 0 40px;position:relative}
 .hero::before{content:'';position:absolute;inset:-120px -10vw auto auto;width:520px;height:520px;background:radial-gradient(circle,rgba(217,71,42,.14),transparent 62%);pointer-events:none;z-index:-1}
-.kicker{display:inline-flex;align-items:center;gap:8px;font-size:.9rem;font-weight:600;color:var(--terra-ink)}
+.kicker{display:inline-flex;align-items:center;gap:8px;font-size:.9rem;font-weight:500;color:var(--terra-ink)}
 .kicker::before{content:'';width:22px;height:2px;background:currentColor}
-.hero h1{font-size:clamp(2.2rem,5.2vw,3.7rem);font-weight:700;margin:14px 0 16px;max-width:17ch}
+.hero h1{font-size:clamp(2.2rem,5.2vw,3.7rem);font-weight:500;margin:14px 0 16px;max-width:17ch}
 .lede{font-size:clamp(1.02rem,1.6vw,1.2rem);color:var(--ink-s);max-width:62ch;font-weight:400}
 .hero-cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
 
 /* ── Badges de phase ── */
-.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.04em;text-decoration:none}
+.badge{display:inline-flex;align-items:center;padding:4px 11px;border-radius:20px;font-size:.72rem;font-weight:500;letter-spacing:.04em;text-decoration:none}
 .ph-avant{background:color-mix(in srgb,var(--blue) 14%,transparent);color:color-mix(in srgb,var(--blue) 55%,var(--ink))}
 .ph-ouverture{background:color-mix(in srgb,var(--sage) 14%,transparent);color:color-mix(in srgb,var(--sage) 55%,var(--ink))}
 .ph-production{background:color-mix(in srgb,var(--terra) 13%,transparent);color:color-mix(in srgb,var(--terra) 55%,var(--ink))}
@@ -83,7 +89,7 @@ img,svg{display:block;max-width:100%}
 .steps li:last-child{border-bottom:1px solid var(--line)}
 .steps li::before{content:counter(s,decimal-leading-zero);font-family:var(--font-display);font-weight:500;font-size:1.5rem;line-height:1.1;color:var(--terra-ink)}
 .tip{position:relative;margin-top:44px;padding:28px 30px 28px 34px;background:linear-gradient(135deg,rgba(107,143,113,.12),rgba(107,143,113,.05));border-radius:var(--r);border-left:4px solid var(--sage)}
-.tip h2{font-size:.9rem;font-family:'DM Sans',sans-serif;font-weight:600;letter-spacing:0;color:color-mix(in srgb,var(--sage) 55%,var(--ink));margin-bottom:10px}
+.tip h2{font-size:.9rem;font-family:'DM Sans',sans-serif;font-weight:500;letter-spacing:0;color:color-mix(in srgb,var(--sage) 55%,var(--ink));margin-bottom:10px}
 .tip p{font-family:var(--font-display);font-size:1.18rem;line-height:1.5;color:var(--ink)}
 .tags{display:flex;flex-wrap:wrap;gap:8px}
 .tag{padding:5px 12px;border:1px solid var(--cream-mid);border-radius:20px;font-size:.8rem;color:var(--ink-s);background:var(--card)}
@@ -107,7 +113,7 @@ img,svg{display:block;max-width:100%}
 .card[data-phase=ouverture]::before{background:var(--sage)}.card[data-phase=cloture]::before{background:var(--gold)}.card[data-phase=avant]::before{background:var(--blue)}.card[data-phase=apres]::before{background:var(--red)}
 .card:hover{transform:translateY(-4px);box-shadow:var(--sh2);border-color:transparent}
 .card:hover::before{transform:scaleX(1)}
-.card h3{font-size:1.18rem;font-weight:600}
+.card h3{font-size:1.18rem;font-weight:500}
 .card-meta{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:.78rem;color:var(--gray)}
 .card p{font-size:.88rem;color:var(--ink-s);line-height:1.55}
 .card .badge{align-self:flex-start}
@@ -118,7 +124,7 @@ img,svg{display:block;max-width:100%}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
 .chip{padding:8px 16px;border-radius:40px;border:1.5px solid var(--cream-mid);background:var(--card);font-size:.86rem;font-weight:500;text-decoration:none;color:var(--ink-s);transition:all var(--tr)}
 .chip:hover,.chip[aria-current=page]{border-color:var(--terra);color:var(--terra-ink)}
-.chip[aria-current=page]{background:var(--terra-d);border-color:var(--terra-d);color:#fff}
+.chip[aria-current=page]{background:color-mix(in srgb,var(--terra) 11%,var(--card));border-color:color-mix(in srgb,var(--terra) 42%,var(--line));color:var(--ink)}
 
 /* ── Pages outil live ── */
 .feature-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(240px,100%),1fr));gap:16px}
@@ -130,7 +136,7 @@ img,svg{display:block;max-width:100%}
 .howto li::before{content:counter(h);display:grid;place-items:center;width:34px;height:34px;margin-bottom:14px;border-radius:50%;background:var(--terra);color:#fff;font-family:var(--font-display);font-weight:500}
 .faq{display:flex;flex-direction:column;gap:10px;max-width:780px}
 .faq details{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:4px 22px}
-.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:16px 0;font-weight:600;font-size:1rem}
+.faq summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:16px 0;font-weight:500;font-size:1rem}
 .faq summary::-webkit-details-marker{display:none}
 .faq summary::after{content:'+';font-family:var(--font-display);font-size:1.4rem;line-height:1;color:var(--terra-ink);transition:transform var(--tr)}
 .faq details[open] summary::after{transform:rotate(45deg)}
@@ -143,7 +149,7 @@ img,svg{display:block;max-width:100%}
 /* ── Pied de page ── */
 .site-foot{background:var(--night);color:rgba(238,242,247,.8);padding:56px 0 34px;font-size:.88rem}
 .foot-grid{display:grid;grid-template-columns:1.3fr repeat(3,1fr);gap:32px}
-.site-foot h2{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:600;color:rgba(238,242,247,.72);margin-bottom:12px}
+.site-foot h2{font-family:'DM Sans',sans-serif;font-size:.85rem;font-weight:500;color:rgba(238,242,247,.72);margin-bottom:12px}
 .site-foot ul{list-style:none;display:flex;flex-direction:column;gap:7px}
 .site-foot a{text-decoration:none}.site-foot a:hover{color:#EEF2F7}
 .site-foot .brand{margin-bottom:12px}

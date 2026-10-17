@@ -35,7 +35,10 @@ main{flex:1;display:flex;flex-direction:column;gap:20px;padding:24px 0 16px}
 .bar span{display:block;height:100%;width:0;background:var(--accent);transition:width .5s linear}
 .acts{display:grid;gap:10px;margin-top:auto}
 .btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:0 18px;border-radius:var(--r);border:1px solid var(--line);background:var(--surface);font-weight:500;font-size:1rem}
-.btn:active{transform:scale(.98);background:var(--surface-2)}
+.btn{transition:background-color .16s cubic-bezier(.22,1,.36,1),transform .58s var(--ease-spring,cubic-bezier(.22,1,.36,1))}
+.btn:active{transform:scale(.97);background:var(--surface-2);transition-duration:.12s}
+@supports (transition-timing-function:linear(0,1)){:root{--ease-spring:linear(0,0.032,0.106,0.193,0.289,0.393,0.484,0.568,0.65,0.715,0.771,0.821,0.86,0.892,0.92,0.94,0.956,0.97,0.979,0.986,0.992,0.996,0.998,1,1.001,1.002,1.002,1.002,1.002,1.002,1.002,1.002,1.001,1.001,1.001,1.001,1)}}
+@media(prefers-reduced-motion:reduce){.btn{transition:none}.btn:active{transform:none}}
 .btn.main{min-height:84px;font-size:1.2rem;background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .btn.main:active{opacity:.85}
 .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
