@@ -158,8 +158,8 @@ function render(){
     timeEl.classList.toggle('low',st.total>0&&st.rem/st.total<=.1);
     $('bar-fill').style.width=(st.total?(1-st.rem/st.total)*100:0)+'%';
   } else if(t==='sequence'){
-    title=st.count?st.label:'Aucune phase'; timeEl.textContent=fmt(st.rem);
-    next=st.count?`Phase ${st.idx+1} sur ${st.count}`+(st.next?` · ensuite : ${st.next}`:'')+(st.end?` · fin prévue ${st.end}`+(st.late>0?` (+${st.late} min)`:''):''):'Prépare la séquence sur l\'ordinateur';
+    title=st.done?'Séquence terminée':st.count?st.label:'Aucune phase'; timeEl.textContent=fmt(st.rem);
+    next=st.done?'Bravo, c’est fini.':st.count?(st.tag?st.tag+' · ':'')+`Phase ${st.idx+1} sur ${st.count}`+(st.next?` · ensuite : ${st.next}`:'')+(st.end?` · fin prévue ${st.end}`+(st.late>0?` (+${st.late} min)`:''):''):'Prépare la séquence sur l\'ordinateur';
     timeEl.classList.remove('low');
   } else if(t==='roulette'){
     title=st.last?st.last:'Prêt à tirer au sort';

@@ -341,6 +341,46 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .seq-phase-name{text-align:center;font-size:.95rem;color:var(--gray);margin-bottom:8px}
 .seq-progress-bar{height:6px;background:var(--cream-dark);border-radius:3px;overflow:hidden;margin:18px 0 12px}
 .seq-progress-fill{height:100%;background:var(--terra);border-radius:3px;transition:width .5s}
+
+/* Formats de travail */
+.seq-meta{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.seq-tag{--tg:var(--ink-s);display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:0 10px;border-radius:999px;border:1px solid color-mix(in srgb,var(--tg) 30%,transparent);background:color-mix(in srgb,var(--tg) 12%,var(--card));color:color-mix(in srgb,var(--tg) 62%,var(--ink));font:500 .8125rem 'DM Sans',sans-serif;white-space:nowrap}
+.seq-tag .ic{width:1em;height:1em}
+.seq-tag[data-tag=pleniere]{--tg:var(--blue)}.seq-tag[data-tag=sg]{--tg:var(--sage)}.seq-tag[data-tag=binomes]{--tg:var(--gold)}.seq-tag[data-tag=debout]{--tg:var(--red)}.seq-tag[data-tag=pause]{--tg:var(--terra)}
+button.seq-tag{cursor:pointer}
+.seq-tag-row .seq-tag[aria-pressed=false]{background:var(--card);border-color:var(--border);color:var(--text-secondary)}
+.seq-tag-row .seq-tag[aria-pressed=true]{border-color:color-mix(in srgb,var(--tg) 60%,transparent)}
+.seq-tag-add{min-height:30px;padding:0 10px;border-radius:999px;border:1px dashed var(--border-strong);background:none;color:var(--gray);font:500 .8125rem 'DM Sans',sans-serif}
+.seq-tag-row{flex:1 1 100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:6px}
+.seq-tag-row>span{font-size:.8125rem;color:var(--gray);margin-right:4px}
+.seq-hint{font-size:.8125rem;color:var(--gray);margin:-8px 0 18px;line-height:1.6}
+.seq-hint kbd{font:500 .78rem 'DM Sans',sans-serif;padding:1px 6px;border-radius:6px;background:var(--surface-muted);color:var(--ink-s);border:1px solid var(--border)}
+/* Fin de séquence */
+.seq-card{position:relative;overflow:hidden}
+.seq-card.finished :is(#seq-current-name,#seq-display,.seq-progress-bar,#seq-progress-label,.seq-adjust,.seq-catch,.seq-insert){display:none}
+.seq-fin{display:flex;flex-direction:column;align-items:center;gap:8px;padding:4px 0 8px}
+.seq-fin[hidden]{display:none}
+.seq-fin .fin-check{width:72px;height:72px}
+.seq-fin-t{font:500 1.6rem/1.2 var(--font-display);color:var(--ink)}
+.seq-fin-s{font-size:.9rem;color:var(--gray);max-width:32ch}
+.fin-check{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.fin-check circle{stroke:var(--sage);stroke-width:3;stroke-dasharray:151;stroke-dashoffset:151;animation:finDraw .7s cubic-bezier(.65,0,.35,1) forwards}
+.fin-check path{stroke:var(--sage);stroke-width:4;stroke-dasharray:36;stroke-dashoffset:36;animation:finDraw .45s .6s cubic-bezier(.65,0,.35,1) forwards}
+@keyframes finDraw{to{stroke-dashoffset:0}}
+.cf-layer{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:5}
+.cf-layer i{position:absolute;display:block}
+.pj-finish{position:absolute;inset:0;z-index:4;display:grid;place-items:center;padding:24px;background:var(--p-bg);color:var(--p-ink);text-align:center;animation:pjFinIn .6s ease both}
+.pj-finish[hidden]{display:none}
+.pj-finish-in{display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2.4vh,28px)}
+.pj-finish .fin-check{width:clamp(96px,14vh,170px);height:clamp(96px,14vh,170px)}
+.pj-finish .fin-check :is(circle,path){stroke:var(--p-accent)}
+.pj-finish-t{font:500 clamp(44px,8vw,150px)/1 var(--font-display);letter-spacing:-.03em;animation:pjFinUp .7s .5s cubic-bezier(.2,.8,.2,1) both}
+.pj-finish-s{font-size:clamp(16px,1.8vw,30px);color:var(--p-muted);max-width:40ch;animation:pjFinUp .7s .7s cubic-bezier(.2,.8,.2,1) both}
+.pj-finish-acts{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:clamp(8px,2vh,24px);animation:pjFinUp .7s .9s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pjFinIn{from{opacity:0}}
+@keyframes pjFinUp{from{opacity:0;transform:translateY(24px)}}
+#proj-sequence.finished>.pj-controls,#proj-sequence.finished>.pj-layer,#proj-sequence.finished::before{visibility:hidden}
+@media(prefers-reduced-motion:reduce){.fin-check :is(circle,path){animation:none;stroke-dashoffset:0}.pj-finish,.pj-finish-t,.pj-finish-s,.pj-finish-acts{animation:none}}
 /* Séquence : horaires, saisie express, durées en un tap, ajustements en direct */
 .seq-clock{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin-bottom:18px}
 .seq-time-f{display:flex;flex-direction:column;gap:6px;font-size:.8125rem;color:var(--ink-s);font-weight:500}
@@ -349,7 +389,14 @@ input,textarea,select{font-family:'DM Sans',sans-serif;color:var(--ink)}
 .seq-budget:empty{display:none}
 .seq-budget.ok{background:color-mix(in srgb,var(--sage) 14%,var(--card));color:color-mix(in srgb,var(--sage) 55%,var(--ink))}
 .seq-budget.late{background:color-mix(in srgb,var(--terra) 12%,var(--card));color:color-mix(in srgb,var(--terra) 60%,var(--ink));font-weight:500}
-.seq-phase-row{flex-wrap:wrap}
+.seq-phase-row{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto auto;grid-template-areas:"mv num name at del" "mv num dur dur del" "tray tray tray tray tray";column-gap:10px;row-gap:6px;align-items:center}
+.seq-phase-row .phase-move{grid-area:mv}
+.seq-phase-row .seq-num{grid-area:num}
+.seq-phase-row .seq-name-inp{grid-area:name;width:auto}
+.seq-phase-row .seq-at{grid-area:at}
+.seq-phase-row .seq-meta{grid-area:dur;justify-self:start}
+.seq-phase-row .btn-icon{grid-area:del}
+.seq-phase-row .seq-dur-tray{grid-area:tray;padding-left:0}
 .seq-at{font-variant-numeric:tabular-nums;font-size:.8125rem;color:var(--gray);min-width:3.2em}
 .seq-dur-btn{min-height:36px;min-width:72px;padding:0 12px;border:1px solid var(--border-strong);border-radius:12px;background:var(--surface);color:var(--foreground);font:500 .875rem 'DM Sans',sans-serif;font-variant-numeric:tabular-nums;white-space:nowrap}
 .seq-dur-btn[aria-expanded=true]{border-color:var(--foreground)}
@@ -699,14 +746,6 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
   .timer-ring-wrap,.timer-ring-wrap svg{width:min(280px,100%);height:auto;aspect-ratio:1}
   .chrono-display{font-size:3.2rem}
   /* Séquence : nom sur toute la largeur, durée dessous */
-  .seq-phase-row{display:grid;grid-template-columns:auto auto auto minmax(0,1fr) auto;grid-template-areas:"mv num name name del" "mv num dur at del" "tray tray tray tray tray";column-gap:8px;row-gap:4px;padding:8px 10px 8px 6px}
-  .seq-phase-row .phase-move{grid-area:mv}
-  .seq-num{grid-area:num}
-  .seq-name-inp{grid-area:name;width:auto}
-  .seq-phase-row .seq-at{grid-area:at;align-self:center}
-  .seq-phase-row .seq-dur-btn{grid-area:dur;justify-self:start}
-  .seq-phase-row .btn-icon{grid-area:del}
-  .seq-dur-tray{grid-area:tray}
   .seq-display{font-size:3rem}
   .lib-seg{flex:1 1 100%}
   .lib-seg button{flex:1;padding:0 6px}
@@ -743,6 +782,12 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
 <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" /></symbol>
 <symbol id="i-pause" viewBox="0 0 24 24"><rect x="14" y="4" width="4" height="16" rx="1" /><rect x="6" y="4" width="4" height="16" rx="1" /></symbol>
 <symbol id="i-plus" viewBox="0 0 24 24"><path d="M5 12h14" /><path d="M12 5v14" /></symbol>
+<symbol id="i-presentation" viewBox="0 0 24 24"><path d="M2 3h20" /><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3" /><path d="m7 21 5-5 5 5" /></symbol>
+<symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></symbol>
+<symbol id="i-handshake" viewBox="0 0 24 24"><path d="m11 17 2 2a1 1 0 1 0 3-3" /><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4" /><path d="m21 3 1 11h-2" /><path d="M3 3 2 14l6.5 6.5a1 1 0 1 0 3-3" /><path d="M3 4h8" /></symbol>
+<symbol id="i-user" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></symbol>
+<symbol id="i-coffee" viewBox="0 0 24 24"><path d="M10 2v2" /><path d="M14 2v2" /><path d="M16 8a1 1 0 0 1 1 1v8a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V9a1 1 0 0 1 1-1h14a4 4 0 1 1 0 8h-1" /><path d="M6 2v2" /></symbol>
+<symbol id="i-party-popper" viewBox="0 0 24 24"><path d="M5.8 11.3 2 22l10.7-3.79" /><path d="M4 3h.01" /><path d="M22 8h.01" /><path d="M15 2h.01" /><path d="M22 20h.01" /><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10" /><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11c-.11.7-.72 1.22-1.43 1.22H17" /><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7" /><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z" /></symbol>
 <symbol id="i-play" viewBox="0 0 24 24"><polygon points="6 3 20 12 6 21 6 3" /></symbol>
 <symbol id="i-repeat" viewBox="0 0 24 24"><path d="m17 2 4 4-4 4" /><path d="M3 11v-1a4 4 0 0 1 4-4h14" /><path d="m7 22-4-4 4-4" /><path d="M21 13v1a4 4 0 0 1-4 4H3" /></symbol>
 <symbol id="i-rotate-ccw" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path d="M3 3v5h5" /></symbol>
@@ -816,6 +861,14 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
     <div class="pj-controls proj-ui">
       <button class="pj-btn" id="proj-s-toggle" onclick="seqToggle()"><svg class="ic" aria-hidden="true"><use href="#i-pause"/></svg> Pause</button>
       <button class="pj-btn" onclick="seqSkip()">Passer <svg class="ic" aria-hidden="true"><use href="#i-skip-forward"/></svg></button>
+    </div>
+    <div class="pj-finish" id="proj-s-finish" hidden>
+      <div class="pj-finish-in">
+        <svg class="fin-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg>
+        <div class="pj-finish-t">C’est terminé</div>
+        <div class="pj-finish-s" id="proj-s-finish-s"></div>
+        <div class="pj-finish-acts"><button class="pj-btn" onclick="seqReset()">Recommencer</button><button class="pj-btn pj-btn-main" onclick="projClose()">Quitter la projection</button></div>
+      </div>
     </div>
   </div>
   <div id="proj-parole" class="proj-pane">
@@ -1208,18 +1261,22 @@ body.is-sorting,body.is-sorting *{cursor:grabbing!important;user-select:none}
           </div>
           <datalist id="seq-sugg"></datalist>
           <div class="seq-blocks" role="group" aria-label="Blocs rapides">
-            <button class="pill" onclick="seqAddText('Accueil 5')">Accueil · 5</button>
-            <button class="pill" onclick="seqAddText('Tour de table 10')">Tour de table · 10</button>
-            <button class="pill" onclick="seqAddText('Pause 10')">Pause · 10</button>
-            <button class="pill" onclick="seqAddText('Pause déjeuner 60')">Déjeuner · 60</button>
-            <button class="pill" onclick="seqAddText('Clôture 5')">Clôture · 5</button>
+            <button class="pill" onclick="seqAddText('Accueil 5 #plénière')">Accueil · 5</button>
+            <button class="pill" onclick="seqAddText('Tour de table 10 #plénière')">Tour de table · 10</button>
+            <button class="pill" onclick="seqAddText('Travail en sous-groupes 20 #sg')">Sous-groupes · 20</button>
+            <button class="pill" onclick="seqAddText('Restitution 15 #plénière')">Restitution · 15</button>
+            <button class="pill" onclick="seqAddText('Pause 10 #pause')">Pause · 10</button>
+            <button class="pill" onclick="seqAddText('Pause déjeuner 60 #pause')">Déjeuner · 60</button>
+            <button class="pill" onclick="seqAddText('Clôture 5 #plénière')">Clôture · 5</button>
           </div>
+          <p class="seq-hint">Astuce : ajoute le format en tapant <kbd>#plénière</kbd>, <kbd>#sg</kbd> (sous-groupes), <kbd>#binômes</kbd>, <kbd>#solo</kbd>, <kbd>#debout</kbd> ou <kbd>#pause</kbd>. Exemple : « Brainstorm 20 #sg ».</p>
           <div class="flex-between mt16" style="flex-wrap:wrap;gap:8px">
             <button class="btn btn-primary" id="seq-start-btn" onclick="seqStart()"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Lancer la séquence</button>
             <button class="btn btn-ghost btn-sm" onclick="seqReset()"><svg class="ic" aria-hidden="true"><use href="#i-rotate-ccw"/></svg> Remettre à zéro</button>
           </div>
         </div>
-        <div class="card" style="text-align:center;padding:32px 28px">
+        <div class="card seq-card" id="seq-card" style="text-align:center;padding:32px 28px">
+          <div class="seq-fin" id="seq-fin" hidden><svg class="fin-check" viewBox="0 0 52 52" aria-hidden="true"><circle cx="26" cy="26" r="24"/><path d="M15 27l7 7 15-16"/></svg><div class="seq-fin-t">Séquence terminée</div><div class="seq-fin-s" id="seq-fin-s"></div></div>
           <div class="seq-phase-name" id="seq-current-name">—</div>
           <div class="seq-display" id="seq-display">00:00</div>
           <div class="seq-progress-bar"><div class="seq-progress-fill" id="seq-prog-fill" style="width:0%"></div></div>
@@ -1910,7 +1967,7 @@ const RC={
       const i=SEQ.curIdx, ph=SEQ.phases[i], nx=SEQ.phases[i+1];
       const started=SEQ.running||SEQ.remaining>0;
       const pe=SEQ.projectedEnd(), tg=SEQ.target();
-      Object.assign(st,{label:ph?ph.name:'',rem:started?SEQ.remaining:(ph?ph.duration*60:0),running:SEQ.running,idx:i,count:SEQ.phases.length,next:nx?nx.name:'',end:pe?fmtHM(pe):'',late:pe&&tg?Math.round((pe-tg)/60000):0});
+      Object.assign(st,{label:ph?ph.name:'',rem:started?SEQ.remaining:(ph?ph.duration*60:0),running:SEQ.running,idx:i,count:SEQ.phases.length,next:nx?nx.name:'',tag:ph&&SEQ_TAGS[ph.tag]?SEQ_TAGS[ph.tag].say:'',done:!!SEQ.endedAt&&!started,end:pe?fmtHM(pe):'',late:pe&&tg?Math.round((pe-tg)/60000):0});
     }
     else if(tool==='roulette'){ Object.assign(st,{count:RL.names.length,last:RL.history[0]||''}); }
     else if(tool==='parole'){ Object.assign(st,{parts:PA.parts.map(p=>({name:p.name,time:p.time,active:!!p.active})),total:PA.total()}); }
@@ -2194,11 +2251,11 @@ function fmtSec(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
 const SEQ = {
   phases:[], curIdx:0, remaining:0, msLeft:0, endAt:0, running:false, iv:null,
   meta:{start:'',end:''}, plan:null, log:[], trayId:null, endedAt:null,
-  save(){ try{localStorage.setItem('fk-seq',JSON.stringify(SEQ.phases.map(p=>({id:p.id,name:p.name,duration:p.duration}))));}catch(e){} },
+  save(){ try{localStorage.setItem('fk-seq',JSON.stringify(SEQ.phases.map(p=>({id:p.id,name:p.name,duration:p.duration,tag:p.tag||''}))));}catch(e){} },
   load(){
     try{
       const s=JSON.parse(localStorage.getItem('fk-seq')||'null');
-      if(Array.isArray(s)) SEQ.phases=s.map((p,i)=>({id:p.id||Date.now()+i,name:String(p.name||''),duration:Math.max(1,parseInt(p.duration)||1)}));
+      if(Array.isArray(s)) SEQ.phases=s.map((p,i)=>({id:p.id||Date.now()+i,name:String(p.name||''),duration:Math.max(1,parseInt(p.duration)||1),tag:SEQ_TAGS[p.tag]?p.tag:''}));
     }catch(e){}
     try{ const m=JSON.parse(localStorage.getItem('fk-seq-meta')||'null'); if(m) SEQ.meta={start:String(m.start||''),end:String(m.end||'')}; }catch(e){}
   },
@@ -2238,7 +2295,7 @@ const SEQ = {
   addPhase(){ SEQ.addPhases([{name:'Phase '+(SEQ.phases.length+1),duration:10}]); },
   // Ajoute des phases à la fin (ou à la position at) ; renvoie les phases créées
   addPhases(list,at){
-    const base=Date.now(), made=list.map((p,i)=>({id:base+i,name:p.name,duration:Math.max(1,Math.min(999,p.duration|0))}));
+    const base=Date.now(), made=list.map((p,i)=>({id:base+i,name:p.name,duration:Math.max(1,Math.min(999,p.duration|0)),tag:SEQ_TAGS[p.tag]?p.tag:''}));
     const pos=at==null?SEQ.phases.length:at;
     SEQ.phases.splice(pos,0,...made);
     if(SEQ.remaining>0&&pos<=SEQ.curIdx) SEQ.curIdx+=made.length;
@@ -2307,7 +2364,7 @@ const SEQ = {
     track('sequence_start',{phases:SEQ.phases.length});
     const now=Date.now();
     SEQ.plan={startedAt:now,plannedEnd:now+SEQ.phases.reduce((t,p)=>t+p.duration*60000,0),planned:SEQ.phases.map(p=>({id:p.id,duration:p.duration}))};
-    SEQ.log=[]; SEQ.endedAt=null; seqReport(false);
+    SEQ.log=[]; SEQ.endedAt=null; seqReport(false); seqFinish(false);
     SEQ.loadPhase(0);
   },
   loadPhase(i,startAt){
@@ -2346,20 +2403,20 @@ const SEQ = {
     SEQ.persist(); WL.sync(); seqUpdateDisplay();
   },
   skip(){ clearInterval(SEQ.iv); beep(SND_PHASE); SEQ.loadPhase(SEQ.curIdx+1); },
-  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; SEQ.msLeft=0; SEQ.plan=null; SEQ.log=[]; SEQ.endedAt=null; seqReport(false); seqRender(); seqUpdateDisplay(); seqBtnSync(false); SEQ.persist(); WL.sync(); },
-  end(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.remaining=0; SEQ.msLeft=0; SEQ.persist(); WL.sync(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='Séquence terminée'; document.getElementById('seq-display').textContent='—'; SEQ.endedAt=Date.now(); seqReport(true); seqRender(); }
+  reset(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.curIdx=0; SEQ.remaining=0; SEQ.msLeft=0; SEQ.plan=null; SEQ.log=[]; SEQ.endedAt=null; seqReport(false); seqFinish(false); seqRender(); seqUpdateDisplay(); seqBtnSync(false); SEQ.persist(); WL.sync(); },
+  end(){ clearInterval(SEQ.iv); SEQ.running=false; SEQ.remaining=0; SEQ.msLeft=0; SEQ.persist(); WL.sync(); beep([[1047,0,.3],[1319,.25,.3],[1568,.5,.5]]); document.getElementById('seq-current-name').textContent='Séquence terminée'; document.getElementById('seq-display').textContent='—'; SEQ.endedAt=Date.now(); seqBtnSync(false); seqReport(true); seqRender(); seqFinish(true); if(projTool==='sequence') seqUpdateDisplay(); }
 };
 const SEQ_TEMPLATES = {
-  retro: {name:'Rétrospective agile', phases:[['Accueil & météo',5],['Ce qui a bien marché',10],['Ce qui a coincé',10],['Analyse & échanges',15],['Actions à prendre',15],['Clôture & ROTI',5]]},
-  brainstorm: {name:'Brainstorming', phases:[['Cadrage de la question',5],['Divergence silencieuse',10],['Partage des idées',10],['Regroupement en thèmes',10],['Dot voting',5],['Prochaines étapes',5]]},
-  reunion: {name:'Réunion efficace', phases:[['Check-in',3],['Objectif & ordre du jour',2],['Sujet principal',15],['Décisions & actions',7],['Check-out',3]]},
-  icebreaker: {name:'Ouverture d\'atelier', phases:[['Accueil',3],['Icebreaker',7],['Cadre & objectifs',5]]}
+  retro: {name:'Rétrospective agile', phases:[['Accueil & météo',5,'pleniere'],['Ce qui a bien marché',10,'sg'],['Ce qui a coincé',10,'sg'],['Analyse & échanges',15,'pleniere'],['Actions à prendre',15,'sg'],['Clôture & ROTI',5,'pleniere']]},
+  brainstorm: {name:'Brainstorming', phases:[['Cadrage de la question',5,'pleniere'],['Divergence silencieuse',10,'solo'],['Partage des idées',10,'sg'],['Regroupement en thèmes',10,'debout'],['Dot voting',5,'debout'],['Prochaines étapes',5,'pleniere']]},
+  reunion: {name:'Réunion efficace', phases:[['Check-in',3,'pleniere'],['Objectif & ordre du jour',2,'pleniere'],['Sujet principal',15,'pleniere'],['Décisions & actions',7,'pleniere'],['Check-out',3,'pleniere']]},
+  icebreaker: {name:'Ouverture d\'atelier', phases:[['Accueil',3,'pleniere'],['Icebreaker',7,'binomes'],['Cadre & objectifs',5,'pleniere']]}
 };
 function seqLoadTemplate(key){
   const t=SEQ_TEMPLATES[key]; if(!t) return;
   if(SEQ.phases.length && !confirm(`Remplacer la séquence actuelle par « ${t.name} » ?`)) return;
   SEQ.reset();
-  SEQ.phases=t.phases.map(([n,d],i)=>({id:Date.now()+i,name:n,duration:d}));
+  SEQ.phases=t.phases.map(([n,d,g],i)=>({id:Date.now()+i,name:n,duration:d,tag:g||''}));
   SEQ.save(); seqRender(); seqUpdateDisplay();
 }
 function seqStart(){ SEQ.start(); }
@@ -2391,9 +2448,10 @@ function seqRender(){
       <div class="seq-num">${st==='done'?ic('check'):i+1}</div>
       ${at[i]?`<span class="seq-at" title="Horaire de début">${fmtHM(at[i])}</span>`:''}
       <input class="seq-name-inp" value="${escHtml(p.name)}" onchange="SEQ.edit(${i},'name',this.value)" onkeydown="if(event.key==='Enter'){this.blur();document.getElementById('seq-add-inp').focus()}" placeholder="Nom de la phase" aria-label="Nom de la phase ${i+1}">
-      <button type="button" class="seq-dur-btn" onclick="seqTray(${p.id})" aria-expanded="${open}" aria-label="Durée : ${p.duration} minutes. Modifier">${p.duration} min</button>
+      <span class="seq-meta"><button type="button" class="seq-dur-btn" onclick="seqTray(${p.id})" aria-expanded="${open}" aria-label="Durée : ${p.duration} minutes. Modifier la durée et le format">${p.duration} min</button>${p.tag?seqTagBadge(p.tag,`seqTray(${p.id})`):`<button type="button" class="seq-tag-add" onclick="seqTray(${p.id})" aria-label="Ajouter un format à la phase">+ format</button>`}</span>
       <button class="btn btn-danger btn-sm btn-icon" onclick="SEQ.removePhase(${p.id})" aria-label="Supprimer la phase ${escHtml(p.name)}" title="Supprimer la phase">${ic('x')}</button>
-      ${open?`<div class="seq-dur-tray" role="group" aria-label="Choisir une durée">${[5,10,15,20,30,45,60].map(m=>`<button type="button" class="${m===p.duration?'sel':''}" aria-pressed="${m===p.duration}" onclick="seqDurSet(${p.id},${m})">${m}</button>`).join('')}<label>Autre <input type="number" min="1" max="999" value="${p.duration}" onkeydown="if(event.key==='Enter')seqDurSet(${p.id},this.value)" onchange="seqDurSet(${p.id},this.value)"> min</label></div>`:''}
+      ${open?`<div class="seq-dur-tray" role="group" aria-label="Choisir une durée">${[5,10,15,20,30,45,60].map(m=>`<button type="button" class="${m===p.duration?'sel':''}" aria-pressed="${m===p.duration}" onclick="seqDurSet(${p.id},${m})">${m}</button>`).join('')}<label>Autre <input type="number" min="1" max="999" value="${p.duration}" onkeydown="if(event.key==='Enter')seqDurSet(${p.id},this.value)" onchange="seqDurSet(${p.id},this.value)"> min</label>
+        <div class="seq-tag-row" role="group" aria-label="Format de la phase"><span>Format</span>${Object.entries(SEQ_TAGS).map(([k,t])=>`<button type="button" class="seq-tag" data-tag="${k}" aria-pressed="${p.tag===k}" onclick="seqTagSet(${p.id},'${k}')">${ic(t.icon)} ${t.label}</button>`).join('')}</div></div>`:''}
     </div>`;}).join('');
 }
 // Horaire de début de chaque phase (ms) : réel pour ce qui est passé, projeté pour la suite
@@ -2425,6 +2483,65 @@ function seqBudget(){
   const from=SEQ.remaining>0?SEQ.curIdx+1:0, can=late>0&&SEQ.phases.slice(from).some(p=>p.duration>1);
   if(c){ c.hidden=!can; if(can) c.innerHTML=`<span>${fmtMin(late)} de retard</span><button class="btn btn-secondary btn-sm" onclick="SEQ.catchUpLate()">Raccourcir la suite pour finir à ${fmtHM(tgt)}</button>`; }
 }
+// ── Formats de travail (étiquettes des phases) ──
+const SEQ_TAGS={
+  pleniere:{label:'Plénière',icon:'presentation',say:'En plénière'},
+  sg:{label:'Sous-groupes',icon:'users',say:'En sous-groupes'},
+  binomes:{label:'Binômes',icon:'handshake',say:'En binômes'},
+  solo:{label:'Individuel',icon:'user',say:'Chacun pour soi'},
+  debout:{label:'Debout',icon:'zap',say:'Debout, en mouvement'},
+  pause:{label:'Pause',icon:'coffee',say:'Pause'}
+};
+function seqTagFrom(w){
+  const n=seqNorm(w).replace(/ /g,'');
+  const A={pleniere:'pleniere',plen:'pleniere',pl:'pleniere',tous:'pleniere',all:'pleniere',groupe:'pleniere',
+    sg:'sg',sousgroupe:'sg',sousgroupes:'sg',groupes:'sg',ateliers:'sg',tables:'sg',
+    binome:'binomes',binomes:'binomes',duo:'binomes',duos:'binomes',paires:'binomes',
+    solo:'solo',seul:'solo',indiv:'solo',individuel:'solo',perso:'solo',
+    debout:'debout',mouvement:'debout',energie:'debout',
+    pause:'pause',break:'pause',cafe:'pause',dejeuner:'pause',repas:'pause'};
+  return A[n]||'';
+}
+function seqTagBadge(k,onclick){
+  const t=SEQ_TAGS[k]; if(!t) return '';
+  return onclick?`<button type="button" class="seq-tag" data-tag="${k}" onclick="${onclick}" aria-label="Format : ${t.label}. Modifier">${ic(t.icon)} ${t.label}</button>`:`<span class="seq-tag" data-tag="${k}">${ic(t.icon)} ${t.label}</span>`;
+}
+function seqTagSet(id,k){
+  const p=SEQ.phases.find(x=>x.id===id); if(!p) return;
+  p.tag=p.tag===k?'':k; SEQ.save(); seqRender(); seqUpdateDisplay();
+  document.querySelector(`.seq-phase-row[data-id="${id}"] .seq-tag-row [data-tag="${k}"]`)?.focus();
+}
+// ── Fin de séquence : coche qui se dessine et confettis, dans le panneau et en projection ──
+function seqFinish(on){
+  const card=document.getElementById('seq-card'), fin=document.getElementById('seq-fin');
+  const pf=document.getElementById('proj-s-finish'), pane=document.getElementById('proj-sequence');
+  card.classList.toggle('finished',on); fin.hidden=!on; pf.hidden=!on; pane.classList.toggle('finished',on);
+  document.querySelectorAll('.cf-layer').forEach(l=>l.remove());
+  if(!on) return;
+  const n=SEQ.log.length, real=SEQ.plan?Math.round(((SEQ.endedAt||Date.now())-SEQ.plan.startedAt)/60000):0;
+  const diff=SEQ.plan?Math.round(((SEQ.endedAt||Date.now())-SEQ.plan.plannedEnd)/60000):0;
+  const when=diff>1?`${fmtMin(diff)} après l'heure prévue`:diff<-1?`${fmtMin(-diff)} avant l'heure prévue`:'pile à l\'heure';
+  const txt=`${n} phase${n>1?'s':''} en ${fmtMin(real)}, fin à ${fmtHM(SEQ.endedAt||Date.now())}, ${when}`;
+  document.getElementById('seq-fin-s').textContent=txt;
+  document.getElementById('proj-s-finish-s').textContent='Merci à toutes et à tous. '+txt.charAt(0).toUpperCase()+txt.slice(1)+'.';
+  confetti(card,60);
+  if(projTool==='sequence'){ confetti(pf,140); setTimeout(()=>pf.querySelector('.pj-btn')?.focus({preventScroll:true}),400); }
+  toast('Séquence terminée');
+}
+function confetti(host,count){
+  if(!MOTION()||!host||!host.animate) return;
+  const layer=document.createElement('div'); layer.className='cf-layer'; layer.setAttribute('aria-hidden','true'); host.appendChild(layer);
+  const W=host.clientWidth, H=host.clientHeight, css=getComputedStyle(document.documentElement);
+  const cols=['--terra','--sage','--gold','--blue','--red'].map(v=>css.getPropertyValue(v).trim()||'#D9472A');
+  for(let i=0;i<count;i++){
+    const p=document.createElement('i'), sz=6+Math.random()*7, x=W*(.15+Math.random()*.7);
+    p.style.cssText=`left:${x}px;top:${H*.35}px;width:${sz}px;height:${sz*(.4+Math.random()*.8)}px;background:${cols[i%cols.length]};border-radius:${Math.random()<.3?'50%':'2px'}`;
+    layer.appendChild(p);
+    const dx=(Math.random()-.5)*W*.9, up=H*(.25+Math.random()*.35), rot=(Math.random()-.5)*900;
+    p.animate([{transform:'translate(0,0) rotate(0)',opacity:1},{transform:`translate(${dx*.6}px,${-up}px) rotate(${rot*.4}deg)`,opacity:1,offset:.35},{transform:`translate(${dx}px,${H*.75}px) rotate(${rot}deg)`,opacity:0}],{duration:2200+Math.random()*1600,easing:'cubic-bezier(.2,.6,.4,1)',delay:Math.random()*250,fill:'forwards'});
+  }
+  setTimeout(()=>layer.remove(),4500);
+}
 function seqToday(hm){ if(!/^\d{1,2}:\d{2}$/.test(hm||'')) return null; const [h,m]=hm.split(':').map(Number), d=new Date(); d.setHours(h,m,0,0); return d.getTime(); }
 function fmtHM(ms){ const d=new Date(ms); return pad(d.getHours())+':'+pad(d.getMinutes()); }
 function fmtMin(m){ m=Math.round(m); const h=Math.floor(m/60), r=m%60; return h?(h+' h'+(r?' '+pad(r):'')):m+' min'; }
@@ -2445,6 +2562,8 @@ function seqParse(txt){
     const parts=line.split(',');
     (parts.filter(p=>/\d/.test(p)).length>=2?parts:[line]).forEach(raw=>{
       let t=raw.replace(/^\s*(?:[-•*·–]|\d+[.)])\s+/,'').trim(); if(!t) return;
+      let tag='';
+      t=t.replace(/#([\p{L}\-]+)/gu,(m,w)=>{ const k=seqTagFrom(w); if(k) tag=k; return k?' ':m; }).replace(/\s{2,}/g,' ').trim();
       let dur=null, m;
       if((m=t.match(/^\(?\s*(\d+\s*h\s*\d{0,2}|\d+\s*(?:min|mn|m|'))\s*\)?\s*[-–:]?\s*(.+)$/i))&&/[a-zà-ÿ]/i.test(m[2])){ dur=m[1]; t=m[2]; }
       else if((m=t.match(/^(.*?)[\s:–\-(]+(\d+\s*h\s*\d{0,2}|\d+)\s*(?:min|mn|m|')?\s*\)?$/i))&&m[1].trim()){ dur=m[2]; t=m[1]; }
@@ -2452,7 +2571,8 @@ function seqParse(txt){
       t=t.replace(/[\s:–\-(]+$/,'').trim(); if(!t) return;
       const tool=seqFindTool(t);
       if(tool){ t=tool.name; if(dur==null) dur=parseInt(tool.dur)||10; }
-      out.push({name:t,duration:dur||10});
+      if(!tag&&/\b(pause|déjeuner|dejeuner|café|cafe)\b/i.test(t)) tag='pause';
+      out.push({name:t,duration:dur||10,tag});
     });
   });
   return out;
@@ -2517,13 +2637,13 @@ function seqUpdateDisplay(){
   const timeStr=shown>0?`${pad(Math.floor(shown/60))}:${pad(shown%60)}`:'—';
   document.getElementById('seq-display').textContent=timeStr;
   if(ph){ const pct=SEQ.remaining/(ph.duration*60)*100; document.getElementById('seq-prog-fill').style.width=pct+'%'; }
-  document.getElementById('seq-progress-label').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'—';
+  document.getElementById('seq-progress-label').textContent=SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`+(ph&&SEQ_TAGS[ph.tag]?' · '+SEQ_TAGS[ph.tag].say:''):'—';
   // Miroir projection
   if(projTool==='sequence'){
     const prog=ph&&SEQ.remaining>0?SEQ.remaining/(ph.duration*60):1;
     const next=SEQ.phases[SEQ.curIdx+1];
     const both=(id,v,html)=>{ document.getElementById(id)[html?'innerHTML':'textContent']=v; };
-    both('proj-s-kicker',SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`:'Séquence');
+    both('proj-s-kicker',SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`+(ph&&SEQ_TAGS[ph.tag]?' · '+SEQ_TAGS[ph.tag].say:''):'Séquence');
     both('proj-s-name',ph?ph.name:'—');
     both('proj-s-time',timeStr);
     const pe=SEQ.remaining>0?SEQ.projectedEnd():null;
