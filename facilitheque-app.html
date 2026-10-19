@@ -378,6 +378,23 @@ button.seq-tag{cursor:pointer}
 @keyframes pjFinUp{from{opacity:0;transform:translateY(24px)}}
 #proj-sequence.finished>.pj-controls,#proj-sequence.finished>.pj-layer,#proj-sequence.finished::before{visibility:hidden}
 @media(prefers-reduced-motion:reduce){.fin-check :is(circle,path){animation:none;stroke-dashoffset:0}.pj-finish,.pj-finish-t,.pj-finish-s,.pj-finish-acts{animation:none}}
+/* Déroulé commun : Préparer et Animer, mes séquences */
+.deroule-bar{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 24px}
+.deroule-bar .db-view{flex:none}
+.deroule-bar .plan-select-wrap{flex:1 1 260px;min-width:0}
+.deroule-bar .plan-count{font-size:.8125rem;color:var(--gray);margin-left:auto}
+.tpl-user{display:contents}
+.tpl-u{display:inline-flex;align-items:center;gap:2px}
+.tpl-x{width:32px;height:32px;border:0;border-radius:999px;background:none;color:var(--gray);display:grid;place-items:center}
+@media(hover:hover) and (pointer:fine){.tpl-x:hover{background:var(--surface-muted);color:var(--foreground)}}
+.qr-box{max-width:420px}
+.qr-sub{font-size:.875rem;color:var(--text-secondary);margin-top:6px;line-height:1.5}
+.qr-body{padding:20px 28px 28px;display:flex;flex-direction:column;align-items:center;gap:12px;overflow:auto}
+.qr-code{width:min(260px,70vw);aspect-ratio:1;background:#fff;border-radius:14px;padding:12px;display:grid;place-items:center;border:1px solid var(--border)}
+.qr-code svg{width:100%;height:100%;display:block}
+.qr-code p{font-size:.875rem;color:#2B3A50;text-align:center;line-height:1.5}
+.qr-name{font-size:.875rem;color:var(--text-secondary);text-align:center}
+@media(max-width:560px){.deroule-bar .plan-count{margin-left:0;flex-basis:100%}}
 /* Séquence : horaires, saisie express, durées en un tap, ajustements en direct */
 .seq-clock{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;margin-bottom:18px}
 .seq-time-f{display:flex;flex-direction:column;gap:6px;font-size:.8125rem;color:var(--ink-s);font-weight:500}
@@ -969,6 +986,14 @@ input.arc-switch:checked::before{transform:translateX(18px);background:var(--bac
   </div>
 </div>
 
+<!-- OUVRIR LE DÉROULÉ SUR UN TÉLÉPHONE : QR code du lien de partage -->
+<div class="modal-ov" id="qr-ov" onclick="if(event.target===this)qrClose()">
+  <div class="modal-box qr-box" role="dialog" aria-modal="true" aria-labelledby="qr-t">
+    <div class="modal-hdr"><div><h2 class="modal-title" id="qr-t">Ouvrir sur mon téléphone</h2><p class="qr-sub">Scanne ce code avec l’appareil photo. Le déroulé s’ajoute dans Facilithèque sur le téléphone, sans compte.</p></div><button class="modal-close" onclick="qrClose()" aria-label="Fermer"><svg class="ic" aria-hidden="true"><use href="#i-x"/></svg></button></div>
+    <div class="qr-body"><div class="qr-code" id="qr-code" aria-hidden="true"></div><div class="qr-name" id="qr-name"></div></div>
+  </div>
+</div>
+
 <!-- APP -->
 <div id="app">
   <!-- SIDEBAR -->
@@ -1308,6 +1333,7 @@ input.arc-switch:checked::before{transform:translateX(18px);background:var(--bac
     <section class="panel" id="p-sequence">
       <h1 class="panel-title">Séquence de timers</h1>
       <p class="panel-sub">Enchaîne des phases minutées. L'alerte passe automatiquement à la suivante.</p>
+      <div class="deroule-bar" id="db-sequence"></div>
       <div style="margin-bottom:28px">
         <div class="text-xs text-gray fw6" style="margin-bottom:10px">Démarrage rapide</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
@@ -1315,6 +1341,7 @@ input.arc-switch:checked::before{transform:translateX(18px);background:var(--bac
           <button class="pill" onclick="seqLoadTemplate('brainstorm')">Brainstorming · 45 min</button>
           <button class="pill" onclick="seqLoadTemplate('reunion')">Réunion efficace · 30 min</button>
           <button class="pill" onclick="seqLoadTemplate('icebreaker')">Ouverture d'atelier · 15 min</button>
+          <span class="tpl-user" id="tpl-user"></span>
         </div>
       </div>
       <div class="two-col" style="align-items:start">
@@ -1380,17 +1407,9 @@ input.arc-switch:checked::before{transform:translateX(18px);background:var(--bac
     <section class="panel" id="p-planner">
       <h1 class="panel-title">Planificateur d'atelier</h1>
       <p class="panel-sub">Construis ton déroulé. Sauvegardé automatiquement.</p>
-      <div class="plan-switch">
-        <div class="plan-select-wrap">
-          <select id="plan-select" onchange="plannerSwitch(this.value)" aria-label="Choisir le plan affiché"></select>
-          <svg viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-        <button class="btn btn-ghost btn-sm" onclick="plannerNew()"><svg class="ic" aria-hidden="true"><use href="#i-plus"/></svg> Nouveau plan</button>
-        <button class="btn btn-ghost btn-sm" onclick="plannerDuplicate()">⧉ Dupliquer</button>
-        <span class="plan-count" id="plan-count"></span>
-      </div>
+      <div class="deroule-bar" id="db-planner"></div>
       <div class="planner-actions">
-        <button class="btn btn-primary" onclick="plannerToSequence()" title="Transformer ce déroulé en séquence minutée"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Lancer en séquence</button>
+        <button class="btn btn-primary" onclick="plannerToSequence()"><svg class="ic" aria-hidden="true"><use href="#i-play"/></svg> Animer ce déroulé</button>
         <button class="btn btn-secondary" onclick="plannerExportPDF()"><svg class="ic" aria-hidden="true"><use href="#i-download"/></svg> Exporter en PDF</button>
         <button class="btn btn-secondary" id="plan-share-btn" onclick="plannerShare()"><svg class="ic" aria-hidden="true"><use href="#i-link"/></svg> Partager le lien</button>
         <span style="flex:1"></span>
@@ -1637,7 +1656,8 @@ function goPanel(id, mode) {
   // Déjà sur la bibliothèque (retour depuis une fiche) : on garde les cartes, et donc le focus
   if (id === 'library' && !(samePanel && document.querySelector('#lib-grid .lib-card-link'))) libRender();
   if (id === 'planner') plannerRender();
-  if (id === 'sequence') { seqRender(); seqUpdateDisplay(); }
+  if (id === 'sequence') { seqRender(); seqUpdateDisplay(); tplRender(); }
+  if (id === 'planner' || id === 'sequence') dBarRender();
   miniSync();
 }
 
@@ -1747,6 +1767,8 @@ function arcConfirm(btn,o){
     if(b.classList.contains('cm-no')&&!cm._undo) return close(true);
     if(b.classList.contains('cm-yes')){
       const undo=o.run();
+      // L'action a retiré le bouton de la page (élément d'une liste) : l'annulation passe par une notification
+      if(!cm.isConnected){ clearTimeout(timer); document.removeEventListener('pointerdown',outside,true); document.removeEventListener('keydown',esc,true); btn._cm=null; if(typeof undo==='function') toast(o.done,'Annuler',undo); return; }
       if(typeof undo==='function'){
         cm._undo=undo; clearTimeout(timer);
         face('<span class="cm-q">'+o.done+'</span><button type="button" class="cm-no">Annuler</button>','.cm-no');
@@ -2200,7 +2222,7 @@ document.addEventListener('keydown',e=>{ if(e.key==='Escape'&&!document.getEleme
 // ── Raccourcis clavier ──
 // Espace = start/pause · R = reset · F = plein écran · L = tour (chrono)
 document.addEventListener('keydown',e=>{
-  if(e.key==='Escape'){ fsClose(); projClose(); return; }
+  if(e.key==='Escape'){ if(qrClose()) return; fsClose(); projClose(); return; }
   const tag=(e.target.tagName||'').toLowerCase();
   if(tag==='input'||tag==='textarea'||tag==='select'||e.target.isContentEditable) return;
   if(e.ctrlKey||e.metaKey||e.altKey) return;
@@ -2440,19 +2462,16 @@ function fmtSec(s){ return `${pad(Math.floor(s/60))}:${pad(s%60)}`; }
 // SEQUENCE
 // ════════════════════════════════════════════════════
 const SEQ = {
-  phases:[], curIdx:0, remaining:0, msLeft:0, endAt:0, running:false, iv:null,
-  meta:{start:'',end:''}, plan:null, log:[], trayId:null, endedAt:null,
-  save(){ try{localStorage.setItem('fk-seq',JSON.stringify(SEQ.phases.map(p=>({id:p.id,name:p.name,duration:p.duration,tag:p.tag||''}))));}catch(e){} },
-  load(){
-    try{
-      const s=JSON.parse(localStorage.getItem('fk-seq')||'null');
-      if(Array.isArray(s)) SEQ.phases=s.map((p,i)=>({id:p.id||Date.now()+i,name:String(p.name||''),duration:Math.max(1,parseInt(p.duration)||1),tag:SEQ_TAGS[p.tag]?p.tag:''}));
-    }catch(e){}
-    try{ const m=JSON.parse(localStorage.getItem('fk-seq-meta')||'null'); if(m) SEQ.meta={start:String(m.start||''),end:String(m.end||'')}; }catch(e){}
-  },
+  // Les phases sont celles du plan en cours : Préparer et Animer montrent le même déroulé
+  get phases(){ return PL.data.phases; }, set phases(v){ PL.data.phases=v; },
+  get meta(){ return {start:PL.data.start||'',end:PL.data.end||''}; },
+  curIdx:0, remaining:0, msLeft:0, endAt:0, running:false, iv:null,
+  plan:null, log:[], trayId:null, endedAt:null,
+  save(){ PL.persist(); PL.renderSwitcher(); },
+  load(){},
   persist(){
     if(!appReady) return;
-    LIVE.set('fk-live-seq',SEQ.remaining>0?{curIdx:SEQ.curIdx,remaining:SEQ.remaining,running:SEQ.running,
+    LIVE.set('fk-live-seq',SEQ.remaining>0?{planId:PL.store.current,curIdx:SEQ.curIdx,remaining:SEQ.remaining,running:SEQ.running,
       endAt:SEQ.running?SEQ.endAt:null,msLeft:SEQ.running?null:SEQ.msLeft,plan:SEQ.plan,log:SEQ.log}:null);
   },
   // Avance jusqu'à la phase en cours à l'instant présent (fin de phase, onglet endormi, rechargement).
@@ -2470,6 +2489,7 @@ const SEQ = {
   // Reprend la séquence là où elle en était avant le rechargement
   restore(){
     const s=LIVE.get('fk-live-seq');
+    if(s&&s.planId&&s.planId!==PL.store.current&&PL.store.plans.some(p=>p.id===s.planId)) PL.select(s.planId);
     if(!s||!SEQ.phases.length||!(s.curIdx<SEQ.phases.length)) return false;
     SEQ.plan=s.plan||null; SEQ.log=Array.isArray(s.log)?s.log:[];
     if(s.running&&s.endAt){
@@ -2486,14 +2506,14 @@ const SEQ = {
   addPhase(){ SEQ.addPhases([{name:'Phase '+(SEQ.phases.length+1),duration:10}]); },
   // Ajoute des phases à la fin (ou à la position at) ; renvoie les phases créées
   addPhases(list,at){
-    const base=Date.now(), made=list.map((p,i)=>({id:base+i,name:p.name,duration:Math.max(1,Math.min(999,p.duration|0)),tag:SEQ_TAGS[p.tag]?p.tag:''}));
+    const base=Date.now(), made=list.map((p,i)=>({id:base+i,name:p.name,duration:Math.max(1,Math.min(999,p.duration|0)),tag:SEQ_TAGS[p.tag]?p.tag:'',tool:p.tool||'',desc:p.desc||''}));
     const pos=at==null?SEQ.phases.length:at;
     SEQ.phases.splice(pos,0,...made);
     if(SEQ.remaining>0&&pos<=SEQ.curIdx) SEQ.curIdx+=made.length;
     SEQ.save(); SEQ.persist(); seqRender(); seqUpdateDisplay();
     return made;
   },
-  setMeta(k,v){ SEQ.meta[k]=v||''; try{localStorage.setItem('fk-seq-meta',JSON.stringify(SEQ.meta));}catch(e){} seqRender(); },
+  setMeta(k,v){ PL.data[k]=v||''; PL.persist(); seqRender(); },
   // Ajuste la phase en cours (ou la première avant le lancement) de n minutes
   adjust(n){
     const i=SEQ.remaining>0?SEQ.curIdx:0, ph=SEQ.phases[i]; if(!ph) return;
@@ -2604,12 +2624,17 @@ const SEQ_TEMPLATES = {
   icebreaker: {name:'Ouverture d\'atelier', phases:[['Accueil',3,'pleniere'],['Icebreaker',7,'binomes'],['Cadre & objectifs',5,'pleniere']]}
 };
 function seqLoadTemplate(key){
-  const t=SEQ_TEMPLATES[key]; if(!t) return;
-  const prev=SEQ.phases.slice();
+  const t=SEQ_TEMPLATES[key]?{name:SEQ_TEMPLATES[key].name,phases:SEQ_TEMPLATES[key].phases.map(([n,d,g])=>({name:n,duration:d,tag:g||''}))}:(PL.store.templates||[]).find(x=>x.id===key);
+  if(!t||!derouleFree()) return;
+  const base=Date.now(), phases=t.phases.map((p,i)=>({id:base+i,name:p.name,duration:p.duration,tag:p.tag||'',tool:p.tool||'',desc:p.desc||''}));
   SEQ.reset();
-  SEQ.phases=t.phases.map(([n,d,g],i)=>({id:Date.now()+i,name:n,duration:d,tag:g||''}));
-  SEQ.save(); seqRender(); seqUpdateDisplay();
-  if(prev.length) toast(`« ${t.name} » chargée`,'Annuler',()=>{ SEQ.reset(); SEQ.phases=prev; SEQ.save(); seqRender(); seqUpdateDisplay(); });
+  if(!PL.data.phases.length){
+    const prevName=PL.data.name; PL.data.phases=phases; if(!PL.data.name) PL.data.name=t.name; PL.persist(); derouleRefresh();
+    toast(`« ${t.name} » chargé`,'Annuler',()=>{ PL.data.phases=[]; PL.data.name=prevName; PL.persist(); derouleRefresh(); });
+  } else {
+    PL.save(); const prevId=PL.store.current, p=PL.blank(); p.name=t.name; p.phases=phases; PL.add(p); derouleRefresh();
+    toast(`Nouveau déroulé « ${t.name} »`,'Annuler',()=>{ PL.store.plans=PL.store.plans.filter(x=>x.id!==p.id); PL.select(prevId); derouleRefresh(); });
+  }
 }
 function seqStart(){ SEQ.start(); }
 // Rien en cours ni en pause : le bouton ▶ lance la séquence (comme la barre Espace)
@@ -2734,6 +2759,7 @@ function confetti(host,count){
   }
   setTimeout(()=>layer.remove(),4500);
 }
+function seqName(p,i){ return p.name||p.tool||'Phase '+(i+1); }
 function seqToday(hm){ if(!/^\d{1,2}:\d{2}$/.test(hm||'')) return null; const [h,m]=hm.split(':').map(Number), d=new Date(); d.setHours(h,m,0,0); return d.getTime(); }
 function fmtHM(ms){ const d=new Date(ms); return pad(d.getHours())+':'+pad(d.getMinutes()); }
 function fmtMin(m){ m=Math.round(m); const h=Math.floor(m/60), r=m%60; return h?(h+' h'+(r?' '+pad(r):'')):m+' min'; }
@@ -2822,7 +2848,7 @@ function seqReport(show){
 function seqCopyReport(b){ const done=()=>{ arcSet(b,ic('check')+' Copié'); setTimeout(()=>arcSet(b,ic('link')+' Copier le bilan'),2000); }; navigator.clipboard?navigator.clipboard.writeText(SEQ.reportText||'').then(done,()=>{}):done(); }
 function seqUpdateDisplay(){
   const ph=SEQ.phases[SEQ.curIdx];
-  arcText(document.getElementById('seq-current-name'),ph?ph.name:'—');
+  arcText(document.getElementById('seq-current-name'),ph?seqName(ph,SEQ.curIdx):'—');
   // Avant le lancement : durée de la phase à venir plutôt qu'un tiret
   const shown=SEQ.remaining>0?SEQ.remaining:(ph?(parseInt(ph.duration)||0)*60:0);
   const timeStr=shown>0?`${pad(Math.floor(shown/60))}:${pad(shown%60)}`:'—';
@@ -2835,7 +2861,7 @@ function seqUpdateDisplay(){
     const next=SEQ.phases[SEQ.curIdx+1];
     const both=(id,v,html)=>{ document.getElementById(id)[html?'innerHTML':'textContent']=v; };
     both('proj-s-kicker',SEQ.phases.length?`Phase ${SEQ.curIdx+1} sur ${SEQ.phases.length}`+(ph&&SEQ_TAGS[ph.tag]?' · '+SEQ_TAGS[ph.tag].say:''):'Séquence');
-    both('proj-s-name',ph?ph.name:'—');
+    both('proj-s-name',ph?seqName(ph,SEQ.curIdx):'—');
     both('proj-s-time',timeStr);
     const pe=SEQ.remaining>0?SEQ.projectedEnd():null;
     both('proj-s-next',(next?`Ensuite : ${next.name} (${next.duration} min)`:(SEQ.phases.length?'Dernière phase':''))+(pe?` · fin prévue ${fmtHM(pe)}`:''));
@@ -2852,8 +2878,6 @@ function seqUpdateDisplay(){
   miniSync();
 }
 SEQ.load();
-seqRender();
-seqUpdateDisplay();
 
 // ════════════════════════════════════════════════════
 // PLANNER
@@ -2866,16 +2890,19 @@ const PL = {
   blank(){ return {id:'p'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),name:'',date:'',fac:'',loc:'',notes:'',phases:[]}; },
   normalize(d){
     return Object.assign(PL.blank(),{name:String(d.name||''),date:String(d.date||''),fac:String(d.fac||''),loc:String(d.loc||''),notes:String(d.notes||''),
-      phases:(Array.isArray(d.phases)?d.phases:[]).map((p,i)=>({id:Date.now()+i,name:String(p.name||''),duration:parseInt(p.duration)||0,tool:String(p.tool||''),desc:String(p.desc||'')}))});
+      start:/^\d{1,2}:\d{2}$/.test(d.start||'')?d.start:'',end:/^\d{1,2}:\d{2}$/.test(d.end||'')?d.end:'',
+      phases:(Array.isArray(d.phases)?d.phases:[]).map((p,i)=>({id:Date.now()+i,name:String(p.name||''),duration:parseInt(p.duration)||0,tool:String(p.tool||''),desc:String(p.desc||''),tag:SEQ_TAGS[p.tag]?p.tag:''}))});
   },
-  label(p){ return p.name||'Plan sans titre'; },
+  label(p){ return p.name||'Déroulé sans titre'; },
   // save : lit le formulaire affiché puis enregistre · persist : enregistre les plans tels quels
   save(){
+    if(PL.formFor===PL.data.id){
     PL.data.name=document.getElementById('plan-name').value;
     PL.data.date=document.getElementById('plan-date').value;
     PL.data.fac=document.getElementById('plan-fac').value;
     PL.data.loc=document.getElementById('plan-loc').value;
     PL.data.notes=document.getElementById('plan-notes').value;
+    }
     PL.persist();
     PL.updateTotal();
     PL.renderSwitcher();
@@ -2890,6 +2917,7 @@ const PL = {
       try{ const old=JSON.parse(localStorage.getItem('fk-plan')||'null'); if(old&&typeof old==='object') s.plans.push(PL.normalize(old)); }catch(e){}
     }
     if(!s.plans.length) s.plans.push(PL.blank());
+    if(!Array.isArray(s.templates)) s.templates=[];
     if(!s.plans.some(p=>p.id===s.current)) s.current=s.plans[0].id;
     PL.store=s; PL.data=s.plans.find(p=>p.id===s.current);
     if(migrate) PL.persist();
@@ -2897,13 +2925,14 @@ const PL = {
   select(id){ PL.store.current=id; PL.data=PL.store.plans.find(p=>p.id===id)||PL.store.plans[0]; PL.persist(); },
   add(p){ PL.store.plans.push(p); PL.select(p.id); },
   renderSwitcher(){
-    const sel=document.getElementById('plan-select'); if(!sel) return;
-    sel.innerHTML=PL.store.plans.map(p=>{
+    const sels=document.querySelectorAll('.plan-sel'); if(!sels.length) return;
+    const html=PL.store.plans.map(p=>{
       const n=p.phases.length, meta=[p.date&&new Date(p.date+'T12:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'}),`${n} phase${n>1?'s':''}`].filter(Boolean).join(' · ');
       return `<option value="${escHtml(p.id)}"${p.id===PL.store.current?' selected':''}>${escHtml(PL.label(p))} (${meta})</option>`;
     }).join('');
+    sels.forEach(sel=>{ if(document.activeElement!==sel) sel.innerHTML=html; });
     const c=PL.store.plans.length;
-    document.getElementById('plan-count').textContent=`${c} plan${c>1?'s':''} enregistré${c>1?'s':''}`;
+    document.querySelectorAll('.plan-count').forEach(e=>e.textContent=`${c} déroulé${c>1?'s':''} enregistré${c>1?'s':''}`);
   },
   move(id,dir){
     const i=PL.data.phases.findIndex(p=>p.id===id);
@@ -3036,32 +3065,97 @@ const PL = {
 function plannerSave(){ PL.save(); }
 function plannerAddPhase(){ PL.addPhase(); }
 function plannerExportPDF(){ PL.exportPDF(); }
-function plannerClear(){ return PL.remove(); }
-function plannerSwitch(id){ PL.save(); PL.select(id); plannerRender(); }
+function plannerClear(){ if(!derouleFree()) return; const u=PL.remove(); derouleRefresh(); return u&&(()=>{ u(); derouleRefresh(); }); }
+function plannerSwitch(id){ if(!derouleFree()) return; PL.save(); PL.select(id); derouleRefresh(); }
 function plannerNew(){
-  PL.save(); PL.add(PL.blank()); plannerRender();
-  document.getElementById('plan-name').focus();
-  toast('Nouveau plan créé. Donne-lui un nom pour le retrouver.');
+  if(!derouleFree()) return;
+  PL.save(); PL.add(PL.blank()); derouleRefresh();
+  if(currentPanel==='planner') document.getElementById('plan-name').focus(); else document.getElementById('seq-add-inp').focus();
 }
 function plannerDuplicate(){
+  if(!derouleFree()) return;
   PL.save();
   const c=PL.normalize(PL.data); c.name=PL.label(PL.data)+' (copie)';
-  PL.add(c); plannerRender();
-  toast(`Plan dupliqué : « ${c.name} ».`);
+  PL.add(c); derouleRefresh();
+  toast(`Déroulé dupliqué : « ${c.name} »`);
 }
-// Préparer → Animer : le déroulé du plan devient la séquence minutée
+// Préparer → Animer : c'est le même déroulé, on change seulement de vue
 function plannerToSequence(){
   PL.save();
-  const phases=PL.data.phases.filter(p=>(parseInt(p.duration)||0)>0);
-  if(!phases.length){ toast('Ajoute au moins une phase avec une durée pour lancer la séquence.'); return; }
-  const label=PL.data.name||'ce plan';
-  if(SEQ.phases.length && !confirm(`Remplacer la séquence actuelle par « ${label} » ?`)) return;
-  SEQ.reset();
-  SEQ.phases=phases.map((p,i)=>({id:Date.now()+i,name:p.name||p.tool||'Phase '+(i+1),duration:parseInt(p.duration)}));
-  SEQ.save();
-  track('plan_to_sequence',{phases:phases.length});
+  track('plan_to_sequence',{phases:PL.data.phases.length});
   goPanel('sequence');
-  toast(`${phases.length} phase${phases.length>1?'s':''} prête${phases.length>1?'s':''}. Lance la séquence quand tu veux.`);
+}
+// ── Barre commune du déroulé : vue, choix, nouveau, dupliquer, modèle, téléphone ──
+function derouleFree(){
+  if(SEQ.remaining>0){ toast('Une séquence est en cours. Remets-la à zéro avant de changer de déroulé.'); PL.renderSwitcher(); return false; }
+  return true;
+}
+function derouleRefresh(){ plannerRender(); seqRender(); seqUpdateDisplay(); tplRender(); dBarRender(); homeRefresh(); }
+function dBarRender(){
+  document.querySelectorAll('.deroule-bar').forEach(bar=>{
+    if(!bar.firstElementChild){
+      bar.innerHTML=`<div class="seg db-view" role="group" aria-label="Vue du déroulé"><button type="button" data-v="planner" onclick="PL.save();goPanel('planner')">Préparer</button><button type="button" data-v="sequence" onclick="plannerToSequence()">Animer</button></div>
+        <div class="plan-select-wrap"><select class="plan-sel" onchange="plannerSwitch(this.value)" aria-label="Choisir le déroulé"></select><svg viewBox="0 0 10 10" fill="none" aria-hidden="true"><path d="M2 3.5L5 6.5l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="plannerNew()">${ic('plus')} Nouveau</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="plannerDuplicate()">Dupliquer</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="tplSave(this)">Enregistrer comme modèle</button>
+        <button type="button" class="btn btn-ghost btn-sm" onclick="qrOpen()">${ic('smartphone')} Sur mon téléphone</button>
+        <span class="plan-count"></span>`;
+      arcGlideWatch(bar.querySelector('.seg'),'button[aria-pressed=true]','seg-hl');
+    }
+    bar.querySelectorAll('.db-view button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===currentPanel)));
+  });
+  PL.renderSwitcher();
+}
+// Mes modèles : un déroulé enregistré pour repartir de lui, affiché dans les démarrages rapides
+function tplRender(){
+  const el=document.getElementById('tpl-user'); if(!el) return;
+  el.innerHTML=(PL.store.templates||[]).map(t=>{ const m=t.phases.reduce((a,p)=>a+(parseInt(p.duration)||0),0); return `<span class="tpl-u"><button class="pill" onclick="seqLoadTemplate('${t.id}')">${escHtml(t.name)} · ${fmtMin(m)}</button><button type="button" class="tpl-x" aria-label="Supprimer le modèle ${escHtml(t.name)}" onclick="arcConfirm(this,{prompt:'Supprimer ce modèle ?',confirm:'Supprimer',done:'Modèle supprimé',run:()=>tplRemove('${t.id}')})">${ic('x')}</button></span>`; }).join('');
+}
+function tplSave(btn){
+  PL.save();
+  if(!PL.data.phases.length){ toast('Ajoute au moins une phase avant d’en faire un modèle.'); return; }
+  const t={id:'t'+Date.now().toString(36),name:PL.label(PL.data),phases:PL.data.phases.map(p=>({name:seqName(p,0)===p.name?p.name:(p.name||p.tool||''),duration:parseInt(p.duration)||0,tag:p.tag||'',tool:p.tool||'',desc:p.desc||''}))};
+  PL.store.templates.push(t); PL.persist(); tplRender();
+  arcSet(btn,ic('check')+' Modèle enregistré'); clearTimeout(btn._to); btn._to=setTimeout(()=>arcSet(btn,'Enregistrer comme modèle'),2400);
+}
+function tplRemove(id){
+  const i=PL.store.templates.findIndex(t=>t.id===id); if(i<0) return;
+  const [t]=PL.store.templates.splice(i,1); PL.persist(); tplRender();
+  return ()=>{ PL.store.templates.splice(i,0,t); PL.persist(); tplRender(); };
+}
+// Sur mon téléphone : QR code du lien de partage, qui ajoute le déroulé sur le téléphone
+async function qrOpen(){
+  PL.save();
+  if(!PL.data.name&&!PL.data.phases.length){ toast('Ton déroulé est vide. Ajoute une phase avant de l’envoyer.'); return; }
+  const {name,date,fac,loc,notes,phases}=PL.data;
+  const url=`${location.origin}/facilitheque-app.html#plan=${planEncode({name,date,fac,loc,notes,start:PL.data.start||'',end:PL.data.end||'',phases:phases.map(({name,duration,tool,desc,tag})=>({name,duration,tool,desc,tag}))})}`;
+  const ov=document.getElementById('qr-ov'), box=document.getElementById('qr-code');
+  document.getElementById('qr-name').textContent=PL.label(PL.data)+' · '+phases.length+' phase'+(phases.length>1?'s':'');
+  box.innerHTML='<p>Préparation du code…</p>';
+  ov.classList.add('open'); trapOpen(ov,ov.querySelector('.modal-close'));
+  track('plan_qr',{phases:phases.length});
+  try{ await RC.lib('https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js'); }
+  catch(e){ box.innerHTML='<p>Connexion impossible. Utilise « Partager le lien » dans Préparer.</p>'; return; }
+  try{ const q=qrcode(0,'L'); q.addData(url); q.make(); box.innerHTML=q.createSvgTag({cellSize:4,margin:0,scalable:true}); }
+  catch(e){ box.innerHTML='<p>Ce déroulé est trop long pour un QR code. Utilise « Partager le lien » dans Préparer.</p>'; }
+}
+function qrClose(){ const ov=document.getElementById('qr-ov'); if(!ov.classList.contains('open')) return false; ov.classList.remove('open'); trapClose(ov); return true; }
+// Ancienne séquence autonome : reprise une fois comme déroulé « Ma séquence », rien n'est perdu
+function seqMigrate(){
+  try{
+    if(localStorage.getItem('fk-seq-merged')) return;
+    localStorage.setItem('fk-seq-merged','1');
+    const old=JSON.parse(localStorage.getItem('fk-seq')||'null'), meta=JSON.parse(localStorage.getItem('fk-seq-meta')||'null')||{};
+    if(!Array.isArray(old)||!old.length) return;
+    const ph=old.map((p,i)=>({id:Date.now()+i,name:String(p.name||''),duration:Math.max(1,parseInt(p.duration)||1),tool:'',desc:'',tag:SEQ_TAGS[p.tag]?p.tag:''}));
+    if(PL.store.plans.some(pl=>pl.phases.length===ph.length&&pl.phases.every((q,i)=>q.name===ph[i].name&&(parseInt(q.duration)||0)===ph[i].duration))) return;
+    const live=LIVE.get('fk-live-seq'), cur=PL.data;
+    if(!cur.name&&!cur.phases.length){ cur.name='Ma séquence'; cur.phases=ph; cur.start=meta.start||''; cur.end=meta.end||''; if(live) live.planId=cur.id; }
+    else { const p=PL.blank(); p.name='Ma séquence'; p.phases=ph; p.start=meta.start||''; p.end=meta.end||''; PL.store.plans.push(p); if(live) live.planId=p.id; }
+    if(live) LIVE.set('fk-live-seq',live);
+    PL.persist();
+  }catch(e){}
 }
 
 // ── Partage du plan par lien ──
@@ -3076,7 +3170,7 @@ function plannerShare(){
   PL.save();
   if(!PL.data.name && !PL.data.phases.length){ toast('Ton plan est vide. Ajoute un nom ou une phase avant de le partager.'); return; }
   const {name,date,fac,loc,notes,phases}=PL.data;
-  const url=`${location.origin}${location.pathname}#plan=${planEncode({name,date,fac,loc,notes,phases:phases.map(({name,duration,tool,desc})=>({name,duration,tool,desc}))})}`;
+  const url=`${location.origin}${location.pathname}#plan=${planEncode({name,date,fac,loc,notes,start:PL.data.start||'',end:PL.data.end||'',phases:phases.map(({name,duration,tool,desc,tag})=>({name,duration,tool,desc,tag}))})}`;
   track('plan_share',{phases:PL.data.phases.length});
   const btn=document.getElementById('plan-share-btn');
   const done=()=>{ arcSet(btn,ic('check')+' Lien copié'); setTimeout(()=>arcSet(btn,ic('link')+' Partager le lien'),2200); };
@@ -3094,13 +3188,13 @@ function planImportFromHash(){
     PL.load();
     const p=PL.normalize(data);
     PL.add(p);
-    goPanel('planner','replace');
-    toast(`Plan partagé ajouté : « ${PL.label(p)} » (${p.phases.length} phase${p.phases.length>1?'s':''}).`);
+    derouleRefresh(); goPanel('planner','replace');
+    toast(`Déroulé reçu : « ${PL.label(p)} » (${p.phases.length} phase${p.phases.length>1?'s':''}).`);
     return true;
   }catch(e){ history.replaceState(null,'',location.pathname); return false; }
 }
 function plannerRender(){
-  PL.load();
+  PL.load(); PL.formFor=PL.data.id;
   document.getElementById('plan-name').value=PL.data.name||'';
   document.getElementById('plan-date').value=PL.data.date||'';
   document.getElementById('plan-fac').value=PL.data.fac||'';
@@ -3127,7 +3221,7 @@ function homeRefresh(){
       <div class="home-plan-meta">${meta.map(x=>`<span>${escHtml(x)}</span>`).join('')}</div>
       ${d.phases.length?`<div class="home-frise" aria-hidden="true">${d.phases.map(p=>`<span style="--w:${Math.max(1,parseInt(p.duration)||1)}" title="${escHtml(p.name||p.tool||'Phase')} (${parseInt(p.duration)||0} min)"></span>`).join('')}</div>`:'<div style="height:20px"></div>'}
       <div class="home-plan-acts">
-        <button type="button" class="btn btn-primary" onclick="plannerRender();plannerToSequence()"${tot?'':' disabled'}>${ic('play')} Lancer en séquence</button>
+        <button type="button" class="btn btn-primary" onclick="plannerToSequence()"${tot?'':' disabled'}>${ic('play')} Animer ce déroulé</button>
         <button type="button" class="btn btn-secondary" onclick="goPanel('planner')">Ouvrir le plan</button>
       </div>`;
   } else {
@@ -3621,6 +3715,10 @@ function pdfMetaChips(doc, items, y){
 // INIT
 // ════════════════════════════════════════════════════
 PL.load();
+seqMigrate();
+PL.load();
+seqRender();
+seqUpdateDisplay();
 homeRefresh();
 RL.load();
 const paLive = PA.load();
